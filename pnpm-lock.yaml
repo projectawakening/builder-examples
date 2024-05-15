@@ -84,6 +84,12 @@ importers:
 
   packages/contracts:
     dependencies:
+      '@eve/common-constants':
+        specifier: /Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/common
+        version: link:../../../contracts/world-chain-contracts/mud-contracts/common
+      '@eve/frontier-world':
+        specifier: /Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/frontier-world
+        version: link:../../../contracts/world-chain-contracts/mud-contracts/frontier-world
       '@latticexyz/cli':
         specifier: 2.0.0-transaction-context-98ef570f
         version: 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)

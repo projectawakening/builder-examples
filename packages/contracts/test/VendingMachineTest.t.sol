@@ -6,9 +6,8 @@ import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Counter, CounterTableId } from "../src/codegen/index.sol";
 
-contract CounterTest is MudTest {
+contract VendingMachineTest is MudTest {
   function testWorldExists() public {
     uint256 codeSize;
     address addr = worldAddress;
@@ -18,14 +17,5 @@ contract CounterTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
-  function testCounter() public {
-    // Expect the counter to be 1 because it was incremented in the PostDeploy script.
-    uint32 counter = Counter.get();
-    assertEq(counter, 1);
-
-    // Expect the counter to be 2 after calling increment.
-    IWorld(worldAddress).increment();
-    counter = Counter.get();
-    assertEq(counter, 2);
-  }
+  function testFuncA() public {}
 }

@@ -19,7 +19,9 @@
     "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/store": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/world": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f"
+    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f",
+    "@eve/frontier-world": "/Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/frontier-world",
+    "@eve/common-constants": "/Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/common"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
