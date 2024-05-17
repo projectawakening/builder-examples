@@ -84,12 +84,12 @@ importers:
 
   packages/contracts:
     dependencies:
-      '@eve/common-constants':
-        specifier: /Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/common
-        version: link:../../../contracts/world-chain-contracts/mud-contracts/common
-      '@eve/frontier-world':
-        specifier: /Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/frontier-world
-        version: link:../../../contracts/world-chain-contracts/mud-contracts/frontier-world
+      '@eveworld/common-constants':
+        specifier: ^0.0.1
+        version: 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/world':
+        specifier: ^0.0.1
+        version: 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.0.0-transaction-context-98ef570f
         version: 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
@@ -105,6 +105,12 @@ importers:
       '@latticexyz/world-modules':
         specifier: 2.0.0-transaction-context-98ef570f
         version: 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      i:
+        specifier: ^0.3.7
+        version: 0.3.7
+      npm:
+        specifier: ^10.8.0
+        version: 10.8.0
     devDependencies:
       '@types/node':
         specifier: ^18.15.11
@@ -834,6 +840,61 @@ packages:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
+
+  /@eveworld/common-constants@0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-cVWjYsZKF/634SpNYtxbUPizjeDi94z4LxzjX+MefnJJTr2WIyWalB/tARWxKgpvr+TXKH7E46l0OWzwQMBBKQ==}
+    dependencies:
+      '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
+      '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/store': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - google-protobuf
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@eveworld/smart-object-framework@0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-jJT+UPDlt4quLXXiNNd7RtQEG+zaEHZn6kGDug7OQlRSbmsH14vHrwBJYH5xagjXZvPYCZzzNQTn184o1Q4Weg==}
+    dependencies:
+      '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
+      '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/store': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - google-protobuf
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@eveworld/world@0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-rJLpsn55VXSzyBKtql/aq4cG5BSRcp3GwQ7IyzV/rANvPR6XVBEJgB9+bHehC0pWFJvUxJNGLTUC+sBKBf+qNg==}
+    dependencies:
+      '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/smart-object-framework': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
+      '@latticexyz/gas-report': 2.0.0-transaction-context-98ef570f
+      '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/store': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - google-protobuf
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -2301,6 +2362,11 @@ packages:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
     engines: {node: '>=14.18.0'}
 
+  /i@0.3.7:
+    resolution: {integrity: sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==}
+    engines: {node: '>=0.4'}
+    dev: false
+
   /ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
@@ -2576,6 +2642,81 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       path-key: 4.0.0
+
+  /npm@10.8.0:
+    resolution: {integrity: sha512-wh93uRczgp7HDnPMiLXcCkv2hagdJS0zJ9KT/31d0FoXP02+qgN2AOwpaW85fxRWkinl2rELfPw+CjBXW48/jQ==}
+    engines: {node: ^18.17.0 || >=20.5.0}
+    hasBin: true
+    dev: false
+    bundledDependencies:
+      - '@isaacs/string-locale-compare'
+      - '@npmcli/arborist'
+      - '@npmcli/config'
+      - '@npmcli/fs'
+      - '@npmcli/map-workspaces'
+      - '@npmcli/package-json'
+      - '@npmcli/promise-spawn'
+      - '@npmcli/redact'
+      - '@npmcli/run-script'
+      - '@sigstore/tuf'
+      - abbrev
+      - archy
+      - cacache
+      - chalk
+      - ci-info
+      - cli-columns
+      - fastest-levenshtein
+      - fs-minipass
+      - glob
+      - graceful-fs
+      - hosted-git-info
+      - ini
+      - init-package-json
+      - is-cidr
+      - json-parse-even-better-errors
+      - libnpmaccess
+      - libnpmdiff
+      - libnpmexec
+      - libnpmfund
+      - libnpmhook
+      - libnpmorg
+      - libnpmpack
+      - libnpmpublish
+      - libnpmsearch
+      - libnpmteam
+      - libnpmversion
+      - make-fetch-happen
+      - minimatch
+      - minipass
+      - minipass-pipeline
+      - ms
+      - node-gyp
+      - nopt
+      - normalize-package-data
+      - npm-audit-report
+      - npm-install-checks
+      - npm-package-arg
+      - npm-pick-manifest
+      - npm-profile
+      - npm-registry-fetch
+      - npm-user-validate
+      - p-map
+      - pacote
+      - parse-conflict-json
+      - proc-log
+      - qrcode-terminal
+      - read
+      - semver
+      - spdx-expression-parse
+      - ssri
+      - supports-color
+      - tar
+      - text-table
+      - tiny-relative-date
+      - treeverse
+      - validate-npm-package-name
+      - which
+      - write-file-atomic
 
   /once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}

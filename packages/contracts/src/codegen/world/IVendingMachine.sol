@@ -8,7 +8,7 @@ pragma solidity >=0.8.24;
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IVendingMachine {
-  function test__setVendingMachineRatio(
+  function playtest__setVendingMachineRatio(
     uint256 smartObjectId,
     uint256 inventoryItemIdIn,
     uint256 inventoryItemIdOut,
@@ -16,14 +16,14 @@ interface IVendingMachine {
     uint256 quantityOut
   ) external;
 
-  function test__executeVendingMachine(
+  function playtest__executeVendingMachine(
     uint256 smartObjectId,
     address owner,
     uint256 quantity,
     uint256 inventoryItemIdIn
   ) external;
 
-  function test__calculateOutput(
+  function playtest__calculateOutput(
     uint256 inputRatio,
     uint256 outputRatio,
     uint256 inputAmount

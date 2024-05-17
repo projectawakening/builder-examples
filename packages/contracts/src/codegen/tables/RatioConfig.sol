@@ -19,8 +19,8 @@ import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-// Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test", name: "RatioConfig", typeId: RESOURCE_TABLE });`
-ResourceId constant _tableId = ResourceId.wrap(0x74627465737400000000000000000000526174696f436f6e6669670000000000);
+// Hex below is the result of `WorldResourceIdLib.encode({ namespace: "playtest", name: "RatioConfig", typeId: RESOURCE_TABLE });`
+ResourceId constant _tableId = ResourceId.wrap(0x7462706c617974657374000000000000526174696f436f6e6669670000000000);
 ResourceId constant RatioConfigTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(

@@ -15,13 +15,13 @@
     "test": "tsc --noEmit && mud test"
   },
   "dependencies": {
+    "@eveworld/common-constants": "^0.0.1",
+    "@eveworld/world": "^0.0.1",
     "@latticexyz/cli": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/store": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/world": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f",
-    "@eve/frontier-world": "/Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/frontier-world",
-    "@eve/common-constants": "/Users/toniya/workspace/contracts/world-chain-contracts/mud-contracts/common"
+    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
