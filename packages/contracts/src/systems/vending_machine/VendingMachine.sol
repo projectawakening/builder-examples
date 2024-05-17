@@ -7,13 +7,20 @@ import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
+import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
 import { InventoryLib } from "@eveworld/world/src/modules/inventory/InventoryLib.sol";
 import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
 import { IInventoryErrors } from "@eveworld/world/src/modules/inventory/IInventoryErrors.sol";
+
+import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 import { InventoryItemTable } from "@eveworld/world/src/codegen/tables/InventoryItemTable.sol";
 import { EphemeralInvTable } from "@eveworld/world/src/codegen/tables/EphemeralInvTable.sol";
+import { EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 import { EntityRecordTable, EntityRecordTableData } from "@eveworld/world/src/codegen/tables/EntityRecordTable.sol";
+
 import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
+import { Utils as InventoryUtils } from "@eveworld/world/src/modules/inventory/Utils.sol";
+import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 import { RatioConfig, RatioConfigData } from "../../codegen/tables/RatioConfig.sol";
@@ -25,6 +32,8 @@ import { RatioConfig, RatioConfigData } from "../../codegen/tables/RatioConfig.s
 contract VendingMachine is System {
   using InventoryLib for InventoryLib.World;
   using EntityRecordUtils for bytes14;
+  using InventoryUtils for bytes14;
+  using SmartDeployableUtils for bytes14;
 
   /**
    * @dev Define what goes in and out and set the exchange ratio for a vending machine
@@ -71,17 +80,14 @@ contract VendingMachine is System {
    * @param smartObjectId The smart object id of the smart storage unit
    * @param quantity is the quanity of the item to be exchanged
    */
-  function executeVendingMachine(
-    uint256 smartObjectId,
-    address owner,
-    uint256 quantity,
-    uint256 inventoryItemIdIn
-  ) public {
+  function executeVendingMachine(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
-
     if (ratioConfigData.ratioIn == 0 || ratioConfigData.ratioOut == 0) {
       return;
     }
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId())).ownerOf(
+      smartObjectId
+    );
 
     // Make sure there are enough items
     (uint256 quantityOutputItem, uint256 quantityInputItemLeftOver) = calculateOutput(
@@ -92,32 +98,56 @@ contract VendingMachine is System {
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 
-    uint256 inQuantity = InventoryItemTable.getQuantity(
-      _namespace().inventoryItemTableId(),
-      smartObjectId,
+    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(
+      _namespace().entityRecordTableId(),
       inventoryItemIdIn
     );
 
-    uint256 outQuantity = EphemeralInvTable.getQuantity(
-      _namespace().ephemeralInvTableId(),
-      smartObjectId,
-      _msgSender()
+    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(
+      _namespace().entityRecordTableId(),
+      itemObjectIdOut
     );
 
     InventoryItem[] memory inItems = new InventoryItem[](1);
-    inItems[0] = InventoryItem(inventoryItemIdIn, msg.sender, 46, 2, 70, quantity * ratioConfigData.ratioIn);
+    inItems[0] = InventoryItem(
+      inventoryItemIdIn,
+      msg.sender,
+      itemInEntity.typeId,
+      itemInEntity.itemId,
+      itemInEntity.volume,
+      quantity
+    );
+
     InventoryItem[] memory outItems = new InventoryItem[](1);
-    outItems[0] = InventoryItem(ratioConfigData.itemOut, owner, 46, 2, 70, quantity * ratioConfigData.ratioOut);
 
     if (quantityInputItemLeftOver > 0) {
       // world().inventoryOut(_msgSender(), smartObjectId, inventoryItemIdIn, quantityInputItemLeftOver);
       //Withdraw from ephemeralnventory and deposit to inventory
-      _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, _msgSender(), inItems);
+      // _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, _msgSender(), inItems);
+
+      outItems[0] = InventoryItem(
+        itemObjectIdOut,
+        ssuOwner,
+        itemOutEntity.itemId,
+        itemOutEntity.typeId,
+        itemOutEntity.volume,
+        quantityInputItemLeftOver
+      );
+      _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
     }
 
+    outItems[0] = InventoryItem(
+      itemObjectIdOut,
+      ssuOwner,
+      itemOutEntity.itemId,
+      itemOutEntity.typeId,
+      itemOutEntity.volume,
+      quantityOutputItem
+    );
+    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, _msgSender(), inItems);
     // world().inventoryOut(_msgSender(), smartObjectId, itemObjectIdOut, quantityOutputItem);
     //Withdraw from inventory and deposit to ephemeral inventory
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
   }
 
   /**
@@ -179,7 +209,7 @@ contract VendingMachine is System {
     } else return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: DEPLOYMENT_NAMESPACE });
   }
 
-  function _namespace() internal view returns (bytes14 namespace) {
+  function _namespace() internal pure returns (bytes14 namespace) {
     return DEPLOYMENT_NAMESPACE;
   }
 }

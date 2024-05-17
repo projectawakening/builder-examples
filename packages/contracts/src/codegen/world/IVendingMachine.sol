@@ -16,12 +16,7 @@ interface IVendingMachine {
     uint256 quantityOut
   ) external;
 
-  function playtest__executeVendingMachine(
-    uint256 smartObjectId,
-    address owner,
-    uint256 quantity,
-    uint256 inventoryItemIdIn
-  ) external;
+  function playtest__executeVendingMachine(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) external;
 
   function playtest__calculateOutput(
     uint256 inputRatio,
