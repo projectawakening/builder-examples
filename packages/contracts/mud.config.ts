@@ -1,7 +1,7 @@
 import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
-  namespace: "playtest",
+  namespace: "test",
   systems: {
     VendingMachine: {
       name: "VendingMachine",

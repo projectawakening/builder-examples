@@ -42,7 +42,7 @@ contract VendingMachine is System {
    * @param inventoryItemIdOut The inventory item id of the item that goes out
    * @param quantityIn The ratio of the item that goes in
    * @param quantityOut The ratio of the item that goes out
-   * Eg: 100:1 ratio would be 100, 1; 4:2 ratio would be 2, 1
+   * The ratios are whole numbers as an item cannot exist as float in game
    */
   function setVendingMachineRatio(
     uint256 smartObjectId,
@@ -121,10 +121,6 @@ contract VendingMachine is System {
     InventoryItem[] memory outItems = new InventoryItem[](1);
 
     if (quantityInputItemLeftOver > 0) {
-      // world().inventoryOut(_msgSender(), smartObjectId, inventoryItemIdIn, quantityInputItemLeftOver);
-      //Withdraw from ephemeralnventory and deposit to inventory
-      // _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, _msgSender(), inItems);
-
       outItems[0] = InventoryItem(
         itemObjectIdOut,
         ssuOwner,
@@ -145,9 +141,7 @@ contract VendingMachine is System {
       quantityOutputItem
     );
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, _msgSender(), inItems);
-    // world().inventoryOut(_msgSender(), smartObjectId, itemObjectIdOut, quantityOutputItem);
-    //Withdraw from inventory and deposit to ephemeral inventory
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
   }
 
   /**
