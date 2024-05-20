@@ -7,6 +7,10 @@ export default mudConfig({
       name: "VendingMachine",
       openAccess: true,
     },
+    ItemSeller: {
+      name: "ItemSeller",
+      openAccess: true,
+    },
   },
   tables: {
     RatioConfig: {
@@ -15,7 +19,27 @@ export default mudConfig({
         itemOut: "uint256",
         ratioIn: "uint256",
         ratioOut: "uint256",
-      }
-    }
+      },
+    },
+    ItemSellerERC20: {
+      keySchema: {
+        smartObjectId: "uint256", // SSU ID
+      },
+      valueSchema: {
+        tokenAddress: "address",
+        tokenDecimals: "uint256",
+        receiver: "address",
+      },
+    },
+    ItemPrice: {
+      keySchema: {
+        smartObjectId: "uint256", // SSU ID
+        itemId: "uint256",
+      },
+      valueSchema: {
+        isSet: "bool",
+        price: "uint256",
+      },
+    },
   },
 });
