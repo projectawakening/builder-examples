@@ -12,13 +12,14 @@
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "tsc --noEmit && mud test",
+    "test": "tsc --noEmit && forge test -vv",
     "configure-ratio": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/ExecuteVendingMachine.s.sol:ExecuteVendingMachine --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
   },
   "dependencies": {
-    "@eveworld/common-constants": "^0.0.2",
-    "@eveworld/world": "^0.0.2",
+    "@eveworld/common-constants": "0.0.2",
+    "@eveworld/smart-object-framework": "0.0.2",
+    "@eveworld/world": "0.0.2",
     "@latticexyz/cli": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/store": "2.0.0-transaction-context-98ef570f",

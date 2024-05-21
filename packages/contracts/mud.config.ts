@@ -3,19 +3,31 @@ import { mudConfig } from "@latticexyz/world/register";
 export default mudConfig({
   namespace: "test",
   systems: {
-    VendingMachine: {
-      name: "VendingMachine",
+    ItemSeller: {
+      name: "ItemSeller",
       openAccess: true,
     },
   },
   tables: {
-    RatioConfig: {
-      keySchema: { smartObjectId: "uint256", itemIn: "uint256" },
+    /**********************
+     * ITEM SELLER MODULE *
+     **********************/
+    /**
+     * Used to store the transfer details when a item is sold/bought back
+     */
+    ItemSellerTable: {
+      keySchema: {
+        smartObjectId: "uint256",
+      },
       valueSchema: {
-        itemOut: "uint256",
-        ratioIn: "uint256",
-        ratioOut: "uint256",
-      }
-    }
+        acceptedItemTypeId: "uint256",
+        erc20PurchasePriceWei: "uint256",
+        erc20BuybackPriceWei: "uint256",
+        erc20Address: "address",
+        isPurchaseAllowed: "bool",
+        isBuybackAllowed: "bool",
+      },
+      tableIdArgument: true,
+    },
   },
 });
