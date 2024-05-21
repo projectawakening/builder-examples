@@ -47,6 +47,13 @@ library SOFInitializationLibrary {
       SMART_OBJECT_MODULE_NAME,
       systemIds
     );
+  }
+
+  function initClassAssociation(IBaseWorld world) internal {
+    SmartObjectLib.World memory smartObject = SmartObjectLib.World({
+      namespace: SMART_OBJECT_DEPLOYMENT_NAMESPACE,
+      iface: world
+    });
     // setting up basic entity types
     smartObject.registerEntityType(CLASS, "Class");
     smartObject.registerEntityType(OBJECT, "Object");

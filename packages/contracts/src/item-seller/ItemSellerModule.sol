@@ -6,6 +6,7 @@ import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { Module } from "@latticexyz/world/src/Module.sol";
 import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
+import { System } from "@latticexyz/world/src/System.sol";
 
 import { ITEM_SELLER_MODULE_NAME as MODULE_NAME, ITEM_SELLER_MODULE_NAMESPACE as MODULE_NAMESPACE } from "./constants.sol";
 import { Utils } from "./Utils.sol";
@@ -32,7 +33,7 @@ contract ItemSellerModule is Module {
   function install(bytes memory encodeArgs) public {
     requireNotInstalled(__self, encodeArgs);
 
-    bytes14 namespace = abi.decode(encodeArgs, (bytes14));
+    (bytes14 namespace, address itemSeller) = abi.decode(encodeArgs, (bytes14, address));
 
     if (namespace == MODULE_NAMESPACE) {
       revert ItemSellerModule_InvalidNamespace(namespace);
@@ -42,7 +43,7 @@ contract ItemSellerModule is Module {
 
     IBaseWorld world = IBaseWorld(_world());
     (bool success, bytes memory returnData) = registrationLibrary.delegatecall(
-      abi.encodeCall(ItemSellerModuleRegistrationLibrary.register, (world, namespace))
+      abi.encodeCall(ItemSellerModuleRegistrationLibrary.register, (world, namespace, itemSeller))
     );
     require(success, string(returnData));
 
@@ -61,7 +62,7 @@ contract ItemSellerModuleRegistrationLibrary {
   /**
    * Register systems and tables for a new smart storage unit in a given namespace
    */
-  function register(IBaseWorld world, bytes14 namespace) external {
+  function register(IBaseWorld world, bytes14 namespace, address itemSeller) external {
     //Register the namespace
     if (!ResourceIds.getExists(WorldResourceIdLib.encodeNamespace(namespace)))
       world.registerNamespace(WorldResourceIdLib.encodeNamespace(namespace));
@@ -71,6 +72,6 @@ contract ItemSellerModuleRegistrationLibrary {
 
     //Register the systems
     if (!ResourceIds.getExists(namespace.itemSellerSystemId()))
-      world.registerSystem(namespace.itemSellerSystemId(), new ItemSeller(), true);
+      world.registerSystem(namespace.itemSellerSystemId(), System(itemSeller), true);
   }
 }

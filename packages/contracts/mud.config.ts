@@ -1,7 +1,7 @@
 import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
-  namespace: "test",
+  namespace: "ItemSeller",
   systems: {
     ItemSeller: {
       name: "ItemSeller",

@@ -39,8 +39,8 @@ import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
 import { OBJECT , ITEM_SELLER_CLASS_ID } from "../constants.sol";
 
 /**
- * @title GateKeep storage unit
- * @notice contains hook logic that modifies a vanilla SSU into a GateKeep storage unit, war-effort-style
+ * @title Item Seller
+ * @notice contains hook logic that modifies a vanilla SSU into a Item Seller, war-effort-style
  * users can only deposit a pre-determined kind of items in it, no withdrawals are allowed (transaction)
  */
 contract ItemSeller is EveSystem, IItemSellerErrors {

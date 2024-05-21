@@ -25,7 +25,7 @@ import { ModuleCore } from "@eveworld/smart-object-framework/src/systems/core/Mo
 
 import "@eveworld/common-constants/src/constants.sol";
 import { OBJECT, CLASS, ITEM_SELLER_CLASS_ID, ITEM_SELLER_DEPLOYMENT_NAMESPACE } from "../src/item-seller/constants.sol";
-
+import { ItemSeller } from "../src/item-seller/systems/ItemSeller.sol";
 import { ModulesInitializationLibrary } from "../src/utils/ModulesInitializationLibrary.sol";
 import { SOFInitializationLibrary } from "../src/utils/SOFInitializationLibrary.sol";
 import { SmartObjectLib } from "@eveworld/smart-object-framework/src/SmartObjectLib.sol";
@@ -125,6 +125,7 @@ contract ItemSellerUnitTest is Test {
       abi.encode(SMART_OBJECT_DEPLOYMENT_NAMESPACE, new EntityCore(), new HookCore(), new ModuleCore())
     );
     world.initSOF();
+    world.initClassAssociation();
     smartObject = SmartObjectLib.World(world, SMART_OBJECT_DEPLOYMENT_NAMESPACE);
 
     // install module dependancies
@@ -179,7 +180,7 @@ contract ItemSellerUnitTest is Test {
     smartStorageUnit = SmartStorageUnitLib.World(world, SMART_STORAGE_UNIT_DEPLOYMENT_NAMESPACE);
 
     // ItemSellerModule installation
-    _installModule(new ItemSellerModule(), ITEM_SELLER_DEPLOYMENT_NAMESPACE);
+    _installModule(new ItemSellerModule(), ITEM_SELLER_DEPLOYMENT_NAMESPACE, address(new ItemSeller()));
     world.initItemSeller();
     itemSeller = ItemSellerLib.World(world, ITEM_SELLER_DEPLOYMENT_NAMESPACE);
 
@@ -235,6 +236,16 @@ contract ItemSellerUnitTest is Test {
     if (NamespaceOwner.getOwner(WorldResourceIdLib.encodeNamespace(namespace)) == address(this))
       world.transferOwnership(WorldResourceIdLib.encodeNamespace(namespace), address(module));
     world.installModule(module, abi.encode(namespace));
+  }
+
+    function _installModule(
+    IModule module,
+    bytes14 namespace,
+    address system1
+  ) internal {
+    if (NamespaceOwner.getOwner(WorldResourceIdLib.encodeNamespace(namespace)) == address(this))
+      world.transferOwnership(WorldResourceIdLib.encodeNamespace(namespace), address(module));
+    world.installModule(module, abi.encode(namespace, system1));
   }
 
   function _registerClassLevelHookItemSeller() internal {
