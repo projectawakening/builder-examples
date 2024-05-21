@@ -266,7 +266,7 @@ library ModulesInitializationLibrary {
   }
 
   /**
-   * @notice registers the Gate Keeper module into Frontier's Smart Object Framework
+   * @notice registers the Item Seller module into Frontier's Smart Object Framework
    * @dev module must first be registered into MUD through either `mud deploy` and/or a `__Module` contract
    * @param world interface
    */
@@ -279,11 +279,11 @@ library ModulesInitializationLibrary {
   }
 
   /**
-   * @notice associates an entity to the Gate Keeper module
-   * @dev entity needs to be registered first, and Gate Keeper module needs to be fully initialized
+   * @notice associates an entity to the Item Seller module
+   * @dev entity needs to be registered first, and Item Seller module needs to be fully initialized
    * Also, SOF needs to be initialized too before doing the steps above
    * Ideally, only use this on Object entities, not Classes
-   * Note: this only associates the Gate Keeper module; to fully work, the entity needs to be also
+   * Note: this only associates the Item Seller module; to fully work, the entity needs to be also
    * associated to all modules related to Smart Deployables and Inventory.
    * @param world interface
    * @param entityId entityId of the object or class to associate to the module
@@ -296,7 +296,7 @@ library ModulesInitializationLibrary {
   }
 
   /**
-   * @notice creates a class from a given Frontier Type ID and associates all modules related to Gate Keeper to it
+   * @notice creates a class from a given Frontier Type ID and associates all modules related to Item Seller to it
    * @param world interface
    * @param frontierTypeId the frontier typeId we want to create a SOF class for
    * @return classId created
@@ -319,7 +319,7 @@ library ModulesInitializationLibrary {
   }
 
   /**
-   * @notice associates all modules related to Gate Keeper to a classId
+   * @notice associates all modules related to Item Seller to a classId
    * @dev the class entity needs to be registered in the SOF prior to calling this
    * @param world interface
    * @param classId we want to associate SSU modules and its dependencies to

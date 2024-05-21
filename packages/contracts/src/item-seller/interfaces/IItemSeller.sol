@@ -31,6 +31,12 @@ interface IItemSeller {
   ) external;
 
   /**
+   * @notice just tags an already existing SSU as an entityId
+   * @param smartObjectId The smart object id
+   */
+  function associateSSUToItemSeller(uint256 smartObjectId) external;
+
+  /**
    * @notice Sets the allow purchase status for a given smart object.
    * @param smartObjectId The ID of the smart object.
    * @param isAllowed The new purchase status (true to allow purchase, false to disallow).

@@ -67,6 +67,18 @@ library ItemSellerLib {
   }
 
   /**
+   * @notice just tags an already existing SSU as an entityId
+   * @param world The world state.
+   * @param smartObjectId The smart object id
+   */
+  function associateSSUToItemSeller(World memory world, uint256 smartObjectId) internal {
+    world.iface.call(
+      world.namespace.itemSellerSystemId(),
+      abi.encodeCall(IItemSeller.associateSSUToItemSeller, (smartObjectId))
+    );
+  }
+
+  /**
    * @notice Sets the allow purchase status for a given smart object.
    * @param world The world state.
    * @param smartObjectId The ID of the smart object.

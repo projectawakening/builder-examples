@@ -8,7 +8,7 @@ import { RESOURCE_SYSTEM, RESOURCE_TABLE } from "@latticexyz/world/src/worldReso
 import { EntityRecordTableData } from "@eveworld/world/src/codegen/tables/EntityRecordTable.sol";
 
 import { EveSystem } from "@eveworld/smart-object-framework/src/systems/internal/EveSystem.sol";
-import { ENTITY_RECORD_DEPLOYMENT_NAMESPACE, SMART_OBJECT_DEPLOYMENT_NAMESPACE, SMART_STORAGE_UNIT_DEPLOYMENT_NAMESPACE, INVENTORY_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { ENTITY_RECORD_DEPLOYMENT_NAMESPACE, SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE, SMART_OBJECT_DEPLOYMENT_NAMESPACE, SMART_STORAGE_UNIT_DEPLOYMENT_NAMESPACE, INVENTORY_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 import { SmartObjectLib } from "@eveworld/smart-object-framework/src/SmartObjectLib.sol";
 import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol";
 
@@ -56,7 +56,7 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
   modifier onlySSUOwner(uint256 smartObjectId) {
     if (
       _initialMsgSender() !=
-      IERC721Mintable(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId())).ownerOf(
+      IERC721Mintable(DeployableTokenTable.getErc721Address(SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE.deployableTokenTableId())).ownerOf(
         smartObjectId
       )
     ) {
@@ -99,6 +99,21 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
         storageCapacity,
         ephemeralStorageCapacity
       );
+    if (EntityTable.getDoesExists(_namespace().entityTableTableId(), smartObjectId) == false) {
+      // register smartObjectId as an object
+      _smartObjectLib().registerEntity(smartObjectId, OBJECT);
+    }
+    SmartObjectLib.World(IBaseWorld(_world()), SMART_OBJECT_DEPLOYMENT_NAMESPACE).tagEntity(
+      smartObjectId,
+      ITEM_SELLER_CLASS_ID
+    );
+  }
+
+  /**
+   * @notice just tags an already existing SSU as an entityId
+   * @param smartObjectId The smart object id
+   */
+  function associateSSUToItemSeller(uint256 smartObjectId) public onlySSUOwner(smartObjectId) hookable(smartObjectId, _systemId()) {
     if (EntityTable.getDoesExists(_namespace().entityTableTableId(), smartObjectId) == false) {
       // register smartObjectId as an object
       _smartObjectLib().registerEntity(smartObjectId, OBJECT);
@@ -201,7 +216,7 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
       totalQuantity;
     address erc20Address = ItemSellerTable.getErc20Address(_namespace().itemSellerTableId(), smartObjectId);
     // sending ERC20 from this contract to the user initiating the transfer
-    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId()))
+    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE.deployableTokenTableId()))
       .ownerOf(smartObjectId);
     IERC20Mintable(erc20Address).transferFrom(ssuOwner, _initialMsgSender(), priceWei);
   }
@@ -226,7 +241,7 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
       totalQuantity;
     address erc20Address = ItemSellerTable.getErc20Address(_namespace().itemSellerTableId(), smartObjectId);
     // sending ERC20 from this contract to the user initiating the transfer
-    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId()))
+    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE.deployableTokenTableId()))
       .ownerOf(smartObjectId);
     IERC20Mintable(erc20Address).transferFrom(ssuOwner, _initialMsgSender(), priceWei);
   }
@@ -250,7 +265,7 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
     uint256 priceWei = ItemSellerTable.getErc20PurchasePriceWei(_namespace().itemSellerTableId(), smartObjectId) *
       totalQuantity;
     address erc20Address = ItemSellerTable.getErc20Address(_namespace().itemSellerTableId(), smartObjectId);
-    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId()))
+    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE.deployableTokenTableId()))
       .ownerOf(smartObjectId);
     IERC20Mintable(erc20Address).transferFrom(_initialMsgSender(), ssuOwner, priceWei);
   }
@@ -274,7 +289,7 @@ contract ItemSeller is EveSystem, IItemSellerErrors {
     uint256 priceWei = ItemSellerTable.getErc20PurchasePriceWei(_namespace().itemSellerTableId(), smartObjectId) *
       totalQuantity;
     address erc20Address = ItemSellerTable.getErc20Address(_namespace().itemSellerTableId(), smartObjectId);
-    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId()))
+    address ssuOwner = IERC721Mintable(DeployableTokenTable.getErc721Address(SMART_DEPLOYABLE_DEPLOYMENT_NAMESPACE.deployableTokenTableId()))
       .ownerOf(smartObjectId);
     IERC20Mintable(erc20Address).transferFrom(_initialMsgSender(), ssuOwner, priceWei);
   }

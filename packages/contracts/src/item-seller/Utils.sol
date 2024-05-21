@@ -8,7 +8,6 @@ import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.so
 
 import { ITEM_SELLER_TABLE_NAME } from "./constants.sol";
 
-// import { GATE_KEEPER_SYSTEM_NAME } from "@eveworld/common-constants/src/constants.sol";
 // clash with a version of npm that doesnt exist yet
 bytes16 constant ITEM_SELLER_SYSTEM_NAME = "ItemSeller";
 
