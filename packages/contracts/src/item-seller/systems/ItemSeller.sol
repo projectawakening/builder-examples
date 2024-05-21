@@ -36,7 +36,7 @@ import { IERC20Mintable } from "@latticexyz/world-modules/src/modules/erc20-pupp
 import { SmartObjectData, WorldPosition } from "@eveworld/world/src/modules/smart-storage-unit/types.sol";
 import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
-import { OBJECT , ITEM_SELLER_CLASS_ID } from "../constants.sol";
+import { OBJECT, ITEM_SELLER_CLASS_ID } from "../constants.sol";
 
 /**
  * @title Item Seller
