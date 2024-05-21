@@ -13,6 +13,7 @@
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "tsc --noEmit && forge test -vv",
+    "configureItemSeller": ". ./.env && pnpm forge script ./script/ConfigureItemSeller.s.sol:ConfigureItemSeller --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "initializeModules": ". ./.env && pnpm forge script ./script/InitModules.s.sol:InitModules --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "initializeClassAssociation": ". ./.env && pnpm forge script ./script/InitClassAssociation.s.sol:InitClassAssociation --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "initializeItemSeller": ". ./.env && pnpm forge script ./script/InitItemSeller.s.sol:InitItemSeller --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
