@@ -14,7 +14,7 @@ import { ERC20Module } from "@latticexyz/world-modules/src/modules/erc20-puppet/
 contract PurchaseLensSeller is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     vm.startBroadcast(playerPrivateKey);
 
     address owner = vm.addr(playerPrivateKey);
@@ -22,13 +22,13 @@ contract PurchaseLensSeller is Script {
     console.log(owner);
 
     //Read from .env
-    // uint256 smartStorageUnitId = vm.envUint("SSU_ID");
+    uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItemId = vm.envUint("INVENTORY_ITEM_ID");
 
-    uint256 smartStorageUnitId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-2345")));
+    // uint256 smartStorageUnitId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-2345")));
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    IItemSeller(worldAddress).test2__purchaseItem(smartStorageUnitId, inventoryItemId, 1);
+    IItemSeller(worldAddress).lens__purchaseItem(smartStorageUnitId, inventoryItemId, 1);
 
     vm.stopBroadcast();
   }

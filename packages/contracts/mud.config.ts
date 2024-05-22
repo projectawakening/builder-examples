@@ -1,7 +1,7 @@
 import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
-  namespace: "test2",
+  namespace: "lens",
   systems: {
     VendingMachine: {
       name: "VendingMachine",
@@ -41,5 +41,15 @@ export default mudConfig({
         price: "uint256",
       },
     },
+    GateKeeperConfig: {
+      keySchema: {
+        smartObjectId: "uint256",
+      },
+      valueSchema: {
+        itemIn: "uint256",
+        targetItemQuantity: "uint256",
+        isGoalReached: "bool",
+      }
+    }
   },
 });

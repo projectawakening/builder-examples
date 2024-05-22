@@ -17,9 +17,9 @@ import { IItemSeller } from "../src/codegen/world/IItemSeller.sol";
 contract ApproveToken is Script {
   function run(address worldAddress) external {
     // Private key for the ERC20 Contract owner/deployer loaded from ENV
-    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
-    address owner = vm.addr(deployerPrivateKey);
+    address owner = vm.addr(playerPrivateKey);
 
     console.log(owner);
 
@@ -34,15 +34,16 @@ contract ApproveToken is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
-    vm.startBroadcast(deployerPrivateKey);
-    address itemSellerAddress = IItemSeller(worldAddress).test2__getContractAddress();
+    vm.startBroadcast(playerPrivateKey);
+    address itemSellerAddress = IItemSeller(worldAddress).lens__getContractAddress();
+    console.log(itemSellerAddress);
 
-    StoreSwitch.setStoreAddress(address(world));
+    // StoreSwitch.setStoreAddress(address(world));
     IERC20Mintable erc20 = IERC20Mintable(erc20Address);
     console.log(erc20.balanceOf(owner));
     erc20.approve(itemSellerAddress, amount * 1 ether);
 
-    console.log(erc20.balanceOf(itemSellerAddress));
+    console.log(erc20.allowance(owner, itemSellerAddress));
     console.log(erc20.balanceOf(owner));
 
     vm.stopBroadcast();
