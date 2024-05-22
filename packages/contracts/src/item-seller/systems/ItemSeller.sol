@@ -40,8 +40,8 @@ import { OBJECT, ITEM_SELLER_CLASS_ID } from "../constants.sol";
 
 /**
  * @title Item Seller
- * @notice contains hook logic that modifies a vanilla SSU into a Item Seller, war-effort-style
- * users can only deposit a pre-determined kind of items in it, no withdrawals are allowed (transaction)
+ * @notice Contains hook logic that modifies a vanilla SSU into an Item Seller, that accepts only a single type of item for purchases and buybacks.
+ * ERC20 transfers are automatically triggered from and to the user and SSU owner's wallets respectively each time a deposit or withdrawal of item is made, in the currency chosen by the owner.
  */
 contract ItemSeller is EveSystem, IItemSellerErrors {
   using WorldResourceIdInstance for ResourceId;
