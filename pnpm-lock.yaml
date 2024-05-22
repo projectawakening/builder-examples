@@ -85,10 +85,13 @@ importers:
   packages/contracts:
     dependencies:
       '@eveworld/common-constants':
-        specifier: ^0.0.2
+        specifier: 0.0.2
+        version: 0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/smart-object-framework':
+        specifier: 0.0.2
         version: 0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/world':
-        specifier: ^0.0.2
+        specifier: 0.0.2
         version: 0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.0.0-transaction-context-98ef570f
@@ -877,6 +880,24 @@ packages:
 
   /@eveworld/smart-object-framework@0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-jJT+UPDlt4quLXXiNNd7RtQEG+zaEHZn6kGDug7OQlRSbmsH14vHrwBJYH5xagjXZvPYCZzzNQTn184o1Q4Weg==}
+    dependencies:
+      '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
+      '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/store': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - google-protobuf
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
+  /@eveworld/smart-object-framework@0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-zXyjwDx0Nh1JIdyUyTLvjIsXWJyBgequhY8UXv/eXuws3GrptO5p+q5ev6AW/D1fcJ8j1iLqu9HHIre1iDHrRw==}
     dependencies:
       '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
