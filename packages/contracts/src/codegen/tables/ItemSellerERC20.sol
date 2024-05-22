@@ -19,8 +19,8 @@ import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 
-// Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test", name: "ItemSellerERC20", typeId: RESOURCE_TABLE });`
-ResourceId constant _tableId = ResourceId.wrap(0x746274657374000000000000000000004974656d53656c6c6572455243323000);
+// Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test2", name: "ItemSellerERC20", typeId: RESOURCE_TABLE });`
+ResourceId constant _tableId = ResourceId.wrap(0x746274657374320000000000000000004974656d53656c6c6572455243323000);
 ResourceId constant ItemSellerERC20TableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(

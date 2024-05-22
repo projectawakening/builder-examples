@@ -21,7 +21,7 @@ contract ExecuteVendingMachine is Script {
     uint256 itemIn = vm.envUint("ITEM_IN_ID");
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    IVendingMachine(worldAddress).test__executeVendingMachine(smartStorageUnitId, 1, itemIn);
+    IVendingMachine(worldAddress).test2__executeVendingMachine(smartStorageUnitId, 1, itemIn);
 
     vm.stopBroadcast();
   }

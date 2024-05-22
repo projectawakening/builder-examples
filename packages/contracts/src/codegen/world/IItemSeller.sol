@@ -11,17 +11,24 @@ import { ItemPriceData } from "./../tables/ItemPrice.sol";
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IItemSeller {
-  function test__registerERC20Token(uint256 smartObjectId, address tokenAddress, address receiver) external;
+  function test2__registerERC20Token(uint256 smartObjectId, address tokenAddress, address receiver) external;
 
-  function test__updateERC20Receiver(uint256 smartObjectId, address receiver) external;
+  function test2__updateERC20Receiver(uint256 smartObjectId, address receiver) external;
 
-  function test__getERC20Data(uint256 smartObjectId) external view returns (ItemSellerERC20Data memory);
+  function test2__getERC20Data(uint256 smartObjectId) external view returns (ItemSellerERC20Data memory);
 
-  function test__setItemPrice(uint256 smartObjectId, uint256 itemId, uint256 price) external;
+  function test2__setItemPrice(uint256 smartObjectId, uint256 inventoryItemId, uint256 price) external;
 
-  function test__unsetItemPrice(uint256 smartObjectId, uint256 itemId) external;
+  function test2__unsetItemPrice(uint256 smartObjectId, uint256 inventoryItemId) external;
 
-  function test__getItemPriceData(uint256 smartObjectId, uint256 itemId) external view returns (ItemPriceData memory);
+  function test2__getItemPriceData(
+    uint256 smartObjectId,
+    uint256 inventoryItemId
+  ) external view returns (ItemPriceData memory);
 
-  function test__purchaseItem(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test2__purchaseItem(uint256 smartObjectId, uint256 inventoryItemId, uint256 quantity) external;
+
+  function test2__collectTokens(uint256 smartObjectId) external;
+
+  function test2__getContractAddress() external returns (address);
 }
