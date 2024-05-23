@@ -196,8 +196,6 @@ pnpm run deploy:tesnet --worldAddress ${WORLD_ADDRESS}
 pnpm run configure-ratio
 ```
 
-5. 
-
 
 ## Running and Deploying in Local with the World Chain Contracts 
 Clone the World Chain Contracts repository [here](https://github.com/projectawakening/world-chain-contracts/tree/stable-release) and deploy a canonical World contract in your local. 
