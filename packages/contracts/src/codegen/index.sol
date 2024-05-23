@@ -6,3 +6,4 @@ pragma solidity >=0.8.24;
 import { RatioConfig, RatioConfigData, RatioConfigTableId } from "./tables/RatioConfig.sol";
 import { ItemSellerERC20, ItemSellerERC20Data, ItemSellerERC20TableId } from "./tables/ItemSellerERC20.sol";
 import { ItemPrice, ItemPriceData, ItemPriceTableId } from "./tables/ItemPrice.sol";
+import { GateKeeperConfig, GateKeeperConfigData, GateKeeperConfigTableId } from "./tables/GateKeeperConfig.sol";
