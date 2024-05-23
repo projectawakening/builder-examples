@@ -123,8 +123,6 @@ Then, execute the following commands
 pnpm run foundry:up
 
 pnpm i
-
-pnpm run mud:up
 ```
 
 ## Step 2: ENV changes:
