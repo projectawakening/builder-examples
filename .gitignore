@@ -1,3 +1,4 @@
 node_modules
 node_modules/
 packages/contracts/worlds.json
+packages/contracts/src/codegen/

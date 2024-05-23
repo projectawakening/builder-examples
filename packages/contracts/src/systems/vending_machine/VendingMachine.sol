@@ -66,7 +66,7 @@ contract VendingMachine is System {
 
     if (entityInRecord.recordExists == false || entityOutRecord.recordExists == false) {
       revert IInventoryErrors.Inventory_InvalidItem(
-        "InventoryEphemeralSystem: item is not created on-chain",
+        "VendingMachine: item is not created on-chain",
         inventoryItemIdIn
       );
     }

@@ -25,7 +25,7 @@ contract ConfigureRatio is Script {
     console.log("itemOut", itemOut);
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    IVendingMachine(worldAddress).test__setVendingMachineRatio(smartStorageUnitId, itemIn, itemOut, inRatio, outRatio);
+    IVendingMachine(worldAddress).test2__setVendingMachineRatio(smartStorageUnitId, itemIn, itemOut, inRatio, outRatio);
     // console.log("ratioIn:", RatioConfig.getRatioIn(smartStorageUnitId, itemIn));
     // console.log("ratioOut:", RatioConfig.getRatioOut(smartStorageUnitId, itemIn));
 
