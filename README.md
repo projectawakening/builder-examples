@@ -13,7 +13,6 @@ You can enhance in-game functionalities by:
 
 Refer the [docs](https://docs.projectawakening.io/developing) for details.
 
-Now, let's explore how to customize an SSU by configuring as a vending machine.
  
 ## Example
 This example demonstrates customizing an in-game SSU as a vending machine. The vending machine can be configured to determine which items go into the input bay, what is returned (vended) in the output bay, and in what ratio.
@@ -21,7 +20,7 @@ This example demonstrates customizing an in-game SSU as a vending machine. The v
 ![Vending Machine](image.png)
 
 There are 2 ways you can start building. 
-1. Less Code / No Code 
+1. Less code / No code 
     - configure your SSU as a vending machine with the ratio you like 
 2. Program your SSU 
     - make code changes to the Vending Machine smart contract and have your own logic 
@@ -29,7 +28,7 @@ There are 2 ways you can start building.
     - interact
 
 
-## Less Code / No Code  
+## Less code / No code  
 ### Steps to Customize a SSU as a vending machine
 To get started without making any code changes, follow below steps by adjusting the configuration in the [.env](./packages/contracts/.env) file and later explore making code changes and implementing new features.
 
@@ -139,7 +138,7 @@ Make changes to [.env](./packages/contracts/.env) to get started:
 - Add your **private key** to execute smart contract transactions on-chain.
     - You can export your **private key** from EVE Vault by clicking the three dots on the main screen and there select **view private key**.
     
-- The [.env](./packages/contracts/.env) file is configured by default for deployment to the playtest devnet, if you are testing locally be sure to comment out Lines 10-111 and uncomment the Local RPC parameters on Lines 6-7.
+- The [.env](./packages/contracts/.env) file is configured by default for deployment to the playtest devnet, if you are testing locally be sure to comment out Lines 20-21 and uncomment the Local RPC parameters on Lines 16-17.
 
 - Add your **Smart Storage Unit ID**, **item-in ID**, and **item-out ID** to configure your vending machine. Obtain ID values from either the [dapp](<todo>) or [indexer](<todo>).
 
@@ -147,7 +146,6 @@ Make changes to [.env](./packages/contracts/.env) to get started:
   - Right click your Smart Storage Unit, and view the `ssu-id`.
   - **item-in ID** and **item-out ID** can be viewed in the indexer.
 
-//TODO add image
 
 ## Step 3: Configure SSU as Vending Machine
 
@@ -160,6 +158,10 @@ NOTE: Its a prerequisite to have already deposited these items into the SSU once
 ```bash
 pnpm run configure-vending-machine
 ```
+
+## Step 3: Build a UI to interact with the vending machine in game
+
+You can build a external UI or a In game to interact with your SSU by calling `executeVendingMachine()` function from the dapp.
 
 Now, test the configuration by adding items to the input bay in-game and observe how it works. Play around, and once comfortable, delve deeper by making code changes. To understand the smart contract structure, refer to the [docs]() and start building.
 
