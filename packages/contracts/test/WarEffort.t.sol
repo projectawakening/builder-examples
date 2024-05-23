@@ -107,8 +107,8 @@ contract WarEffortUnitTest is Test {
   SmartDeployableLib.World smartDeployable;
   InventoryLib.World inventory;
 
-  uint256 storageCapacity = 100000;
-  uint256 ephemeralStorageCapacity = 100000;
+  uint256 storageCapacity = type(uint256).max;
+  uint256 ephemeralStorageCapacity = type(uint256).max;
 
   bytes14 constant ERC721_DEPLOYABLE = "DeployableTokn";
 
@@ -238,6 +238,12 @@ contract WarEffortUnitTest is Test {
     hookId = uint256(keccak256(abi.encodePacked(systemId, functionSelector)));
   }
 
+  function _createEntityRecords(InventoryItem[] memory _items) internal {
+    for (uint i = 0; i < _items.length; i++) {
+      entityRecord.createEntityRecord(_items[i].inventoryItemId, _items[i].itemId, _items[i].typeId, _items[i].volume);
+    }
+  }
+
   function testSetup() public {
     address smartStorageUnitSystem = Systems.getSystem(
       SMART_STORAGE_UNIT_DEPLOYMENT_NAMESPACE.smartStorageUnitSystemId()
@@ -311,25 +317,28 @@ contract WarEffortUnitTest is Test {
     assertEq(entityRecordOffchainTableData.description, "testdesc");
   }
 
-  function testCreateAndDepositItemsToInventoryRevertWrongItemType(uint256 smartObjectId, uint256 entityTypeId, address owner) public {
+  function testEphemeralToInventoryTransferRevertWrongItemType(uint256 smartObjectId, uint256 entityTypeId, address owner) public {
     testCreateAndAnchorWarEffort(smartObjectId, owner);
     vm.assume(entityTypeId != 0);
     InventoryItem[] memory items = new InventoryItem[](1);
     items[0] = InventoryItem({
       inventoryItemId: 123,
-      owner: address(2),
+      owner: owner,
       itemId: 12,
       typeId: entityTypeId,
       volume: 10,
       quantity: 5
     });
+    _createEntityRecords(items);
     warEffort.setAcceptedItemTypeId(smartObjectId, 0);
     warEffort.setTargetQuantity(smartObjectId, 1000000);
+    inventory.depositToEphemeralInventory(smartObjectId, owner, items);
+
     vm.expectRevert();
-    smartStorageUnit.createAndDepositItemsToInventory(smartObjectId, items);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, items);
   }
 
-  function testCreateAndDepositItemsToInventoryRevertTooMuchDeposited(
+  function testEphemeralToInventoryTransferRevertTooMuchDeposited(
     uint256 smartObjectId,
     uint256 entityTypeId,
     uint256 quantity,
@@ -343,55 +352,65 @@ contract WarEffortUnitTest is Test {
     InventoryItem[] memory items = new InventoryItem[](1);
     items[0] = InventoryItem({
       inventoryItemId: 123,
-      owner: address(2),
+      owner: owner,
       itemId: 12,
       typeId: entityTypeId,
       volume: volume,
       quantity: quantity + 1
     });
+    _createEntityRecords(items);
     warEffort.setAcceptedItemTypeId(smartObjectId, entityTypeId);
     warEffort.setTargetQuantity(smartObjectId, quantity);
+
+    inventory.depositToEphemeralInventory(smartObjectId, owner, items);
     vm.expectRevert();
-    smartStorageUnit.createAndDepositItemsToInventory(smartObjectId, items);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, items);
 
     // deposit up to goal
     items[0] = InventoryItem({
       inventoryItemId: 123,
-      owner: address(2),
+      owner: owner,
       itemId: 12,
       typeId: entityTypeId,
       volume: volume,
       quantity: quantity
     });
-    smartStorageUnit.createAndDepositItemsToInventory(smartObjectId, items);
+    inventory.depositToEphemeralInventory(smartObjectId, owner, items);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, items);
+
     // then deposit one and see if it reverts
     items[0] = InventoryItem({
       inventoryItemId: 123,
-      owner: address(2),
+      owner: owner,
       itemId: 12,
       typeId: entityTypeId,
       volume: volume,
       quantity: 1
     });
+    inventory.depositToEphemeralInventory(smartObjectId, owner, items);
     vm.expectRevert();
-    smartStorageUnit.createAndDepositItemsToInventory(smartObjectId, items);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, items);
   }
 
-  function testCreateAndDepositItemsToInventory(uint256 smartObjectId, uint256 entityTypeId, address owner) public {
+  function testEphemeralToInventoryTransfer(uint256 smartObjectId, uint256 entityTypeId, address owner) public {
     testCreateAndAnchorWarEffort(smartObjectId, owner);
 
     InventoryItem[] memory items = new InventoryItem[](1);
     items[0] = InventoryItem({
       inventoryItemId: 123,
-      owner: address(2),
+      owner: owner,
       itemId: 12,
       typeId: entityTypeId,
       volume: 10,
       quantity: 5
     });
+    _createEntityRecords(items);
     warEffort.setAcceptedItemTypeId(smartObjectId, entityTypeId);
     warEffort.setTargetQuantity(smartObjectId, 1000000);
-    smartStorageUnit.createAndDepositItemsToInventory(smartObjectId, items);
+    inventory.depositToEphemeralInventory(smartObjectId, owner, items);
+
+    // transfers items from user's ephemeral inventory to SSU's inventory
+    inventory.ephemeralToInventoryTransfer(smartObjectId, items);
 
     InventoryTableData memory inventoryTableData = InventoryTable.get(
       INVENTORY_DEPLOYMENT_NAMESPACE.inventoryTableId(),
