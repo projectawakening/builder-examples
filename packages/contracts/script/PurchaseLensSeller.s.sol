@@ -28,7 +28,7 @@ contract PurchaseLensSeller is Script {
     // uint256 smartStorageUnitId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-2345")));
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    IItemSeller(worldAddress).lens__purchaseItem(smartStorageUnitId, inventoryItemId, 1);
+    IItemSeller(worldAddress).test2__purchaseItem(smartStorageUnitId, inventoryItemId, 1);
 
     vm.stopBroadcast();
   }
