@@ -192,11 +192,11 @@ contract ItemSellerUnitTest is Test {
     _registerClassLevelHookItemSeller();
   }
 
-  function _createItems(uint256 typeId) internal returns (InventoryItem[] memory) {
+  function _createItems(uint256 typeId, address owner) internal returns (InventoryItem[] memory) {
     InventoryItem[] memory _items = new InventoryItem[](3);
     _items[0] = InventoryItem({
       inventoryItemId: uint256(keccak256(abi.encodePacked(typeId))),
-      owner: address(1), // doesnt actually matter apparently
+      owner: owner,
       itemId: 69,
       typeId: typeId,
       volume: 1,
@@ -204,7 +204,7 @@ contract ItemSellerUnitTest is Test {
     });
     _items[1] = InventoryItem({
       inventoryItemId: uint256(keccak256(abi.encodePacked(typeId))) + 1,
-      owner: address(1), // doesnt actually matter apparently
+      owner: owner,
       itemId: 69,
       typeId: typeId,
       volume: 1,
@@ -212,7 +212,7 @@ contract ItemSellerUnitTest is Test {
     });
     _items[2] = InventoryItem({
       inventoryItemId: uint256(keccak256(abi.encodePacked(typeId))) + 2,
-      owner: address(1), // doesnt actually matter apparently
+      owner: owner,
       itemId: 69,
       typeId: typeId,
       volume: 1,
@@ -374,7 +374,7 @@ contract ItemSellerUnitTest is Test {
 
     // to deposit items, we `allowBuyBack` with a price of 0` so we can "deposit" items
     InventoryItem[] memory tempItems = new InventoryItem[](1);
-    tempItems[0] = _createItems(acceptedEntityTypeId)[0]; //quantity = 10
+    tempItems[0] = _createItems(acceptedEntityTypeId, owner)[0]; //quantity = 10
     _createEntityRecords(tempItems);
     itemSeller.setAllowBuyback(smartObjectId, true);
     inventory.depositToInventory(smartObjectId, tempItems);
@@ -383,7 +383,7 @@ contract ItemSellerUnitTest is Test {
     // let's see if an ERC20 transfer is shot
     vm.expectEmit(true, true, true, false);
     emit IERC20Events.Transfer(owner, owner, tempItems[0].quantity * purchasePrice);
-    inventory.withdrawFromInventory(smartObjectId, tempItems);
+    inventory.inventoryToEphemeralTransfer(smartObjectId, tempItems);
   }
 
   function testBuybackItems(
@@ -401,13 +401,16 @@ contract ItemSellerUnitTest is Test {
 
     // to deposit items, we `allowBuyBack` with a price of 0` so we can "deposit" items
     InventoryItem[] memory tempItems = new InventoryItem[](1);
-    tempItems[0] = _createItems(acceptedEntityTypeId)[0]; //quantity = 10
+    tempItems[0] = _createItems(acceptedEntityTypeId, owner)[0]; //quantity = 10
     _createEntityRecords(tempItems);
     itemSeller.setAllowBuyback(smartObjectId, true);
+
+    //deposit those items to the user's ephemeral inventory (not required in game, handled by the game servers)
+    inventory.depositToEphemeralInventory(smartObjectId, owner, tempItems);
 
     // let's see if an ERC20 transfer is shot
     vm.expectEmit(true, true, true, false);
     emit IERC20Events.Transfer(owner, owner, tempItems[0].quantity * purchasePrice);
-    inventory.depositToInventory(smartObjectId, tempItems);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, tempItems);
   }
 }
