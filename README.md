@@ -184,7 +184,7 @@ pnpm build
 Under the `world-chain-contracts` repository, run the following: 
 
 ```
-git clone https://github.com/projectawakening/world-chain-contracts/tree/stable-release
+git clone https://github.com/projectawakening/world-chain-contracts
 cd world-chain-contracts
 pnpm run dev 
 ``` 
