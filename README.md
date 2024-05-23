@@ -17,7 +17,6 @@ Refer the [docs](https://docs.projectawakening.io/developing) for details.
 ## Example
 This example demonstrates customizing an in-game SSU as a vending machine. The vending machine can be configured to determine which items go into the input bay, what is returned (vended) in the output bay, and in what ratio.
 
-![Vending Machine](image.png)
 
 There are 2 ways you can start building. 
 1. Less code / No code 
@@ -138,7 +137,7 @@ Make changes to [.env](./packages/contracts/.env) to get started:
     
 - The [.env](./packages/contracts/.env) file is configured by default for deployment to the playtest devnet, if you are testing locally be sure to comment out Lines 20-21 and uncomment the Local RPC parameters on Lines 16-17.
 
-- Add your **Smart Storage Unit ID**, **item-in ID**, and **item-out ID** to configure your vending machine. Obtain ID values from either the [dapp](<todo>) or [indexer](<todo>).
+- Add your **Smart Storage Unit ID**, **item-in ID**, and **item-out ID** to configure your vending machine. Obtain ID values from either the dapp or indexer.
 
 - **Smart Storage Unit ID (SSU ID)** is available once you have deployed an SSU in the game. 
   - Right click your Smart Storage Unit, and view the `ssu-id`.
@@ -161,7 +160,7 @@ pnpm run configure-vending-machine
 
 You can build a external UI or a In game to interact with your SSU by calling `executeVendingMachine()` function from the dapp.
 
-Now, test the configuration by adding items to the input bay in-game and observe how it works. Play around, and once comfortable, delve deeper by making code changes. To understand the smart contract structure, refer to the [docs]() and start building.
+Now, test the configuration by adding items to the input bay in-game and observe how it works. Play around, and once comfortable, delve deeper by making code changes. To understand the smart contract structure, refer to the docs and start building.
 
 
 ## Program your SSU 
@@ -203,7 +202,7 @@ pnpm run configure-ratio
 
 
 ## Running and Deploying in Local with the World Chain Contracts 
-Clone the World Chain Contracts repository [here](https://github.com/projectawakening/world-chain-contracts/tree/stable-release) and deploy a canonical World contract in your local. 
+Clone the World Chain Contracts repository [here](https://github.com/projectawakening/world-chain-contracts) and deploy a canonical World contract in your local. 
 
 1. To deploy all contract in local run, from the root of the repository 
 
