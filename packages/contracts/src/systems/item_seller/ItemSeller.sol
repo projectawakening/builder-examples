@@ -118,8 +118,7 @@ contract ItemSeller is System {
     require(itemPriceData.isSet, "Item price not set");
 
     uint256 totalAmount = itemPriceData.price * quantity;
-    totalAmount = totalAmount * ssuData.tokenDecimals;
-
+    
     //This function can also be changed to transferFrom if the user has to approve the contract to spend the tokens
     //Transfer from msg.sender to this contract and then from this contract to the receiver
     console.logAddress(address(this));
