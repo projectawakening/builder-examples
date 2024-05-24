@@ -17,7 +17,7 @@ contract ConfigureLensSeller is Script {
     address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
     address receiver = vm.envAddress("RECEIVER_ADDRESS");
     uint256 inventoryItemId = vm.envUint("INVENTORY_ITEM_ID");
-    uint256 price = vm.envUint("PRICE");
+    uint256 price = vm.envUint("PRICE_IN_WEI");
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
     IItemSeller(worldAddress).test2__registerERC20Token(smartStorageUnitId, tokenAddress, receiver);
