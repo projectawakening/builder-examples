@@ -206,8 +206,7 @@ Note: This step is required only if you are making code changes.
 
 **NOTE:** In the MUD Framework deploying new contracts is specific to a NAMESPACE for permissioning reasons. If you try to deploy to an existing namespace for which you are not the namespace owner, the deployment will fail.
 
-2. Deploy 
-  - Build locally:
+2. Build locally:
 
 ```bash
 pnpm tablegen && pnpm worldgen
@@ -217,20 +216,29 @@ pnpm build
 ## Running and Deploying in Local with the World Chain Contracts 
 Clone the World Chain Contracts repository [here](https://github.com/projectawakening/world-chain-contracts) and deploy a canonical World contract in your local. 
 
-1. To deploy all contract in local run, from the root of the repository 
+
+1. Under the `world-chain-contracts` repository, run the following: 
+
+```
+git clone https://github.com/projectawakening/world-chain-contracts
+cd world-chain-contracts
+pnpm run dev 
+``` 
+
+2. To deploy all contract in local run, from the root of the repository 
 
 ```
 pnpm run dev
 ```
 
-2. In your terminal, under the `.scripts/deploy-all.sh` process, wait a few seconds for all the contracts to compile and deploy. 
+3. In your terminal, under the `.scripts/deploy-all.sh` process, wait a few seconds for all the contracts to compile and deploy. 
 
 Obtain the world contract address in the terminal, or in the `worlds.json` file created in the root directory. 
 
 ![World deployment script](./world-deployment.png)
 
 
-3. Deploying builder example contract to World Contract
+4. Deploying builder example contract to World Contract
 
 ```
 cd packages/contracts
@@ -240,7 +248,14 @@ Deploy the contracts in this repository by, replacing the ADDRESS field with the
 
 ```
 pnpm run deploy:local --worldAddress <ADDRESS>
+
 ``` 
+
+5. Write Scripts to interact with it in [scripts](./packages/contracts/script/) folder. Or make use of the existing script if it is using the ratio logic and run it! 
+
+```
+pnpm run configure-ratio
+```
 
 Now you have the local chain, world contracts and builder example contracts deployed to the chain. You can play around by any building any logic. 
 
@@ -250,3 +265,5 @@ Now you have the local chain, world contracts and builder example contracts depl
 nano ~/.zshrc
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+
