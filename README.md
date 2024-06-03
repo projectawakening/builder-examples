@@ -1,4 +1,4 @@
-# Good Place to start 
+# A Good Place to start 
 Our work is built on [MUD](https://mud.dev/quickstart). [MUD](https://mud.dev/introduction) docs is a good place to start learning the concepts 
 
 Thanks to the contributors of the original project!
