@@ -1,0 +1,41 @@
+{
+  "name": "contracts",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "mud build",
+    "clean": "forge clean && rimraf src/codegen",
+    "deploy:local": "pnpm run build && mud deploy",
+    "deploy:evenet": "pnpm run build && mud deploy --profile=evenet",
+    "dev": "pnpm mud dev-contracts",
+    "lint": "pnpm run prettier && pnpm run solhint",
+    "prettier": "prettier --write 'src/**/*.sol'",
+    "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
+    "test": "tsc --noEmit && forge test -vvv",
+    "grant-table-access": ". ./.env && pnpm forge script ./script/GrantAccessRoleTableAccess.s.sol:GrantAccessRoleTableAccess --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "configure-admin-access-list": ". ./.env && pnpm forge script ./script/ConfigureAdminAccessList.s.sol:ConfigureAdminAccessList --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "configure-approved-access-list": ". ./.env && pnpm forge script ./script/ConfigureApprovedAccessList.s.sol:ConfigureApprovedAccessList --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "configure-hooks": ". ./.env && pnpm forge script ./script/ConfigureHooks.s.sol:ConfigureHooks --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
+  },
+  "dependencies": {
+    "@latticexyz/cli": "2.0.0-next-17-awakening-9c07ab3a2",
+    "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
+    "@latticexyz/store": "2.0.0-transaction-context-98ef570f",
+    "@latticexyz/world": "2.0.0-transaction-context-98ef570f",
+    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f",
+    "@eveworld/world": "0.0.7",
+    "@eveworld/smart-object-framework": "0.0.7",
+    "@eveworld/common-constants": "0.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "ds-test": "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0",
+    "forge-std": "https://github.com/foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1",
+    "prettier": "^2.6.2",
+    "prettier-plugin-solidity": "1.1.3",
+    "solhint": "^3.3.7",
+    "solhint-config-mud": "2.0.0-transaction-context-98ef570f",
+    "solhint-plugin-mud": "2.0.0-transaction-context-98ef570f"
+  }
+}

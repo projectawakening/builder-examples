@@ -1,4 +1,11 @@
-node_modules
-node_modules/
-packages/contracts/worlds.json
-packages/contracts/src/codegen/
+**/node_modules
+**/worlds.json
+**/src/codegen
+**/out
+**/cache
+**/bindings
+**/artifacts
+**/broadcast
+**/deploys
+**/dist
+**/.DS_Store

@@ -11,7 +11,7 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.0.0-transaction-context-98ef570f",
+    "@latticexyz/cli": "2.0.0-next-17-awakening-9c07ab3a2",
     "@types/debug": "4.1.7",
     "@types/prettier": "2.7.2",
     "@typescript-eslint/eslint-plugin": "5.46.1",

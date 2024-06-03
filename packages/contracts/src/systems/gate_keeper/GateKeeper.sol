@@ -22,7 +22,7 @@ import { EntityRecordTable, EntityRecordTableData } from "@eveworld/world/src/co
 import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { Utils as InventoryUitls } from "@eveworld/world/src/modules/inventory/Utils.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { WORLD_NAMESPACE } from "../constants.sol";
 
 import { ItemSellerERC20, ItemSellerERC20Data } from "../../codegen/tables/ItemSellerERC20.sol";
 import { ItemPrice, ItemPriceData } from "../../codegen/tables/ItemPrice.sol";
@@ -140,12 +140,12 @@ contract GateKeeper is System {
   }
 
   function _inventoryLib() internal view returns (InventoryLib.World memory) {
-    if (!ResourceIds.getExists(WorldResourceIdLib.encodeNamespace(DEPLOYMENT_NAMESPACE))) {
-      return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: DEPLOYMENT_NAMESPACE });
-    } else return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: DEPLOYMENT_NAMESPACE });
+    if (!ResourceIds.getExists(WorldResourceIdLib.encodeNamespace(WORLD_NAMESPACE))) {
+      return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: WORLD_NAMESPACE });
+    } else return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: WORLD_NAMESPACE });
   }
 
   function _namespace() internal pure returns (bytes14 namespace) {
-    return DEPLOYMENT_NAMESPACE;
+    return WORLD_NAMESPACE;
   }
 }
