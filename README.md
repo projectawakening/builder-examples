@@ -40,74 +40,35 @@ To get started without making any code changes, follow below steps by adjusting 
 - Have basic knowledge of smart contracts and the [MUD](https://mud.dev/quick-start) framework.
 - Have an IDE that supports Solidity (preferably).
 
-## Step 0 (optional): Setting up your environment:
+## Step 0: Setting up your environment:
+This guide will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
 
-### For Windows users:
-First you will need to install Windows Subsystem for Linux, version 2. To do that, open the command prompt and enter the command:
+### Prerequisites
+Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
+
+### Step 0.1: Deploying world contracts into a local node.
+We have provided a compose file which bundles the running of the local node and deploying the contracts together. Run that with the command
+```bash
+docker compose up -d
+```
+and monitor the progress of the world deployment with:
 
 ```bash
-wsl.exe --install
+docker compose logs -f world-deployer
 ```
 
-Once that is done, you can launch the `Ubuntu` app from the _Start Menu_, which will give you access to a Linux terminal. From then on, enter the following commands to update your Linux distribution:
+This will display the progress of the deployment and relevant addresses once it completes.
+
+### Step 0.2 (Optional): Retrieveing world ABIs
+You can also retrieve the world abis from the deployment by running:
 
 ```bash
-apt update && apt upgrade
+docker compose cp world-deployer:/monorepo/abis .
 ```
 
-### For MacOS users:
-First, we need to install the CLI tools for Xcode. Run the following command in a Terminal: 
+### Using local environment
 
-```bash
-xcode-select --install
-```
-
-Then, install homebrew:
-
-```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-And finally, install Z Shell (a.k.a. zsh), which is a Unix shell built on top of bash. This will solve most issue linked to disreptancies between MacOS and other Linux distributions:
-
-```bash
-brew install zsh
-```
-
-You can then close this terminal and open a new one to confirm the changes made to your terminal.
-
-## Step 0.5: Setting up node:
-
-If that is not done already, we need to install Node Version Manager. (See the project page on Github for more info or troubleshooting : [Node Version Manager Github](https://github.com/nvm-sh/nvm))
-To do that, run either of the following cURL or Wget commands in your terminal:
-
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.6/install.sh | bash
-```
-
-```bash
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.6/install.sh | bash
-```
-
-To test if the installation went properly, verify that you can run the following command:
-
-```bash
-nvm —version
-```
-
-Now, let’s install Node Package Manager (nvm) with the following command:
-
-```bash
-nvm install 18 && nvm use 18
-```
-
-running `node --version` should return `v18.19.0`, which means your terminal is now properly set for the next steps.
-
-Finally, install pnpm :
-
-```bash
-npm install pnpm -g
-```
+The steps described previously provide us with an anvil node with all the frontier world contracts and support contracts deployed into it. When experimenting with the builder examplees or deploying your own, you can target the local node using the `RPC_URL=http://127.0.0.1:8545`.
 
 ## Step 1: Set up the repository:
 
