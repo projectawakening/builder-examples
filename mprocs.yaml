@@ -5,3 +5,6 @@ procs:
   client:
     cwd: packages/client
     shell: pnpm run dev
+  mock-data:
+    cwd: packages/mock-data
+    shell: pnpm run dev
