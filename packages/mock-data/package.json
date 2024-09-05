@@ -29,9 +29,9 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol'"
   },
   "dependencies": {
-    "@eveworld/common-constants": "0.0.7",
+    "@eveworld/common-constants": "0.0.12",
     "@eveworld/smart-object-framework": "0.0.7",
-    "@eveworld/world": "0.0.8",
+    "@eveworld/world": "0.0.12",
     "@latticexyz/cli": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/gas-report": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",

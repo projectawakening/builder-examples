@@ -41,6 +41,7 @@ contract CreateSmartCharacter is Script {
     smartCharacter.createCharacter(
       characterId,
       characterAddress,
+      corpId,
       EntityRecordData({ typeId: typeId, itemId: itemId, volume: volume }),
       EntityRecordOffchainTableData({ name: characterName, dappURL: "noURL", description: "." }),
       cid

@@ -140,14 +140,14 @@ importers:
   packages/mock-data:
     dependencies:
       '@eveworld/common-constants':
-        specifier: 0.0.7
-        version: 0.0.7(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+        specifier: 0.0.12
+        version: 0.0.12(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/smart-object-framework':
         specifier: 0.0.7
         version: 0.0.7(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/world':
-        specifier: 0.0.8
-        version: 0.0.8(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+        specifier: 0.0.12
+        version: 0.0.12(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.0.0-transaction-context-98ef570f
         version: 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
@@ -919,6 +919,23 @@ packages:
       - zod
     dev: false
 
+  /@eveworld/common-constants@0.0.12(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-2mYrzhnZQYj7O8mT/pkr7qsryozYi3ryud8waKhxfkW2IMuKhhmR+eLaw6P2KuA2dT7xJn2KlEkemZEKBGF2iA==}
+    dependencies:
+      '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
+      '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/store': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+      '@latticexyz/world-modules': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)
+    transitivePeerDependencies:
+      - bufferutil
+      - google-protobuf
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
+
   /@eveworld/common-constants@0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-aq8K0GATdFmjMokP03WHAhA8FV88VJLa1FKzvdRx2WUs122N83NkWlp/Fg2nbFFbmivkLEhYRJAp9qZpxjkSPw==}
     dependencies:
@@ -989,11 +1006,11 @@ packages:
       - zod
     dev: false
 
-  /@eveworld/world@0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-UTyhFMKL/4OGP+hPhI5brNtAVADe/+8KspO95Dz+Yq8KTou4lRvSIX9VGATIEUaYpknhMONIYyR/2FCCDQlqxA==}
+  /@eveworld/world@0.0.12(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-kT0KWhpF/Dp5wMd3vrUJXE6aY+tD301c16FGjWFuXLvouhtuetpBUyhP557LmGQNJfZ3VxuKqKfIyPNjnNMnWQ==}
     dependencies:
-      '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
-      '@eveworld/smart-object-framework': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/common-constants': 0.0.12(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/smart-object-framework': 0.0.7(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
       '@latticexyz/gas-report': 2.0.0-transaction-context-98ef570f
       '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
@@ -1009,11 +1026,11 @@ packages:
       - zod
     dev: false
 
-  /@eveworld/world@0.0.8(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-+606GqjUBziqmtWa03WtKvYfxlEVhwj3F+cTX0QbcFivtayKgOyWoZvZnZrgE57eEbFrft2rYilsaSHi4vsPUA==}
+  /@eveworld/world@0.0.2(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-UTyhFMKL/4OGP+hPhI5brNtAVADe/+8KspO95Dz+Yq8KTou4lRvSIX9VGATIEUaYpknhMONIYyR/2FCCDQlqxA==}
     dependencies:
-      '@eveworld/common-constants': 0.0.7(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
-      '@eveworld/smart-object-framework': 0.0.7(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/common-constants': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
+      '@eveworld/smart-object-framework': 0.0.1(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli': 2.0.0-transaction-context-98ef570f(google-protobuf@3.21.2)
       '@latticexyz/gas-report': 2.0.0-transaction-context-98ef570f
       '@latticexyz/schema-type': 2.0.0-transaction-context-98ef570f(typescript@5.1.6)(zod@3.23.8)
