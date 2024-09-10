@@ -11,21 +11,35 @@
     "test": "tsc --noEmit"
   },
   "dependencies": {
+    "@eveworld/types": "^0.0.4",
+    "@eveworld/ui-components": "^0.0.5",
+    "@eveworld/utils": "^0.0.4",
     "@latticexyz/common": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/dev-tools": "2.0.0-transaction-context-98ef570f",
+    "@latticexyz/react": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/recs": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/services": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/store-sync": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/utils": "2.0.0-transaction-context-98ef570f",
     "@latticexyz/world": "2.0.0-transaction-context-98ef570f",
-    "contracts": "workspace:*",
+    "item-seller-contracts": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rxjs": "7.5.5",
-    "viem": "1.14.0"
+    "tailwindcss": "^3.4.10",
+    "viem": "^2.19.6"
   },
   "devDependencies": {
+    "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.19",
+    "eslint-plugin-react": "7.31.11",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "postcss": "^8.4.39",
     "vite": "^4.2.1",
+    "vite-plugin-svgr": "3.3.0",
     "wait-port": "^1.0.4"
   }
 }

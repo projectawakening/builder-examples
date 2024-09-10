@@ -19,33 +19,79 @@ export function createSystemCalls(
    *
    *   Out of this parameter, we only care about two fields:
    *   - worldContract (which comes from getContract, see
-   *     https://github.com/latticexyz/mud/blob/main/templates/vanilla/packages/client/src/mud/setupNetwork.ts#L63-L69).
+   *     https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L63-L69).
    *
    *   - waitForTransaction (which comes from syncToRecs, see
-   *     https://github.com/latticexyz/mud/blob/main/templates/vanilla/packages/client/src/mud/setupNetwork.ts#L77-L83).
+   *     https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
    *
    * - From the second parameter, which is a ClientComponent,
    *   we only care about Counter. This parameter comes to use
    *   through createClientComponents.ts, but it originates in
    *   syncToRecs
-   *   (https://github.com/latticexyz/mud/blob/main/templates/vanilla/packages/client/src/mud/setupNetwork.ts#L77-L83).
+   *   (https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
    */
   { worldContract, waitForTransaction }: SetupNetworkResult,
-  { }: ClientComponents
+  { Balances, FunctionSelectors, Hooks, ItemPrice, ItemSellerERC20, Systems, StoreHooks }: ClientComponents
 ) {
-  const increment = async () => {
     /*
-     * Because IncrementSystem
-     * (https://mud.dev/templates/typescript/contracts#incrementsystemsol)
-     * is in the root namespace, `.increment` can be called directly
-     * on the World contract.
+     * This function is retrieved from the codegen function in contracts/src/godegen/world/IITemSeller.sol
+     * And must be used with the test2__ prefix due to namespacing
      */
-    // const tx = await worldContract.write.increment();
-    // await waitForTransaction(tx);
-    // return getComponentValue(Counter, singletonEntity);
-  };
+
+  const registerERC20Token = async (smartObjectId, tokenAddress, receiver) => {
+    const tx = await worldContract.write.test2__registerERC20Token([smartObjectId, tokenAddress, receiver]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+
+  const updateERC20Receiver = async (smartObjectId, receiver) => {
+    const tx = await worldContract.write.test2__updateERC20Receiver([smartObjectId, receiver]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemSellerERC20, singletonEntity);
+  }
+
+  const setItemPrice = async (smartObjectId, inventoryItemId, price) => {
+    const tx = await worldContract.write.test2__setItemPrice([smartObjectId, inventoryItemId, price]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+
+  const unsetItemPrice = async (smartObjectId, inventoryItemId) => {
+    const tx = await worldContract.write.test2__unsetItemPrice([smartObjectId, inventoryItemId]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+
+  const purchaseItem = async (smartObjectId, inventoryItemId, quantity) => {
+    const tx = await worldContract.write.test2__purchaseItem([smartObjectId, inventoryItemId, quantity]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+  const collectTokens = async (smartObjectId) => {
+    const tx = await worldContract.write.test2__collectTokens([smartObjectId]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+
+  const getItemPriceData = async (smartObjectId, inventoryItemId) => {
+    const tx = await worldContract.write.test2__getItemPriceData([smartObjectId, inventoryItemId]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, singletonEntity);
+  }
+  const getERC20Data = async (smartObjectId) => {
+    const tx = await worldContract.write.test2__getERC20Data([smartObjectId]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemSellerERC20, singletonEntity);
+  }
 
   return {
-    increment,
+    registerERC20Token,
+    updateERC20Receiver,
+    setItemPrice,
+    unsetItemPrice,
+    purchaseItem,
+    collectTokens,
+    getItemPriceData,
+    getERC20Data,
   };
 }
