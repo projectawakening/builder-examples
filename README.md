@@ -5,17 +5,22 @@ This guide will walk you through setting up a local environment for running a lo
 Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
 ### Step 0.1: Deploying world contracts into a local node.
-We have provided a compose file which bundles the running of the local node and deploying the contracts together. Run that with the command
+We have provided a compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command
 ```bash
 docker compose up -d
 ```
+![alt text](docker1.png)
+
 and monitor the progress of the world deployment with:
 
 ```bash
 docker compose logs -f world-deployer
 ```
 
-This will display the progress of the deployment and relevant addresses once it completes.
+The deployment progress and relevant addresses will be displayed during the process. Once the deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
+
+![alt text](docker_deployment.png)
+
 
 ### Step 0.2 (Optional): Retrieveing world ABIs
 You can also retrieve the world abis from the deployment by running:
@@ -24,3 +29,9 @@ You can also retrieve the world abis from the deployment by running:
 docker compose cp world-deployer:/monorepo/abis .
 ```
 
+Now that your local development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory and follow the instructions outlined in its respective README file.
+
+```bash
+cd item-seller
+cat Readme.md
+```
