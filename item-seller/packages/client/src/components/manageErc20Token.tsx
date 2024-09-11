@@ -1,7 +1,7 @@
 import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { EveButton, TextEdit } from "@eveworld/ui-components";
 
 const ManageErc20Token = React.memo(function ManageErc20Token({
@@ -9,7 +9,8 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 }: {
 	smartAssemblyId: bigint;
 }) {
-
+ const [render, setRender] = useState(false); // State to trigger a re-render
+ 
 	const {
 		network: { walletClient },
 		components: { ItemSellerERC20 },
@@ -39,12 +40,17 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 						const erc20TokenData = await getERC20Data(smartAssemblyId)
 						if (erc20TokenData) {
 							erc20TokenAddressValueRef.current = erc20TokenData.tokenAddress
+							erc20TokenReceiverValueRef.current = erc20TokenData.receiver
+							setRender((prev) => !prev);
 						}
 					}}
 				>
 					Fetch
 				</EveButton>{" "}
-				<span className="text-xs">{erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
+				<div className="flex flex-col">
+				<span className="text-xs">Token contract address: {erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
+				<span className="text-xs">Receiver address: {erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
+				</div>
 			</div>
 
 			<TextEdit
@@ -81,13 +87,13 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 				typeClass="tertiary"
 				onClick={async (event) => {
 					event.preventDefault();
-					console.log(
-						"token receiver:",
-						await updateERC20Receiver(
-							smartAssemblyId,
-							erc20TokenReceiverValueRef.current
-						)
-					);
+					const erc20Receiver = await updateERC20Receiver(
+						smartAssemblyId,
+						erc20TokenReceiverValueRef.current
+					)
+						if (erc20Receiver) {
+							console.log("receiver", erc20Receiver)
+						}
 				}}
 			>
 				Update ERC-20 Token Receiver

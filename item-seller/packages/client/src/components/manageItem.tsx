@@ -9,9 +9,10 @@ const ManageItem = React.memo(function ManageItem({
 }: {
 	smartAssemblyId: bigint;
 }) {
-	const [itemPriceData, setItemPriceData] = useState<number | undefined>();
-	const [inventoryItemId, setInventoryItemId] = useState<number | undefined>();
+	const [render, setRender] = useState(false); // State to trigger a re-render
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
+
+	const inventoryItemId = import.meta.env.VITE_INVENTORY_ITEM_ID
 
 	const {
 		components: { ItemPrice },
@@ -37,15 +38,14 @@ const ManageItem = React.memo(function ManageItem({
 		<>
 			<div className="Quantum-Container my-4">
 				<div>STEP 2: Manage inventory item</div>
-				<TextEdit
-					isMultiline={false}
-					defaultValue={inventoryItemId}
-					fieldType={"inventory item ID - this is not your item typeid"}
-					onChange={(str) => setInventoryItemId(Number(str))}
-				></TextEdit>
+				<div className="text-sm">
+				Managing for item inventory item ID: {inventoryItemId}
+				</div>
+				<div className="text-sm">
+				You can change this inventory item ID in the .env file
+				</div>
 
 				<div className="mt-4">STEP 2.1: Get item price</div>
-
 				<div className="flex items-center">
 					<EveButton
 						className="mr-2"
@@ -56,19 +56,20 @@ const ManageItem = React.memo(function ManageItem({
 								smartAssemblyId,
 								inventoryItemId
 							);
-							console.log(itemPriceData);
-							setItemPriceData(Number(itemPriceData?.price));
+							if (itemPriceData) {
+								itemPriceWeiValueRef.current = itemPriceData.price.toString()
+								setRender((prev) => !prev);	
+							}
 						}}
-						disabled={inventoryItemId == undefined}
 					>
 						Fetch
 					</EveButton>
 					<span className="text-xs">
-						{itemPriceData ?? "No item price set"}
+						{ itemPriceWeiValueRef.current ? itemPriceWeiValueRef.current : "No item price set"}
 					</span>
 				</div>
 
-				<div className="mt-4">STEP 2.2: Set item price</div>
+				<div className="mt-4">STEP 2.2: Set item price in wei</div>
 				<div className="flex items-center gap-3">
 					<TextEdit
 						isMultiline={false}
@@ -81,14 +82,16 @@ const ManageItem = React.memo(function ManageItem({
 							typeClass="primary"
 							onClick={async (event) => {
 								event.preventDefault();
-								console.log(
-									"new item price:",
-									await setItemPrice(
-										smartAssemblyId,
-										inventoryItemId,
-										Number(itemPriceWeiValueRef.current)
-									)
+
+								const itemPriceData = await setItemPrice(
+									smartAssemblyId,
+									inventoryItemId,
+									Number(itemPriceWeiValueRef.current)
 								);
+								if (itemPriceData) {
+									itemPriceWeiValueRef.current = itemPriceData.price.toString()
+									setRender((prev) => !prev);	
+								}
 							}}
 						>
 							Set Item Price

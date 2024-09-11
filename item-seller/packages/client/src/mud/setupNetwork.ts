@@ -12,6 +12,8 @@ import { world } from "./world";
 import IWorldAbi from "item-seller-contracts/out/IWorld.sol/IWorld.abi.json";
 import { createBurnerAccount, getContract, transportObserver, ContractWrite } from "@latticexyz/common";
 
+import mudConfig from "item-seller-contracts/mud.config";
+
 import { Subject, share } from "rxjs";
 
 /*
@@ -22,8 +24,6 @@ import { Subject, share } from "rxjs";
  * See https://mud.dev/templates/typescript/contracts#mudconfigts
  * for the source of this information.
  */
-import mudConfig from "item-seller-contracts/mud.config";
-
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
 export async function setupNetwork() {

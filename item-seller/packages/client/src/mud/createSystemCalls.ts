@@ -32,14 +32,18 @@ export function createSystemCalls(
    *   (https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
    */
   { worldContract, waitForTransaction }: SetupNetworkResult,
-  { Balances, FunctionSelectors, Hooks, ItemPrice, ItemSellerERC20, Systems, StoreHooks }: ClientComponents
+  { ItemPrice, ItemSellerERC20 }: ClientComponents
 ) {
     /*
      * This function is retrieved from the codegen function in contracts/src/godegen/world/IITemSeller.sol
      * And must be used with the test2__ prefix due to namespacing
      */
 
-  const entity = encodeEntity(mudConfig.tables.ItemSellerERC20.keySchema, {smartObjectId: import.meta.env.VITE_SMARTASSEMBLY_ID})
+    const smartObjectId = import.meta.env.VITE_SMARTASSEMBLY_ID;
+    const itemId = import.meta.env.VITE_INVENTORY_ITEM_ID;
+
+  const entity = encodeEntity(mudConfig.tables.ItemSellerERC20.keySchema, {smartObjectId})
+  const item = encodeEntity(mudConfig.tables.ItemPrice.keySchema, {smartObjectId, itemId})
 
   const getERC20Data = async (smartObjectId) => {
     const tx = await worldContract.write.test2__getERC20Data([smartObjectId]);
@@ -62,33 +66,35 @@ export function createSystemCalls(
 
   /** ITEM PRICE FUNCTIONS */
 
+  const getItemPriceData = async (smartObjectId, inventoryItemId) => {
+    const tx = await worldContract.write.test2__getItemPriceData([smartObjectId, inventoryItemId]);
+    await waitForTransaction(tx);
+    return getComponentValue(ItemPrice, item);
+  }
+
   const setItemPrice = async (smartObjectId, inventoryItemId, price) => {
     const tx = await worldContract.write.test2__setItemPrice([smartObjectId, inventoryItemId, price]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
+    return getComponentValue(ItemPrice, item);
   }
 
   const unsetItemPrice = async (smartObjectId, inventoryItemId) => {
     const tx = await worldContract.write.test2__unsetItemPrice([smartObjectId, inventoryItemId]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
+    return getComponentValue(ItemPrice, item);
   }
+
+  /** PURCHASE ITEM FUNCTIONS */
 
   const purchaseItem = async (smartObjectId, inventoryItemId, quantity) => {
     const tx = await worldContract.write.test2__purchaseItem([smartObjectId, inventoryItemId, quantity]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
+    return getComponentValue(ItemPrice, item);
   }
   const collectTokens = async (smartObjectId) => {
     const tx = await worldContract.write.test2__collectTokens([smartObjectId]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
-  }
-
-  const getItemPriceData = async (smartObjectId, inventoryItemId) => {
-    const tx = await worldContract.write.test2__getItemPriceData([smartObjectId, inventoryItemId]);
-    await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
+    return getComponentValue(ItemPrice, item);
   }
 
   return {
