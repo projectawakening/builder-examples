@@ -7,7 +7,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 ![alt text](../docker_deployment.png)
 
 ```bash
-cd pakcages/contracts
+cd packages/contracts
 ```
 
 **Local Deployment**
@@ -17,7 +17,7 @@ pnpm run deploy:local --worldAddress <worldAddress>
 
 **Devnet Deployment**
 ```bash
-cd pakcages/contracts
+cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
 
