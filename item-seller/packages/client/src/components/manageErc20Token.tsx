@@ -9,7 +9,9 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 }: {
 	smartAssemblyId: bigint;
 }) {
+
 	const {
+		network: { walletClient },
 		components: { ItemSellerERC20 },
 		systemCalls: { registerERC20Token, updateERC20Receiver, getERC20Data },
 	} = useMUD();
@@ -35,13 +37,14 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 					onClick={async (event) => {
 						event.preventDefault();
 						const erc20TokenData = await getERC20Data(smartAssemblyId)
-						console.log(erc20TokenData)
-						// setErc20TokenData();
+						if (erc20TokenData) {
+							erc20TokenAddressValueRef.current = erc20TokenData.tokenAddress
+						}
 					}}
 				>
 					Fetch
 				</EveButton>{" "}
-				<span className="text-xs">{erc20TokenReceiverValueRef.current ? erc20TokenReceiverValueRef.current : "No token data set"}</span>
+				<span className="text-xs">{erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
 			</div>
 
 			<TextEdit
@@ -58,8 +61,8 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 						"new erc20 token:",
 						await registerERC20Token(
 							smartAssemblyId,
-							12345,
-							"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+							erc20TokenAddressValueRef.current,
+							walletClient.account?.address
 						)
 					);
 				}}

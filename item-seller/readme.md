@@ -70,6 +70,14 @@ pnpm run purchase-item-with-token
 
 
 
+### Step 5: Client folder
+To open the client folder, run:
+```bash
+cd ../client
+pnpm run dev
+```
+
+This will create an instance of the client running on localhost:3000, pointing to the world address that you have earlier defined in step 1.
 
 
 

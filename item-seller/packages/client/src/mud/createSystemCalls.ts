@@ -6,7 +6,8 @@
 import { getComponentValue } from "@latticexyz/recs";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { encodeEntity } from "@latticexyz/store-sync/recs";
+import mudConfig from "item-seller-contracts/mud.config";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -38,17 +39,28 @@ export function createSystemCalls(
      * And must be used with the test2__ prefix due to namespacing
      */
 
+  const entity = encodeEntity(mudConfig.tables.ItemSellerERC20.keySchema, {smartObjectId: import.meta.env.VITE_SMARTASSEMBLY_ID})
+
+  const getERC20Data = async (smartObjectId) => {
+    const tx = await worldContract.write.test2__getERC20Data([smartObjectId]);
+    await waitForTransaction(tx);
+    const result = getComponentValue(ItemSellerERC20, entity)
+    return result;
+  }
+
   const registerERC20Token = async (smartObjectId, tokenAddress, receiver) => {
     const tx = await worldContract.write.test2__registerERC20Token([smartObjectId, tokenAddress, receiver]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemPrice, singletonEntity);
+    return getComponentValue(ItemSellerERC20, entity);
   }
 
   const updateERC20Receiver = async (smartObjectId, receiver) => {
     const tx = await worldContract.write.test2__updateERC20Receiver([smartObjectId, receiver]);
     await waitForTransaction(tx);
-    return getComponentValue(ItemSellerERC20, singletonEntity);
+    return getComponentValue(ItemSellerERC20, entity);
   }
+
+  /** ITEM PRICE FUNCTIONS */
 
   const setItemPrice = async (smartObjectId, inventoryItemId, price) => {
     const tx = await worldContract.write.test2__setItemPrice([smartObjectId, inventoryItemId, price]);
@@ -77,11 +89,6 @@ export function createSystemCalls(
     const tx = await worldContract.write.test2__getItemPriceData([smartObjectId, inventoryItemId]);
     await waitForTransaction(tx);
     return getComponentValue(ItemPrice, singletonEntity);
-  }
-  const getERC20Data = async (smartObjectId) => {
-    const tx = await worldContract.write.test2__getERC20Data([smartObjectId]);
-    await waitForTransaction(tx);
-    return getComponentValue(ItemSellerERC20, singletonEntity);
   }
 
   return {
