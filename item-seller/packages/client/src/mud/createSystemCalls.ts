@@ -41,7 +41,6 @@ export function createSystemCalls(
 
 	const smartObjectId = import.meta.env.VITE_SMARTASSEMBLY_ID;
 	const itemId = import.meta.env.VITE_INVENTORY_ITEM_ID;
-	const itemSellerAddress = import.meta.env.VITE_ITEM_SELLER_ADDRESS;
 
 	const entity = encodeEntity(mudConfig.tables.ItemSellerERC20.keySchema, {
 		smartObjectId,
@@ -108,17 +107,25 @@ export function createSystemCalls(
 		const itemPrice = getComponentValue(ItemPrice, item);
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
+
+		const itemSellerContractAddress = await worldContract.read.test2__getContractAddress()
+
 		const approvalAmount = quantity * Number(itemPrice.price);
+
+		// Check if address has sufficient approval amount.
+		
+
+		//TODO: Fix stack underflow error
 		await erc20Contract.write.approve([
-			worldContract.address,
+			itemSellerContractAddress,
 			BigInt(approvalAmount),
 		]);
 
 		//TODO: Fix purchase item spend unapproved
 		await worldContract.write.test2__purchaseItem([
-			smartObjectId,
-			inventoryItemId,
-			quantity,
+			BigInt(smartObjectId),
+			BigInt(inventoryItemId),
+			BigInt(quantity),
 		]);
 
 		return getComponentValue(ItemPrice, item);

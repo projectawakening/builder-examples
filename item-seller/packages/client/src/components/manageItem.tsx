@@ -112,7 +112,7 @@ const ManageItem = React.memo(function ManageItem({
 						isMultiline={false}
 						defaultValue={itemQuantity}
 						fieldType={"item quantity"}
-						onChange={(str) => {setItemQuantity(Number(str))}}
+						onChange={(str) => setItemQuantity(Number(str))}
 					></TextEdit>
 					<div>
 						<EveButton

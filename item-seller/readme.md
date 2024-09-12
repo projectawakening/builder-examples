@@ -85,7 +85,6 @@ Replace the following values in the [.env](./packages/client/.env) file with the
 ```bash
 VITE_SMARTASSEMBLY_ID=
 VITE_INVENTORY_ITEM_ID=
-VITE_ITEM_SELLER_ADDRESS=
 VITE_ERC20_TOKEN_ADDRESS=
 ```
 
