@@ -26,7 +26,6 @@ const ManageItem = React.memo(function ManageItem({
 			smartAssemblyId,
 			inventoryItemId
 		);
-		console.log(itemPriceData)
 		setItemPriceWei(Number(itemPriceData?.price))
 	}
 
@@ -120,14 +119,10 @@ const ManageItem = React.memo(function ManageItem({
 							typeClass="primary"
 							onClick={async (event) => {
 								event.preventDefault();
-								console.log(
-									"items purchased:",
-									await purchaseItem(
-										smartAssemblyId,
-										inventoryItemId,
-										itemQuantity
-									)
-								);
+								await purchaseItem(
+									smartAssemblyId,
+									inventoryItemId,
+									itemQuantity								)
 							}}
 						>
 							Purchase items

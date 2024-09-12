@@ -3,7 +3,7 @@
  * (https://viem.sh/docs/getting-started.html).
  * This line imports the functions we need from it.
  */
-import { createPublicClient, fallback, webSocket, http, createWalletClient, Hex, parseEther, ClientConfig } from "viem";
+import { createPublicClient, fallback, webSocket, http, createWalletClient, Hex, parseEther, ClientConfig, Chain, erc20Abi } from "viem";
 import { createFaucetService } from "@latticexyz/services/faucet";
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
 
@@ -34,7 +34,7 @@ export async function setupNetwork() {
    * (https://viem.sh/docs/clients/public.html)
    */
   const clientOptions = {
-    chain: networkConfig.chain,
+    chain: networkConfig.chain as Chain,
     transport: transportObserver(fallback([webSocket(), http()])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
@@ -63,6 +63,17 @@ export async function setupNetwork() {
   const worldContract = getContract({
     address: networkConfig.worldAddress as Hex,
     abi: IWorldAbi,
+    publicClient,
+    walletClient: burnerWalletClient,
+    onWrite: (write) => write$.next(write),
+  });
+ 
+  /*
+   * Create an object for communicating with the deployed ERC20 contract.
+   */
+  const erc20Contract = getContract({
+    address: networkConfig.worldAddress as Hex,
+    abi: erc20Abi,
     publicClient,
     walletClient: burnerWalletClient,
     onWrite: (write) => write$.next(write),
@@ -120,6 +131,7 @@ export async function setupNetwork() {
     storedBlockLogs$,
     waitForTransaction,
     worldContract,
+    erc20Contract,
     write$: write$.asObservable().pipe(share()),
   };
 }
