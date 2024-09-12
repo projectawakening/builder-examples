@@ -102,33 +102,29 @@ export function createSystemCalls(
 	};
 
 	/** PURCHASE ITEM FUNCTIONS */
-
 	const purchaseItem = async (smartObjectId, inventoryItemId, quantity) => {
 		const itemPrice = getComponentValue(ItemPrice, item);
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
 
 		const itemSellerContractAddress = await worldContract.read.test2__getContractAddress()
-
 		const approvalAmount = quantity * Number(itemPrice.price);
 
-		// Check if address has sufficient approval amount.
-		
-
+		// First, approve spend by the contract address
 		//TODO: Fix stack underflow error
 		await erc20Contract.write.approve([
 			itemSellerContractAddress,
 			BigInt(approvalAmount),
 		]);
 
-		//TODO: Fix purchase item spend unapproved
+		// Then, purchase item
 		await worldContract.write.test2__purchaseItem([
 			BigInt(smartObjectId),
 			BigInt(inventoryItemId),
 			BigInt(quantity),
 		]);
 
-		return getComponentValue(ItemPrice, item);
+		return;
 	};
 	const collectTokens = async (smartObjectId) => {
 		await worldContract.write.test2__collectTokens([smartObjectId]);
