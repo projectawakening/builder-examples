@@ -1,7 +1,7 @@
 import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EveButton, TextEdit } from "@eveworld/ui-components";
 
 const ManageErc20Token = React.memo(function ManageErc20Token({
@@ -9,17 +9,24 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 }: {
 	smartAssemblyId: bigint;
 }) {
- const [render, setRender] = useState(false); // State to trigger a re-render
- 
+	const [erc20TokenAddress, setErc20TokenAddress] = useState<
+		string | undefined
+	>();
+	const [erc20Receiver, setErc20Receiver] = useState<string | undefined>();
+
 	const {
 		network: { walletClient },
-		components: { ItemSellerERC20 },
 		systemCalls: { registerERC20Token, updateERC20Receiver, getERC20Data },
 	} = useMUD();
 
-	const erc20Data = useComponentValue(ItemSellerERC20, singletonEntity);
-	const erc20TokenAddressValueRef = useRef((erc20Data?.tokenAddress as string) ?? "");
-	const erc20TokenReceiverValueRef = useRef((erc20Data?.receiver as string) ?? "");
+	const fetchErc20Data = async () => {
+		const erc20TokenData = await getERC20Data(smartAssemblyId);
+		setErc20TokenAddress(erc20TokenData?.tokenAddress as string);
+		setErc20Receiver(erc20TokenData?.receiver as string);
+	};
+
+	const erc20TokenAddressValueRef = useRef("");
+	const erc20ReceiverValueRef = useRef("");
 
 	const handleEdit = (
 		refString: React.MutableRefObject<string>,
@@ -37,25 +44,24 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 					typeClass="tertiary"
 					onClick={async (event) => {
 						event.preventDefault();
-						const erc20TokenData = await getERC20Data(smartAssemblyId)
-						if (erc20TokenData) {
-							erc20TokenAddressValueRef.current = erc20TokenData.tokenAddress
-							erc20TokenReceiverValueRef.current = erc20TokenData.receiver
-							setRender((prev) => !prev);
-						}
+						fetchErc20Data();
 					}}
 				>
 					Fetch
 				</EveButton>{" "}
 				<div className="flex flex-col">
-				<span className="text-xs">Token contract address: {erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
-				<span className="text-xs">Receiver address: {erc20TokenAddressValueRef.current ? erc20TokenAddressValueRef.current : "No token data set"}</span>
+					<span className="text-xs">
+						Token contract address: {erc20TokenAddress ?? "No token data set"}
+					</span>
+					<span className="text-xs">
+						Receiver address: {erc20Receiver ?? "No token data set"}
+					</span>
 				</div>
 			</div>
 
 			<TextEdit
 				isMultiline={false}
-				defaultValue={erc20Data?.tokenAddress as string}
+				defaultValue={erc20TokenAddress}
 				fieldType={"ERC20 token"}
 				onChange={(str) => handleEdit(erc20TokenAddressValueRef, str)}
 			/>
@@ -63,14 +69,12 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 				typeClass="secondary"
 				onClick={async (event) => {
 					event.preventDefault();
-					console.log(
-						"new erc20 token:",
-						await registerERC20Token(
-							smartAssemblyId,
-							erc20TokenAddressValueRef.current,
-							walletClient.account?.address
-						)
+					await registerERC20Token(
+						smartAssemblyId,
+						erc20TokenAddressValueRef.current,
+						walletClient.account?.address
 					);
+					fetchErc20Data();
 				}}
 			>
 				Set ERC-20 Token
@@ -79,9 +83,9 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 			<div className="mt-6">STEP 1.1: Update token receiver</div>
 			<TextEdit
 				isMultiline={false}
-				defaultValue={undefined}
+				defaultValue={erc20Receiver}
 				fieldType={"Token receiver"}
-				onChange={(str) => handleEdit(erc20TokenReceiverValueRef, str)}
+				onChange={(str) => handleEdit(erc20ReceiverValueRef, str)}
 			/>
 			<EveButton
 				typeClass="tertiary"
@@ -89,11 +93,11 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 					event.preventDefault();
 					const erc20Receiver = await updateERC20Receiver(
 						smartAssemblyId,
-						erc20TokenReceiverValueRef.current
-					)
-						if (erc20Receiver) {
-							console.log("receiver", erc20Receiver)
-						}
+						erc20ReceiverValueRef.current
+					);
+					if (erc20Receiver) {
+						console.log("receiver", erc20Receiver);
+					}
 				}}
 			>
 				Update ERC-20 Token Receiver

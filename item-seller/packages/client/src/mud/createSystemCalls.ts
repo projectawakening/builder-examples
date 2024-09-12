@@ -35,7 +35,7 @@ export function createSystemCalls(
   { ItemPrice, ItemSellerERC20 }: ClientComponents
 ) {
     /*
-     * This function is retrieved from the codegen function in contracts/src/godegen/world/IITemSeller.sol
+     * This function is retrieved from the codegen function in contracts/src/codegen/world/IItemSeller.sol
      * And must be used with the test2__ prefix due to namespacing
      */
 

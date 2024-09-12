@@ -1,6 +1,4 @@
-import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
-import { singletonEntity } from "@latticexyz/store-sync/recs";
 import React, { useRef, useState } from "react";
 import { EveButton, TextEdit } from "@eveworld/ui-components";
 
@@ -9,13 +7,12 @@ const ManageItem = React.memo(function ManageItem({
 }: {
 	smartAssemblyId: bigint;
 }) {
-	const [render, setRender] = useState(false); // State to trigger a re-render
+	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
 
 	const inventoryItemId = import.meta.env.VITE_INVENTORY_ITEM_ID
 
 	const {
-		components: { ItemPrice },
 		systemCalls: {
 			setItemPrice,
 			unsetItemPrice,
@@ -24,8 +21,16 @@ const ManageItem = React.memo(function ManageItem({
 		},
 	} = useMUD();
 
-	const itemPriceWei = useComponentValue(ItemPrice, singletonEntity);
-	const itemPriceWeiValueRef = useRef((itemPriceWei?.price.toString()) ?? "");
+	const fetchItemPriceData = async () => {
+		const itemPriceData = await getItemPriceData(
+			smartAssemblyId,
+			inventoryItemId
+		);
+		console.log(itemPriceData)
+		setItemPriceWei(Number(itemPriceData?.price))
+	}
+
+	const itemPriceWeiValueRef = useRef("");
 
 	const handleEdit = (
 		refString: React.MutableRefObject<string>,
@@ -37,11 +42,8 @@ const ManageItem = React.memo(function ManageItem({
 	return (
 		<>
 			<div className="Quantum-Container my-4">
-				<div>STEP 2: Manage inventory item</div>
-				<div className="text-sm">
-				Managing for item inventory item ID: {inventoryItemId}
-				</div>
-				<div className="text-sm">
+				<div>STEP 2: Manage inventory item ID: {inventoryItemId}</div>
+				<div className="text-xs">
 				You can change this inventory item ID in the .env file
 				</div>
 
@@ -52,20 +54,13 @@ const ManageItem = React.memo(function ManageItem({
 						typeClass="tertiary"
 						onClick={async (event) => {
 							event.preventDefault();
-							const itemPriceData = await getItemPriceData(
-								smartAssemblyId,
-								inventoryItemId
-							);
-							if (itemPriceData) {
-								itemPriceWeiValueRef.current = itemPriceData.price.toString()
-								setRender((prev) => !prev);	
-							}
+							fetchItemPriceData()
 						}}
 					>
 						Fetch
 					</EveButton>
 					<span className="text-xs">
-						{ itemPriceWeiValueRef.current ? itemPriceWeiValueRef.current : "No item price set"}
+						{itemPriceWei ? `${itemPriceWei?.toString()} wei` : "Click fetch to get item price"}
 					</span>
 				</div>
 
@@ -73,7 +68,7 @@ const ManageItem = React.memo(function ManageItem({
 				<div className="flex items-center gap-3">
 					<TextEdit
 						isMultiline={false}
-						defaultValue={itemPriceWei?.price.toString()}
+						defaultValue={itemPriceWei?.toString()}
 						fieldType={"item price"}
 						onChange={(str) => handleEdit(itemPriceWeiValueRef, str)}
 					></TextEdit>
@@ -82,16 +77,12 @@ const ManageItem = React.memo(function ManageItem({
 							typeClass="primary"
 							onClick={async (event) => {
 								event.preventDefault();
-
-								const itemPriceData = await setItemPrice(
+								await setItemPrice(
 									smartAssemblyId,
 									inventoryItemId,
 									Number(itemPriceWeiValueRef.current)
 								);
-								if (itemPriceData) {
-									itemPriceWeiValueRef.current = itemPriceData.price.toString()
-									setRender((prev) => !prev);	
-								}
+								fetchItemPriceData()
 							}}
 						>
 							Set Item Price
