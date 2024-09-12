@@ -68,10 +68,10 @@ Note: In Devnet, ensure that the player has enough tokens to complete the purcha
 pnpm run purchase-item-with-token
 ```
 
+## Client UI
 
-
-### Step 5: Client folder
-To open the client folder, run:
+### Step 5: Client UI
+To open the client UI, run:
 ```bash
 cd ../client
 pnpm run dev
@@ -79,9 +79,14 @@ pnpm run dev
 
 This will create an instance of the client running on localhost:3000, pointing to the world address that you have earlier defined in step 1.
 
+### Step 6: Set up client env variables
+Replace the following values in the [.env](./packages/client/.env) file with the values you copied earlier:
 
+```bash
+VITE_SMARTASSEMBLY_ID=
+VITE_INVENTORY_ITEM_ID=
+VITE_ITEM_SELLER_ADDRESS=
+VITE_ERC20_TOKEN_ADDRESS=
+```
 
-
-
-
-
+To make use of mock data, the values of `VITE_SMARTASSEMBLY_ID` and `VITE_INVENTORY_ITEM_ID` **must** match the `SSU_ID` and `INVENTORY_ITEM_ID` values set up in `./packages/contract/.env`, respectively.

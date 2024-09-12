@@ -72,7 +72,7 @@ export async function setupNetwork() {
    * Create an object for communicating with the deployed ERC20 contract.
    */
   const erc20Contract = getContract({
-    address: networkConfig.worldAddress as Hex,
+    address: import.meta.env.VITE_ERC20_TOKEN as Hex,
     abi: erc20Abi,
     publicClient,
     walletClient: burnerWalletClient,
