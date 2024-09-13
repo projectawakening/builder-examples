@@ -25,7 +25,7 @@ pnpm run deploy:devnet --worldAddress <worldAddress>
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Item Seller contract and a test ERC20 token required for the Item Seller. Be sure to copy the ERC20 token address and save it for future use.
-![alt text](deployment.png)
+![alt text](./readme-imgs/deployment.png)
 
 
 ### Step 1: Setup the environment variables 
@@ -70,17 +70,22 @@ pnpm run purchase-item-with-token
 
 ## Client UI
 
-### Step 5: Client UI
-To open the client UI, run:
+### Step 5: Launch the Client UI
+
+To start the client interface, navigate to the client directory and run the following command:
+
 ```bash
 cd ../client
 pnpm run dev
 ```
 
-This will create an instance of the client running on localhost:3000, pointing to the world address that you have earlier defined in step 1.
+This will launch a local development server at `http://localhost:3000`, which will be connected to the world address defined earlier in Step 1.
 
-### Step 6: Set up client env variables
-Replace the following values in the [.env](./packages/client/.env) file with the values you copied earlier:
+![alt text](./readme-imgs/client-ui.png)
+
+### Step 6: Configure Client Environment Variables
+
+Next, update the following values in the `.env` file located in the `./packages/client/` folder:
 
 ```bash
 VITE_SMARTASSEMBLY_ID=
@@ -88,4 +93,28 @@ VITE_INVENTORY_ITEM_ID=
 VITE_ERC20_TOKEN_ADDRESS=
 ```
 
-To make use of mock data, the values of `VITE_SMARTASSEMBLY_ID` and `VITE_INVENTORY_ITEM_ID` **must** match the `SSU_ID` and `INVENTORY_ITEM_ID` values set up in `./packages/contract/.env`, respectively.
+These variables must be set as follows:
+
+- **`VITE_SMARTASSEMBLY_ID`**: This should match the `SSU_ID` you set in `./packages/contracts/.env`.
+- **`VITE_INVENTORY_ITEM_ID`**: This should match the `INVENTORY_ITEM_ID` from `./packages/contracts/.env`.
+- **`VITE_ERC20_TOKEN_ADDRESS`**: Use the ERC20 token address from the contract deployment step.
+
+By ensuring these values match those in the `contracts` folder, the client will correctly interface with the on-chain environment.
+
+### Step 7: Running and Testing the Client
+
+Once the client is running, you can interact with the system through the browser interface. This step allows you to simulate and test interactions like purchasing items, monitoring transactions, and observing live contract behavior.
+
+---
+
+### Troubleshooting
+
+If you encounter any issues, refer to the troubleshooting tips below:
+
+1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
+   
+2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
+
+3. **Item Limits**: Be cautious not to attempt purchasing more items than have been generated via the `mockData` script. The number of available items is controlled by `MockSsuData.s.sol`, so ensure this script has been properly executed.
+
+4. **Environment Variable Consistency**: Confirm that the `VITE_SMARTASSEMBLY_ID` and `VITE_INVENTORY_ITEM_ID` in the client `.env` file match the values set up in `./packages/contracts/.env`. Misalignment between these variables can cause the client to fail when interacting with the contract.
