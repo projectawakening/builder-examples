@@ -102,6 +102,12 @@ export function createSystemCalls(
 	};
 
 	/** PURCHASE ITEM FUNCTIONS */
+
+	const getErc20Balance = async(address) => {
+		const balance = await erc20Contract.read.balanceOf([address])
+		return balance
+	}
+
 	const purchaseItem = async (smartObjectId, inventoryItemId, quantity) => {
 		const itemPrice = getComponentValue(ItemPrice, item);
 		if (!itemPrice) return console.error("Unable to retrieve item price");
@@ -111,7 +117,6 @@ export function createSystemCalls(
 		const approvalAmount = quantity * Number(itemPrice.price);
 
 		// First, approve spend by the contract address
-		//TODO: Fix stack underflow error
 		await erc20Contract.write.approve([
 			itemSellerContractAddress,
 			BigInt(approvalAmount),
@@ -141,5 +146,6 @@ export function createSystemCalls(
 		collectTokens,
 		getItemPriceData,
 		getERC20Data,
+		getErc20Balance,
 	};
 }

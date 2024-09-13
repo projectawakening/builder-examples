@@ -1,6 +1,7 @@
 import { useMUD } from "../MUDContext";
 import React, { useRef, useState } from "react";
 import { EveButton, TextEdit } from "@eveworld/ui-components";
+import { formatEther, parseEther } from "viem";
 
 const ManageItem = React.memo(function ManageItem({
 	smartAssemblyId,
@@ -9,15 +10,18 @@ const ManageItem = React.memo(function ManageItem({
 }) {
 	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
+	const [erc20Balance, setErc20Balance] = useState<number | undefined>();
 
 	const inventoryItemId = import.meta.env.VITE_INVENTORY_ITEM_ID
 
 	const {
+		network: { walletClient },
 		systemCalls: {
 			setItemPrice,
 			unsetItemPrice,
 			getItemPriceData,
 			purchaseItem,
+			getErc20Balance
 		},
 	} = useMUD();
 
@@ -26,7 +30,7 @@ const ManageItem = React.memo(function ManageItem({
 			smartAssemblyId,
 			inventoryItemId
 		);
-		setItemPriceWei(Number(itemPriceData?.price))
+		setItemPriceWei(Number(itemPriceData?.price ?? 0))
 	}
 
 	const itemPriceWeiValueRef = useRef("");
@@ -59,15 +63,15 @@ const ManageItem = React.memo(function ManageItem({
 						Fetch
 					</EveButton>
 					<span className="text-xs">
-						{itemPriceWei ? `${itemPriceWei?.toString()} wei` : "Click fetch to get item price"}
+						{itemPriceWei ? `${formatEther(BigInt(itemPriceWei))} ether units` : "Click fetch to get item price"}
 					</span>
 				</div>
 
-				<div className="mt-4">STEP 2.2: Set item price in wei</div>
-				<div className="flex items-center gap-3">
+				<div className="mt-4">STEP 2.2: Set item price in ether units</div>
+				<div className="flex flex-col items-start gap-3">
 					<TextEdit
 						isMultiline={false}
-						defaultValue={itemPriceWei?.toString()}
+						defaultValue={`${itemPriceWei} wei`}
 						fieldType={"item price"}
 						onChange={(str) => handleEdit(itemPriceWeiValueRef, str)}
 					></TextEdit>
@@ -79,7 +83,7 @@ const ManageItem = React.memo(function ManageItem({
 								await setItemPrice(
 									smartAssemblyId,
 									inventoryItemId,
-									Number(itemPriceWeiValueRef.current)
+									parseEther(itemPriceWeiValueRef.current)
 								);
 								fetchItemPriceData()
 							}}
@@ -106,8 +110,23 @@ const ManageItem = React.memo(function ManageItem({
 
 			<div className="Quantum-Container my-4">
 				<div>STEP 3: Purchase Item</div>
-				<div></div>
-				<div className="flex items-center gap-3">
+				<div className="flex items-center">
+					<EveButton
+						className="mr-2"
+						typeClass="tertiary"
+						onClick={async (event) => {
+							event.preventDefault();
+							const balance = await getErc20Balance(walletClient.account?.address)
+							setErc20Balance(Number(balance ?? 0))
+						}}
+					>
+						Get balance
+					</EveButton>
+					<span className="text-xs">
+						{erc20Balance ? `${formatEther(BigInt(erc20Balance))} ether units` : "Click fetch to get buyer ERC-20 balance"}
+					</span>
+				</div>
+				<div className="flex items-start flex-col gap-3">
 					<TextEdit
 						isMultiline={false}
 						defaultValue={itemQuantity}
@@ -126,8 +145,7 @@ const ManageItem = React.memo(function ManageItem({
 							}}
 						>
 							Purchase items
-						</EveButton>
-					</div>
+						</EveButton></div>
 				</div>
 			</div>
 		</>
