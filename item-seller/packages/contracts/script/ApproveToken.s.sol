@@ -47,11 +47,12 @@ contract ApproveToken is Script {
 
     // StoreSwitch.setStoreAddress(address(world));
     IERC20Mintable erc20 = IERC20Mintable(erc20Address);
-    console.log(erc20.balanceOf(owner));
-    erc20.approve(itemSellerAddress, amount * 1 ether);
+    console.log(erc20Address);
+    // console.log(erc20.balanceOf(owner));
+    // erc20.approve(itemSellerAddress, amount * 1 ether);
 
-    console.log(erc20.allowance(owner, itemSellerAddress));
-    console.log(erc20.balanceOf(owner));
+    // console.log(erc20.allowance(owner, itemSellerAddress));
+    // console.log(erc20.balanceOf(owner));
 
     vm.stopBroadcast();
   }

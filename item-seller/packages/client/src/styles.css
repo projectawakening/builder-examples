@@ -1,0 +1,15 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "@eveworld/ui-components/styles";
+
+input.MuiInputBase-input {
+    color: hsla(60, 100%, 92%, 1);
+    fontFamily: "Sometype Mono";
+    padding: 0px !important;
+    outline: none;
+    fontSize: 0.875rem;
+    border: 1px solid hsla(26, 85%, 58%, 1);
+    borderRadius: 0px !important;
+    padding: 8px !important;
+}

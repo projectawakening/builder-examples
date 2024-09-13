@@ -55,7 +55,7 @@ contract MockSsuData is Script {
       itemId: 0,
       typeId: 23,
       volume: 10,
-      quantity: 15
+      quantity: 1500
     });
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
 

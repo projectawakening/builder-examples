@@ -8,6 +8,7 @@
  *   basefee set to zero to avoid transaction fees.
  * - latticeTestnet, our public test network.
  *
+
  */
 
 import { MUDChain, latticeTestnet, mudFoundry } from "@latticexyz/common/chains";

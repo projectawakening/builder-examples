@@ -19,7 +19,7 @@ import { getBurnerPrivateKey } from "@latticexyz/common";
  * from packages/contracts/worlds.json. When the contracts package
  * deploys a new `World`, it updates this file.
  */
-import worlds from "contracts/worlds.json";
+import worlds from "item-seller-contracts/worlds.json";
 
 /*
  * The supported chains.
@@ -34,7 +34,6 @@ import worlds from "contracts/worlds.json";
  * See https://mud.dev/tutorials/minimal/deploy#run-the-user-interface
  * for instructions on how to add networks.
  */
-
 import { supportedChains } from "./supportedChains";
 
 export async function getNetworkConfig() {
@@ -82,7 +81,7 @@ export async function getNetworkConfig() {
     : world?.blockNumber ?? 0n;
 
   return {
-    privateKey: getBurnerPrivateKey(),
+    privateKey: import.meta.env.VITE_PRIVATE_KEY ?? getBurnerPrivateKey(),
     chainId,
     chain,
     faucetServiceUrl: params.get("faucet") ?? chain.faucetUrl,
