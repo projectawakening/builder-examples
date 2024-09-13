@@ -63,7 +63,7 @@ const ManageItem = React.memo(function ManageItem({
 						Fetch
 					</EveButton>
 					<span className="text-xs">
-						{itemPriceWei ? `${formatEther(BigInt(itemPriceWei))} ether units` : "Click fetch to get item price"}
+						{itemPriceWei ? `${formatEther(BigInt(itemPriceWei))} ether units` : "No item price set"}
 					</span>
 				</div>
 
@@ -71,8 +71,8 @@ const ManageItem = React.memo(function ManageItem({
 				<div className="flex flex-col items-start gap-3">
 					<TextEdit
 						isMultiline={false}
-						defaultValue={`${itemPriceWei} wei`}
-						fieldType={"item price"}
+						defaultValue={undefined}
+						fieldType={"Item price"}
 						onChange={(str) => handleEdit(itemPriceWeiValueRef, str)}
 					></TextEdit>
 					<div>

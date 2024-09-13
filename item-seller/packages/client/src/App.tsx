@@ -75,7 +75,7 @@ export const App = () => {
 								event.preventDefault();
 								console.log(
 									"tokens collected:",
-									await collectTokens(smartAssemblyId)
+									await collectTokens(smartAssemblyId, walletClient?.account?.address)
 								);
 							}}
 						>

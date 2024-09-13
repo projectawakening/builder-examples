@@ -131,10 +131,9 @@ export function createSystemCalls(
 
 		return;
 	};
-	const collectTokens = async (smartObjectId) => {
+	const collectTokens = async (smartObjectId, address) => {
 		await worldContract.write.test2__collectTokens([smartObjectId]);
-
-		return getComponentValue(ItemPrice, item);
+		return await getErc20Balance(address)
 	};
 
 	return {
