@@ -13,7 +13,7 @@
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "tsc --noEmit && mud test",
-    "mockData": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-item-seller": ". ./.env && pnpm forge script ./script/ConfigureItemSeller.s.sol:ConfigureItemSeller --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "approve": ". ./.env && pnpm forge script ./script/ApproveToken.s.sol:ApproveToken --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "purchase-item": ". ./.env && pnpm forge script ./script/PurchaseItem.s.sol:PurchaseItem --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",

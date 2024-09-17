@@ -22,7 +22,7 @@
     "withdrawFuel:local": "source ./.env && PRIVATE_KEY=$PRIVATE_KEY forge script script/WithdrawFuel.s.sol:WithdrawFuel --fork-url $RPC_URL --private-key $PRIVATE_KEY --broadcast --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "withdrawFromInv:local": "source ./.env && PRIVATE_KEY=$PRIVATE_KEY forge script script/WithdrawFromInventory.s.sol:WithdrawFromInventory --fork-url $RPC_URL --private-key $PRIVATE_KEY --broadcast --sig \"run(address)\" $WORLD_ADDRESS -vvvv",
     "withdrawFromEphemeral:local": "source ./.env && PRIVATE_KEY=$PRIVATE_KEY forge script script/WithdrawFromEphemeral.s.sol:WithdrawFromEphemeral --fork-url $RPC_URL --private-key $PRIVATE_KEY --broadcast --sig \"run(address)\" $WORLD_ADDRESS -vvvv",
-    "createMockData:local": "source ./.env pnpm run createSmartCharacter:local && pnpm run createMintERC20:local && pnpm run createAndAnchor:local && pnpm run depositFuel:local && pnpm run bringOnline:local && pnpm run depositToInventory:local && pnpm run depositToEphemeral:local",
+    "createmock-data:local": "source ./.env pnpm run createSmartCharacter:local && pnpm run createMintERC20:local && pnpm run createAndAnchor:local && pnpm run depositFuel:local && pnpm run bringOnline:local && pnpm run depositToInventory:local && pnpm run depositToEphemeral:local",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier '**/*.sol' --plugin=prettier-plugin-solidity --check",
     "fixFormat": "prettier '**/*.sol' --plugin=prettier-plugin-solidity --write",

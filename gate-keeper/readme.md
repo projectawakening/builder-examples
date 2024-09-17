@@ -1,4 +1,6 @@
-This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+
+The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
 
 ## Deployment and Testing
 ### Step 0: Deploy the item seller contracts to the existing world 
@@ -7,7 +9,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 ![alt text](../docker_deployment.png)
 
 ```bash
-cd packages/contracts
+cd gate-keeper/packages/contracts
 ```
 
 Install the dependecies for the contracts:
@@ -45,6 +47,14 @@ ERC20_TOKEN_ADDRESS=
 ```
 
 You can adjust the remaining values in the .env file as needed, though they are optional.
+
+<details markdown="block">
+<summary>Changing optional environment values</summary>
+```
+pnpm run mock-data
+```
+
+</details>
 
 
 ### Step 2: Mock data for the existing world 

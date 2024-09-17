@@ -23,7 +23,7 @@ The deployment progress and relevant addresses will be displayed during the proc
 
 
 ### Step 0.2 (Optional): Retrieveing world ABIs
-You can also retrieve the world abis from the deployment by running:
+You can also retrieve the world abis and save them to the root directory from the deployment by running:
 
 ```bash
 docker compose cp world-deployer:/monorepo/abis .
@@ -35,3 +35,35 @@ Now that your local development environment is set up, you're ready to start bui
 cd item-seller
 cat Readme.md
 ```
+
+### Step 0.3: Installing general tools 
+#### Installing NVM
+Install NVM by using this command:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+```
+Restart the shell to use it.
+
+#### Installing NPM
+Install version 18.12.1 of npm using node version manager with:
+```bash
+nvm install 18.12.1
+```
+
+#### Installing PNPM
+Install PNPM version 8 with:
+```bash
+npm install -g pnpm@latest-8
+```
+
+### Step 0.4: Installing Foundry + Forge
+Install foundry and restart the shell with:
+```bash
+curl -L https://foundry.paradigm.xyz | bash & source /root/.bashrc
+```
+
+Run the below command to install forge, cast, anvil and chisel:
+```bash
+foundryup
+```
+
