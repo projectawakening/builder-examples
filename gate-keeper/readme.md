@@ -19,11 +19,13 @@ pnpm install
 ```
 
 **Local Deployment**
+This will deploy the contracts to your local world.
 ```bash
 pnpm run deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
+This will deploy the contracts to the Devnet world.
 ```bash
 cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
@@ -43,16 +45,24 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 #WORLD ADDRESS COPIED FROM DOCKER LOGS
 WORLD_ADDRESS=
 
-#ERC20 TOKEN ADDRESS COPIED FROM ITEM SELLER DEPLOYMENT
-ERC20_TOKEN_ADDRESS=
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=
 ```
 
 You can adjust the remaining values in the .env file as needed, though they are optional.
 
+
 <details markdown="block">
 <summary>Changing optional environment values</summary>
-```
-pnpm run mock-data
+
+#### Setting item wanted and amount
+You can set the item you want to crowdfund and the quantity for the goal.
+
+```bash
+#Item for the goal
+INVENTORY_ITEM_ID=1135
+#Quantity needed to reach the goal
+TARGET_QUANTITY=10
 ```
 
 </details>

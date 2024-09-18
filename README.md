@@ -37,6 +37,12 @@ cat Readme.md
 ```
 
 ### Step 0.3: Installing general tools 
+#### Installing Git
+Install Git by using this command:
+```bash
+apt-get install git
+```
+
 #### Installing NVM
 Install NVM by using this command:
 ```bash
@@ -59,7 +65,7 @@ npm install -g pnpm@latest-8
 ### Step 0.4: Installing Foundry + Forge
 Install foundry and restart the shell with:
 ```bash
-curl -L https://foundry.paradigm.xyz | bash & source /root/.bashrc
+curl -L https://foundry.paradigm.xyz | bash && source /root/.bashrc
 ```
 
 Run the below command to install forge, cast, anvil and chisel:

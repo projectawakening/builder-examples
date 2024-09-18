@@ -10,7 +10,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 ![alt text](../docker_deployment.png)
 
 ```bash
-cd gate-keeper/packages/contracts
+cd vending-machine/packages/contracts
 ```
 
 Install the dependecies for the contracts:
@@ -19,11 +19,13 @@ pnpm install
 ```
 
 **Local Deployment**
+This will deploy the contracts to your local world.
 ```bash
 pnpm run deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
+This will deploy the contracts to the Devnet world.
 ```bash
 cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
@@ -32,7 +34,7 @@ pnpm run deploy:devnet --worldAddress <worldAddress>
 
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract.
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract.
 ![alt text](./readme-imgs/deployment.png)
 
 
@@ -42,28 +44,50 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 ```bash
 #WORLD ADDRESS COPIED FROM DOCKER LOGS
 WORLD_ADDRESS=
+
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=
 ```
 
 You can adjust the remaining values in the .env file as needed, though they are optional.
 
 <details markdown="block">
-<summary>Changing optional environment values</summary>
+<summary>Customizing optional environment values</summary>
+
+#### Items
+You can set the items in and out to change which items you trade for. 
+
+```bash
+#ITEM ID 77800 - Common Ore
+ITEM_IN_ID=888
+#ITEM ID 77811 - Carbonaceous Ore
+ITEM_OUT_ID=999
 ```
-pnpm run mock-data
+
+#### Ratios
+A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
+
+You can alter this ratio how you want, but be careful not to accidently give away your whole supply of items with the wrong ratio.
+
+```bash
+#IN Ratio
+IN_RATIO=1
+#OUT Ratio
+OUT_RATIO=2
 ```
 
 </details>
 
 
 ### Step 2: Mock data for the existing world 
-To generate mock data for testing the Vending Machine logic, run the following command:
+To generate mock data for testing the Vending Machine logic, run the following command. This generates and deploys the smart storage deployable and items.
 
 ```bash
 pnpm run mock-data
 ```
 This will create the on-chain SSU, fuel it and bring it online.
 
-### Step 3: Configure Gate Keeper 
+### Step 3: Configure Vending Machine
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash

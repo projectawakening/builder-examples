@@ -1,4 +1,7 @@
+## Introduction
 This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+
+The Item Seller allows players to purchase items with ERC20 Tokens.
 
 ## Deployment and Testing
 ### Step 0: Deploy the item seller contracts to the existing world 
@@ -16,11 +19,13 @@ pnpm install
 ```
 
 **Local Deployment**
+This will deploy the contracts to your local world.
 ```bash
 pnpm run deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
+This will deploy the contracts to the Devnet world.
 ```bash
 cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
@@ -42,9 +47,33 @@ WORLD_ADDRESS=
 
 #ERC20 TOKEN ADDRESS COPIED FROM ITEM SELLER DEPLOYMENT
 ERC20_TOKEN_ADDRESS=
+
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=
 ```
 
 You can adjust the remaining values in the .env file as needed, though they are optional.
+
+
+<details markdown="block">
+<summary>Changing optional environment values</summary>
+
+#### Setting item, price and payment address
+You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether.
+
+```bash
+##### ITEM SELLER CONFIGURATION
+#ITEM ID 77800 - Common Ore
+INVENTORY_ITEM_ID=1235
+
+#The address that recieves the payments
+RECEIVER_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+
+##PRICE SHOULD BE IN WEI
+PRICE_IN_WEI=500000000000000000
+```
+
+</details>
 
 
 ### Step 2: Mock data for the existing world 
