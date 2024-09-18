@@ -3,3 +3,8 @@ mock-data/node_modules/
 mock-data/node_modules/.pnpm/
 mock-data/out/
 mock-data/broadcast/
+smart-turret/node_modules/
+smart-turret/packages/contracts/src/codegen/
+smart-turret/packages/client/node_modules/
+smart-turret/packages/contracts/out/
+smart-turret/packages/contracts/node_modules/
