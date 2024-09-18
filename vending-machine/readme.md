@@ -1,10 +1,10 @@
 ## Introduction
-This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for the vending machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
+The vending machine allows you to automatically trade an item for another item. For example, if a player gives you one set item depending on the ratio you set it could give the player two of another item.
 
 ## Deployment and Testing
-### Step 0: Deploy the gate keeper contracts to the existing world 
+### Step 0: Deploy the vending machine contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
 ![alt text](../docker_deployment.png)
@@ -42,9 +42,6 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 ```bash
 #WORLD ADDRESS COPIED FROM DOCKER LOGS
 WORLD_ADDRESS=
-
-#ERC20 TOKEN ADDRESS COPIED FROM ITEM SELLER DEPLOYMENT
-ERC20_TOKEN_ADDRESS=
 ```
 
 You can adjust the remaining values in the .env file as needed, though they are optional.
@@ -59,7 +56,7 @@ pnpm run mock-data
 
 
 ### Step 2: Mock data for the existing world 
-To generate mock data for testing the Gate Keeper logic, run the following command:
+To generate mock data for testing the Vending Machine logic, run the following command:
 
 ```bash
 pnpm run mock-data
@@ -67,19 +64,19 @@ pnpm run mock-data
 This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 3: Configure Gate Keeper 
-To configure which items should be recieved and the target amount, run:
+To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm run configure-gate-keeper
+pnpm run configure-ratio
 ```
 
-You can adjust the values for the SSU_ID, INVENTORY_ITEM_ID & TARGET_QUANTITY in the .env file as needed, though they are optional.
+You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
 
-### Step 4: Test Gate Keeper (Optional)
-To test the gate keeper, execute the following command:
+### Step 4: Test The Vending Machine (Optional)
+To test the vending machine, execute the following command:
 
 ```bash
-pnpm run deposit-to-ssu
+pnpm run execute
 ```
 
 ### Troubleshooting
@@ -90,4 +87,4 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Item Limits**: Be cautious not to attempt depositing more items than have been generated via the `mock-data` script. The number of available items is controlled by `MockSsuData.s.sol`, so ensure this script has been properly executed. The default number generated is 15, however you can change this as needed.
+3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  

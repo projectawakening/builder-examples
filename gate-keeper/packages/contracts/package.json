@@ -14,7 +14,7 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "tsc --noEmit && mud test",
     "configure-gate-keeper": ". ./.env && pnpm forge script ./script/ConfigureGateKeeper.s.sol:ConfigureGateKeeper --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "depoit-to-ssu": ". ./.env && pnpm forge script ./script/DepositToSSU.s.sol:DepositToSSU --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "deposit-to-ssu": ". ./.env && pnpm forge script ./script/DepositToSSU.s.sol:DepositToSSU --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
   },
   "dependencies": {
