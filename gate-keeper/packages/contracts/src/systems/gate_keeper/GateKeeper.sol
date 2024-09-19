@@ -23,6 +23,7 @@ import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-r
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { Utils as InventoryUitls } from "@eveworld/world/src/modules/inventory/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 
 import { GateKeeperConfig, GateKeeperConfigData } from "../../codegen/tables/GateKeeperConfig.sol";
 
@@ -84,10 +85,11 @@ contract GateKeeper is System {
    * @param smartObjectId The smart object id of the SSU
    * @param quantity The quantity of the item to deposit into the SSU
    */
-  function depositToSSU(uint256 smartObjectId, uint256 quantity) public {
+  function depositToSSU(uint256 smartObjectId, uint256 quantity) public {    
     GateKeeperConfigData memory gatekeeperConfig = GateKeeperConfig.get(smartObjectId);
-
+    
     require(gatekeeperConfig.isGoalReached == false, "GateKeeper goal reached");
+    require(quantity != 0, "No items deposited");    
 
     uint256 quantityInInventory = InventoryItemTable.getQuantity(
       _namespace().inventoryItemTableId(),
@@ -96,13 +98,13 @@ contract GateKeeper is System {
     );
 
     if (quantityInInventory + quantity > gatekeeperConfig.targetItemQuantity) {
-      revert("Quantity is greater than target quantity");
+      quantity = quantity - ((quantityInInventory + quantity) - gatekeeperConfig.targetItemQuantity);
     }
 
     if (quantityInInventory + quantity == gatekeeperConfig.targetItemQuantity) {
       GateKeeperConfig.setIsGoalReached(smartObjectId, true);
     }
-
+    
     EntityRecordTableData memory entityInRecord = EntityRecordTable.get(
       _namespace().entityRecordTableId(),
       gatekeeperConfig.itemIn
@@ -122,7 +124,7 @@ contract GateKeeper is System {
       quantity
     );
 
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);    
   }
 
   /**
