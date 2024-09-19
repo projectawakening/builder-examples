@@ -21,7 +21,7 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
 
-contract MockSsuData is Script {
+contract MockData is Script {
   using SmartCharacterUtils for bytes14;
   using SmartDeployableUtils for bytes14;
   using SmartTurretUtils for bytes14;
@@ -41,6 +41,7 @@ contract MockSsuData is Script {
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
+    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
 
     smartCharacter = SmartCharacterLib.World({
       iface: IBaseWorld(worldAddress),
@@ -67,14 +68,17 @@ contract MockSsuData is Script {
       "tokenCid"
     );
 
-    anchorAndOnlineSmartTurret(12345);
+    anchorAndOnlineSmartTurret(smartTurretId);
 
     vm.stopBroadcast();
   }
 
   function anchorAndOnlineSmartTurret(uint256 smartObjectId) public {
     EntityRecordData memory entityRecordData = EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 });
-    SmartObjectData memory smartObjectData = SmartObjectData({ owner: address(1), tokenURI: "test" });
+    SmartObjectData memory smartObjectData = SmartObjectData({
+      owner: address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
+      tokenURI: "test"
+    });
     WorldPosition memory worldPosition = WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) });
 
     uint256 fuelUnitVolume = 100;

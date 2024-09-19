@@ -3,7 +3,6 @@ pragma solidity >=0.8.24;
 
 import { console } from "forge-std/console.sol";
 import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
-import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
