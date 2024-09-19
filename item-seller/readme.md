@@ -27,7 +27,6 @@ pnpm run deploy:local --worldAddress <worldAddress>
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world.
 ```bash
-cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
 
