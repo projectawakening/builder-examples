@@ -27,9 +27,8 @@ pnpm run deploy:local --worldAddress <worldAddress>
 ```
 
 **Devnet Deployment**
-This will deploy the contracts to the Devnet world.
+This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
-cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
 
@@ -42,6 +41,8 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the values you copied earlier:
+
+If you are on Devnet, then you can get your SSU_ID through 
 
 ```bash
 #WORLD ADDRESS COPIED FROM DOCKER LOGS

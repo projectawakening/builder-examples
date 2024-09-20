@@ -1,15 +1,18 @@
 ## Introduction
-This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. The contracts will be used with a SSU (Smart Storage Unit) to act as a item seller where players can purchase items, for example lenses for ERC20 Tokens.
+This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. 
 
 ### User Flow
-#### Step 0: User buys an item
-The item seller will recieve the ERC20 token and authorize the transaction if the player has paid enough.
+The item seller is a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players. 
 
-#### Step 1: Item Transfer
-The item seller will transfer the item from the inventory to the ephemeral inventory. The ephemeral inventory is where players can input and withdraw items from the SSU. The inventory is where the owner of the SSU can store and withdraw items needed for the SSU such as the items being sold.
+The SSU (item seller) has two types of inventories; the main inventory and the ephemeral inventory.
 
-#### Step 2: Item Retrieval
-The player will transfer the item from the SSU's ephemeral inventory to their ship. 
+#### Inventory
+This is the storage that belongs to the owner of the SSU.
+
+#### Ephemeral Inventory
+Temporary storage for players interacting with the SSU. Players can deposit and withdraw items from the SSU via this inventory.
+
+When an ERC20 token is transferred by the player, the item seller SSU transfers items from the owner's inventory to the player's ephemeral inventory. Players can then withdraw these items to their ship's hangar.
 
 ## Deployment and Testing
 ### Step 0: Deploy the item seller contracts to the existing world 
@@ -33,7 +36,7 @@ pnpm run deploy:local --worldAddress <worldAddress>
 ```
 
 **Devnet Deployment**
-This will deploy the contracts to the Devnet world.
+This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
