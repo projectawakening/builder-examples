@@ -66,7 +66,10 @@ You can adjust the remaining values in the .env file as needed, though they are 
 <summary>Changing optional environment values</summary>
 
 ### Setting item, price and payment address
-You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether. For example, if one lens is 5 Tokens then the price is 5 * 10^18. This means that the default price is set to 0.5 Tokens.
+You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether. For example, 
+1. if one lens is 5 Tokens then the price is 5 * 10^18.  
+2. If 5 lenses cost 1 Token then the price is 2 * 10^17 
+The default is 500000000000000000 which is 2 lens per token
 
 ```bash
 ##### ITEM SELLER CONFIGURATION
