@@ -1,8 +1,10 @@
 ### Step 0: Installing general tools 
 #### Installing Git
-Install Git by using this command:
+Install Git through https://git-scm.com/book/en/v2/Getting-Started-Installing-Git. 
+
+To confirm Git has been installed run:
 ```bash
-apt-get install git
+git --version
 ```
 
 #### Installing NVM
