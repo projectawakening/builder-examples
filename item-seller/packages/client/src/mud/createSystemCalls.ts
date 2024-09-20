@@ -31,7 +31,7 @@ export function createSystemCalls(
 	 *   syncToRecs
 	 *   (https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
 	 */
-	{ worldContract, erc20Contract, waitForTransaction }: SetupNetworkResult,
+	{ worldContract, erc20Contract }: SetupNetworkResult,
 	{ ItemPrice, ItemSellerERC20 }: ClientComponents
 ) {
 	/*
@@ -50,8 +50,7 @@ export function createSystemCalls(
 		itemId,
 	});
 
-	const getERC20Data = async (smartObjectId) => {
-		await worldContract.write.test2__getERC20Data([smartObjectId]);
+	const getERC20Data = async () => {
 		const result = getComponentValue(ItemSellerERC20, entity);
 		return result;
 	};
@@ -75,12 +74,9 @@ export function createSystemCalls(
 
 	/** ITEM PRICE FUNCTIONS */
 
-	const getItemPriceData = async (smartObjectId, inventoryItemId) => {
-		await worldContract.write.test2__getItemPriceData([
-			smartObjectId,
-			inventoryItemId,
-		]);
-		return getComponentValue(ItemPrice, item);
+	const getItemPriceData = async () => {
+		const result = getComponentValue(ItemPrice, item)
+		return result;
 	};
 
 	const setItemPrice = async (smartObjectId, inventoryItemId, price) => {
