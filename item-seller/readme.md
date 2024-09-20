@@ -1,7 +1,7 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. The contracts will be used with a SSU (Smart Storage Unit) to act as a item seller where players can purchase items, for example lenses for ERC20 Tokens.
 
-### User Process
+### User Flow
 #### Step 0: User buys an item
 The item seller will recieve the ERC20 token and authorize the transaction if the player has paid enough.
 
