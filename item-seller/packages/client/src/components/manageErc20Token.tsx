@@ -1,8 +1,6 @@
-import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
-import { singletonEntity } from "@latticexyz/store-sync/recs";
-import React, { useEffect, useRef, useState } from "react";
-import { EveButton, TextEdit } from "@eveworld/ui-components";
+import React, { useRef, useState } from "react";
+import { EveButton, EveInput } from "@eveworld/ui-components";
 
 const ManageErc20Token = React.memo(function ManageErc20Token({
 	smartAssemblyId,
@@ -20,7 +18,7 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 	} = useMUD();
 
 	const fetchErc20Data = async () => {
-		const erc20TokenData = await getERC20Data(smartAssemblyId);
+		const erc20TokenData = await getERC20Data();
 		setErc20TokenAddress(erc20TokenData?.tokenAddress as string);
 		setErc20Receiver(erc20TokenData?.receiver as string);
 	};
@@ -30,9 +28,9 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 
 	const handleEdit = (
 		refString: React.MutableRefObject<string>,
-		eventString: string
+		eventString: string | number | null
 	): void => {
-		refString.current = eventString;
+		refString.current = eventString?.toString() ?? "";
 	};
 
 	return (
@@ -59,10 +57,10 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 				</div>
 			</div>
 
-			<TextEdit
-				isMultiline={false}
+			<EveInput
+				inputType="string"
 				defaultValue={erc20TokenAddress}
-				fieldType={"ERC20 token"}
+				fieldName={"ERC20 token"}
 				onChange={(str) => handleEdit(erc20TokenAddressValueRef, str)}
 			/>
 			<EveButton
@@ -81,10 +79,10 @@ const ManageErc20Token = React.memo(function ManageErc20Token({
 			</EveButton>
 
 			<div className="mt-6">STEP 1.1: Update token receiver</div>
-			<TextEdit
-				isMultiline={false}
+			<EveInput
+				inputType="string"
 				defaultValue={erc20Receiver}
-				fieldType={"Token receiver"}
+				fieldName={"Token receiver"}
 				onChange={(str) => handleEdit(erc20ReceiverValueRef, str)}
 			/>
 			<EveButton
