@@ -1,6 +1,6 @@
 import { useMUD } from "../MUDContext";
 import React, { useRef, useState } from "react";
-import { EveButton, TextEdit } from "@eveworld/ui-components";
+import { EveButton, EveInput } from "@eveworld/ui-components";
 import { formatEther, parseEther } from "viem";
 
 const ManageItem = React.memo(function ManageItem({
@@ -26,18 +26,15 @@ const ManageItem = React.memo(function ManageItem({
 	} = useMUD();
 
 	const fetchItemPriceData = async () => {
-		const itemPriceData = await getItemPriceData(
-			smartAssemblyId,
-			inventoryItemId
-		);
+		const itemPriceData = await getItemPriceData();
 		setItemPriceWei(Number(itemPriceData?.price ?? 0))
 	}
 
-	const itemPriceWeiValueRef = useRef("");
+	const itemPriceWeiValueRef = useRef(0);
 
 	const handleEdit = (
-		refString: React.MutableRefObject<string>,
-		eventString: string
+		refString: React.MutableRefObject<number>,
+		eventString: number
 	): void => {
 		refString.current = eventString;
 	};
@@ -69,12 +66,12 @@ const ManageItem = React.memo(function ManageItem({
 
 				<div className="mt-4">STEP 2.2: Set item price in ether units</div>
 				<div className="flex flex-col items-start gap-3">
-					<TextEdit
-						isMultiline={false}
+					<EveInput
+						inputType="numerical"
 						defaultValue={undefined}
-						fieldType={"Item price"}
-						onChange={(str) => handleEdit(itemPriceWeiValueRef, str)}
-					></TextEdit>
+						fieldName={"Item price"}
+						onChange={(str) => handleEdit(itemPriceWeiValueRef, str as number)}
+					></EveInput>
 					<div>
 						<EveButton
 							typeClass="primary"
@@ -83,7 +80,7 @@ const ManageItem = React.memo(function ManageItem({
 								await setItemPrice(
 									smartAssemblyId,
 									inventoryItemId,
-									parseEther(itemPriceWeiValueRef.current)
+									parseEther(itemPriceWeiValueRef.current.toString())
 								);
 								fetchItemPriceData()
 							}}
@@ -127,12 +124,12 @@ const ManageItem = React.memo(function ManageItem({
 					</span>
 				</div>
 				<div className="flex items-start flex-col gap-3">
-					<TextEdit
-						isMultiline={false}
+					<EveInput
+						inputType="numerical"
 						defaultValue={itemQuantity}
-						fieldType={"item quantity"}
+						fieldName={"item quantity"}
 						onChange={(str) => setItemQuantity(Number(str))}
-					></TextEdit>
+					></EveInput>
 					<div>
 						<EveButton
 							typeClass="primary"
