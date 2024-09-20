@@ -1,7 +1,15 @@
 ## Introduction
-This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. The contracts will be used with a SSU (Smart Storage Unit) to act as a item seller where players can purchase items, for example lenses for ERC20 Tokens.
 
-The Item Seller allows players to purchase items with ERC20 Tokens.
+### User Process
+#### Step 0: User buys an item
+The item seller will recieve the ERC20 token and authorize the transaction if the player has paid enough.
+
+#### Step 1: Item Transfer
+The item seller will transfer the item from the inventory to the ephemeral inventory. The ephemeral inventory is where players can input and withdraw items from the SSU. The inventory is where the owner of the SSU can store and withdraw items needed for the SSU such as the items being sold.
+
+#### Step 2: Item Retrieval
+The player will transfer the item from the SSU's ephemeral inventory to their ship. 
 
 ## Deployment and Testing
 ### Step 0: Deploy the item seller contracts to the existing world 
@@ -10,7 +18,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 ![alt text](../docker_deployment.png)
 
 ```bash
-cd packages/contracts
+cd item-seller/packages/contracts
 ```
 
 Install the dependecies for the contracts:
@@ -57,8 +65,8 @@ You can adjust the remaining values in the .env file as needed, though they are 
 <details markdown="block">
 <summary>Changing optional environment values</summary>
 
-#### Setting item, price and payment address
-You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether.
+### Setting item, price and payment address
+You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether. For example, if one lens is 5 Tokens then the price is 5 * 10^18. This means that the default price is set to 0.5 Tokens.
 
 ```bash
 ##### ITEM SELLER CONFIGURATION
@@ -70,6 +78,59 @@ RECEIVER_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 
 ##PRICE SHOULD BE IN WEI
 PRICE_IN_WEI=500000000000000000
+```
+
+To get the INVENTORY_ITEM_ID you can follow these steps:
+
+#### Step 0:
+Right click your SSU, open the dapp window and copy the smart storage unit id.
+
+> [!CAUTION]
+> TODO: FINALIZE THIS SECTION.
+
+![alt text](./readme-imgs/ssu_view.png)
+
+#### Step 1:
+Once you have your SSU ID, you can go to https://blockchain-gateway-test.nursery.reitnorf.com/smartdeployables/ssu_id (and replace ssu_id with your copied SSU ID). 
+
+#### Step 2:
+You should now have similar JSON to this. You want to get the item ID from the itemId in the storage items array and ephemeralInventoryItems array. The item ID should look something like: 
+
+```json
+"112603025077760770783264636189502217226733230421932850697496331082050661822826"
+```
+
+```json
+"inventory": {
+  "storageCapacity": 100000000000000,
+  "usedCapacity": 490000000000,
+  "storageItems": [
+    {
+      "typeId": 77518,
+      "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
+      "quantity": 49,
+      "name": "Lens 3X",
+      "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
+    }
+  ],
+  "ephemeralInventoryList": [
+    {
+      "ownerId": "0xbc07106cc909d37e36a1c3db35411805836bdf67",
+      "ownerName": "skygirl",
+      "storageCapacity": 1000000000000,
+      "usedCapacity": 10000000000,
+      "ephemeralInventoryItems": [
+        {
+          "typeId": 77518,
+          "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
+          "quantity": 1,
+          "name": "Lens 3X",
+          "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
+        }
+      ]
+    }
+  ]
+},
 ```
 
 </details>

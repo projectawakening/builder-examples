@@ -3,6 +3,8 @@ This guide will walk you through the process of building contracts for the gate 
 
 The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
 
+Previously, in the game gate keeper was used to have shared goals for players to contribute salt. Once the goals were met, gates and new areas were unlocked.
+
 ## Deployment and Testing
 ### Step 0: Deploy the gate keeper contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
@@ -74,7 +76,7 @@ To generate mock data for testing the Gate Keeper logic, run the following comma
 ```bash
 pnpm run mock-data
 ```
-This will create the on-chain SSU, fuel it and bring it online.
+This will create the on-chain SSU, fuel it and bring it online. This SSU will then act as a gate keeper, which has to be online to recieve items for the set goal. 
 
 ### Step 3: Configure Gate Keeper 
 To configure which items should be recieved and the target amount, run:

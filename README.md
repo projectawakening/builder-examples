@@ -1,10 +1,48 @@
-## Step 0: Setting up your environment:
+### Step 0: Installing general tools 
+#### Installing Git
+Install Git by using this command:
+```bash
+apt-get install git
+```
+
+#### Installing NVM
+Install NVM by using this command:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+```
+
+Restart the shell to use it.
+
+#### Installing NPM
+Install version 18.12.1 of npm using node version manager with:
+```bash
+nvm install 18.12.1
+```
+
+#### Installing PNPM
+Install PNPM version 8 with:
+```bash
+npm install -g pnpm@latest-8
+```
+
+### Step 0.1: Installing Foundry + Forge
+Install foundry and restart the shell with:
+```bash
+curl -L https://foundry.paradigm.xyz | bash && source /root/.bashrc
+```
+
+Run the below command to install forge, cast, anvil and chisel:
+```bash
+foundryup
+```
+
+### Step 0.2: Setting up your environment:
 This guide will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
 
 ### Prerequisites
 Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
-### Step 0.1: Deploying world contracts into a local node.
+### Step 0.3: Deploying world contracts into a local node.
 We have provided a compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command
 ```bash
 docker compose up -d
@@ -33,43 +71,5 @@ Now that your local development environment is set up, you're ready to start bui
 
 ```bash
 cd item-seller
-cat Readme.md
+cat readme.md
 ```
-
-### Step 0.3: Installing general tools 
-#### Installing Git
-Install Git by using this command:
-```bash
-apt-get install git
-```
-
-#### Installing NVM
-Install NVM by using this command:
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-```
-Restart the shell to use it.
-
-#### Installing NPM
-Install version 18.12.1 of npm using node version manager with:
-```bash
-nvm install 18.12.1
-```
-
-#### Installing PNPM
-Install PNPM version 8 with:
-```bash
-npm install -g pnpm@latest-8
-```
-
-### Step 0.4: Installing Foundry + Forge
-Install foundry and restart the shell with:
-```bash
-curl -L https://foundry.paradigm.xyz | bash && source /root/.bashrc
-```
-
-Run the below command to install forge, cast, anvil and chisel:
-```bash
-foundryup
-```
-
