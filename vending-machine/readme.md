@@ -13,7 +13,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 cd vending-machine/packages/contracts
 ```
 
-Install the dependecies for the contracts:
+Install the dependencies for the contracts:
 ```bash
 pnpm install
 ```
@@ -67,7 +67,7 @@ ITEM_OUT_ID=999
 #### Ratios
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
 
-You can alter this ratio how you want, but be careful not to accidently give away your whole supply of items with the wrong ratio.
+You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ```bash
 #IN Ratio

@@ -1,4 +1,9 @@
-### Step 0: Installing general tools 
+## Welcome to EVE Frontier Building!
+Welcome, this repository contains guides and examples to get started building on EVE Frontier. For more information, you can visit https://docs.evefrontier.com/. To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
+
+### Step 0: Installing general tools
+Before you get started you need to either install, or make sure you have the required tools.
+
 #### Installing Git
 Install Git through https://git-scm.com/book/en/v2/Getting-Started-Installing-Git. 
 
@@ -7,7 +12,7 @@ To confirm Git has been installed run:
 git --version
 ```
 
-#### Installing NVM
+#### Installing Node Version Manager
 Install NVM by using this command:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
@@ -16,13 +21,13 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 Restart the shell to use it.
 
 #### Installing NPM
-Install version 18.12.1 of npm using node version manager with:
+Install version 18.12.1 of NPM (Node.JS Version Manager) using NVM with:
 ```bash
 nvm install 18.12.1
 ```
 
 #### Installing PNPM
-Install PNPM version 8 with:
+Install PNPM version 8, which is used as a more efficient version of NPM with:
 ```bash
 npm install -g pnpm@latest-8
 ```
@@ -45,33 +50,47 @@ This guide will walk you through setting up a local environment for running a lo
 Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
 ### Step 0.3: Deploying world contracts into a local node.
-We have provided a compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command
+We have provided a docker compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command:
 ```bash
 docker compose up -d
 ```
 ![alt text](docker1.png)
 
-and monitor the progress of the world deployment with:
+Monitor the progress of the world deployment with:
 
 ```bash
 docker compose logs -f world-deployer
 ```
 
-The deployment progress and relevant addresses will be displayed during the process. Once the deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
+The deployment progress and relevant addresses will be displayed during the process. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
 
 ![alt text](docker_deployment.png)
 
 
-### Step 0.2 (Optional): Retrieveing world ABIs
+### Step 0.4 (Optional): Retrieving world ABIs
 You can also retrieve the world abis and save them to the root directory from the deployment by running:
 
 ```bash
 docker compose cp world-deployer:/monorepo/abis .
 ```
 
-Now that your local development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory and follow the instructions outlined in its respective README file.
+### Step 0.5: Start Building!
+
+Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file.
 
 ```bash
 cd item-seller
 cat readme.md
 ```
+
+## Guides
+### Item Seller: [View](./item-seller/readme.md)
+Create a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players. 
+
+### Vending Machine: [View](./vending-machine/readme.md)
+Create a Vending Machine Smart Storage Unit (SSU) in the game which trade items between the owner and players.
+
+### Gate Keeper: [View](./gate-keeper/readme.md)
+Create a Smart Storage Unit (SSU) which can accept item donations toward a specific goal.
+
+
