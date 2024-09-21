@@ -18,7 +18,7 @@ When an ERC20 token is transferred by the player, the item seller SSU transfers 
 ### Step 0: Deploy the item seller contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
-![alt text](../docker_deployment.png)
+![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
 cd item-seller/packages/contracts
@@ -142,8 +142,8 @@ You should now have similar JSON to this. You want to get the item ID from the i
 </details>
 
 
-### Step 2: Mock data for the existing world 
-To generate mock data for testing the Item Seller logic, run the following command:
+### Step 2: Mock data for the existing world **(Local Development Only)**
+To generate mock data for testing the Item Seller logic on the local world, run the following command:
 
 ```bash
 pnpm run mock-data

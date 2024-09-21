@@ -1,5 +1,9 @@
+![alt text](readme-imgs/banner7.png)
+
 ## Welcome to EVE Frontier Building!
-Welcome, this repository contains guides and examples to get started building on EVE Frontier. For more information, you can visit https://docs.evefrontier.com/. To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
+Welcome, this repository contains guides and examples to get started building on EVE Frontier. For more information, you can visit https://docs.evefrontier.com/. 
+
+To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
 ### Step 0: Installing general tools
 Before you get started you need to either install, or make sure you have the required tools.
@@ -54,7 +58,7 @@ We have provided a docker compose file which bundles the running of the local no
 ```bash
 docker compose up -d
 ```
-![alt text](docker1.png)
+![alt text](readme-imgs/docker1.png)
 
 Monitor the progress of the world deployment with:
 
@@ -64,7 +68,7 @@ docker compose logs -f world-deployer
 
 The deployment progress and relevant addresses will be displayed during the process. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
 
-![alt text](docker_deployment.png)
+![alt text](readme-imgs/docker_deployment.png)
 
 
 ### Step 0.4 (Optional): Retrieving world ABIs

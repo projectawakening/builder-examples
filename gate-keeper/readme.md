@@ -9,7 +9,7 @@ Previously, in the game gate keeper was used to have shared goals for players to
 ### Step 0: Deploy the gate keeper contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
-![alt text](../docker_deployment.png)
+![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
 cd gate-keeper/packages/contracts
@@ -71,8 +71,8 @@ TARGET_QUANTITY=10
 </details>
 
 
-### Step 2: Mock data for the existing world 
-To generate mock data for testing the Gate Keeper logic, run the following command:
+### Step 2: Mock data for the existing world **(Local Development Only)**
+To generate mock data for testing the Gate Keeper logic on the local world, run the following command:
 
 ```bash
 pnpm run mock-data
