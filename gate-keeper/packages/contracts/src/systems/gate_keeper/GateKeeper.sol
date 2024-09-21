@@ -98,7 +98,7 @@ contract GateKeeper is System {
     );
 
     if (quantityInInventory + quantity > gatekeeperConfig.targetItemQuantity) {
-      quantity = quantity - ((quantityInInventory + quantity) - gatekeeperConfig.targetItemQuantity);
+      quantity = gatekeeperConfig.targetItemQuantity - quantityInInventory ;
     }
 
     if (quantityInInventory + quantity == gatekeeperConfig.targetItemQuantity) {
