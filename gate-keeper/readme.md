@@ -1,3 +1,5 @@
+# Gate Keeper Example
+
 ## Introduction
 This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
@@ -9,7 +11,7 @@ Previously, in the game gate keeper was used to have shared goals for players to
 ### Step 0: Deploy the gate keeper contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
-![alt text](../docker_deployment.png)
+![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
 cd gate-keeper/packages/contracts
@@ -35,7 +37,7 @@ pnpm run deploy:devnet --worldAddress <worldAddress>
 
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract.
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
 ![alt text](./readme-imgs/deployment.png)
 
 
@@ -71,8 +73,8 @@ TARGET_QUANTITY=10
 </details>
 
 
-### Step 2: Mock data for the existing world 
-To generate mock data for testing the Gate Keeper logic, run the following command:
+### Step 2: Mock data for the existing world **(Local Development Only)**
+To generate mock data for testing the Gate Keeper logic on the local world, run the following command:
 
 ```bash
 pnpm run mock-data

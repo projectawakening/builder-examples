@@ -1,3 +1,5 @@
+# Item Seller Example
+
 ## Introduction
 This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. 
 
@@ -18,13 +20,13 @@ When an ERC20 token is transferred by the player, the item seller SSU transfers 
 ### Step 0: Deploy the item seller contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
-![alt text](../docker_deployment.png)
+![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
 cd item-seller/packages/contracts
 ```
 
-Install the dependecies for the contracts:
+Install the dependencies for the contracts:
 ```bash
 pnpm install
 ```
@@ -69,7 +71,7 @@ You can adjust the remaining values in the .env file as needed, though they are 
 <summary>Changing optional environment values</summary>
 
 ### Setting item, price and payment address
-You can set the item you want to sell, the address that recieves payments and the price in Wei. 10^18 wei is equal to one Ether. For example, 
+You can set the item you want to sell, the address that receives payments and the price in Wei. 10^18 wei is equal to one Ether. For example, 
 1. if one lens is 5 Tokens then the price is 5 * 10^18.  
 2. If 5 lenses cost 1 Token then the price is 2 * 10^17 
 The default is 500000000000000000 which is 2 lens per token
@@ -79,7 +81,7 @@ The default is 500000000000000000 which is 2 lens per token
 #ITEM ID 77800 - Common Ore
 INVENTORY_ITEM_ID=1235
 
-#The address that recieves the payments
+#The address that receives the payments
 RECEIVER_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 
 ##PRICE SHOULD BE IN WEI
@@ -142,8 +144,8 @@ You should now have similar JSON to this. You want to get the item ID from the i
 </details>
 
 
-### Step 2: Mock data for the existing world 
-To generate mock data for testing the Item Seller logic, run the following command:
+### Step 2: Mock data for the existing world **(Local Development Only)**
+To generate mock data for testing the Item Seller logic on the local world, run the following command:
 
 ```bash
 pnpm run mock-data

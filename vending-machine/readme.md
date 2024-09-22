@@ -1,19 +1,21 @@
+# Vending Machine Example
+
 ## Introduction
 This guide will walk you through the process of building contracts for the vending machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-A vending machine is a SSU in the game which can be setup to trade items between the owner and players. Prices are set by providing a ratio of items. For example with a ratio of 1:2  you can exchange 1 ore for 2 mining crystals
+A vending machine is a SSU (Smart Storage Unit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
 
 ## Deployment and Testing
 ### Step 0: Deploy the vending machine contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
-![alt text](../docker_deployment.png)
+![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
 cd vending-machine/packages/contracts
 ```
 
-Install the dependecies for the contracts:
+Install the Solidity dependencies for the contracts:
 ```bash
 pnpm install
 ```
@@ -26,17 +28,16 @@ pnpm run deploy:local --worldAddress <worldAddress>
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
+
 ```bash
-cd packages/contracts
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
 
-
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract.
-![alt text](./readme-imgs/deployment.png)
+Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract.
 
+![alt text](./readme-imgs/deployment.png)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the values you copied earlier:
@@ -45,7 +46,7 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 #WORLD ADDRESS COPIED FROM DOCKER LOGS
 WORLD_ADDRESS=
 
-#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+#DON'T NEED TO CHANGE IF YOUR RUNNING LOCALLY
 SSU_ID=
 ```
 
@@ -67,7 +68,7 @@ ITEM_OUT_ID=999
 #### Ratios
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
 
-You can alter this ratio how you want, but be careful not to accidently give away your whole supply of items with the wrong ratio.
+You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ```bash
 #IN Ratio
@@ -78,13 +79,13 @@ OUT_RATIO=2
 
 </details>
 
-
-### Step 2: Mock data for the existing world 
-To generate mock data for testing the Vending Machine logic, run the following command. This generates and deploys the smart storage deployable and items.
+### Step 2: Mock data for the existing world **(Local Development Only)**
+To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
 ```bash
 pnpm run mock-data
 ```
+
 This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 3: Configure Vending Machine
