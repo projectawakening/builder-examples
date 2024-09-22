@@ -1,3 +1,5 @@
+# Gate Keeper Example
+
 ## Introduction
 This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
@@ -35,7 +37,7 @@ pnpm run deploy:devnet --worldAddress <worldAddress>
 
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract.
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
 ![alt text](./readme-imgs/deployment.png)
 
 

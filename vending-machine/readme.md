@@ -1,3 +1,5 @@
+# Vending Machine Example
+
 ## Introduction
 This guide will walk you through the process of building contracts for the vending machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
