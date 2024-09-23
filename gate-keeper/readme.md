@@ -3,13 +3,13 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
+The gate keeper is a [Smart Storage Unit (SSU)](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit) that allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
 
-Previously, in the game gate keeper was used to have shared goals for players to contribute salt. Once the goals were met, gates and new areas were unlocked.
+Previously, the gate keeper system was used to have shared goals for players to contribute salt items. Once the goals were met, gates and new areas were unlocked.
 
 ## Deployment and Testing
 ### Step 0: Deploy the gate keeper contracts to the existing world 
-First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
+First, copy the World Contract Address from the Docker logs, then run the following command:
 
 ![alt text](../readme-imgs/docker_deployment.png)
 
@@ -17,13 +17,13 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 cd gate-keeper/packages/contracts
 ```
 
-Install the dependecies for the contracts:
+Install the dependencies for the contracts:
 ```bash
 pnpm install
 ```
 
 **Local Deployment**
-This will deploy the contracts to your local world.
+This will deploy the contracts to your local world. Replace <worldAddress> with the world address from your Docker logs.
 ```bash
 pnpm run deploy:local --worldAddress <worldAddress> 
 ```
@@ -33,7 +33,6 @@ This will deploy the contracts to the Devnet world. You can retrieve the world a
 ```bash
 pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
-
 
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
@@ -61,7 +60,7 @@ You can adjust the remaining values in the .env file as needed, though they are 
 <summary>Changing optional environment values</summary>
 
 #### Setting item wanted and amount
-You can set the item you want to crowdfund and the quantity for the goal.
+You can set the item you want to crowdfund and the target amount.
 
 ```bash
 #Item for the goal
@@ -79,10 +78,10 @@ To generate mock data for testing the Gate Keeper logic on the local world, run 
 ```bash
 pnpm run mock-data
 ```
-This will create the on-chain SSU, fuel it and bring it online. This SSU will then act as a gate keeper, which has to be online to recieve items for the set goal. 
+This will create the on-chain SSU, fuel it and bring it online. This SSU will then act as a gate keeper, which has to be online to receive items for the set goal. 
 
 ### Step 3: Configure Gate Keeper 
-To configure which items should be recieved and the target amount, run:
+To configure which items should be received and the target amount, run:
 
 ```bash
 pnpm run configure-gate-keeper

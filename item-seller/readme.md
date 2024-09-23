@@ -4,7 +4,7 @@
 This guide will walk you through the process of building contracts for the item seller, deploying them into an existing world running in Docker, and testing their functionality by executing scripts. 
 
 ### User Flow
-The item seller is a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players. 
+The item seller is a [Smart Storage Unit (SSU)](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit) which can accept ERC20 tokens to transfer items to players. 
 
 The SSU (item seller) has two types of inventories; the main inventory and the ephemeral inventory.
 
@@ -171,6 +171,7 @@ pnpm run purchase-item-with-token
 ```
 
 ## Client UI
+For more in-depth information on the Client UI and how it works, you can visit [Reading Chain State](https://docs.evefrontier.com/ItemSeller/reading-chain-state) and [State Query](https://docs.evefrontier.com/ItemSeller/state-query).
 
 ### Step 5: Launch the Client UI
 

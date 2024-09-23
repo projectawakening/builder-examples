@@ -24,7 +24,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 Restart the shell to use it.
 
-#### Installing NPM
+#### Installing Node.JS
 Install version 18.12.1 of NPM (Node.JS Version Manager) using NVM with:
 ```bash
 nvm install 18.12.1
@@ -48,10 +48,12 @@ foundryup
 ```
 
 ### Step 0.2: Setting up your environment:
-This guide will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
+This section will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
+
+This will allow you to safely test smart contracts on a locally hosted world instead of risking your resources on the official world.
 
 ### Prerequisites
-Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
+Make sure you have **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
 ### Step 0.3: Deploying world contracts into a local node.
 We have provided a docker compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command:
@@ -66,7 +68,7 @@ Monitor the progress of the world deployment with:
 docker compose logs -f world-deployer
 ```
 
-The deployment progress and relevant addresses will be displayed during the process. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
+The deployment progress should be visible. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference as you will need it for development and using the examples.
 
 ![alt text](readme-imgs/docker_deployment.png)
 
@@ -80,7 +82,7 @@ docker compose cp world-deployer:/monorepo/abis .
 
 ### Step 0.5: Start Building!
 
-Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file.
+Now that your local tools and development environment are set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file.
 
 ```bash
 cd item-seller

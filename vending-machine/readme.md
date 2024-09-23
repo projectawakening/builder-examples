@@ -3,7 +3,7 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the vending machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-A vending machine is a SSU (Smart Storage Unit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
+A vending machine is a [Smart Storage Unit (SSU)](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
 
 ## Deployment and Testing
 ### Step 0: Deploy the vending machine contracts to the existing world 
@@ -56,7 +56,7 @@ You can adjust the remaining values in the .env file as needed, though they are 
 <summary>Customizing optional environment values</summary>
 
 #### Items
-You can set the items in and out to change which items you trade for. 
+You can set the item ID's to change which items you trade for. 
 
 ```bash
 #ITEM ID 77800 - Common Ore
@@ -66,7 +66,7 @@ ITEM_OUT_ID=999
 ```
 
 #### Ratios
-A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
+IN_RATIO=1 and IN_RATIO=2 means for every item a player puts into the deployable, they get two items from it. 
 
 You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
@@ -76,11 +76,10 @@ IN_RATIO=1
 #OUT Ratio
 OUT_RATIO=2
 ```
-
 </details>
 
 ### Step 2: Mock data for the existing world **(Local Development Only)**
-To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
+To generate mock data for testing the Vending Machine logic on the local world, run the following command.
 
 ```bash
 pnpm run mock-data
@@ -89,16 +88,16 @@ pnpm run mock-data
 This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 3: Configure Vending Machine
-To configure which items should be traded and the ratio's to trade for run:
+To configure the vending machine to know the SSU ID, which items should be traded and the ratios to trade for run:
 
 ```bash
 pnpm run configure-ratio
 ```
 
-You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+This script gets all of the values from the .env file, so make sure they are the correct values.
 
-### Step 4: Test The Vending Machine (Optional)
-To test the vending machine, execute the following command:
+### Step 4: Test The Vending Machine **(Local Development Only & Optional)**
+To run a test trade with the vending machine, execute the following command:
 
 ```bash
 pnpm run execute
