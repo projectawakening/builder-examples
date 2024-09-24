@@ -14,18 +14,13 @@ export function createSystemCalls(
    * - The first parameter is expected to be a
    *   SetupNetworkResult, as defined in setupNetwork.ts
    *
-   *   Out of this parameter, we only care about two fields:
+   *   Out of this parameter, we care about the following fields:
    *   - worldContract (which comes from getContract, see
    *     https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L63-L69).
-   *
-   *   - waitForTransaction (which comes from syncToRecs, see
-   *     https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
-   *
-   * - From the second parameter, which is a ClientComponent,
-   *   we only care about Counter. This parameter comes to use
-   *   through createClientComponents.ts, but it originates in
-   *   syncToRecs
-   *   (https://github.com/latticexyz/mud/blob/main/templates/react/packages/client/src/mud/setupNetwork.ts#L77-L83).
+   *   
+   *   - erc20Contract 
+   *   - useStore
+   *   - tables
    */
   { worldContract, erc20Contract, useStore, tables }: SetupNetworkResult
 ) {
@@ -95,7 +90,7 @@ export function createSystemCalls(
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
 
-		const itemSellerContractAddress = await worldContract.read.test__getContractAddress()
+		const itemSellerContractAddress = await worldContract.write.test__getContractAddress()
 		const approvalAmount = quantity * Number(itemPrice.price);
 
 		// First, approve spend by the contract address
