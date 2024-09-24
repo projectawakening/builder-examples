@@ -59,9 +59,6 @@ importers:
       '@latticexyz/react':
         specifier: 2.2.8
         version: 2.2.8(typescript@5.1.6)(zod@3.23.8)
-      '@latticexyz/recs':
-        specifier: 2.2.8
-        version: 2.2.8(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/schema-type':
         specifier: 2.2.8
         version: 2.2.8(typescript@5.1.6)(zod@3.23.8)
@@ -90,8 +87,8 @@ importers:
         specifier: ^3.4.12
         version: 3.4.12
       viem:
-        specifier: ^2.21.10
-        version: 2.21.10(typescript@5.1.6)(zod@3.23.8)
+        specifier: 2.21.6
+        version: 2.21.6(typescript@5.1.6)(zod@3.23.8)
     devDependencies:
       '@types/react':
         specifier: 18.2.22
@@ -1438,7 +1435,7 @@ packages:
   /@eveworld/types@0.0.4(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-2mnPqdxHg1cygt4MvUb0+DRC5zLm/IKfAuWKt+gjVv/2tpYPsDkJStur6tHnHA6jmJq1x2yc1ANba6/9WTvrSA==}
     dependencies:
-      viem: 2.21.10(typescript@5.1.6)(zod@3.23.8)
+      viem: 2.21.6(typescript@5.1.6)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -1449,7 +1446,7 @@ packages:
   /@eveworld/types@0.0.5(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-+p3zHtjIm+4YMgWuZIk+b/nFAZ+ybXDfiqJpfNVDFjqwJC8UMsH5AOllihFsBo1LDPSnBiMotjzvXEs/IGEAXg==}
     dependencies:
-      viem: 2.21.10(typescript@5.1.6)(zod@3.23.8)
+      viem: 2.21.6(typescript@5.1.6)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -1468,7 +1465,7 @@ packages:
       '@mui/material': 5.16.7(@emotion/react@11.13.3)(@emotion/styled@11.13.0)(@types/react@18.2.22)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       react-router-dom: 6.26.2(react-dom@18.3.1)(react@18.3.1)
-      viem: 2.21.10(typescript@5.1.6)(zod@3.23.8)
+      viem: 2.21.6(typescript@5.1.6)(zod@3.23.8)
     transitivePeerDependencies:
       - '@types/react'
       - bufferutil
@@ -1483,7 +1480,7 @@ packages:
     resolution: {integrity: sha512-svV/px8K3F4WSgpAIOHZz4JFZ6CJJ4Bfxi1AJ5zJ17/BEu6APvTGUfaC8aAqNcVzxjGm3axSPEeYnMsecaAGzA==}
     dependencies:
       '@eveworld/types': 0.0.4(typescript@5.1.6)(zod@3.23.8)
-      viem: 2.21.10(typescript@5.1.6)(zod@3.23.8)
+      viem: 2.21.6(typescript@5.1.6)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -6470,30 +6467,6 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  /viem@2.21.10(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-n+BKNabWI0k2i7PB4UEdxgHHpQmMeDk+2X9093l/yU0NLUjIgiazybfD1BksGwbiIRk/WXr+aoRqKOExxRDxWA==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@adraffy/ens-normalize': 1.10.0
-      '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
-      '@scure/bip32': 1.4.0
-      '@scure/bip39': 1.4.0
-      abitype: 1.0.5(typescript@5.1.6)(zod@3.23.8)
-      isows: 1.0.4(ws@8.17.1)
-      typescript: 5.1.6
-      webauthn-p256: 0.0.5
-      ws: 8.17.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - zod
-    dev: false
-
   /viem@2.21.6(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-YX48IVl6nZ4FRsY4ypv2RrxtQVWysIY146/lBW53tma8u32h8EsiA7vecw9ZbrueNUy/asHR4Egu68Z6FOvDzQ==}
     peerDependencies:
@@ -6607,7 +6580,7 @@ packages:
     resolution: {integrity: sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==}
     dependencies:
       '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
+      '@noble/hashes': 1.5.0
 
   /which-boxed-primitive@1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}
