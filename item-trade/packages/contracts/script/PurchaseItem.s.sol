@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -9,6 +9,8 @@ import { IERC20Mintable } from "@latticexyz/world-modules/src/modules/erc20-pupp
 import { ERC20Module } from "@latticexyz/world-modules/src/modules/erc20-puppet/ERC20Module.sol";
 import { IERC20Mintable } from "@latticexyz/world-modules/src/modules/erc20-puppet/IERC20Mintable.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
+
+import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
@@ -27,14 +29,15 @@ contract PurchaseItem is Script {
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItemId = vm.envUint("ITEM_OUT_ID");
 
+    EphemeralInvItemTableData memory invItem = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemId, player);
+    console.log(invItem.quantity); //0
+
     ResourceId systemId = Utils.itemSellerSystemId();
     world.call(systemId, abi.encodeCall(ItemTradeSystem.purchaseItems, (smartStorageUnitId, inventoryItemId, 1)));
 
-    address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
-    address erc20Address = address(tokenAddress);
-    IERC20Mintable erc20 = IERC20Mintable(erc20Address);
+    invItem = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemId, player);
+    console.log(invItem.quantity); //1 item
 
-    console.log(erc20.balanceOf(player));
     vm.stopBroadcast();
   }
 }
