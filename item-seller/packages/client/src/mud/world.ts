@@ -1,3 +1,3 @@
-import { createWorld } from "@latticexyz/recs";
+import { createWorld } from "@latticexyz/store-sync/zustand";
 
 export const world = createWorld();
