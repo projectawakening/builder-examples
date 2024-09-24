@@ -13,18 +13,18 @@ interface IItemTradeSystem {
 
   function test1__updateERC20Receiver(uint256 smartObjectId, address receiver) external;
 
-  function test1__setItemSellPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) external;
+  function test1__setItemPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) external;
 
-  function test1__setItemPurchaseMultiple(
+  function test1__setEnforcedItemMultiple(
     uint256 smartObjectId,
     uint256 itemId,
     uint256 enforcedItemMultiple,
     uint256 tokenAmount
   ) external;
 
-  function test1__purchaseItemForTokens(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test1__purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
 
-  function test1__purchaseTokensWithItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test1__sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
 
   function test1__collectTokens(uint256 smartObjectId, uint256 amount) external;
 

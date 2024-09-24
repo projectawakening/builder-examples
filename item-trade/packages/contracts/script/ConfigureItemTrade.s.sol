@@ -38,12 +38,12 @@ contract ConfigureItemTrade is Script {
       abi.encodeCall(ItemTradeSystem.registerERC20Token, (smartStorageUnitId, tokenAddress, receiver))
     );
 
-    world.call(systemId, abi.encodeCall(ItemTradeSystem.setItemSellPrice, (smartStorageUnitId, itemOutId, price)));
+    world.call(systemId, abi.encodeCall(ItemTradeSystem.setItemPrice, (smartStorageUnitId, itemOutId, price)));
 
     world.call(
       systemId,
       abi.encodeCall(
-        ItemTradeSystem.setItemPurchaseMultiple,
+        ItemTradeSystem.setEnforcedItemMultiple,
         (smartStorageUnitId, itemInId, enforcedItemMultiple, tokenAmount)
       )
     );

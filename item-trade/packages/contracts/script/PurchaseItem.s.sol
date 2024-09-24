@@ -28,10 +28,7 @@ contract PurchaseItem is Script {
     uint256 inventoryItemId = vm.envUint("ITEM_OUT_ID");
 
     ResourceId systemId = Utils.itemSellerSystemId();
-    world.call(
-      systemId,
-      abi.encodeCall(ItemTradeSystem.purchaseItemForTokens, (smartStorageUnitId, inventoryItemId, 1))
-    );
+    world.call(systemId, abi.encodeCall(ItemTradeSystem.purchaseItems, (smartStorageUnitId, inventoryItemId, 1)));
 
     address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
     address erc20Address = address(tokenAddress);

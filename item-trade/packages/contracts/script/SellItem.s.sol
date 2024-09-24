@@ -14,7 +14,7 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 
-contract PurchaseTokens is Script {
+contract SellItem is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
@@ -31,10 +31,7 @@ contract PurchaseTokens is Script {
     console.log(invItem.quantity); //0
 
     ResourceId systemId = Utils.itemSellerSystemId();
-    world.call(
-      systemId,
-      abi.encodeCall(ItemTradeSystem.purchaseTokensWithItems, (smartStorageUnitId, inventoryItemId, 99))
-    );
+    world.call(systemId, abi.encodeCall(ItemTradeSystem.sellItems, (smartStorageUnitId, inventoryItemId, 99)));
 
     invItem = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemId, player);
     console.log(invItem.quantity); //0

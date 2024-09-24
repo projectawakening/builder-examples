@@ -86,7 +86,7 @@ contract ItemTradeSystem is System {
    * @param itemId The id of the item
    * @param priceInWei The price of the item in ERC-20 tokens
    */
-  function setItemSellPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) public onlyOwner(smartObjectId) {
+  function setItemPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) public onlyOwner(smartObjectId) {
     require(priceInWei > 0, "Price cannot be 0");
 
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
@@ -101,7 +101,7 @@ contract ItemTradeSystem is System {
    * @param itemId The id of the item
    * @param enforcedItemMultiple is the enforced multiple for the item per token
    */
-  function setItemPurchaseMultiple(
+  function setEnforcedItemMultiple(
     uint256 smartObjectId,
     uint256 itemId,
     uint256 enforcedItemMultiple,
@@ -122,7 +122,7 @@ contract ItemTradeSystem is System {
    * @param itemId The id of the item
    * @param quantity The quantity of the item to purchase
    */
-  function purchaseItemForTokens(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
+  function purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     require(ssuData.tokenAddress != address(0), "Invalid ERC20 Data");
 
@@ -160,7 +160,7 @@ contract ItemTradeSystem is System {
    * @param itemId The id of the item
    * @param quantity The quantity of the item to purchase
    */
-  function purchaseTokensWithItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
+  function sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
     // Get the token data for the item trade
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     require(ssuData.tokenAddress != address(0), "Invalid ERC20 Data");

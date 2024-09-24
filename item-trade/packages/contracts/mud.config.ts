@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "test1",
+  namespace: "test",
   tables: {
     ItemTradeERC20: {
       schema: {
@@ -13,7 +13,7 @@ export default defineWorld({
       },
       key: ["smartObjectId"],
     },
-    ItemPriceInToken: {
+    ItemPriceInToken: { // Looking for better naming 
       schema: {
         smartObjectId: "uint256", // SSU ID
         itemOutId: "uint256",
@@ -22,7 +22,7 @@ export default defineWorld({
       },
       key: ["smartObjectId", "itemOutId"],
     },
-    ItemQuantityMultipleForToken: {
+    ItemQuantityMultipleForToken: { // Looking for better naming
       schema: {
         smartObjectId: "uint256", // SSU ID
         itemInId: "uint256",

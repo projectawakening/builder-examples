@@ -18,7 +18,7 @@
     "configure-item-trade": ". ./.env && pnpm forge script ./script/ConfigureItemTrade.s.sol:ConfigureItemTrade --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "approve": ". ./.env && pnpm forge script ./script/ApproveToken.s.sol:ApproveToken --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "purchase-item": ". ./.env && pnpm forge script ./script/PurchaseItem.s.sol:PurchaseItem --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "purchase-item-with-token": ". ./.env && pnpm forge script ./script/PurchaseTokens.s.sol:PurchaseTokens --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
+    "sell-item": ". ./.env && pnpm forge script ./script/SellItem.s.sol:SellItem --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
   },
   "dependencies": {
     "@latticexyz/cli": "2.2.8",
