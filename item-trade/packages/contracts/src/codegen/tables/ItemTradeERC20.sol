@@ -20,20 +20,19 @@ struct ItemTradeERC20Data {
   address tokenAddress;
   uint256 tokenDecimals;
   address receiver;
-  uint256 totalTokensCollected;
 }
 
 library ItemTradeERC20 {
-  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test1", name: "ItemTradeERC20", typeId: RESOURCE_TABLE });`
-  ResourceId constant _tableId = ResourceId.wrap(0x746274657374310000000000000000004974656d547261646545524332300000);
+  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test", name: "ItemTradeERC20", typeId: RESOURCE_TABLE });`
+  ResourceId constant _tableId = ResourceId.wrap(0x746274657374000000000000000000004974656d547261646545524332300000);
 
   FieldLayout constant _fieldLayout =
-    FieldLayout.wrap(0x0068040014201420000000000000000000000000000000000000000000000000);
+    FieldLayout.wrap(0x0048030014201400000000000000000000000000000000000000000000000000);
 
   // Hex-encoded key schema of (uint256)
   Schema constant _keySchema = Schema.wrap(0x002001001f000000000000000000000000000000000000000000000000000000);
-  // Hex-encoded value schema of (address, uint256, address, uint256)
-  Schema constant _valueSchema = Schema.wrap(0x00680400611f611f000000000000000000000000000000000000000000000000);
+  // Hex-encoded value schema of (address, uint256, address)
+  Schema constant _valueSchema = Schema.wrap(0x00480300611f6100000000000000000000000000000000000000000000000000);
 
   /**
    * @notice Get the table's key field names.
@@ -49,11 +48,10 @@ library ItemTradeERC20 {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](4);
+    fieldNames = new string[](3);
     fieldNames[0] = "tokenAddress";
     fieldNames[1] = "tokenDecimals";
     fieldNames[2] = "receiver";
-    fieldNames[3] = "totalTokensCollected";
   }
 
   /**
@@ -197,48 +195,6 @@ library ItemTradeERC20 {
   }
 
   /**
-   * @notice Get totalTokensCollected.
-   */
-  function getTotalTokensCollected(uint256 smartObjectId) internal view returns (uint256 totalTokensCollected) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(smartObjectId));
-
-    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Get totalTokensCollected.
-   */
-  function _getTotalTokensCollected(uint256 smartObjectId) internal view returns (uint256 totalTokensCollected) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(smartObjectId));
-
-    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Set totalTokensCollected.
-   */
-  function setTotalTokensCollected(uint256 smartObjectId, uint256 totalTokensCollected) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(smartObjectId));
-
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((totalTokensCollected)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set totalTokensCollected.
-   */
-  function _setTotalTokensCollected(uint256 smartObjectId, uint256 totalTokensCollected) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(smartObjectId));
-
-    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((totalTokensCollected)), _fieldLayout);
-  }
-
-  /**
    * @notice Get the full data.
    */
   function get(uint256 smartObjectId) internal view returns (ItemTradeERC20Data memory _table) {
@@ -271,14 +227,8 @@ library ItemTradeERC20 {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(
-    uint256 smartObjectId,
-    address tokenAddress,
-    uint256 tokenDecimals,
-    address receiver,
-    uint256 totalTokensCollected
-  ) internal {
-    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver, totalTokensCollected);
+  function set(uint256 smartObjectId, address tokenAddress, uint256 tokenDecimals, address receiver) internal {
+    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -292,14 +242,8 @@ library ItemTradeERC20 {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(
-    uint256 smartObjectId,
-    address tokenAddress,
-    uint256 tokenDecimals,
-    address receiver,
-    uint256 totalTokensCollected
-  ) internal {
-    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver, totalTokensCollected);
+  function _set(uint256 smartObjectId, address tokenAddress, uint256 tokenDecimals, address receiver) internal {
+    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -314,12 +258,7 @@ library ItemTradeERC20 {
    * @notice Set the full data using the data struct.
    */
   function set(uint256 smartObjectId, ItemTradeERC20Data memory _table) internal {
-    bytes memory _staticData = encodeStatic(
-      _table.tokenAddress,
-      _table.tokenDecimals,
-      _table.receiver,
-      _table.totalTokensCollected
-    );
+    bytes memory _staticData = encodeStatic(_table.tokenAddress, _table.tokenDecimals, _table.receiver);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -334,12 +273,7 @@ library ItemTradeERC20 {
    * @notice Set the full data using the data struct.
    */
   function _set(uint256 smartObjectId, ItemTradeERC20Data memory _table) internal {
-    bytes memory _staticData = encodeStatic(
-      _table.tokenAddress,
-      _table.tokenDecimals,
-      _table.receiver,
-      _table.totalTokensCollected
-    );
+    bytes memory _staticData = encodeStatic(_table.tokenAddress, _table.tokenDecimals, _table.receiver);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;
@@ -355,18 +289,12 @@ library ItemTradeERC20 {
    */
   function decodeStatic(
     bytes memory _blob
-  )
-    internal
-    pure
-    returns (address tokenAddress, uint256 tokenDecimals, address receiver, uint256 totalTokensCollected)
-  {
+  ) internal pure returns (address tokenAddress, uint256 tokenDecimals, address receiver) {
     tokenAddress = (address(Bytes.getBytes20(_blob, 0)));
 
     tokenDecimals = (uint256(Bytes.getBytes32(_blob, 20)));
 
     receiver = (address(Bytes.getBytes20(_blob, 52)));
-
-    totalTokensCollected = (uint256(Bytes.getBytes32(_blob, 72)));
   }
 
   /**
@@ -380,9 +308,7 @@ library ItemTradeERC20 {
     EncodedLengths,
     bytes memory
   ) internal pure returns (ItemTradeERC20Data memory _table) {
-    (_table.tokenAddress, _table.tokenDecimals, _table.receiver, _table.totalTokensCollected) = decodeStatic(
-      _staticData
-    );
+    (_table.tokenAddress, _table.tokenDecimals, _table.receiver) = decodeStatic(_staticData);
   }
 
   /**
@@ -412,10 +338,9 @@ library ItemTradeERC20 {
   function encodeStatic(
     address tokenAddress,
     uint256 tokenDecimals,
-    address receiver,
-    uint256 totalTokensCollected
+    address receiver
   ) internal pure returns (bytes memory) {
-    return abi.encodePacked(tokenAddress, tokenDecimals, receiver, totalTokensCollected);
+    return abi.encodePacked(tokenAddress, tokenDecimals, receiver);
   }
 
   /**
@@ -427,10 +352,9 @@ library ItemTradeERC20 {
   function encode(
     address tokenAddress,
     uint256 tokenDecimals,
-    address receiver,
-    uint256 totalTokensCollected
+    address receiver
   ) internal pure returns (bytes memory, EncodedLengths, bytes memory) {
-    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver, totalTokensCollected);
+    bytes memory _staticData = encodeStatic(tokenAddress, tokenDecimals, receiver);
 
     EncodedLengths _encodedLengths;
     bytes memory _dynamicData;

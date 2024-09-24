@@ -22,8 +22,8 @@ struct ItemPriceInTokenData {
 }
 
 library ItemPriceInToken {
-  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test1", name: "ItemPriceInToken", typeId: RESOURCE_TABLE });`
-  ResourceId constant _tableId = ResourceId.wrap(0x746274657374310000000000000000004974656d5072696365496e546f6b656e);
+  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test", name: "ItemPriceInToken", typeId: RESOURCE_TABLE });`
+  ResourceId constant _tableId = ResourceId.wrap(0x746274657374000000000000000000004974656d5072696365496e546f6b656e);
 
   FieldLayout constant _fieldLayout =
     FieldLayout.wrap(0x0021020001200000000000000000000000000000000000000000000000000000);

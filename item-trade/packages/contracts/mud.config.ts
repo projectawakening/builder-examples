@@ -9,7 +9,6 @@ export default defineWorld({
         tokenAddress: "address",
         tokenDecimals: "uint256",
         receiver: "address",
-        totalTokensCollected: "uint256",
       },
       key: ["smartObjectId"],
     },

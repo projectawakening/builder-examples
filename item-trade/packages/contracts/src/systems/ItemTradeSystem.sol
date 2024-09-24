@@ -63,7 +63,7 @@ contract ItemTradeSystem is System {
 
     uint256 tokenDecimals = IERC20(tokenAddress).decimals();
 
-    ItemTradeERC20.set(smartObjectId, tokenAddress, tokenDecimals, receiver, 0);
+    ItemTradeERC20.set(smartObjectId, tokenAddress, tokenDecimals, receiver);
   }
 
   /**

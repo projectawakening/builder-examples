@@ -9,24 +9,24 @@ pragma solidity >=0.8.24;
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IItemTradeSystem {
-  function test1__registerERC20Token(uint256 smartObjectId, address tokenAddress, address receiver) external;
+  function test__registerERC20Token(uint256 smartObjectId, address tokenAddress, address receiver) external;
 
-  function test1__updateERC20Receiver(uint256 smartObjectId, address receiver) external;
+  function test__updateERC20Receiver(uint256 smartObjectId, address receiver) external;
 
-  function test1__setItemPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) external;
+  function test__setItemPrice(uint256 smartObjectId, uint256 itemId, uint256 priceInWei) external;
 
-  function test1__setEnforcedItemMultiple(
+  function test__setEnforcedItemMultiple(
     uint256 smartObjectId,
     uint256 itemId,
     uint256 enforcedItemMultiple,
     uint256 tokenAmount
   ) external;
 
-  function test1__purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test__purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
 
-  function test1__sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test__sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
 
-  function test1__collectTokens(uint256 smartObjectId, uint256 amount) external;
+  function test__collectTokens(uint256 smartObjectId, uint256 amount) external;
 
-  function test1__getItemTradeContractAddress() external view returns (address);
+  function test__getItemTradeContractAddress() external view returns (address);
 }

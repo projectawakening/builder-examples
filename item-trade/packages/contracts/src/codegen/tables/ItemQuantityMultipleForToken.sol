@@ -23,8 +23,8 @@ struct ItemQuantityMultipleForTokenData {
 }
 
 library ItemQuantityMultipleForToken {
-  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test1", name: "ItemQuantityMult", typeId: RESOURCE_TABLE });`
-  ResourceId constant _tableId = ResourceId.wrap(0x746274657374310000000000000000004974656d5175616e746974794d756c74);
+  // Hex below is the result of `WorldResourceIdLib.encode({ namespace: "test", name: "ItemQuantityMult", typeId: RESOURCE_TABLE });`
+  ResourceId constant _tableId = ResourceId.wrap(0x746274657374000000000000000000004974656d5175616e746974794d756c74);
 
   FieldLayout constant _fieldLayout =
     FieldLayout.wrap(0x0041030001202000000000000000000000000000000000000000000000000000);
