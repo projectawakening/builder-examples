@@ -16,7 +16,7 @@ export const App = () => {
 		eveBalanceWei: 0,
 		gasBalanceWei: 0,
 		image: "",
-		smartDeployables: [],
+		smartAssemblies: []
 	});
 
 	const {
@@ -39,7 +39,7 @@ export const App = () => {
 			eveBalanceWei: 0,
 			gasBalanceWei: 0,
 			image: "",
-			smartDeployables: [],
+			smartAssemblies: [],
 		};
 		setSmartCharacter(smartCharacter);
 	}, [walletClient.account?.address]);
