@@ -20,7 +20,7 @@ import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 contract ApproveToken is Script {
   function run(address worldAddress) external {
     // Private key for the ERC20 Contract owner/deployer loaded from ENV
-    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
     address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
     address owner = vm.addr(playerPrivateKey);
 
@@ -50,10 +50,10 @@ contract ApproveToken is Script {
     erc20.approve(itemSellerAddress, amount * 1 ether);
 
     console.log(erc20.allowance(owner, itemSellerAddress));
-    console.log(erc20.balanceOf(owner));
 
     //Transfer some ERC20 tokens to the contract for Salt buyer
-    erc20.transferFrom(owner, itemSellerAddress, 100000 * 1 ether);
+    erc20.transfer(itemSellerAddress, 100000 * 1 ether);
+    console.log(erc20.allowance(owner, itemSellerAddress));
 
     vm.stopBroadcast();
   }

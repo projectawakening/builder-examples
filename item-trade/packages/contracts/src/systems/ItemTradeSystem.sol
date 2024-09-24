@@ -131,11 +131,8 @@ contract ItemTradeSystem is System {
 
     uint256 tokenAmount = itemPriceInTokenData.price * quantity;
 
-    // Transfer from msg.sender to this contract and then from this contract to the receiver
+    // Transfer tokens from the msg.sender to the receiver
     IERC20(ssuData.tokenAddress).transferFrom(_msgSender(), ssuData.receiver, tokenAmount);
-
-    uint256 totalTokensCollected = ItemTradeERC20.getTotalTokensCollected(smartObjectId) + tokenAmount;
-    ItemTradeERC20.setTotalTokensCollected(smartObjectId, totalTokensCollected);
 
     EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemId);
 
@@ -191,7 +188,7 @@ contract ItemTradeSystem is System {
     }
 
     // Transfer from msg.sender to this contract and then from this contract to the receiver
-    IERC20(ssuData.tokenAddress).transferFrom(address(this), _msgSender(), totalTokenAmount);
+    IERC20(ssuData.tokenAddress).transfer(_msgSender(), totalTokenAmount);
 
     EntityRecordTableData memory itemInEntity = EntityRecordTable.get(itemId);
 
@@ -216,12 +213,13 @@ contract ItemTradeSystem is System {
   /**
    * @dev Collect the ERC-20 tokens collected by the SSU
    * @param smartObjectId The smart object id of the SSU
+   * @param amount The amount of tokens to collect
    */
-  function collectTokens(uint256 smartObjectId) public onlyOwner(smartObjectId) {
+  function collectTokens(uint256 smartObjectId, uint256 amount) public onlyOwner(smartObjectId) {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     address tokenAddress = ssuData.tokenAddress;
 
-    IERC20(tokenAddress).transfer(ssuData.receiver, ItemTradeERC20.getTotalTokensCollected(smartObjectId));
+    IERC20(tokenAddress).transfer(ssuData.receiver, amount * 1 ether);
   }
 
   function getItemTradeContractAddress() public view returns (address) {

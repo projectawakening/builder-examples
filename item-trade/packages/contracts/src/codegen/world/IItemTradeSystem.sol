@@ -26,7 +26,7 @@ interface IItemTradeSystem {
 
   function test1__purchaseTokensWithItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
 
-  function test1__collectTokens(uint256 smartObjectId) external;
+  function test1__collectTokens(uint256 smartObjectId, uint256 amount) external;
 
   function test1__getItemTradeContractAddress() external view returns (address);
 }
