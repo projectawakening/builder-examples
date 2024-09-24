@@ -1,33 +1,31 @@
-import { mudConfig } from "@latticexyz/world/register";
+import { defineWorld } from "@latticexyz/world";
 
-export default mudConfig({
-  namespace: "test2",
+export default defineWorld({
+  namespace: "test",
   systems: {
-    ItemSeller: {
-      name: "ItemSeller",
+    ItemSellerSystem: {
+      name: "ItemSellerSystem",
       openAccess: true,
     },
   },
   tables: {
     ItemSellerERC20: {
-      keySchema: {
+      schema: {
         smartObjectId: "uint256", // SSU ID
-      },
-      valueSchema: {
         tokenAddress: "address",
         tokenDecimals: "uint256",
         receiver: "address",
       },
+      key: ["smartObjectId"],
     },
     ItemPrice: {
-      keySchema: {
+      schema: {
         smartObjectId: "uint256", // SSU ID
         itemId: "uint256",
-      },
-      valueSchema: {
         isSet: "bool",
         price: "uint256",
       },
+      key: ["smartObjectId", "itemId"],
     }
   },
 });

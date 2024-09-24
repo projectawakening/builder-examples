@@ -30,7 +30,7 @@ import { Utils as ItemSellerUtils } from "./Utils.sol";
  * @dev This contract is an example for extending Inventory functionality from game.
  * This contract implements an ItemSeller that swaps ERC-20 tokens for Inventory items
  */
-contract ItemSeller is System {
+contract ItemSellerSystem is System {
   using InventoryLib for InventoryLib.World;
   using EntityRecordUtils for bytes14;
   using ItemSellerUtils for bytes14;
@@ -40,9 +40,7 @@ contract ItemSeller is System {
    * @dev Only owner modifer
    */
   modifier onlyOwner(uint256 smartObjectId) {
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId())).ownerOf(
-      smartObjectId
-    );
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
     require(_msgSender() == ssuOwner, "Only owner can call this function");
     _;
   }
@@ -122,10 +120,7 @@ contract ItemSeller is System {
     //Transfer from msg.sender to this contract and then from this contract to the receiver
     IERC20(ssuData.tokenAddress).transferFrom(_msgSender(), address(this), totalAmount);
 
-    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      inventoryItemId
-    );
+    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(inventoryItemId);
 
     if (itemOutEntity.recordExists == false) {
       revert IInventoryErrors.Inventory_InvalidItem("ItemSeller: item is not created on-chain", itemOutEntity.itemId);

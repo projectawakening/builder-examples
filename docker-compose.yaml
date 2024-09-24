@@ -9,7 +9,7 @@ services:
     ports:
       - "8545:8545"
     healthcheck:
-      test: ["CMD-SHELL", "anvil --help || exit 1"]
+      test: [ "CMD-SHELL", "anvil --help || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -17,7 +17,7 @@ services:
 
   world-deployer:
     container_name: world-deployer
-    image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.14
+    image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.16
     platform: linux/amd64
     depends_on:
       foundry:

@@ -13,12 +13,11 @@ import { registerERC20 } from "@latticexyz/world-modules/src/modules/erc20-puppe
 
 import { ERC20MetadataData } from "@latticexyz/world-modules/src/modules/erc20-puppet/tables/ERC20Metadata.sol";
 
-import { IItemSeller } from "../src/codegen/world/IItemSeller.sol";
+import { IItemSellerSystem } from "../src/codegen/world/IItemSellerSystem.sol";
 import { Utils } from "../src/systems/item_seller/Utils.sol";
-import { ItemSeller } from "../src/systems/item_seller/ItemSeller.sol";
+import { ItemSellerSystem } from "../src/systems/item_seller/ItemSellerSystem.sol";
 
 contract ApproveToken is Script {
-
   function run(address worldAddress) external {
     // Private key for the ERC20 Contract owner/deployer loaded from ENV
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
@@ -37,22 +36,21 @@ contract ApproveToken is Script {
 
     vm.startBroadcast(playerPrivateKey);
     ResourceId systemId = Utils.itemSellerSystemId();
-    address itemSellerAddress = abi.decode(world.call(
-      systemId,
-      abi.encodeCall(
-        ItemSeller.getContractAddress,())
-    ), (address));
+    address itemSellerAddress = abi.decode(
+      world.call(systemId, abi.encodeCall(ItemSellerSystem.getContractAddress, ())),
+      (address)
+    );
 
     console.log(itemSellerAddress);
 
-    // StoreSwitch.setStoreAddress(address(world));
+    StoreSwitch.setStoreAddress(address(world));
     IERC20Mintable erc20 = IERC20Mintable(erc20Address);
     console.log(erc20Address);
-    // console.log(erc20.balanceOf(owner));
+    console.log(erc20.balanceOf(owner));
     erc20.approve(itemSellerAddress, amount * 1 ether);
 
-    // console.log(erc20.allowance(owner, itemSellerAddress));
-    // console.log(erc20.balanceOf(owner));
+    console.log(erc20.allowance(owner, itemSellerAddress));
+    console.log(erc20.balanceOf(owner));
 
     vm.stopBroadcast();
   }

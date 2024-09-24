@@ -6,9 +6,8 @@ import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResou
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
-
 import { Utils } from "../src/systems/item_seller/Utils.sol";
-import { ItemSeller } from "../src/systems/item_seller/ItemSeller.sol";
+import { ItemSellerSystem } from "../src/systems/item_seller/ItemSellerSystem.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 
 contract ConfigureItemSeller is Script {
@@ -32,15 +31,10 @@ contract ConfigureItemSeller is Script {
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
     world.call(
       systemId,
-      abi.encodeCall(
-        ItemSeller.registerERC20Token,(smartStorageUnitId, tokenAddress, receiver))
+      abi.encodeCall(ItemSellerSystem.registerERC20Token, (smartStorageUnitId, tokenAddress, receiver))
     );
 
-    world.call(
-      systemId,
-      abi.encodeCall(
-        ItemSeller.setItemPrice,(smartStorageUnitId, inventoryItemId, price))
-    );
+    world.call(systemId, abi.encodeCall(ItemSellerSystem.setItemPrice, (smartStorageUnitId, inventoryItemId, price)));
 
     vm.stopBroadcast();
   }
