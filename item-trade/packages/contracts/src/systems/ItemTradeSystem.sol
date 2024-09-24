@@ -36,9 +36,6 @@ contract ItemTradeSystem is System {
   using ItemTradeUtils for bytes14;
   using SmartDeployableUtils for bytes14;
 
-  uint256 public constant SALT_PER_99_PRICE = 275; // Price for 99 Salt in $EVE
-  uint256 public constant SALT_PER_36_PRICE = 100; // Price for 36 Salt in $EVE
-
   /**
    * @dev Only owner modifier
    */
@@ -82,6 +79,7 @@ contract ItemTradeSystem is System {
 
   /**
    * @dev Set the price of an item in ERC-20 tokens
+   * This function transfer the item from the owners inventory to players ephemeral inventory return for EVE tokens to the player
    * @param smartObjectId The smart object id of the SSU
    * @param itemId The id of the item
    * @param priceInWei The price of the item in ERC-20 tokens
