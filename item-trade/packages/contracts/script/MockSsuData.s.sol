@@ -71,7 +71,7 @@ contract MockSsuData is Script {
       itemId: 0,
       typeId: 23,
       volume: 10,
-      quantity: 150
+      quantity: 1500
     });
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
 
