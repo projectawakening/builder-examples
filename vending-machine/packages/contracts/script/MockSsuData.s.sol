@@ -93,7 +93,7 @@ contract MockSsuData is Script {
     );
 
     // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused(FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.globalStateTableId()) == false) {
+    if (GlobalDeployableState.getIsPaused() == false) {
       smartDeployable.globalResume();
     }
 

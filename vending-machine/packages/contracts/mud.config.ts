@@ -1,21 +1,17 @@
-import { mudConfig } from "@latticexyz/world/register";
+import { defineWorld } from "@latticexyz/world";
 
-export default mudConfig({
-  namespace: "test2",
-  systems: {
-    VendingMachine: {
-      name: "VendingMachine",
-      openAccess: true,
-    }
-  },
+export default defineWorld({
+  namespace: "test",
   tables: {
     RatioConfig: {
-      keySchema: { smartObjectId: "uint256", itemIn: "uint256" },
-      valueSchema: {
+      schema: {
+        smartObjectId: "uint256",
+        itemIn: "uint256",
         itemOut: "uint256",
         ratioIn: "uint256",
         ratioOut: "uint256",
       },
+      key: ["smartObjectId", "itemIn"],
     }
   },
 });

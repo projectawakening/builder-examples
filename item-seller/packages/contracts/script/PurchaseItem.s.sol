@@ -11,7 +11,7 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/item_seller/Utils.sol";
-import { ItemSeller } from "../src/systems/item_seller/ItemSeller.sol";
+import { ItemSellerSystem } from "../src/systems/item_seller/ItemSellerSystem.sol";
 
 contract PurchaseItem is Script {
   function run(address worldAddress) external {
@@ -26,7 +26,7 @@ contract PurchaseItem is Script {
     uint256 inventoryItemId = vm.envUint("INVENTORY_ITEM_ID");
 
     ResourceId systemId = Utils.itemSellerSystemId();
-    world.call(systemId, abi.encodeCall(ItemSeller.purchaseItem, (smartStorageUnitId, inventoryItemId, 1)));
+    world.call(systemId, abi.encodeCall(ItemSellerSystem.purchaseItem, (smartStorageUnitId, inventoryItemId, 1)));
     vm.stopBroadcast();
   }
 

@@ -12,7 +12,7 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/
 import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/vending_machine/Utils.sol";
-import { VendingMachine } from "../src/systems/vending_machine/VendingMachine.sol";
+import { VendingMachineSystem } from "../src/systems/vending_machine/VendingMachineSystem.sol";
 
 contract ExecuteVendingMachine is Script {
   using InventoryUtils for bytes14;
@@ -33,24 +33,14 @@ contract ExecuteVendingMachine is Script {
     ResourceId systemId = Utils.vendingMachineSystemId();
 
     //Check Players ephemeral inventory before
-    EphemeralInvItemTableData memory invItem = EphemeralInvItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.ephemeralInventoryItemTableId(),
-      smartStorageUnitId,
-      itemOut,
-      player
-    );
+    EphemeralInvItemTableData memory invItem = EphemeralInvItemTable.get(smartStorageUnitId, itemOut, player);
     console.log(invItem.quantity); //0
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(VendingMachine.executeVendingMachine, (smartStorageUnitId, 1, itemIn)));
+    world.call(systemId, abi.encodeCall(VendingMachineSystem.executeVendingMachine, (smartStorageUnitId, 1, itemIn)));
 
     //Check Players ephemeral inventory after
-    invItem = EphemeralInvItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.ephemeralInventoryItemTableId(),
-      smartStorageUnitId,
-      itemOut,
-      player
-    );
+    invItem = EphemeralInvItemTable.get(smartStorageUnitId, itemOut, player);
     console.log(invItem.quantity); //2
 
     vm.stopBroadcast();

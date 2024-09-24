@@ -29,7 +29,7 @@ import { RatioConfig, RatioConfigData } from "../../codegen/tables/RatioConfig.s
  * @dev This contract is an example for extending Inventory functionality from game.
  * This contract implements vending machine as a feature to the existing inventoryIn logic
  */
-contract VendingMachine is System {
+contract VendingMachineSystem is System {
   using InventoryLib for InventoryLib.World;
   using EntityRecordUtils for bytes14;
   using InventoryUtils for bytes14;
@@ -54,21 +54,12 @@ contract VendingMachine is System {
     require(quantityIn > 0 && quantityOut > 0, "ratio cannot be set to 0");
     //make sure the inventoryItem out item exists
     //Revert if the items to deposit is not created on-chain
-    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      inventoryItemIdIn
-    );
+    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
 
-    EntityRecordTableData memory entityOutRecord = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      inventoryItemIdOut
-    );
+    EntityRecordTableData memory entityOutRecord = EntityRecordTable.get(inventoryItemIdOut);
 
     if (entityInRecord.recordExists == false || entityOutRecord.recordExists == false) {
-      revert IInventoryErrors.Inventory_InvalidItem(
-        "VendingMachine: item is not created on-chain",
-        inventoryItemIdIn
-      );
+      revert IInventoryErrors.Inventory_InvalidItem("VendingMachine: item is not created on-chain", inventoryItemIdIn);
     }
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, quantityIn, quantityOut);
   }
@@ -85,9 +76,7 @@ contract VendingMachine is System {
     if (ratioConfigData.ratioIn == 0 || ratioConfigData.ratioOut == 0) {
       return;
     }
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId())).ownerOf(
-      smartObjectId
-    );
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
 
     // Make sure there are enough items
     (uint256 quantityOutputItem, uint256 quantityInputItemLeftOver) = calculateOutput(
@@ -98,15 +87,9 @@ contract VendingMachine is System {
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 
-    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      inventoryItemIdIn
-    );
+    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(inventoryItemIdIn);
 
-    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      itemObjectIdOut
-    );
+    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemObjectIdOut);
 
     InventoryItem[] memory inItems = new InventoryItem[](1);
     inItems[0] = InventoryItem(
