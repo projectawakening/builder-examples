@@ -31,7 +31,7 @@ import { GateKeeperConfig, GateKeeperConfigData } from "../../codegen/tables/Gat
  * @dev This contract is an example for extending SSU functionality from game.
  * This contract implements an GateKeeper functionality that takes in a item of x type until we reach a certain amount and perform a action
  */
-contract GateKeeper is System {
+contract GateKeeperSystem is System {
   using InventoryLib for InventoryLib.World;
   using EntityRecordUtils for bytes14;
   using SmartDeployableUtils for bytes14;
@@ -41,9 +41,7 @@ contract GateKeeper is System {
    * @dev Only owner modifer
    */
   modifier onlyOwner(uint256 smartObjectId) {
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address(_namespace().deployableTokenTableId())).ownerOf(
-      smartObjectId
-    );
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
     require(_msgSender() == ssuOwner, "Only owner can call this function");
     _;
   }
@@ -53,10 +51,7 @@ contract GateKeeper is System {
     uint256 inventoryItemId,
     uint256 targetItemQuantity
   ) public onlyOwner(smartObjectId) {
-    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      inventoryItemId
-    );
+    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemId);
 
     if (entityInRecord.recordExists == false) {
       revert IInventoryErrors.Inventory_InvalidItem("GateKeeper: item is not created on-chain", entityInRecord.itemId);
@@ -85,30 +80,23 @@ contract GateKeeper is System {
    * @param smartObjectId The smart object id of the SSU
    * @param quantity The quantity of the item to deposit into the SSU
    */
-  function depositToSSU(uint256 smartObjectId, uint256 quantity) public {    
+  function depositToSSU(uint256 smartObjectId, uint256 quantity) public {
     GateKeeperConfigData memory gatekeeperConfig = GateKeeperConfig.get(smartObjectId);
-    
-    require(gatekeeperConfig.isGoalReached == false, "GateKeeper goal reached");
-    require(quantity != 0, "No items deposited");    
 
-    uint256 quantityInInventory = InventoryItemTable.getQuantity(
-      _namespace().inventoryItemTableId(),
-      smartObjectId,
-      gatekeeperConfig.itemIn
-    );
+    require(gatekeeperConfig.isGoalReached == false, "GateKeeper goal reached");
+    require(quantity != 0, "No items deposited");
+
+    uint256 quantityInInventory = InventoryItemTable.getQuantity(smartObjectId, gatekeeperConfig.itemIn);
 
     if (quantityInInventory + quantity > gatekeeperConfig.targetItemQuantity) {
-      quantity = gatekeeperConfig.targetItemQuantity - quantityInInventory ;
+      quantity = gatekeeperConfig.targetItemQuantity - quantityInInventory;
     }
 
     if (quantityInInventory + quantity == gatekeeperConfig.targetItemQuantity) {
       GateKeeperConfig.setIsGoalReached(smartObjectId, true);
     }
-    
-    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(
-      _namespace().entityRecordTableId(),
-      gatekeeperConfig.itemIn
-    );
+
+    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(gatekeeperConfig.itemIn);
 
     if (entityInRecord.recordExists == false) {
       revert IInventoryErrors.Inventory_InvalidItem("GateKeeper: item is not created on-chain", entityInRecord.itemId);
@@ -124,7 +112,7 @@ contract GateKeeper is System {
       quantity
     );
 
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);    
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
   }
 
   /**

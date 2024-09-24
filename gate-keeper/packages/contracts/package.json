@@ -1,5 +1,5 @@
 {
-  "name": "gate-keeper",
+  "name": "contracts",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
@@ -13,18 +13,18 @@
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "tsc --noEmit && mud test",
+    "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-gate-keeper": ". ./.env && pnpm forge script ./script/ConfigureGateKeeper.s.sol:ConfigureGateKeeper --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "deposit-to-ssu": ". ./.env && pnpm forge script ./script/DepositToSSU.s.sol:DepositToSSU --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
+    "deposit-to-ssu": ". ./.env && pnpm forge script ./script/DepositToSSU.s.sol:DepositToSSU --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"
   },
   "dependencies": {
-    "@eveworld/common-constants": "^0.0.2",
-    "@eveworld/world": "^0.0.2",
-    "@latticexyz/cli": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/schema-type": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/store": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/world": "2.0.0-transaction-context-98ef570f",
-    "@latticexyz/world-modules": "2.0.0-transaction-context-98ef570f",
+    "@eveworld/common-constants": "0.0.13",
+    "@eveworld/world": "0.0.16",
+    "@latticexyz/cli": "2.2.8",
+    "@latticexyz/schema-type": "2.2.8",
+    "@latticexyz/store": "2.2.8",
+    "@latticexyz/world": "2.2.8",
+    "@latticexyz/world-modules": "2.2.8",
     "i": "^0.3.7",
     "npm": "^10.8.0"
   },
@@ -35,7 +35,7 @@
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "1.1.3",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.0.0-transaction-context-98ef570f",
-    "solhint-plugin-mud": "2.0.0-transaction-context-98ef570f"
+    "solhint-config-mud": "2.2.8",
+    "solhint-plugin-mud": "2.2.8"
   }
 }

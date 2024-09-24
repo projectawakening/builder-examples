@@ -7,7 +7,7 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
 import { Utils } from "../src/systems/gate_keeper/Utils.sol";
-import { GateKeeper } from "../src/systems/gate_keeper/GateKeeper.sol";
+import { GateKeeperSystem } from "../src/systems/gate_keeper/GateKeeperSystem.sol";
 
 contract DepositToSSU is Script {
   function run(address worldAddress) external {
@@ -24,7 +24,7 @@ contract DepositToSSU is Script {
     ResourceId systemId = Utils.gateKeeperSystemId();
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(GateKeeper.depositToSSU, (smartStorageUnitId, quantity)));
+    world.call(systemId, abi.encodeCall(GateKeeperSystem.depositToSSU, (smartStorageUnitId, quantity)));
     vm.stopBroadcast();
   }
 }

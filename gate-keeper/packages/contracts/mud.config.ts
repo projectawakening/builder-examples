@@ -1,23 +1,22 @@
-import { mudConfig } from "@latticexyz/world/register";
+import { defineWorld } from "@latticexyz/world";
 
-export default mudConfig({
-  namespace: "test2",
+export default defineWorld({
+  namespace: "test",
   systems: {
-    GateKeeper: {
-      name: "GateKeeper",
+    GateKeeperSystem: {
+      name: "GateKeeperSystem",
       openAccess: true,
     }
   },
   tables: {
     GateKeeperConfig: {
-      keySchema: {
+      schema: {
         smartObjectId: "uint256",
-      },
-      valueSchema: {
         itemIn: "uint256",
         targetItemQuantity: "uint256",
         isGoalReached: "bool",
-      }
+      },
+      key: ["smartObjectId"],
     }
   },
 });
