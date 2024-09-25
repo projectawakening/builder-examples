@@ -5,14 +5,14 @@ import { formatEther, parseEther } from "viem";
 
 const BuyItem = React.memo(function BuyItem({
 	smartAssemblyId,
-	itemOutId
+	itemOutId,
 }: {
 	smartAssemblyId: bigint;
-	itemOutId: string
+	itemOutId: string;
 }) {
 	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
-	const [erc20Balance, setErc20Balance] = useState<number | undefined>();
+	const [erc20Balance, setErc20Balance] = useState<bigint | undefined>();
 
 	const {
 		network: { walletClient },
@@ -20,14 +20,14 @@ const BuyItem = React.memo(function BuyItem({
 			setItemPrice,
 			getItemPriceData,
 			purchaseItem,
-			getErc20Balance
+			getErc20Balance,
 		},
 	} = useMUD();
 
 	const fetchItemPriceData = async () => {
 		const itemPriceData = await getItemPriceData();
-		setItemPriceWei(Number(itemPriceData?.price ?? 0))
-	}
+		setItemPriceWei(Number(itemPriceData?.price ?? 0));
+	};
 
 	const itemPriceWeiValueRef = useRef(0);
 
@@ -43,7 +43,7 @@ const BuyItem = React.memo(function BuyItem({
 			<div className="Quantum-Container my-4">
 				<div>STEP 2: User buys inventory item ID: {itemOutId}</div>
 				<div className="text-xs">
-				You can change this inventory item ID in the .env file
+					You can change this inventory item ID in the .env file
 				</div>
 
 				<div className="mt-4">STEP 2.1: Get item buy price</div>
@@ -53,13 +53,15 @@ const BuyItem = React.memo(function BuyItem({
 						typeClass="tertiary"
 						onClick={async (event) => {
 							event.preventDefault();
-							fetchItemPriceData()
+							fetchItemPriceData();
 						}}
 					>
 						Fetch
 					</EveButton>
 					<span className="text-xs">
-						{itemPriceWei ? `${formatEther(BigInt(itemPriceWei))} ether units` : "No item price set"}
+						{itemPriceWei
+							? `${formatEther(BigInt(itemPriceWei))} ether units`
+							: "No item price set"}
 					</span>
 				</div>
 
@@ -80,7 +82,7 @@ const BuyItem = React.memo(function BuyItem({
 									smartAssemblyId,
 									parseEther(itemPriceWeiValueRef.current.toString())
 								);
-								fetchItemPriceData()
+								fetchItemPriceData();
 							}}
 						>
 							Set Item Price
@@ -97,14 +99,18 @@ const BuyItem = React.memo(function BuyItem({
 						typeClass="tertiary"
 						onClick={async (event) => {
 							event.preventDefault();
-							const balance = await getErc20Balance(walletClient.account?.address)
-							setErc20Balance(Number(balance ?? 0))
+							const balance = await getErc20Balance(
+								walletClient.account?.address
+							);
+							setErc20Balance(balance ?? BigInt(0));
 						}}
 					>
 						Get balance
 					</EveButton>
 					<span className="text-xs">
-						{erc20Balance ? `${formatEther(BigInt(erc20Balance))} ether units` : "Click fetch to get buyer ERC-20 balance"}
+						{erc20Balance
+							? `${formatEther(BigInt(erc20Balance))} ether units`
+							: "Click fetch to get buyer ERC-20 balance"}
 					</span>
 				</div>
 				<div className="flex items-start flex-col gap-3">
@@ -119,13 +125,12 @@ const BuyItem = React.memo(function BuyItem({
 							typeClass="primary"
 							onClick={async (event) => {
 								event.preventDefault();
-								await purchaseItem(
-									smartAssemblyId,
-									itemQuantity								)
+								await purchaseItem(itemQuantity);
 							}}
 						>
 							Purchase items
-						</EveButton></div>
+						</EveButton>
+					</div>
 				</div>
 			</div>
 		</>

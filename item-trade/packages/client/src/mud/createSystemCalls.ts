@@ -78,7 +78,7 @@ export function createSystemCalls(
 		return balance
 	}
 
-	const purchaseItem = async (smartObjectId, quantity) => {
+	const purchaseItem = async (quantity) => {
 		const itemPrice = useStore.getState().getValue(tables.ItemPriceInToken, {smartObjectId, itemOutId})
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
@@ -92,14 +92,15 @@ export function createSystemCalls(
 			BigInt(approvalAmount),
 		]);
 
+
 		// Then, purchase item
 		await worldContract.write.test__purchaseItems([
-			BigInt(smartObjectId),
+			smartObjectId,
 			BigInt(itemOutId),
 			BigInt(quantity),
 		]);
 
-		return;
+		return ;
 	};
 
 	/** SELL ITEM FUNCTIONS */

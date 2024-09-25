@@ -60,7 +60,7 @@ contract MockSsuData is Script {
       itemId: 0,
       typeId: 23,
       volume: 10,
-      quantity: 5
+      quantity: 1500
     });
     items[1] = InventoryItem({
       inventoryItemId: inventoryItemIn,
