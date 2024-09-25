@@ -3,7 +3,7 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the smart turret, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and has configuration to determine which ships to shoot.
+This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
 ## Deployment and Testing
 ### Step 0: Deploy the smart turret contracts to the existing world 
