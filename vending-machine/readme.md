@@ -23,17 +23,17 @@ pnpm install
 **Local Deployment**
 This will deploy the contracts to your local world.
 ```bash
-pnpm run deploy:local --worldAddress <worldAddress> 
+pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:devnet --worldAddress <worldAddress> 
 ```
 
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract.
 
@@ -83,7 +83,7 @@ OUT_RATIO=2
 To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
 ```bash
-pnpm run mock-data
+pnpm mock-data
 ```
 
 This will create the on-chain SSU, fuel it and bring it online.
@@ -92,7 +92,7 @@ This will create the on-chain SSU, fuel it and bring it online.
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm run configure-ratio
+pnpm configure-ratio
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
@@ -101,7 +101,7 @@ You can adjust the values for the SSU_ID, in and out item ID's and the ratios in
 To test the vending machine, execute the following command:
 
 ```bash
-pnpm run execute
+pnpm execute
 ```
 
 ### Troubleshooting

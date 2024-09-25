@@ -17,7 +17,7 @@ First, copy the World Contract Address from the Docker logs obtained in the prev
 cd gate-keeper/packages/contracts
 ```
 
-Install the dependecies for the contracts:
+Install the dependencies for the contracts:
 ```bash
 pnpm install
 ```
@@ -25,19 +25,18 @@ pnpm install
 **Local Deployment**
 This will deploy the contracts to your local world.
 ```bash
-pnpm run deploy:local --worldAddress <worldAddress> 
+pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:devnet --worldAddress <worldAddress> 
 ```
 
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
-
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
+Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
 ![alt text](./readme-imgs/deployment.png)
 
 
@@ -72,20 +71,19 @@ TARGET_QUANTITY=10
 
 </details>
 
-
 ### Step 2: Mock data for the existing world **(Local Development Only)**
 To generate mock data for testing the Gate Keeper logic on the local world, run the following command:
 
 ```bash
-pnpm run mock-data
+pnpm mock-data
 ```
-This will create the on-chain SSU, fuel it and bring it online. This SSU will then act as a gate keeper, which has to be online to recieve items for the set goal. 
+This will create the on-chain SSU, fuel it and bring it online. This SSU will then act as a gate keeper, which has to be online to receive items for the set goal. 
 
 ### Step 3: Configure Gate Keeper 
-To configure which items should be recieved and the target amount, run:
+To configure which items should be received and the target amount, run:
 
 ```bash
-pnpm run configure-gate-keeper
+pnpm configure-gate-keeper
 ```
 
 You can adjust the values for the SSU_ID, INVENTORY_ITEM_ID & TARGET_QUANTITY in the .env file as needed, though they are optional.
@@ -94,7 +92,7 @@ You can adjust the values for the SSU_ID, INVENTORY_ITEM_ID & TARGET_QUANTITY in
 To test the gate keeper, execute the following command:
 
 ```bash
-pnpm run deposit-to-ssu
+pnpm deposit-to-ssu
 ```
 
 ### Troubleshooting

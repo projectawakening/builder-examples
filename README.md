@@ -6,7 +6,7 @@ Welcome, this repository contains guides and examples to get started building on
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
 ### Step 0: Installing general tools
-Before you get started you need to either install, or make sure you have the required tools.
+Before you get started you need to either install, or make sure you have the required tools. This guide is for Linux, if you use a different OS then visit https://docs.evefrontier.com/Tools and follow the guide for your operating system.
 
 #### Installing Git
 Install Git through https://git-scm.com/book/en/v2/Getting-Started-Installing-Git. 
@@ -25,9 +25,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 Restart the shell to use it.
 
 #### Installing NPM
-Install version 18.12.1 of NPM (Node.JS Version Manager) using NVM with:
+Install version 18 of NPM (Node.JS Version Manager) using NVM with:
 ```bash
-nvm install 18.12.1
+nvm install 18
 ```
 
 #### Installing PNPM
@@ -88,13 +88,17 @@ cat readme.md
 ```
 
 ## Guides
+### Smart Turret: [View](./smart-turret/readme.md)
+Configure and deploy a Smart Turret smart contract, ready to be further developed.
+
 ### Item Seller: [View](./item-seller/readme.md)
-Create a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players. 
+Create a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players.
+
+### Smart Gate: [View](./smart-turret/readme.md)
+Configure and deploy a Smart Gate smart contract, ready to be further developed.
 
 ### Vending Machine: [View](./vending-machine/readme.md)
 Create a Vending Machine Smart Storage Unit (SSU) in the game which trade items between the owner and players.
 
 ### Gate Keeper: [View](./gate-keeper/readme.md)
 Create a Smart Storage Unit (SSU) which can accept item donations toward a specific goal.
-
-

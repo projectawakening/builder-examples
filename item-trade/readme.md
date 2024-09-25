@@ -34,17 +34,17 @@ pnpm install
 **Local Deployment**
 This will deploy the contracts to your local world.
 ```bash
-pnpm run deploy:local --worldAddress <worldAddress> 
+pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:devnet --worldAddress <worldAddress> 
 ```
 
 
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Item Seller Trade and a test ERC20 token required for the Item Trade. Be sure to copy the ERC20 token address and save it for future use.
 ![alt text](./readme-imgs/deployment.png)
@@ -146,7 +146,7 @@ You should now have similar JSON to this. You want to get the item ID from the i
 To generate mock data for testing the Item Trade logic on the local world, run the following command:
 
 ```bash
-pnpm run mock-data
+pnpm mock-data
 ```
 This will create the on-chain SSU, fuel it, bring it online, and deposit some items into inventory and players ephemeral inventory so they can be traded in exchange for the ERC20 token.
 
@@ -154,7 +154,7 @@ This will create the on-chain SSU, fuel it, bring it online, and deposit some it
 To configure which items should be sold and purchased in return for the ERC20 token, run:
 
 ```bash
-pnpm run configure-item-trade
+pnpm configure-item-trade
 ```
 
 You can adjust the values for the SSU_ID & INVENTORY_ITEM_ID in the .env file as needed, though they are optional.
@@ -165,8 +165,8 @@ To test the purchase of an item in return for the token, execute the following c
 Note: In Devnet, ensure that the player has enough tokens to complete the purchase.
 
 ```bash
-pnpm run approve
-pnpm run purchase-item
+pnpm approve
+pnpm purchase-item
 ```
 
 ### Step 5: Test Item Buyer (Optional)
@@ -175,6 +175,6 @@ To test the selling an item in return for the token, execute the following comma
 Note: In Devnet, ensure that the player has items to sell
 
 ```bash
-pnpm run sell-item
+pnpm sell-item
 ```
 
