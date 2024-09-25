@@ -154,7 +154,7 @@ This will create the on-chain SSU, fuel it, bring it online, and deposit some it
 To configure which items should be sold and purchased in return for the ERC20 token, run:
 
 ```bash
-pnpm run configure-item-seller
+pnpm run configure-item-trade
 ```
 
 You can adjust the values for the SSU_ID & INVENTORY_ITEM_ID in the .env file as needed, though they are optional.
