@@ -78,8 +78,8 @@ export function createSystemCalls(
 		return balance
 	}
 
-	const purchaseItem = async (smartObjectId, inventoryItemId, quantity) => {
-		const itemPrice = useStore.getState().getValue(tables.ItemPriceInToken, {smartObjectId, itemInId})
+	const purchaseItem = async (smartObjectId, quantity) => {
+		const itemPrice = useStore.getState().getValue(tables.ItemPriceInToken, {smartObjectId, itemOutId})
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
 
@@ -95,7 +95,7 @@ export function createSystemCalls(
 		// Then, purchase item
 		await worldContract.write.test__purchaseItems([
 			BigInt(smartObjectId),
-			BigInt(itemInId),
+			BigInt(itemOutId),
 			BigInt(quantity),
 		]);
 
@@ -133,7 +133,7 @@ export function createSystemCalls(
 
 
 	const collectTokens = async (smartObjectId, address) => {
-		await worldContract.write.test__collectTokens([smartObjectId]);
+		// await worldContract.write.test__collectTokens([smartObjectId]);
 		return await getErc20Balance(address)
 	};
 

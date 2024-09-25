@@ -5,14 +5,14 @@ import { formatEther, parseEther } from "viem";
 
 const BuyItem = React.memo(function BuyItem({
 	smartAssemblyId,
+	itemOutId
 }: {
 	smartAssemblyId: bigint;
+	itemOutId: string
 }) {
 	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
 	const [erc20Balance, setErc20Balance] = useState<number | undefined>();
-
-	const itemOutId = import.meta.env.VITE_ITEM_OUT_ID
 
 	const {
 		network: { walletClient },
@@ -41,7 +41,7 @@ const BuyItem = React.memo(function BuyItem({
 	return (
 		<>
 			<div className="Quantum-Container my-4">
-				<div>STEP 2: Manage buying inventory item ID: {itemOutId}</div>
+				<div>STEP 2: User buys inventory item ID: {itemOutId}</div>
 				<div className="text-xs">
 				You can change this inventory item ID in the .env file
 				</div>
@@ -78,7 +78,6 @@ const BuyItem = React.memo(function BuyItem({
 								event.preventDefault();
 								await setItemPrice(
 									smartAssemblyId,
-									itemOutId,
 									parseEther(itemPriceWeiValueRef.current.toString())
 								);
 								fetchItemPriceData()
@@ -122,7 +121,6 @@ const BuyItem = React.memo(function BuyItem({
 								event.preventDefault();
 								await purchaseItem(
 									smartAssemblyId,
-									itemOutId,
 									itemQuantity								)
 							}}
 						>

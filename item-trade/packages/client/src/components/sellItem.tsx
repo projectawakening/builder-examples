@@ -5,21 +5,19 @@ import { formatEther, parseEther } from "viem";
 
 const SellItem = React.memo(function SellItem({
 	smartAssemblyId,
+	itemInId
 }: {
 	smartAssemblyId: bigint;
+	itemInId: string;
 }) {
 	const [itemStackMultiple, setItemStackMultiple] = useState<
 		number | undefined
 	>();
 	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [sellQuantity, setSellQuantity] = useState<number | undefined>();
-	const [erc20Balance, setErc20Balance] = useState<number | undefined>();
-
-	const itemInId = import.meta.env.VITE_ITEM_IN_ID;
 
 	const {
-		network: { walletClient },
-		systemCalls: { setSellConfig, sellItem, getErc20Balance, getItemSellData },
+		systemCalls: { setSellConfig, sellItem, getItemSellData },
 	} = useMUD();
 
 	const fetchItemSellData = async () => {
@@ -41,7 +39,7 @@ const SellItem = React.memo(function SellItem({
 	return (
 		<>
 			<div className="Quantum-Container my-4">
-				<div>STEP 4: Manage selling inventory item ID: {itemInId}</div>
+				<div>STEP 4: User sells inventory item ID: {itemInId}</div>
 				<div className="text-xs">
 					You can change this inventory item ID in the .env file
 				</div>
@@ -105,26 +103,6 @@ const SellItem = React.memo(function SellItem({
 
 			<div className="Quantum-Container my-4">
 				<div>STEP 5: Sell Item</div>
-				<div className="flex items-center">
-					<EveButton
-						className="mr-2"
-						typeClass="tertiary"
-						onClick={async (event) => {
-							event.preventDefault();
-							// const balance = await getErc20Balance(
-							// 	walletClient.account?.address
-							// );
-							// setErc20Balance(Number(balance ?? 0));
-						}}
-					>
-						Get balance
-					</EveButton>
-					<span className="text-xs">
-						{erc20Balance
-							? `${formatEther(BigInt(erc20Balance))} ether units`
-							: "Click fetch to get player item balance"}
-					</span>
-				</div>
 				<div className="flex items-start flex-col gap-3">
 					<EveInput
 						inputType="numerical"

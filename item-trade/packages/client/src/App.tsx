@@ -46,6 +46,8 @@ export const App = () => {
 	}, [walletClient.account?.address]);
 
 	const smartAssemblyId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+	const itemOutId = import.meta.env.VITE_ITEM_OUT_ID;
+	const itemInId = import.meta.env.VITE_ITEM_IN_ID;
 
 	return (
 		<div className="bg-crude-5 w-screen min-h-screen">
@@ -66,9 +68,9 @@ export const App = () => {
 
 					<ManageErc20Token smartAssemblyId={smartAssemblyId} />
 
-					<BuyItem smartAssemblyId={smartAssemblyId} />
+					<BuyItem smartAssemblyId={smartAssemblyId} itemOutId={itemOutId} />
 
-					<SellItem smartAssemblyId={smartAssemblyId} />
+					<SellItem smartAssemblyId={smartAssemblyId} itemInId={itemInId} />
 
 					<div className="Quantum-Container my-4">
 						<div>STEP 4: Collect Tokens</div>

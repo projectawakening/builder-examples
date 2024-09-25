@@ -53,23 +53,39 @@ contract MockSsuData is Script {
     uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
 
     //Deposit some mock items to inventory and ephemeral
-    InventoryItem[] memory items = new InventoryItem[](1);
+    InventoryItem[] memory items = new InventoryItem[](2);
     items[0] = InventoryItem({
       inventoryItemId: inventoryItemOut,
       owner: owner,
       itemId: 0,
       typeId: 23,
       volume: 10,
-      quantity: 15
+      quantity: 5
+    });
+    items[1] = InventoryItem({
+      inventoryItemId: inventoryItemIn,
+      owner: owner,
+      itemId: 0,
+      typeId: 45,
+      volume: 10,
+      quantity: 1500
     });
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
 
-    InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
+    InventoryItem[] memory ephemeralItems = new InventoryItem[](2);
     ephemeralItems[0] = InventoryItem({
-      inventoryItemId: inventoryItemIn,
+      inventoryItemId: inventoryItemOut,
       owner: player,
       itemId: 0,
       typeId: 23,
+      volume: 10,
+      quantity: 1500
+    });
+    ephemeralItems[1] = InventoryItem({
+      inventoryItemId: inventoryItemIn,
+      owner: player,
+      itemId: 0,
+      typeId: 45,
       volume: 10,
       quantity: 1500
     });
