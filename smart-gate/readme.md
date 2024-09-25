@@ -1,9 +1,13 @@
 # Smart Gate Example
 
 ## Introduction
-This guide will walk you through the process of building contracts for the smart gate, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for the Smart Gate, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-This example shows how to interact with the Smart gate smart assembly and how to create contracts for it. The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
+This example shows how to interact with the Smart gate smart assembly and how to create contracts for it. The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it.
+
+### Additional Information
+
+For additional information on the Smart Gate you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartGate](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
 
 ## Deployment and Testing
 ### Step 0: Deploy the smart gate contracts to the existing world 
@@ -94,3 +98,6 @@ If you encounter any issues, refer to the troubleshooting tips below:
 3. **Gate IDs Mismatch**: If you are using Garnet make sure you have set the SOURCE_GATE_ID and DESTINATION_GATE_ID correctly. 
 
 4. **Not Linked**: Make sure you link the gates as seen in Step 4, as otherwise the Smart Gates will not work.
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

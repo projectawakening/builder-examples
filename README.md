@@ -80,7 +80,7 @@ docker compose cp world-deployer:/monorepo/abis .
 
 ### Step 0.5: Start Building!
 
-Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file.
+Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file. For more information on Smart Assemblies you can visit [this page](https://docs.evefrontier.com/SmartAssemblies) on the documentation.
 
 ```bash
 cd item-seller

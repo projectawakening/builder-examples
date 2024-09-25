@@ -5,6 +5,10 @@ This guide will walk you through the process of building contracts for the smart
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
+### Additional Information
+
+For additional information on the Smart Turret you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret).
+
 ## Deployment and Testing
 ### Step 0: Deploy the smart turret contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
@@ -84,3 +88,6 @@ If you encounter any issues, refer to the troubleshooting tips below:
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Turret ID Mismatch (Devnet)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

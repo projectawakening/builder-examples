@@ -5,6 +5,10 @@ This guide will walk you through the process of building contracts for the vendi
 
 A vending machine is a SSU (Smart Storage Unit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
 
+### Additional Information
+
+For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
+
 ## Deployment and Testing
 ### Step 0: Deploy the vending machine contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
@@ -113,3 +117,6 @@ If you encounter any issues, refer to the troubleshooting tips below:
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

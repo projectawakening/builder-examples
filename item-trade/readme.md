@@ -178,3 +178,13 @@ Note: In Devnet, ensure that the player has items to sell
 pnpm sell-item
 ```
 
+### Troubleshooting
+
+If you encounter any issues, refer to the troubleshooting tips below:
+
+1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
+   
+2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

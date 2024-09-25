@@ -3,9 +3,11 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the gate keeper, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc.
+The gate keeper allows you to crowdfund items toward a specific goal. For example, if you need a certain amount of resources to build a new ship for the corporation etc. Previously, in the game gate keeper was used to have shared goals for players to contribute salt. Once the goals were met, gates and new areas were unlocked.
 
-Previously, in the game gate keeper was used to have shared goals for players to contribute salt. Once the goals were met, gates and new areas were unlocked.
+### Additional Information
+
+For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
 ## Deployment and Testing
 ### Step 0: Deploy the gate keeper contracts to the existing world 
@@ -104,3 +106,6 @@ If you encounter any issues, refer to the troubleshooting tips below:
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Item Limits**: Be cautious not to attempt depositing more items than have been generated via the `mock-data` script. The number of available items is controlled by `MockSsuData.s.sol`, so ensure this script has been properly executed. The default number generated is 15, however you can change this as needed.
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.
