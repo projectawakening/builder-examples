@@ -6,7 +6,6 @@ import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Tasks, TasksData } from "../src/codegen/index.sol";
 
 contract PostDeploy is Script {
   function run(address worldAddress) external {
