@@ -19,6 +19,7 @@ import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-u
 import { Utils } from "../src/systems/Utils.sol";
 import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 import { IERC20Mintable } from "@latticexyz/world-modules/src/modules/erc20-puppet/IERC20Mintable.sol";
+import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 
 contract MockSsuData is Script {
   using SmartDeployableLib for SmartDeployableLib.World;
@@ -51,7 +52,7 @@ contract MockSsuData is Script {
     });
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
-    // createAnchorAndOnline(smartStorageUnitId, owner);
+    createAnchorAndOnline(smartStorageUnitId, owner);
 
     uint256 inventoryItemIn = vm.envUint("ITEM_IN_ID");
     uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
@@ -105,8 +106,9 @@ contract MockSsuData is Script {
       (address)
     );
 
-    erc20.transfer(itemSellerAddress, 10 * 1 ether);
-    console.log(itemSellerAddress, ":", erc20.balanceOf(itemSellerAddress), "erc20 wei");
+    //Approve some ERC20 tokens to the item seller contract for the Salt buyer
+    // erc20.approve(itemSellerAddress, 10000000 * 1 ether);
+    erc20.transfer(itemSellerAddress, 10000000 * 1 ether);
 
     vm.stopBroadcast();
   }
