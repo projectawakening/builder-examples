@@ -150,6 +150,8 @@ pnpm run mock-data
 ```
 This will create the on-chain SSU, fuel it, bring it online, and deposit some items into inventory and players ephemeral inventory so they can be traded in exchange for the ERC20 token.
 
+This will also transfer some ERC20 tokens to the item trade contract so that there is enough balance to sell to players in exchange for an item.
+
 ### Step 3: Configure Item Seller 
 To configure which items should be sold and purchased in return for the ERC20 token, run:
 
@@ -178,3 +180,57 @@ Note: In Devnet, ensure that the player has items to sell
 pnpm run sell-item
 ```
 
+## Client UI
+
+### Step 6: Launch the Client UI
+
+To start the client interface, navigate to the client directory and run the following command:
+
+```bash
+cd ../client
+pnpm run dev
+```
+
+This will launch a local development server at `http://localhost:3000`, which will be connected to the world address defined earlier in Step 1.
+
+![alt text](./readme-imgs/item-trade-client.webp)
+
+### Step 7: Configure Client Environment Variables
+
+Next, update the following values in the `.env` file located in the `./packages/client/` folder:
+
+```bash
+VITE_ITEM_OUT_ID=
+VITE_ITEM_IN_ID=
+VITE_SMARTASSEMBLY_ID=
+VITE_ERC20_TOKEN_ADDRESS=
+```
+
+These variables must be set as follows:
+
+- **`VITE_ITEM_OUT_ID`**: This should match the `ITEM_OUT_ID` from `./packages/contracts/.env`.
+- **`VITE_ITEM_IN_ID`**: This should match the `ITEM_IN_ID` from `./packages/contracts/.env`.
+- **`VITE_SMARTASSEMBLY_ID`**: This should match the `SSU_ID` you set in `./packages/contracts/.env`.
+- **`VITE_ERC20_TOKEN_ADDRESS`**: Use the ERC20 token address from the contract deployment step.
+
+By ensuring these values match those in the `contracts` folder, the client will correctly interface with the on-chain environment.
+
+### Step 8: Running and Testing the Client
+
+Once the client is running, you can interact with the system through the browser interface. This step allows you to simulate and test interactions like purchasing items, monitoring transactions, and observing live contract behavior.
+
+---
+
+### Troubleshooting
+
+If you encounter any issues, refer to the troubleshooting tips below:
+
+1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
+   
+2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
+
+3. **Item Limits**: Be cautious not to attempt purchasing more items than have been generated via the `mock-data` script. The number of available items is controlled by `MockSsuData.s.sol`, so ensure this script has been properly executed.
+
+4. **Environment Variable Consistency**: Confirm that the `VITE_SMARTASSEMBLY_ID` and `VITE_INVENTORY_ITEM_ID` in the client `.env` file match the values set up in `./packages/contracts/.env`. Misalignment between these variables can cause the client to fail when interacting with the contract.
+
+4. **Connected accounts**: Confirm the connected account for the role that you are acting as: owner or player. Certain actions, such as configuring smart assemblies, are restricted to only owners or only players. Attempting to call actions while in the wrong roles might cause functions to fail when interacting with the contract.
