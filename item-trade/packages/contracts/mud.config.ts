@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "itemtrade",
+  namespace: "test",
   tables: {
     ItemTradeERC20: {
       schema: {
