@@ -24,6 +24,7 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@ev
 import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 
 import { ItemTradeERC20, ItemTradeERC20Data } from "../codegen/tables/ItemTradeERC20.sol";
+import { ItemTradeTokenSum } from "../codegen/tables/ItemTradeTokenSum.sol";
 import { ItemPriceInToken, ItemPriceInTokenData } from "../codegen/tables/ItemPriceInToken.sol";
 import { ItemQuantityMultipleForToken, ItemQuantityMultipleForTokenData } from "../codegen/tables/ItemQuantityMultipleForToken.sol";
 import { Utils as ItemTradeUtils } from "./Utils.sol";
@@ -133,6 +134,9 @@ contract ItemTradeSystem is System {
     // Transfer tokens from the msg.sender to the receiver
     IERC20(ssuData.tokenAddress).transferFrom(_msgSender(), address(this), tokenAmount);
 
+    uint256 totalTokenAmount = ItemTradeTokenSum.get(smartObjectId);
+    ItemTradeTokenSum.set(smartObjectId, (totalTokenAmount + tokenAmount));
+
     EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemId);
 
     if (!itemOutEntity.recordExists) {
@@ -213,11 +217,12 @@ contract ItemTradeSystem is System {
    * @dev Collect the ERC-20 tokens collected by the SSU
    * @param smartObjectId The smart object id of the SSU
    */
-  function collectTokens(uint256 smartObjectId, uint256 amount) public onlyOwner(smartObjectId) {
+  function collectTokens(uint256 smartObjectId) public onlyOwner(smartObjectId) {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     address tokenAddress = ssuData.tokenAddress;
 
-    IERC20(tokenAddress).transfer(ssuData.receiver, amount);
+    // Transfer only the tokens collected by the SSU
+    IERC20(tokenAddress).transfer(ssuData.receiver, ItemTradeTokenSum.get(smartObjectId));
   }
 
   function getItemTradeContractAddress() public view returns (address) {
