@@ -223,6 +223,7 @@ contract ItemTradeSystem is System {
 
     // Transfer only the tokens collected by the SSU
     IERC20(tokenAddress).transfer(ssuData.receiver, ItemTradeTokenSum.get(smartObjectId));
+    ItemTradeTokenSum.set(smartObjectId, 0);
   }
 
   function getItemTradeContractAddress() public view returns (address) {
