@@ -29,7 +29,7 @@ contract ApproveToken is Script {
     // TODO accept as parameters to the run method for test reproducability
     // Contract address for the deployed token to be minted
     address erc20Address = address(tokenAddress);
-    uint256 amount = 1;
+    uint256 amount = 10;
 
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
@@ -49,10 +49,6 @@ contract ApproveToken is Script {
     console.log(erc20.balanceOf(owner));
     erc20.approve(itemSellerAddress, amount * 1 ether);
 
-    console.log(erc20.allowance(owner, itemSellerAddress));
-
-    //Transfer some ERC20 tokens to the contract for Salt buyer
-    erc20.transfer(itemSellerAddress, 100000 * 1 ether);
     console.log(erc20.allowance(owner, itemSellerAddress));
 
     vm.stopBroadcast();

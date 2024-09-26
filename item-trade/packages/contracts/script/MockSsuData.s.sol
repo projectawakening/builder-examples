@@ -16,6 +16,10 @@ import { EntityRecordData, WorldPosition, SmartObjectData, Coord } from "@evewor
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/GlobalDeployableState.sol";
 import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol";
+import { Utils } from "../src/systems/Utils.sol";
+import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
+import { IERC20Mintable } from "@latticexyz/world-modules/src/modules/erc20-puppet/IERC20Mintable.sol";
+import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 
 contract MockSsuData is Script {
   using SmartDeployableLib for SmartDeployableLib.World;
@@ -33,6 +37,7 @@ contract MockSsuData is Script {
 
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
+    address erc20Address = vm.envAddress("ERC20_TOKEN_ADDRESS");
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -53,27 +58,57 @@ contract MockSsuData is Script {
     uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
 
     //Deposit some mock items to inventory and ephemeral
-    InventoryItem[] memory items = new InventoryItem[](1);
+    InventoryItem[] memory items = new InventoryItem[](2);
     items[0] = InventoryItem({
       inventoryItemId: inventoryItemOut,
       owner: owner,
       itemId: 0,
       typeId: 23,
       volume: 10,
-      quantity: 15
+      quantity: 1500
+    });
+    items[1] = InventoryItem({
+      inventoryItemId: inventoryItemIn,
+      owner: owner,
+      itemId: 0,
+      typeId: 45,
+      volume: 10,
+      quantity: 1500
     });
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
 
-    InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
+    InventoryItem[] memory ephemeralItems = new InventoryItem[](2);
     ephemeralItems[0] = InventoryItem({
-      inventoryItemId: inventoryItemIn,
+      inventoryItemId: inventoryItemOut,
       owner: player,
       itemId: 0,
       typeId: 23,
       volume: 10,
       quantity: 1500
     });
+    ephemeralItems[1] = InventoryItem({
+      inventoryItemId: inventoryItemIn,
+      owner: player,
+      itemId: 0,
+      typeId: 45,
+      volume: 10,
+      quantity: 1500
+    });
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
+
+    //Transfer some ERC20 tokens to the contract for Salt buyer
+    IBaseWorld world = IBaseWorld(worldAddress);
+    ResourceId systemId = Utils.itemSellerSystemId();
+    IERC20Mintable erc20 = IERC20Mintable(erc20Address);
+
+    address itemSellerAddress = abi.decode(
+      world.call(systemId, abi.encodeCall(ItemTradeSystem.getItemTradeContractAddress, ())),
+      (address)
+    );
+
+    //Approve some ERC20 tokens to the item seller contract for the Salt buyer
+    // erc20.approve(itemSellerAddress, 10000000 * 1 ether);
+    erc20.transfer(itemSellerAddress, 10000000 * 1 ether);
 
     vm.stopBroadcast();
   }
