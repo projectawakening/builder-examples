@@ -211,14 +211,12 @@ contract ItemTradeSystem is System {
   /**
    * @dev Collect the ERC-20 tokens collected by the SSU
    * @param smartObjectId The smart object id of the SSU
-   * @param amount The amount of tokens to collect
    */
-  function collectTokens(uint256 smartObjectId, uint256 amount) public onlyOwner(smartObjectId) {
+  function collectTokens(uint256 smartObjectId) public onlyOwner(smartObjectId) {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     address tokenAddress = ssuData.tokenAddress;
 
-    IERC20(tokenAddress).transfer(ssuData.receiver, amount * 1 ether);
-  }
+    IERC20(tokenAddress).transfer(ssuData.receiver, IERC20(tokenAddress).balanceOf(address(this)));  }
 
   function getItemTradeContractAddress() public view returns (address) {
     return address(this);
