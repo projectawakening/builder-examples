@@ -10,7 +10,7 @@ const ManageItem = React.memo(function ManageItem({
 }) {
 	const [itemPriceWei, setItemPriceWei] = useState<number | undefined>();
 	const [itemQuantity, setItemQuantity] = useState<number | undefined>();
-	const [erc20Balance, setErc20Balance] = useState<number | undefined>();
+	const [erc20Balance, setErc20Balance] = useState<bigint | undefined>();
 
 	const inventoryItemId = import.meta.env.VITE_INVENTORY_ITEM_ID
 
@@ -114,13 +114,13 @@ const ManageItem = React.memo(function ManageItem({
 						onClick={async (event) => {
 							event.preventDefault();
 							const balance = await getErc20Balance(walletClient.account?.address)
-							setErc20Balance(Number(balance ?? 0))
+							setErc20Balance(balance ?? BigInt(0))
 						}}
 					>
 						Get balance
 					</EveButton>
 					<span className="text-xs">
-						{erc20Balance ? `${formatEther(BigInt(erc20Balance))} ether units` : "Click fetch to get buyer ERC-20 balance"}
+						{erc20Balance ? `${formatEther(erc20Balance)} ether units` : "Click fetch to get buyer ERC-20 balance"}
 					</span>
 				</div>
 				<div className="flex items-start flex-col gap-3">
