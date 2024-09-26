@@ -62,7 +62,7 @@ export const App = () => {
 
 				<div className="grid">
 					<div className="text-xl font-bold">
-						Configuring information for{" "}
+						Item Trade: Configuring information for{" "}
 						{abbreviateAddress(smartAssemblyId.toString())}
 					</div>
 

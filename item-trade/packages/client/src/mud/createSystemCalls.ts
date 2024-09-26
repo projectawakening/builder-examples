@@ -127,14 +127,12 @@ export function createSystemCalls(
 			BigInt(itemInId),
 			BigInt(quantity),
 		]);
-
-
 		return;
 	};
 
 
-	const collectTokens = async (smartObjectId, address) => {
-		// await worldContract.write.test__collectTokens([smartObjectId]);
+	const collectTokens = async (address) => {
+		await worldContract.write.test__collectTokens([smartObjectId]);
 		return await getErc20Balance(address)
 	};
 
