@@ -12,6 +12,13 @@ export default defineWorld({
       },
       key: ["smartObjectId"],
     },
+    ItemTradeTokenSum: {
+      schema: {
+        smartObjectId: "uint256", // SSU ID
+        aggregateTokenAmount: "uint256"
+      },
+      key: ["smartObjectId"],
+    },
     ItemPriceInToken: { // Looking for better naming 
       schema: {
         smartObjectId: "uint256", // SSU ID

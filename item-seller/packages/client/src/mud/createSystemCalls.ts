@@ -90,7 +90,8 @@ export function createSystemCalls(
 		if (!itemPrice) return console.error("Unable to retrieve item price");
 		if (Number(itemPrice.price) == 0) return console.error("Item price not set");
 
-		const itemSellerContractAddress = await worldContract.write.test__getContractAddress()
+		// This must be a **read** function, not write. Write will return the transaction hash, not result
+		const itemSellerContractAddress = await worldContract.read.test__getContractAddress()
 		const approvalAmount = quantity * Number(itemPrice.price);
 
 		// First, approve spend by the contract address

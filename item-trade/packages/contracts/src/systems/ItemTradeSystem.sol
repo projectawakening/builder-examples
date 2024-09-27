@@ -21,8 +21,10 @@ import { EntityRecordTable, EntityRecordTableData } from "@eveworld/world/src/co
 import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 
 import { ItemTradeERC20, ItemTradeERC20Data } from "../codegen/tables/ItemTradeERC20.sol";
+import { ItemTradeTokenSum } from "../codegen/tables/ItemTradeTokenSum.sol";
 import { ItemPriceInToken, ItemPriceInTokenData } from "../codegen/tables/ItemPriceInToken.sol";
 import { ItemQuantityMultipleForToken, ItemQuantityMultipleForTokenData } from "../codegen/tables/ItemQuantityMultipleForToken.sol";
 import { Utils as ItemTradeUtils } from "./Utils.sol";
@@ -130,7 +132,10 @@ contract ItemTradeSystem is System {
     uint256 tokenAmount = itemPriceInTokenData.price * quantity;
 
     // Transfer tokens from the msg.sender to the receiver
-    IERC20(ssuData.tokenAddress).transferFrom(_msgSender(), ssuData.receiver, tokenAmount);
+    IERC20(ssuData.tokenAddress).transferFrom(_msgSender(), address(this), tokenAmount);
+
+    uint256 totalTokenAmount = ItemTradeTokenSum.get(smartObjectId);
+    ItemTradeTokenSum.set(smartObjectId, (totalTokenAmount + tokenAmount));
 
     EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemId);
 
@@ -174,7 +179,7 @@ contract ItemTradeSystem is System {
     uint256 multiplesToProcess = quantity / itemData.enforcedItemMultiple;
 
     // Total amount of tokens to transfer (e.g., for 99 Salt, transfer 275 $EVE)
-    uint256 totalTokenAmount = multiplesToProcess * itemData.enforcedItemMultiple;
+    uint256 totalTokenAmount = itemData.tokenAmount * multiplesToProcess;
 
     uint256 itemPurchaseQuantity = 0;
 
@@ -211,17 +216,65 @@ contract ItemTradeSystem is System {
   /**
    * @dev Collect the ERC-20 tokens collected by the SSU
    * @param smartObjectId The smart object id of the SSU
-   * @param amount The amount of tokens to collect
    */
-  function collectTokens(uint256 smartObjectId, uint256 amount) public onlyOwner(smartObjectId) {
+  function collectTokens(uint256 smartObjectId) public onlyOwner(smartObjectId) {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     address tokenAddress = ssuData.tokenAddress;
 
-    IERC20(tokenAddress).transfer(ssuData.receiver, amount * 1 ether);
+    // Transfer only the tokens collected by the SSU
+    IERC20(tokenAddress).transfer(ssuData.receiver, ItemTradeTokenSum.get(smartObjectId));
+    ItemTradeTokenSum.set(smartObjectId, 0);
   }
 
   function getItemTradeContractAddress() public view returns (address) {
     return address(this);
+  }
+
+  /**
+   * @dev Get the price of an item in ERC-20 tokens
+   * @param smartObjectId The smart object id of the SSU
+   * @param inventoryItemId The smart object id of the item
+   */
+  function getItemBuyPriceData(
+    uint256 smartObjectId,
+    uint256 inventoryItemId
+  ) public returns (ItemPriceInTokenData memory) {
+    return ItemPriceInToken.get(smartObjectId, inventoryItemId);
+  }
+
+  /**
+   * @dev Get the enforced item multiple for the token
+   * @param smartObjectId The smart object id of the SSU
+   * @param inventoryItemId The smart object id of the item
+   */
+  function getItemSellPriceData(
+    uint256 smartObjectId,
+    uint256 inventoryItemId
+  ) public returns (ItemQuantityMultipleForTokenData memory) {
+    return ItemQuantityMultipleForToken.get(smartObjectId, inventoryItemId);
+  }
+
+  /**
+   * @dev Get the player's ephemeral item balance
+   * @param smartObjectId The smart object id of the SSU
+   * @param inventoryItemId The smart object id of the item
+   * @param player The player's address
+   */
+  function getPlayerEphemeralItemBalance(
+    uint256 smartObjectId,
+    uint256 inventoryItemId,
+    address player
+  ) public view returns (uint256) {
+    EphemeralInvItemTableData memory invItem = EphemeralInvItemTable.get(smartObjectId, inventoryItemId, player);
+    return invItem.quantity;
+  }
+
+  /**
+   * @dev Get the ERC-20 token data
+   * @param smartObjectId The smart object id SSU
+   */
+  function getERC20Data(uint256 smartObjectId) public returns (ItemTradeERC20Data memory) {
+    return ItemTradeERC20.get(smartObjectId);
   }
 
   function _inventoryLib() internal view returns (InventoryLib.World memory) {
