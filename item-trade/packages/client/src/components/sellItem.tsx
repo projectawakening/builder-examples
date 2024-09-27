@@ -39,7 +39,7 @@ const SellItem = React.memo(function SellItem({
 	return (
 		<>
 			<div className="Quantum-Container my-4">
-				<div>STEP 4: User sells inventory item ID: {itemInId}</div>
+				<div>STEP 4: Player sells inventory item ID: {itemInId}</div>
 				<div className="text-xs">
 					You can change this inventory item ID in the .env file
 				</div>
@@ -68,6 +68,9 @@ const SellItem = React.memo(function SellItem({
 				</div>
 
 				<div className="mt-4">STEP 4.2: Set item price in ether units</div>
+				<div className="text-xs">
+				For this step, you must be connected as the <b>smart assembly owner</b>.
+				</div>
 				<div className="flex flex-col items-start gap-3">
 					<EveInput
 						inputType="numerical"
@@ -101,7 +104,10 @@ const SellItem = React.memo(function SellItem({
 				</div>
 			</div>
 
-			<div className="Quantum-Container my-4">
+˛			<div className="Quantum-Container my-4">
+			<div className="text-xs">
+				For this step, you must be connected as the <b>player</b>.
+				</div>
 				<div>STEP 5: Sell Item</div>
 				<div className="flex items-start flex-col gap-3">
 					<EveInput
