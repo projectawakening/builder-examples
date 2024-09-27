@@ -5,6 +5,10 @@ This guide will walk you through the process of building contracts for the vendi
 
 A vending machine is a SSU (Smart Storage Unit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
 
+### Additional Information
+
+For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
+
 ## Deployment and Testing
 ### Step 0: Deploy the vending machine contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
@@ -23,17 +27,17 @@ pnpm install
 **Local Deployment**
 This will deploy the contracts to your local world.
 ```bash
-pnpm run deploy:local --worldAddress <worldAddress> 
+pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:devnet --worldAddress <worldAddress> 
 ```
 
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract.
 
@@ -83,7 +87,7 @@ OUT_RATIO=2
 To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
 ```bash
-pnpm run mock-data
+pnpm mock-data
 ```
 
 This will create the on-chain SSU, fuel it and bring it online.
@@ -92,7 +96,7 @@ This will create the on-chain SSU, fuel it and bring it online.
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm run configure-ratio
+pnpm configure-ratio
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
@@ -101,7 +105,7 @@ You can adjust the values for the SSU_ID, in and out item ID's and the ratios in
 To test the vending machine, execute the following command:
 
 ```bash
-pnpm run execute
+pnpm execute
 ```
 
 ### Troubleshooting
@@ -113,3 +117,6 @@ If you encounter any issues, refer to the troubleshooting tips below:
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

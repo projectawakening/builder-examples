@@ -34,17 +34,17 @@ pnpm install
 **Local Deployment**
 This will deploy the contracts to your local world.
 ```bash
-pnpm run deploy:local --worldAddress <worldAddress> 
+pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:devnet --worldAddress <worldAddress> 
 ```
 
 
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Item Seller Trade and a test ERC20 token required for the Item Trade. Be sure to copy the ERC20 token address and save it for future use.
 ![alt text](./readme-imgs/deployment.png)
@@ -146,7 +146,7 @@ You should now have similar JSON to this. You want to get the item ID from the i
 To generate mock data for testing the Item Trade logic on the local world, run the following command:
 
 ```bash
-pnpm run mock-data
+pnpm mock-data
 ```
 This will create the on-chain SSU, fuel it, bring it online, and deposit some items into inventory and players ephemeral inventory so they can be traded in exchange for the ERC20 token.
 
@@ -156,7 +156,7 @@ This will also transfer some ERC20 tokens to the item trade contract so that the
 To configure which items should be sold and purchased in return for the ERC20 token, run:
 
 ```bash
-pnpm run configure-item-trade
+pnpm configure-item-trade
 ```
 
 You can adjust the values for the SSU_ID & INVENTORY_ITEM_ID in the .env file as needed, though they are optional.
@@ -167,8 +167,8 @@ To test the purchase of an item in return for the token, execute the following c
 Note: In Devnet, ensure that the player has enough tokens to complete the purchase.
 
 ```bash
-pnpm run approve
-pnpm run purchase-item
+pnpm approve
+pnpm purchase-item
 ```
 
 ### Step 5: Test Item Buyer (Optional)
@@ -177,7 +177,7 @@ To test the selling an item in return for the token, execute the following comma
 Note: In Devnet, ensure that the player has items to sell
 
 ```bash
-pnpm run sell-item
+pnpm sell-item
 ```
 
 ## Client UI
@@ -219,8 +219,6 @@ By ensuring these values match those in the `contracts` folder, the client will 
 
 Once the client is running, you can interact with the system through the browser interface. This step allows you to simulate and test interactions like purchasing items, monitoring transactions, and observing live contract behavior.
 
----
-
 ### Troubleshooting
 
 If you encounter any issues, refer to the troubleshooting tips below:
@@ -231,6 +229,9 @@ If you encounter any issues, refer to the troubleshooting tips below:
 
 3. **Item Limits**: Be cautious not to attempt purchasing more items than have been generated via the `mock-data` script. The number of available items is controlled by `MockSsuData.s.sol`, so ensure this script has been properly executed.
 
-4. **Environment Variable Consistency**: Confirm that the `VITE_SMARTASSEMBLY_ID` and `VITE_INVENTORY_ITEM_ID` in the client `.env` file match the values set up in `./packages/contracts/.env`. Misalignment between these variables can cause the client to fail when interacting with the contract.
+4. **Environment Variable Consistency**: Confirm that the environment variables in the client `.env` file match the values set up in `./packages/contracts/.env`. Misalignment between these variables can cause the client to fail when interacting with the contract.
 
-4. **Connected accounts**: Confirm the connected account for the role that you are acting as: owner or player. Certain actions, such as configuring smart assemblies, are restricted to only owners or only players. Attempting to call actions while in the wrong roles might cause functions to fail when interacting with the contract.
+5. **Connected accounts**: Confirm the connected account for the role that you are acting as: owner or player. Certain actions, such as configuring smart assemblies, are restricted to only owners or only players. Attempting to call actions while in the wrong roles might cause functions to fail when interacting with the contract.
+
+### Still having issues?
+If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.
