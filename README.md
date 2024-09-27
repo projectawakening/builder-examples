@@ -6,7 +6,7 @@ Welcome, this repository contains guides and examples to get started building on
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
 ### Step 0: Installing general tools
-Before you get started you need to either install, or make sure you have the required tools. This guide is for Linux, if you use a different OS then visit https://docs.evefrontier.com/Tools and follow the guide for your operating system.
+Before you get started you need to either install, or make sure you have the required tools. Install these tools for Linux, if you use a different OS then visit https://docs.evefrontier.com/Tools and follow the guide for your operating system.
 
 #### Installing Git
 Install Git through https://git-scm.com/book/en/v2/Getting-Started-Installing-Git. 
