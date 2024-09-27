@@ -87,6 +87,30 @@ cd item-seller
 cat readme.md
 ```
 
+### Bonus TIP
+**Run the local indexer, explore, interact and observe the state changes using world explorer**
+
+From any of the example root folder run the below command to run a local world explorer to see all the state changes
+
+```sh
+builder-examples/gate-keeper/
+pnpm explorer <worldAddress>
+```
+
+eg: `pnpm explorer 0x8a791620dd6260079bf849dc5567adc3f2fdc318`
+
+It looks like this 
+
+![alt text](readme-imgs/explorer.png)
+
+
+![alt text](readme-imgs/explorer-view.png)
+
+
+You can interact in the inteact tab and explore the values in the explore tab and also query using SQL commands
+
+![alt text](readme-imgs/query.png)
+
 ## Guides
 ### Smart Turret: [View](./smart-turret/readme.md)
 Configure and deploy a Smart Turret smart contract, ready to be further developed.

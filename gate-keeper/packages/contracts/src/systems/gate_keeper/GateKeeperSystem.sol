@@ -24,6 +24,7 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { Utils as InventoryUitls } from "@eveworld/world/src/modules/inventory/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
+import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 import { GateKeeperConfig, GateKeeperConfigData } from "../../codegen/tables/GateKeeperConfig.sol";
 
@@ -102,17 +103,10 @@ contract GateKeeperSystem is System {
       revert IInventoryErrors.Inventory_InvalidItem("GateKeeper: item is not created on-chain", entityInRecord.itemId);
     }
 
-    InventoryItem[] memory inItems = new InventoryItem[](1);
-    inItems[0] = InventoryItem(
-      gatekeeperConfig.itemIn,
-      _msgSender(),
-      entityInRecord.itemId,
-      entityInRecord.typeId,
-      entityInRecord.volume,
-      quantity
-    );
+    TransferItem[] memory ephInvTransferItems = new TransferItem[](1);
+    ephInvTransferItems[0] = TransferItem(gatekeeperConfig.itemIn, _msgSender(), quantity);
 
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, ephInvTransferItems);
   }
 
   /**

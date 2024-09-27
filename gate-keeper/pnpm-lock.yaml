@@ -106,8 +106,8 @@ importers:
         specifier: 0.0.13
         version: 0.0.13(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/world':
-        specifier: 0.0.16
-        version: 0.0.16(typescript@5.1.6)(zod@3.23.8)
+        specifier: 0.0.17
+        version: 0.0.17(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.2.9
         version: 2.2.9
@@ -2588,8 +2588,8 @@ packages:
       - zod
     dev: false
 
-  /@eveworld/world@0.0.16(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-ysfxDqgTIOne/sQ/fPUyK00VriRBW5SWUaRI/KaZPbKW9DyS3knw49OoZX099XoWL9xmE+PMKxgUktcpLpM5Cw==}
+  /@eveworld/world@0.0.17(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-/CcLDZ0wSu/otvfb4b4psooLcIq09ulvmPqxzx+E379LBBSkPMb546PAibY7PlUiQmzwOhYytF2YR3RyQgNksQ==}
     dependencies:
       '@eveworld/common-constants': 0.0.13(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/smart-object-framework': 0.0.8(typescript@5.1.6)(zod@3.23.8)
