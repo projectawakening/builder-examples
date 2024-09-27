@@ -19,7 +19,7 @@ import { getBurnerPrivateKey } from "@latticexyz/common";
  * from packages/contracts/worlds.json. When the contracts package
  * deploys a new `World`, it updates this file.
  */
-import worlds from "item-seller-contracts/worlds.json";
+import worlds from "contracts/worlds.json";
 
 /*
  * The supported chains.
