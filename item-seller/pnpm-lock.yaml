@@ -55,7 +55,7 @@ importers:
         version: 2.2.9(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/dev-tools':
         specifier: 2.2.9
-        version: 2.2.9(@latticexyz/common@2.2.9)(@latticexyz/recs@2.2.8)(@latticexyz/store-sync@2.2.9)(@latticexyz/store@2.2.9)(@latticexyz/utils@2.2.9)(@latticexyz/world@2.2.9)(@types/react@18.2.22)(typescript@5.1.6)(zod@3.23.8)
+        version: 2.2.9(@latticexyz/common@2.2.9)(@latticexyz/recs@2.2.9)(@latticexyz/store-sync@2.2.9)(@latticexyz/store@2.2.9)(@latticexyz/utils@2.2.9)(@latticexyz/world@2.2.9)(@types/react@18.2.22)(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/faucet':
         specifier: 2.2.9
         version: 2.2.9(typescript@5.1.6)
@@ -130,8 +130,8 @@ importers:
         specifier: 0.0.13
         version: 0.0.13(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/world':
-        specifier: 0.0.16
-        version: 0.0.16(typescript@5.1.6)(zod@3.23.8)
+        specifier: 0.0.17
+        version: 0.0.17(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.2.9
         version: 2.2.9
@@ -2661,7 +2661,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.7
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -2800,8 +2800,8 @@ packages:
       - zod
     dev: false
 
-  /@eveworld/world@0.0.16(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-ysfxDqgTIOne/sQ/fPUyK00VriRBW5SWUaRI/KaZPbKW9DyS3knw49OoZX099XoWL9xmE+PMKxgUktcpLpM5Cw==}
+  /@eveworld/world@0.0.17(typescript@5.1.6)(zod@3.23.8):
+    resolution: {integrity: sha512-/CcLDZ0wSu/otvfb4b4psooLcIq09ulvmPqxzx+E379LBBSkPMb546PAibY7PlUiQmzwOhYytF2YR3RyQgNksQ==}
     dependencies:
       '@eveworld/common-constants': 0.0.13(typescript@5.1.6)(zod@3.23.8)
       '@eveworld/smart-object-framework': 0.0.8(typescript@5.1.6)(zod@3.23.8)
@@ -2931,7 +2931,7 @@ packages:
     engines: {node: '>=10.10.0'}
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.4
+      debug: 4.3.7
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3427,7 +3427,7 @@ packages:
       - utf-8-validate
       - zod
 
-  /@latticexyz/dev-tools@2.2.9(@latticexyz/common@2.2.9)(@latticexyz/recs@2.2.8)(@latticexyz/store-sync@2.2.9)(@latticexyz/store@2.2.9)(@latticexyz/utils@2.2.9)(@latticexyz/world@2.2.9)(@types/react@18.2.22)(typescript@5.1.6)(zod@3.23.8):
+  /@latticexyz/dev-tools@2.2.9(@latticexyz/common@2.2.9)(@latticexyz/recs@2.2.9)(@latticexyz/store-sync@2.2.9)(@latticexyz/store@2.2.9)(@latticexyz/utils@2.2.9)(@latticexyz/world@2.2.9)(@types/react@18.2.22)(typescript@5.1.6)(zod@3.23.8):
     resolution: {integrity: sha512-jJhWnetF4mmodalhvwYXFxg5fn+MQcZ9D3ik30+j/VNXLLPvE0pLTq+8qIqIESGAu5WrVgNG99XY2mEIxgiR+w==}
     peerDependencies:
       '@latticexyz/common': 2.x
@@ -3439,7 +3439,7 @@ packages:
     dependencies:
       '@latticexyz/common': 2.2.9(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/react': 2.2.9(typescript@5.1.6)(zod@3.23.8)
-      '@latticexyz/recs': 2.2.8(typescript@5.1.6)(zod@3.23.8)
+      '@latticexyz/recs': 2.2.9(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/schema-type': 2.2.9(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/store': 2.2.9(typescript@5.1.6)(zod@3.23.8)
       '@latticexyz/store-sync': 2.2.9(@types/react@18.2.22)(react@18.3.1)(typescript@5.1.6)
@@ -3695,20 +3695,6 @@ packages:
       - asn1.js
       - bufferutil
       - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@latticexyz/recs@2.2.8(typescript@5.1.6)(zod@3.23.8):
-    resolution: {integrity: sha512-6FC7BP5/nA5xlIsh+gzCMN6nAgHki7kYbDBKT6oy4M4SDQOp58oycF0EwYUtRp9u0TBJTr6Gnzv03RHro2vXwQ==}
-    dependencies:
-      '@latticexyz/schema-type': 2.2.8(typescript@5.1.6)(zod@3.23.8)
-      '@latticexyz/utils': 2.2.8
-      mobx: 6.13.2
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
       - typescript
       - utf-8-validate
       - zod

@@ -16,14 +16,20 @@ import { EntityRecordData, WorldPosition, SmartObjectData, Coord } from "@evewor
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/GlobalDeployableState.sol";
 import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol";
+import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
+import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
+import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
+import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
 
 contract MockSsuData is Script {
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartStorageUnitLib for SmartStorageUnitLib.World;
+  using SmartCharacterLib for SmartCharacterLib.World;
   using SmartDeployableUtils for bytes14;
 
   SmartDeployableLib.World smartDeployable;
   SmartStorageUnitLib.World smartStorageUnit;
+  SmartCharacterLib.World smartCharacter;
 
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
@@ -43,9 +49,25 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
+    smartCharacter = SmartCharacterLib.World({
+      iface: IBaseWorld(worldAddress),
+      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
+    });
+
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
     createAnchorAndOnline(smartStorageUnitId, player, inventoryItem);
+
+    if (CharactersByAddressTable.get(player) == 0) {
+      smartCharacter.createCharacter(
+        11111166565,
+        player,
+        1005555,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](1);
