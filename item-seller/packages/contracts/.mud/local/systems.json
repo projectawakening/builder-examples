@@ -7,7 +7,7 @@
       "name": "ItemSellerSystem",
       "systemId": "0x737974657374000000000000000000004974656d53656c6c657253797374656d",
       "abi": [
-        "error Inventory_InvalidItem(string message, uint256 typeId)",
+        "error Inventory_InvalidItem(string message, uint256 inventoryItemId)",
         "function collectTokens(uint256 smartObjectId)",
         "function getContractAddress() returns (address)",
         "function getERC20Data(uint256 smartObjectId) returns ((address tokenAddress, uint256 tokenDecimals, address receiver))",
@@ -19,7 +19,7 @@
         "function updateERC20Receiver(uint256 smartObjectId, address receiver)"
       ],
       "worldAbi": [
-        "error Inventory_InvalidItem(string message, uint256 typeId)",
+        "error Inventory_InvalidItem(string message, uint256 inventoryItemId)",
         "function test__collectTokens(uint256 smartObjectId)",
         "function test__getContractAddress() returns (address)",
         "function test__getERC20Data(uint256 smartObjectId) returns ((address tokenAddress, uint256 tokenDecimals, address receiver))",
@@ -32,5 +32,5 @@
       ]
     }
   ],
-  "createdAt": 1727188028548
+  "createdAt": 1727459566464
 }

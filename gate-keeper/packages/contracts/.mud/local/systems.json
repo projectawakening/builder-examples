@@ -7,7 +7,7 @@
       "name": "GateKeeperSystem",
       "systemId": "0x73797465737400000000000000000000476174654b656570657253797374656d",
       "abi": [
-        "error Inventory_InvalidItem(string message, uint256 typeId)",
+        "error Inventory_InvalidItem(string message, uint256 inventoryItemId)",
         "function changeTargetQuantity(uint256 smartObjectId, uint256 inventoryItemId, uint256 targetQuantity)",
         "function configureGateKeeper(uint256 smartObjectId, uint256 inventoryItemId, uint256 targetItemQuantity)",
         "function depositToSSU(uint256 smartObjectId, uint256 quantity)",
@@ -15,7 +15,7 @@
         "function getGateKeeperConfig(uint256 smartObjectId) returns ((uint256 itemIn, uint256 targetItemQuantity, bool isGoalReached))"
       ],
       "worldAbi": [
-        "error Inventory_InvalidItem(string message, uint256 typeId)",
+        "error Inventory_InvalidItem(string message, uint256 inventoryItemId)",
         "function test__changeTargetQuantity(uint256 smartObjectId, uint256 inventoryItemId, uint256 targetQuantity)",
         "function test__configureGateKeeper(uint256 smartObjectId, uint256 inventoryItemId, uint256 targetItemQuantity)",
         "function test__depositToSSU(uint256 smartObjectId, uint256 quantity)",
@@ -24,5 +24,5 @@
       ]
     }
   ],
-  "createdAt": 1727190063475
+  "createdAt": 1727456005359
 }

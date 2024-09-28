@@ -24,7 +24,7 @@ contract WithdrawFuel is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    uint256 smartObjectId = uint256(63172679203090930493472462170959929237896419587292096226487443413731496352045);
+    uint256 smartObjectId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-2345")));
 
     smartDeployable.withdrawFuel(smartObjectId, 1);
 

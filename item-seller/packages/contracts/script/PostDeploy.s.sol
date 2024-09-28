@@ -28,22 +28,22 @@ contract PostDeploy is Script {
     vm.startBroadcast(deployerPrivateKey);
 
     //Deploy a fake ERC20 token
-    string memory namespace = "test1erc20";
+    string memory namespace = "testerc20";
     string memory name = "Test Token";
     string memory symbol = "TEST";
     uint8 decimals = uint8(18);
     address to = address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
     uint256 amount = 10000000000;
-  
-   IERC20Mintable erc20Token;
-   StoreSwitch.setStoreAddress(address(worldAddress));
-   erc20Token = registerERC20(
+
+    IERC20Mintable erc20Token;
+    StoreSwitch.setStoreAddress(address(worldAddress));
+    erc20Token = registerERC20(
       world,
       stringToBytes14(namespace),
       ERC20MetadataData({ decimals: decimals, name: name, symbol: symbol })
     );
 
-   console.log("Deploying ERC20 token with address: ", address(erc20Token));
+    console.log("Deploying ERC20 token with address: ", address(erc20Token));
 
     address erc20Address = address(erc20Token);
 
@@ -52,7 +52,6 @@ contract PostDeploy is Script {
 
     console.log("minting to: ", address(to));
     console.log("amount: ", amount * 1 ether);
-
 
     vm.stopBroadcast();
   }

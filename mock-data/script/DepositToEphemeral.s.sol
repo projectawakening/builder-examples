@@ -7,10 +7,14 @@ import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResou
 import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
 import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
 import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol";
+import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
+import { EntityRecordData } from "@eveworld/world/src/modules/smart-character/types.sol";
+import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 contract DepositToEphemeral is Script {
   using SmartStorageUnitLib for SmartStorageUnitLib.World;
+  using SmartCharacterLib for SmartCharacterLib.World;
 
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
@@ -19,9 +23,12 @@ contract DepositToEphemeral is Script {
     address ephemeralInvOwner1 = address(0x70997970C51812dc3A010C7d01b50e0d17dc79C8);
     address ephemeralInvOwner2 = address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC);
 
-    // Start broadcasting transactions from the deployer account
-    vm.startBroadcast(deployerPrivateKey);
     SmartStorageUnitLib.World memory smartStorageUnit = SmartStorageUnitLib.World({
+      iface: IBaseWorld(worldAddress),
+      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
+    });
+
+    SmartCharacterLib.World memory smartCharacter = SmartCharacterLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
@@ -45,7 +52,24 @@ contract DepositToEphemeral is Script {
       volume: 10,
       quantity: 10
     });
+    vm.startBroadcast(deployerPrivateKey);
 
+    smartCharacter.createCharacter(
+      12514,
+      ephemeralInvOwner1,
+      222,
+      EntityRecordData({ typeId: 123, itemId: 235, volume: 100 }),
+      EntityRecordOffchainTableData({ name: "awesome character", dappURL: "noURL", description: "." }),
+      "azert"
+    );
+    smartCharacter.createCharacter(
+      12515,
+      ephemeralInvOwner2,
+      222,
+      EntityRecordData({ typeId: 123, itemId: 345, volume: 100 }),
+      EntityRecordOffchainTableData({ name: "awesome character jr", dappURL: "noURL", description: "." }),
+      "azert"
+    );
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartObjectId, ephemeralInvOwner1, items);
 
     items = new InventoryItem[](1);

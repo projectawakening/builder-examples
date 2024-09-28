@@ -51,23 +51,11 @@ contract WithdrawFromInventory is Script {
 
     inventory.withdrawFromInventory(smartObjectId, items);
 
-    InventoryItemTableData memory inventoryItem1 = InventoryItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.inventoryItemTableId(),
-      smartObjectId,
-      items[0].inventoryItemId
-    );
-    InventoryItemTableData memory inventoryItem2 = InventoryItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.inventoryItemTableId(),
-      smartObjectId,
-      items[1].inventoryItemId
-    );
+    InventoryItemTableData memory inventoryItem1 = InventoryItemTable.get(smartObjectId, items[0].inventoryItemId);
+    InventoryItemTableData memory inventoryItem2 = InventoryItemTable.get(smartObjectId, items[1].inventoryItemId);
 
     console.log(inventoryItem1.quantity);
-    InventoryItemTableData memory inventoryItem3 = InventoryItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.inventoryItemTableId(),
-      smartObjectId,
-      items[2].inventoryItemId
-    );
+    InventoryItemTableData memory inventoryItem3 = InventoryItemTable.get(smartObjectId, items[2].inventoryItemId);
 
     console.log(inventoryItem1.quantity);
     console.log(inventoryItem2.quantity);

@@ -25,6 +25,7 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@ev
 import { ItemSellerERC20, ItemSellerERC20Data } from "../../codegen/tables/ItemSellerERC20.sol";
 import { ItemPrice, ItemPriceData } from "../../codegen/tables/ItemPrice.sol";
 import { Utils as ItemSellerUtils } from "./Utils.sol";
+import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
@@ -126,17 +127,10 @@ contract ItemSellerSystem is System {
       revert IInventoryErrors.Inventory_InvalidItem("ItemSeller: item is not created on-chain", itemOutEntity.itemId);
     }
 
-    InventoryItem[] memory outItems = new InventoryItem[](1);
-    outItems[0] = InventoryItem(
-      inventoryItemId,
-      _msgSender(),
-      itemOutEntity.itemId,
-      itemOutEntity.typeId,
-      itemOutEntity.volume,
-      quantity
-    );
+    TransferItem[] memory transferItems = new TransferItem[](1);
+    transferItems[0] = TransferItem(inventoryItemId, _msgSender(), quantity);
 
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
+    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), transferItems);
   }
 
   /**

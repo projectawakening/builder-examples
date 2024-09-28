@@ -21,6 +21,9 @@ import { SmartDeployableLib } from "@eveworld/world/src/modules/smart-deployable
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLib.sol";
 import { Utils as SmartGateUtils } from "@eveworld/world/src/modules/smart-gate/Utils.sol";
+import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
+import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
+import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
 
 contract MockData is Script {
   using SmartCharacterUtils for bytes14;
@@ -58,26 +61,28 @@ contract MockData is Script {
     smartGate = SmartGateLib.World({ iface: IBaseWorld(worldAddress), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
 
     //Create a smart character
-    smartCharacter.createCharacter(
-      111901,
-      address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
-      100,
-      EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
-      EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
-      "tokenCid"
-    );
+    if (CharactersByAddressTable.get(player) == 0) {
+      smartCharacter.createCharacter(
+        111901,
+        player,
+        555,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
 
-    anchorFuelAndOnline(sourceGateId);
-    anchorFuelAndOnline(destinationGateId);
+    anchorFuelAndOnline(sourceGateId, player);
+    anchorFuelAndOnline(destinationGateId, player);
 
     vm.stopBroadcast();
   }
 
-  function anchorFuelAndOnline(uint256 smartObjectId) public {
+  function anchorFuelAndOnline(uint256 smartObjectId, address owner) public {
     smartGate.createAndAnchorSmartGate(
       smartObjectId,
       EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 }),
-      SmartObjectData({ owner: address(1), tokenURI: "test" }),
+      SmartObjectData({ owner: owner, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionIntervalInSeconds,

@@ -45,8 +45,8 @@ contract ConfigureSmartGate is Script {
     uint256 destinationGateId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-5551")));
 
     //Create, anchor the smart gate and bring online
-    anchorFuelAndOnline(sourceGateId);
-    anchorFuelAndOnline(destinationGateId);
+    anchorFuelAndOnline(sourceGateId, player);
+    anchorFuelAndOnline(destinationGateId, player);
 
     //Deploy the Mock contract and configure the smart gate to use it
     IBaseWorld world = IBaseWorld(worldAddress);
@@ -72,11 +72,11 @@ contract ConfigureSmartGate is Script {
     vm.stopBroadcast();
   }
 
-  function anchorFuelAndOnline(uint256 smartObjectId) public {
+  function anchorFuelAndOnline(uint256 smartObjectId, address player) public {
     smartGate.createAndAnchorSmartGate(
       smartObjectId,
       EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 }),
-      SmartObjectData({ owner: address(1), tokenURI: "test" }),
+      SmartObjectData({ owner: player, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionIntervalInSeconds,
@@ -85,7 +85,7 @@ contract ConfigureSmartGate is Script {
     );
 
     // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused(FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.globalStateTableId()) == false) {
+    if (GlobalDeployableState.getIsPaused() == false) {
       smartDeployable.globalResume();
     }
 
