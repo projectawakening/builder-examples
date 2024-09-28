@@ -52,6 +52,11 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
+    smartCharacter = SmartCharacterLib.World({
+      iface: IBaseWorld(worldAddress),
+      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
+    });
+
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
         11111166565,
