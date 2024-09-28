@@ -24,6 +24,7 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 import { RatioConfig, RatioConfigData } from "../../codegen/tables/RatioConfig.sol";
+import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
@@ -91,39 +92,18 @@ contract VendingMachineSystem is System {
 
     EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemObjectIdOut);
 
-    InventoryItem[] memory inItems = new InventoryItem[](1);
-    inItems[0] = InventoryItem(
-      inventoryItemIdIn,
-      msg.sender,
-      itemInEntity.typeId,
-      itemInEntity.itemId,
-      itemInEntity.volume,
-      quantity
-    );
+    TransferItem[] memory inItems = new TransferItem[](1);
+    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, quantity);
 
-    InventoryItem[] memory outItems = new InventoryItem[](1);
+    TransferItem[] memory ephTransferItems = new TransferItem[](1);
+    ephTransferItems[0] = TransferItem(itemObjectIdOut, ssuOwner, quantityInputItemLeftOver);
 
-    if (quantityInputItemLeftOver > 0) {
-      outItems[0] = InventoryItem(
-        itemObjectIdOut,
-        ssuOwner,
-        itemOutEntity.itemId,
-        itemOutEntity.typeId,
-        itemOutEntity.volume,
-        quantityInputItemLeftOver
-      );
-      _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
-    }
+    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
 
-    outItems[0] = InventoryItem(
-      itemObjectIdOut,
-      ssuOwner,
-      itemOutEntity.itemId,
-      itemOutEntity.typeId,
-      itemOutEntity.volume,
-      quantityOutputItem
-    );
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
+    ephTransferItems = new TransferItem[](1);
+    ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
+
+    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
   }
 
