@@ -70,7 +70,6 @@ contract WithdrawFromEphemeral is Script {
     inventory.withdrawFromEphemeralInventory(smartObjectId, ephemeralOwner2, items);
 
     EphemeralInvItemTableData memory invItem = EphemeralInvItemTable.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.ephemeralInventoryItemTableId(),
       smartObjectId,
       items[0].inventoryItemId,
       ephemeralOwner2

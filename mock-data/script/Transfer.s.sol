@@ -8,7 +8,7 @@ import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
 import { InventoryItemTableData, InventoryItemTable } from "@eveworld/world/src/codegen/tables/InventoryItemTable.sol";
 import { EphemeralInvItemTable, EphemeralInvItemTableData } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
 
-import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
+import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 import { Utils } from "@eveworld/world/src/modules/inventory/Utils.sol";
 
 import { SmartStorageUnitLib } from "@eveworld/world/src/modules/smart-storage-unit/SmartStorageUnitLib.sol";
@@ -49,50 +49,34 @@ contract Transfer is Script {
     // // Start broadcasting transactions from the deployer account
 
     // ITEM TO MOVE FROM INVENTORY TO EPHEMERAL
-    uint256 inventoryItemId = uint256(123);
-    InventoryItem[] memory invItems = new InventoryItem[](1);
-    invItems[0] = InventoryItem({
-      inventoryItemId: inventoryItemId,
-      owner: ownerSSU,
-      itemId: 12,
-      typeId: 3,
-      volume: 10,
-      quantity: 1
-    });
+    uint256 itemId = uint256(123);
+    TransferItem[] memory invTransferItems = new TransferItem[](1);
+    invTransferItems[0] = TransferItem(itemId, ownerSSU, 1);
 
     // ITEM TO MOVE FROM EPHEMERAL TO INVENTORY
-    uint256 ephInventoryItemId = uint256(345);
-    InventoryItem[] memory ephInvItems = new InventoryItem[](1);
-    ephInvItems[0] = InventoryItem({
-      inventoryItemId: ephInventoryItemId,
-      owner: ephemeralOwner,
-      itemId: 22,
-      typeId: 3,
-      volume: 10,
-      quantity: 1
-    });
+    uint256 ephItemId = uint256(345);
+    TransferItem[] memory ephInvTransferItems = new TransferItem[](1);
+    ephInvTransferItems[0] = TransferItem(ephItemId, ephemeralOwner, 1);
 
     vm.startBroadcast(ephemeralPrivateKey); // if triggered the createItem functions need to be called from the owner/deployer account
 
     // TRANSFER
-    inventory.inventoryToEphemeralTransfer(smartObjectId, invItems);
-    inventory.ephemeralToInventoryTransfer(smartObjectId, ephInvItems);
+    inventory.inventoryToEphemeralTransfer(smartObjectId, ephemeralOwner, invTransferItems);
+    inventory.ephemeralToInventoryTransfer(smartObjectId, ephInvTransferItems);
 
     // After transfer 1 invItem should go into ephemeral and 1 ephInvItem should go into inventory
     // SSU owner should have 1 ephInvItem after transfer
     // Ephermeral owner should have 1 invItem after transfer
 
     InventoryItemTableData memory ephItemInInv = InventoryItemTable.get(
-      DEPLOYMENT_NAMESPACE.inventoryItemTableId(),
       smartObjectId,
-      ephInvItems[0].inventoryItemId
+      ephInvTransferItems[0].inventoryItemId
     );
     console.log(ephItemInInv.quantity); //1
 
     EphemeralInvItemTableData memory itemInEphInv = EphemeralInvItemTable.get(
-      DEPLOYMENT_NAMESPACE.ephemeralInventoryItemTableId(),
       smartObjectId,
-      invItems[0].inventoryItemId,
+      invTransferItems[0].inventoryItemId,
       ephemeralOwner
     );
     console.log(itemInEphInv.quantity); //1

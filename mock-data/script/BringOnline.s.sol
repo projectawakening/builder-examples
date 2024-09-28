@@ -31,15 +31,12 @@ contract BringOnline is Script {
     uint256 smartObjectId = uint256(keccak256(abi.encode("item:<tenant_id>-<db_id>-2345")));
 
     // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused(FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.globalStateTableId()) == false) {
+    if (GlobalDeployableState.getIsPaused() == false) {
       smartDeployable.globalResume();
     }
 
     // check fuel and add fuel if needed
-    DeployableFuelBalanceData memory data = DeployableFuelBalance.get(
-      FRONTIER_WORLD_DEPLOYMENT_NAMESPACE.deployableFuelBalanceTableId(),
-      smartObjectId
-    );
+    DeployableFuelBalanceData memory data = DeployableFuelBalance.get(smartObjectId);
     uint256 FUEL_DECIMALS = 18;
     if (data.fuelAmount < 10 ** FUEL_DECIMALS) {
       smartDeployable.depositFuel(smartObjectId, 200000);

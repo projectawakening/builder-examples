@@ -74,7 +74,6 @@ contract CreateAndDeposit is Script {
     vm.startBroadcast(ownerPrivateKey);
     // check if SSU has any items to transfer and if not create them with SmartStorageUnit.createAndDepositItemsToInventory
     InventoryItemTableData memory invItemToTransfer = InventoryItemTable.get(
-      DEPLOYMENT_NAMESPACE.inventoryItemTableId(),
       smartObjectId,
       invItems[0].inventoryItemId
     );
@@ -83,7 +82,6 @@ contract CreateAndDeposit is Script {
     }
     // check if EPH INV has items to transfer and if not create them with SmartStorageUnit.createAndDepositItemsToEphemeralInventory(
     EphemeralInvItemTableData memory ephInvItemToTransfer = EphemeralInvItemTable.get(
-      DEPLOYMENT_NAMESPACE.ephemeralInventoryItemTableId(),
       smartObjectId,
       ephInvItems[0].inventoryItemId,
       ephemeralOwner
