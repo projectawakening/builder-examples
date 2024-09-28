@@ -26,7 +26,7 @@
     "@latticexyz/world": "2.2.9",
     "@latticexyz/world-modules": "2.2.9",
     "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.16"
+    "@eveworld/world": "0.0.17"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
