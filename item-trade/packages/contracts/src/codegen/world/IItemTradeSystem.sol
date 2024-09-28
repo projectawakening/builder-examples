@@ -26,9 +26,9 @@ interface IItemTradeSystem {
     uint256 tokenAmount
   ) external;
 
-  function test__purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test__purchaseItems(uint256 smartObjectId, uint256 inventoryItemId, uint256 quantity) external;
 
-  function test__sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) external;
+  function test__sellItems(uint256 smartObjectId, uint256 inventoryItemId, uint256 quantity) external;
 
   function test__collectTokens(uint256 smartObjectId) external;
 

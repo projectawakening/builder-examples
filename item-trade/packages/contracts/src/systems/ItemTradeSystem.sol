@@ -28,6 +28,7 @@ import { ItemTradeTokenSum } from "../codegen/tables/ItemTradeTokenSum.sol";
 import { ItemPriceInToken, ItemPriceInTokenData } from "../codegen/tables/ItemPriceInToken.sol";
 import { ItemQuantityMultipleForToken, ItemQuantityMultipleForTokenData } from "../codegen/tables/ItemQuantityMultipleForToken.sol";
 import { Utils as ItemTradeUtils } from "./Utils.sol";
+import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 /**
  * @dev This contract implements an ItemTrade system that allows buying and selling of items using ERC-20 tokens
@@ -119,14 +120,14 @@ contract ItemTradeSystem is System {
   /**
    * @dev Purchase an item with ERC-20 tokens
    * @param smartObjectId The smart object id of the SSU
-   * @param itemId The id of the item
+   * @param inventoryItemId The id of the item
    * @param quantity The quantity of the item to purchase
    */
-  function purchaseItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
+  function purchaseItems(uint256 smartObjectId, uint256 inventoryItemId, uint256 quantity) public {
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     require(ssuData.tokenAddress != address(0), "Invalid ERC20 Data");
 
-    ItemPriceInTokenData memory itemPriceInTokenData = ItemPriceInToken.get(smartObjectId, itemId);
+    ItemPriceInTokenData memory itemPriceInTokenData = ItemPriceInToken.get(smartObjectId, inventoryItemId);
     require(itemPriceInTokenData.isSet, "Item price not set");
 
     uint256 tokenAmount = itemPriceInTokenData.price * quantity;
@@ -137,39 +138,32 @@ contract ItemTradeSystem is System {
     uint256 totalTokenAmount = ItemTradeTokenSum.get(smartObjectId);
     ItemTradeTokenSum.set(smartObjectId, (totalTokenAmount + tokenAmount));
 
-    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemId);
+    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(inventoryItemId);
 
     if (!itemOutEntity.recordExists) {
       revert IInventoryErrors.Inventory_InvalidItem("ItemTrade: item not found on-chain", itemOutEntity.itemId);
     }
 
-    InventoryItem[] memory outItems = new InventoryItem[](1);
-    outItems[0] = InventoryItem(
-      itemId,
-      _msgSender(),
-      itemOutEntity.itemId,
-      itemOutEntity.typeId,
-      itemOutEntity.volume,
-      quantity
-    );
+    TransferItem[] memory transferItems = new TransferItem[](1);
+    transferItems[0] = TransferItem(inventoryItemId, _msgSender(), quantity);
 
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, outItems);
+    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), transferItems);
   }
 
   /**
    * @dev Exchange items for ERC20 tokens based on the configured item multiples.
    * For example: if 99 Salt is configured to return 275 $EVE, exchanging in multiples of 99 Salt will result in $EVE tokens being transferred to the msg.sender.
    * @param smartObjectId The smart object id of the SSU
-   * @param itemId The id of the item
+   * @param inventoryItemId The id of the item
    * @param quantity The quantity of the item to purchase
    */
-  function sellItems(uint256 smartObjectId, uint256 itemId, uint256 quantity) public {
+  function sellItems(uint256 smartObjectId, uint256 inventoryItemId, uint256 quantity) public {
     // Get the token data for the item trade
     ItemTradeERC20Data memory ssuData = ItemTradeERC20.get(smartObjectId);
     require(ssuData.tokenAddress != address(0), "Invalid ERC20 Data");
 
     // Get the configured item multiple (e.g., 99 Salt) and verify it's set
-    ItemQuantityMultipleForTokenData memory itemData = ItemQuantityMultipleForToken.get(smartObjectId, itemId);
+    ItemQuantityMultipleForTokenData memory itemData = ItemQuantityMultipleForToken.get(smartObjectId, inventoryItemId);
     require(itemData.isSet, "Multiple not set");
 
     // Ensure the quantity is a multiple of the configured sellItemMultiple
@@ -193,24 +187,16 @@ contract ItemTradeSystem is System {
     // Transfer from msg.sender to this contract and then from this contract to the receiver
     IERC20(ssuData.tokenAddress).transfer(_msgSender(), totalTokenAmount);
 
-    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(itemId);
+    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(inventoryItemId);
 
     if (!itemInEntity.recordExists) {
       revert IInventoryErrors.Inventory_InvalidItem("ItemTrade: item not found on-chain", itemInEntity.itemId);
     }
 
-    InventoryItem[] memory inItems = new InventoryItem[](1);
+    TransferItem[] memory transferItems = new TransferItem[](1);
+    transferItems[0] = TransferItem(inventoryItemId, _msgSender(), itemPurchaseQuantity);
 
-    inItems[0] = InventoryItem(
-      itemId,
-      _msgSender(),
-      itemInEntity.itemId,
-      itemInEntity.typeId,
-      itemInEntity.volume,
-      itemPurchaseQuantity
-    );
-
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, transferItems);
   }
 
   /**

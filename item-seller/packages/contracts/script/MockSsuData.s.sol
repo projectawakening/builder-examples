@@ -54,10 +54,6 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    uint256 smartStorageUnitId = vm.envUint("SSU_ID");
-    uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
-    createAnchorAndOnline(smartStorageUnitId, player, inventoryItem);
-
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
         11111166565,
@@ -68,6 +64,10 @@ contract MockSsuData is Script {
         ""
       );
     }
+
+    uint256 smartStorageUnitId = vm.envUint("SSU_ID");
+    uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
+    createAnchorAndOnline(smartStorageUnitId, player, inventoryItem);
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](1);
