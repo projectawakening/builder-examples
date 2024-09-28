@@ -20,6 +20,7 @@ import { SmartDeployableLib } from "@eveworld/world/src/modules/smart-deployable
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
+import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
 
 contract MockData is Script {
   using SmartCharacterUtils for bytes14;
@@ -59,14 +60,16 @@ contract MockData is Script {
     });
 
     //Create a smart character
-    smartCharacter.createCharacter(
-      11111,
-      address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
-      100,
-      EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
-      EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
-      "tokenCid"
-    );
+    if (CharactersByAddressTable.get(player) == 0) {
+      smartCharacter.createCharacter(
+        11111,
+        address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
+        100,
+        EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
+        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        "tokenCid"
+      );
+    }
 
     anchorAndOnlineSmartTurret(smartTurretId);
 
