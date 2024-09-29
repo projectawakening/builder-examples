@@ -40,7 +40,7 @@ pnpm deploy:local --worldAddress <worldAddress>
 **Devnet Deployment**
 This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
 ```bash
-pnpm deploy:devnet --worldAddress <worldAddress> 
+pnpm deploy:garnet --worldAddress <worldAddress> 
 ```
 
 
