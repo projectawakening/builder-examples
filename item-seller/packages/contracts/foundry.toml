@@ -23,5 +23,5 @@ extra_output_files = [
 ]
 fs_permissions = [{ access = "read", path = "./"}]
 
-[profile.devnet]
+[profile.garnet]
 eth_rpc_url = "https://devnet-game-sync.nursery.reitnorf.com"
