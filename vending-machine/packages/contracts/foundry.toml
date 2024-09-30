@@ -25,3 +25,6 @@ fs_permissions = [{ access = "read", path = "./"}]
 
 [profile.testnet]
 eth_rpc_url = "https://testnet-game-sync.nursery.reitnorf.com"
+
+[profile.docker]
+eth_rpc_url = "https://testnet-game-sync.nursery.reitnorf.com"

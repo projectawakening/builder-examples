@@ -9,11 +9,13 @@ services:
     ports:
       - "8545:8545"
     healthcheck:
-      test: [ "CMD-SHELL", "anvil --help || exit 1" ]
+      test: ["CMD-SHELL", "anvil --help || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 20s
+      start_period: 20s    
+    networks:
+      - myNet
 
   world-deployer:
     container_name: world-deployer
@@ -23,4 +25,20 @@ services:
       foundry:
         condition: service_healthy
     command: "--rpc-url http://foundry:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-    tty: true
+    tty: true    
+    networks:
+      - myNet
+    
+  dev:
+    container_name: dev
+    build:
+      context: .
+      dockerfile: ./docker-file.dockerfile
+    networks:
+      - myNet    
+    volumes:
+      - ./:/usr/src/builder-examples
+
+networks:
+  myNet:
+    driver: bridge
