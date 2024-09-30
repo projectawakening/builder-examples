@@ -23,8 +23,10 @@ extra_output_files = [
 ]
 fs_permissions = [{ access = "read", path = "./"}]
 
-[profile.testnet]
-eth_rpc_url = "https://testnet-game-sync.nursery.reitnorf.com"
+[profile.garnet]
+# Public Testnet
+eth_rpc_url = "https://rpc.garnetchain.com"
 
-[profile.docker]
-eth_rpc_url = "https://testnet-game-sync.nursery.reitnorf.com"
+[profile.redstone]
+# Public Mainnet
+eth_rpc_url = "https://rpc.redstonechain.com"

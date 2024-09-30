@@ -6,8 +6,11 @@
   "scripts": {
     "build": "mud build",
     "clean": "forge clean && rimraf src/codegen",
-    "deploy:local": ". ./.env && pnpm run build && mud deploy --rpc $RPC_URL",
-    "deploy:garnet": "pnpm run build && mud deploy --profile=testnet",
+    "deploy:local": "pnpm run build && mud deploy",
+    "deploy:devnet": "pnpm run build && mud deploy --profile=devnet",
+    "deploy:testnet": "pnpm run build && mud deploy --profile=testnet",
+    "deploy:garnet": "pnpm run build && mud deploy --profile=garnet",
+    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
