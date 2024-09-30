@@ -7,7 +7,7 @@
     "build": "mud build",
     "clean": "forge clean && shx rm -rf src/**/codegen",
     "deploy:garnet": "mud deploy --profile=garnet",
-    "deploy:local": "mud deploy",
+    "deploy:local": ". ./.env && pnpm run build && mud deploy --rpc $RPC_URL",
     "deploy:redstone": "mud deploy --profile=redstone",
     "dev": "mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
