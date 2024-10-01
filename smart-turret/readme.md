@@ -30,12 +30,20 @@ This will deploy the contracts to your local world.
 pnpm deploy:local --worldAddress <worldAddress> 
 ```
 
-**Devnet Deployment**
-This will deploy the contracts to the Devnet world. You can retrieve the world address through https://blockchain-gateway-oblivion.nursery.reitnorf.com/config and then replace <worldAddress> with the world address. 
+**Devnet/Production Deployment**
+To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
+
+Devnet which connects to Nova - Builder Sandbox
+
+https://blockchain-gateway-nova.nursery.reitnorf.com/config
 
 ```bash
-pnpm deploy:garnet --worldAddress <worldAddress> 
+pnpm run deploy:devnet --worldAddress <worldAddress> 
 ```
+
+Production which connects to Nebula
+
+https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
 
 eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
