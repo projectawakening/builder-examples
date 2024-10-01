@@ -48,6 +48,7 @@ https://blockchain-gateway-nebula.nursery.reitnorf.com/config
 eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
+
 ![alt text](./readme-imgs/deployment.png)
 
 
@@ -75,7 +76,7 @@ WORLD_ADDRESS=
 ```
 For Nova or Nebula, Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
 
-Right click your Smart Storage Unit, and open the dapp window and copy the smart storage unit id.
+Right click your Smart Storage Unit, click Interact and open the dapp window and copy the smart storage unit id.
 
 ![alt text](../readme-imgs/ssuid.png)
 
@@ -85,6 +86,8 @@ SSU_ID=3481834403966808803225929920962421706680919472138771478847215818250287024
 ```
 
 For Nova or Nebula, the Inventory item id can be copied from the world api by using the below links and replace the `ssu_id` by your own SSU_ID.
+
+NOTE: Its a prerequisite to have already deposit the item into the SSU. This is to ensure that the game logic has updated those specific item data on-chain.
 
 https://blockchain-gateway-nebula.nursery.reitnorf.com/smartassemblies/<ssu_id>
 https://blockchain-gateway-nova.nursery.reitnorf.com/smartassemblies/<ssu_id>

@@ -89,6 +89,7 @@ contract MockSsuData is Script {
 
     uint256 inventoryItemIn = vm.envUint("ITEM_IN_ID");
     uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
+    address erc20Address = vm.envAddress("ERC20_TOKEN_ADDRESS");
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](2);

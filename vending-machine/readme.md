@@ -29,7 +29,6 @@ This will deploy the contracts to your local world.
 ```bash
 pnpm deploy:local --worldAddress <worldAddress> 
 ```
-
 **Devnet/Production Deployment**
 To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
 
@@ -45,26 +44,102 @@ Production which connects to Nebula
 
 https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
 
+eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract. 
 ![alt text](./readme-imgs/deployment.png)
 
+
 ### Step 1: Setup the environment variables 
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the values you copied earlier:
+Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
+
+You can change values in the .env file for Nova and Nebula, though they are optional for local testing.
+
+For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
 
 ```bash
-#WORLD ADDRESS COPIED FROM DOCKER LOGS
-WORLD_ADDRESS=
-
-#DON'T NEED TO CHANGE IF YOUR RUNNING LOCALLY
-SSU_ID=
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-You can adjust the remaining values in the .env file as needed, though they are optional.
+For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
 
-<details markdown="block">
-<summary>Customizing optional environment values</summary>
+https://blockchain-gateway-nova.nursery.reitnorf.com/config
+https://blockchain-gateway-nebula.nursery.reitnorf.com/config
 
-#### Items
-You can set the items in and out to change which items you trade for. 
+![alt text](../readme-imgs/worldAddress.png)
+
+```bash
+#WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
+WORLD_ADDRESS=
+```
+
+For Nova or Nebula, Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
+
+Right click your Smart Storage Unit, and open the dapp window and copy the smart storage unit id.
+
+![alt text](../readme-imgs/ssuid.png)
+
+```bash
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
+```
+
+For Nova or Nebula, You can get the item you want to sell and the item you want to buy from the world api by using the below links and replace the `ssu_id` by your own SSU_ID.
+
+NOTE: Its a prerequisite to have already deposited these items into the SSU. This is to ensure that the game logic has updated those specific items data on-chain.
+
+https://blockchain-gateway-nebula.nursery.reitnorf.com/smartassemblies/<ssu_id>
+https://blockchain-gateway-nova.nursery.reitnorf.com/smartassemblies/<ssu_id>
+
+You should now have similar JSON to this. You want to get the item ID from the itemId in the storage items array and ephemeralInventoryItems array. The item ID should look something like: 
+
+```json
+"112603025077760770783264636189502217226733230421932850697496331082050661822826"
+```
+
+```json
+"inventory": {
+  "storageCapacity": 100000000000000,
+  "usedCapacity": 490000000000,
+  "storageItems": [
+    {
+      "typeId": 77518,
+      "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
+      "quantity": 49,
+      "name": "Lens 3X",
+      "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
+    }
+  ],
+  "ephemeralInventoryList": [
+    {
+      "ownerId": "0xbc07106cc909d37e36a1c3db35411805836bdf67",
+      "ownerName": "skygirl",
+      "storageCapacity": 1000000000000,
+      "usedCapacity": 10000000000,
+      "ephemeralInventoryItems": [
+        {
+          "typeId": 77518,
+          "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
+          "quantity": 1,
+          "name": "Lens 3X",
+          "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
+        }
+      ]
+    }
+  ]
+},
+```
+
+Fetch the `itemId` from `{inventory.storageItems.itemId}`
+
+![alt text](../readme-imgs/itemIds.png)
+
+```bash
+#ITEM IN : SALT
+ITEM_IN_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
+#ITEM OUT : LENS
+ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
+```
 
 ```bash
 #ITEM ID 77800 - Common Ore
@@ -73,7 +148,6 @@ ITEM_IN_ID=888
 ITEM_OUT_ID=999
 ```
 
-#### Ratios
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
 
 You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
@@ -84,8 +158,6 @@ IN_RATIO=1
 #OUT Ratio
 OUT_RATIO=2
 ```
-
-</details>
 
 ### Step 2: Mock data for the existing world **(Local Development Only)**
 To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.

@@ -59,57 +59,49 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 
 ### Step 1: Setup the environment variables 
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the values you copied earlier:
+Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
+
+You can change values in the .env file for Nova and Nebula, though they are optional for local testing.
+
+For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
 
 ```bash
-#WORLD ADDRESS COPIED FROM DOCKER LOGS
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
+
+https://blockchain-gateway-nova.nursery.reitnorf.com/config
+https://blockchain-gateway-nebula.nursery.reitnorf.com/config
+
+![alt text](../readme-imgs/worldAddress.png)
+
+```bash
+#WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
 WORLD_ADDRESS=
 
-#ERC20 TOKEN ADDRESS COPIED FROM ITEM SELLER DEPLOYMENT
+#ERC20 TOKEN ADDRESS COPIED FROM ITEM SELLER DEPLOYMENT FOR LOCAL
 ERC20_TOKEN_ADDRESS=
-
-#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
-SSU_ID=
 ```
 
-You can adjust the remaining values in the .env file as needed, though they are optional.
+For Nova or Nebula, Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
 
+Right click your Smart Storage Unit, and open the dapp window and copy the smart storage unit id.
 
-<details markdown="block">
-<summary>Changing optional environment values</summary>
-
-### Setting item, price and payment address
-You can set the item you want to sell, the address that receives payments and the price in Wei. 10^18 wei is equal to one Ether. For example, 
-1. if one lens is 5 Tokens then the price is 5 * 10^18.  
-2. If 5 lenses cost 1 Token then the price is 2 * 10^17 
-The default is 500000000000000000 which is 2 lens per token
+![alt text](../readme-imgs/ssuid.png)
 
 ```bash
-##### ITEM SELLER CONFIGURATION
-#ITEM ID 77800 - Common Ore
-INVENTORY_ITEM_ID=1235
-
-#The address that receives the payments
-RECEIVER_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-
-##PRICE SHOULD BE IN WEI
-PRICE_IN_WEI=500000000000000000
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 ```
 
-To get the INVENTORY_ITEM_ID you can follow these steps:
+For Nova or Nebula, the Inventory item id can be copied from the world api by using the below links and replace the `ssu_id` by your own SSU_ID.
 
-#### Step 0:
-Right click your SSU, open the dapp window and copy the smart storage unit id.
+NOTE: Its a prerequisite to have already deposited these items into the SSU. This is to ensure that the game logic has updated those specific items data on-chain.
 
-> [!CAUTION]
-> TODO: FINALIZE THIS SECTION.
+https://blockchain-gateway-nebula.nursery.reitnorf.com/smartassemblies/<ssu_id>
+https://blockchain-gateway-nova.nursery.reitnorf.com/smartassemblies/<ssu_id>
 
-![alt text](./readme-imgs/ssu_view.png)
-
-#### Step 1:
-Once you have your SSU ID, you can go to https://blockchain-gateway-test.nursery.reitnorf.com/smartdeployables/ssu_id (and replace ssu_id with your copied SSU ID). 
-
-#### Step 2:
 You should now have similar JSON to this. You want to get the item ID from the itemId in the storage items array and ephemeralInventoryItems array. The item ID should look something like: 
 
 ```json
@@ -149,7 +141,28 @@ You should now have similar JSON to this. You want to get the item ID from the i
 },
 ```
 
-</details>
+Fetch the `itemId` from `{inventory.storageItems.itemId}`
+
+![alt text](../readme-imgs/itemIds.png)
+
+```bash
+INVENTORY_ITEM_ID=112603025077760770783264636189502217226733230421932850697496331082050
+```
+
+### Setting item, price and payment address
+You can set the address that receives payments and the price in Wei. 10^18 wei is equal to one Ether. For example, 
+1. if one lens is 5 Tokens then the price is 5 * 10^18.  
+2. If 5 lenses cost 1 Token then the price is 2 * 10^17 
+The default is 500000000000000000 which is 2 lens per token
+
+```bash
+##### ITEM SELLER CONFIGURATION
+#The address that receives the payments
+RECEIVER_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+
+##PRICE SHOULD BE IN WEI
+PRICE_IN_WEI=500000000000000000
+```
 
 
 ### Step 2: Mock data for the existing world **(Local Development Only)**
