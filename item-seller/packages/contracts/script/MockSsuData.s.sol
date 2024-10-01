@@ -35,7 +35,10 @@ contract MockSsuData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address player = vm.addr(deployerPrivateKey);
+    address owner = vm.addr(deployerPrivateKey);
+
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -54,11 +57,22 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
+    if (CharactersByAddressTable.get(owner) == 0) {
+      smartCharacter.createCharacter(
+        200001,
+        owner,
+        1221,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        11111166565,
+        200002,
         player,
-        1005555,
+        1221,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""
@@ -67,13 +81,13 @@ contract MockSsuData is Script {
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
-    createAnchorAndOnline(smartStorageUnitId, player, inventoryItem);
+    createAnchorAndOnline(smartStorageUnitId, owner, inventoryItem);
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](1);
     items[0] = InventoryItem({
       inventoryItemId: inventoryItem,
-      owner: player,
+      owner: owner,
       itemId: 0,
       typeId: 23,
       volume: 10,
@@ -84,12 +98,12 @@ contract MockSsuData is Script {
     vm.stopBroadcast();
   }
 
-  function createAnchorAndOnline(uint256 smartStorageUnitId, address player, uint256 inventoryItem) private {
+  function createAnchorAndOnline(uint256 smartStorageUnitId, address owner, uint256 inventoryItem) private {
     //Create, anchor the ssu and bring online
     smartStorageUnit.createAndAnchorSmartStorageUnit(
       smartStorageUnitId,
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: player, tokenURI: "test" }),
+      SmartObjectData({ owner: owner, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionPerMinute,
