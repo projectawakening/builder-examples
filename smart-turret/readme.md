@@ -38,7 +38,7 @@ Devnet which connects to Nova - Builder Sandbox
 https://blockchain-gateway-nova.nursery.reitnorf.com/config
 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
 
 Production which connects to Nebula
