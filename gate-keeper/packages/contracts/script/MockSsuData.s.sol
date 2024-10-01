@@ -37,7 +37,10 @@ contract MockSsuData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address player = vm.addr(deployerPrivateKey);
+    address admin = vm.addr(deployerPrivateKey);
+
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -62,9 +65,18 @@ contract MockSsuData is Script {
     });
 
     smartCharacter.createCharacter(
-      1250081923,
+      0000001,
+      admin,
+      200003,
+      CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+      EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
+      ""
+    );
+
+    smartCharacter.createCharacter(
+      0000002,
       player,
-      22662,
+      200003,
       CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
       EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
       ""
@@ -72,32 +84,32 @@ contract MockSsuData is Script {
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
-    createAnchorAndOnline(smartStorageUnitId, player, inventoryItem);
+    createAnchorAndOnline(smartStorageUnitId, admin, inventoryItem);
 
     //Create item entity record on-chain
     entityRecord.createEntityRecord(inventoryItem, 0, 23, 50);
 
-    //Put some items in the player ephemeral inventory
+    //Put some items in the admin ephemeral inventory
     InventoryItem[] memory items = new InventoryItem[](1);
     items[0] = InventoryItem({
       inventoryItemId: inventoryItem,
-      owner: player,
+      owner: admin,
       itemId: 0,
       typeId: 23,
       volume: 10,
       quantity: 15
     });
-    smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, items);
+    smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, admin, items);
 
     vm.stopBroadcast();
   }
 
-  function createAnchorAndOnline(uint256 smartStorageUnitId, address player, uint256 inventoryItem) private {
+  function createAnchorAndOnline(uint256 smartStorageUnitId, address admin, uint256 inventoryItem) private {
     //Create, anchor the ssu and bring online
     smartStorageUnit.createAndAnchorSmartStorageUnit(
       smartStorageUnitId,
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: player, tokenURI: "test" }),
+      SmartObjectData({ owner: admin, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionPerMinute,

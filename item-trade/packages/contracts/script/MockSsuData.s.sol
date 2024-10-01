@@ -44,7 +44,6 @@ contract MockSsuData is Script {
 
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
-    address erc20Address = vm.envAddress("ERC20_TOKEN_ADDRESS");
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -65,9 +64,20 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        11111166565,
+        50001,
         player,
-        1005555,
+        343434,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+
+    if (CharactersByAddressTable.get(owner) == 0) {
+      smartCharacter.createCharacter(
+        50002,
+        owner,
+        444434,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""

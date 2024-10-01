@@ -59,9 +59,9 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        11111166565,
+        777000011,
         player,
-        1005555,
+        7777,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
         ""
@@ -70,9 +70,9 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(owner) == 0) {
       smartCharacter.createCharacter(
-        11111166565,
+        777000022,
         owner,
-        1005555,
+        8888,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""

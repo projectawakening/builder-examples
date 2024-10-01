@@ -38,7 +38,10 @@ contract MockData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address player = vm.addr(deployerPrivateKey);
+    address admin = vm.addr(deployerPrivateKey);
+
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -62,8 +65,8 @@ contract MockData is Script {
     //Create a smart character
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        11111,
-        address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
+        77777,
+        player,
         100,
         EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
         EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
@@ -71,17 +74,14 @@ contract MockData is Script {
       );
     }
 
-    anchorAndOnlineSmartTurret(smartTurretId);
+    anchorAndOnlineSmartTurret(smartTurretId, player);
 
     vm.stopBroadcast();
   }
 
-  function anchorAndOnlineSmartTurret(uint256 smartObjectId) public {
+  function anchorAndOnlineSmartTurret(uint256 smartObjectId, address player) public {
     EntityRecordData memory entityRecordData = EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 });
-    SmartObjectData memory smartObjectData = SmartObjectData({
-      owner: address(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),
-      tokenURI: "test"
-    });
+    SmartObjectData memory smartObjectData = SmartObjectData({ owner: player, tokenURI: "test" });
     WorldPosition memory worldPosition = WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) });
 
     uint256 fuelUnitVolume = 100;
