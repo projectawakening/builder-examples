@@ -68,7 +68,7 @@ contract MockData is Script {
       smartCharacter.createCharacter(
         666666666,
         player,
-        0000006,
+        3434306,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
         ""
