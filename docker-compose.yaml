@@ -13,7 +13,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 20s    
+      start_period: 20s
     networks:
       - devNet
 
@@ -25,19 +25,18 @@ services:
       foundry:
         condition: service_healthy
     command: "--rpc-url http://foundry:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-    tty: true    
+    tty: true
     networks:
       - devNet
-    
-  dev:
-    container_name: dev
-    build:
-      context: .
-      dockerfile: ./docker-file.dockerfile
+
+  dev-environment:
+    container_name: dev-environment
+    image: ghcr.io/projectawakening/builder-dev-environment:0.0.1
     networks:
-      - devNet    
+      - devNet
+    tty: true
     volumes:
-      - ./:/usr/src/builder-examples
+      - ./:/builder-examples
 
 networks:
   devNet:
