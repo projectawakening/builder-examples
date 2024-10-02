@@ -20,6 +20,7 @@ import { EntityRecordLib } from "@eveworld/world/src/modules/entity-record/Entit
 import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
 import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
 import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
+import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
 
 contract MockSsuData is Script {
   using SmartDeployableLib for SmartDeployableLib.World;
@@ -64,23 +65,27 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    smartCharacter.createCharacter(
-      0000001,
-      admin,
-      200003,
-      CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-      EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
-      ""
-    );
+    if (CharactersByAddressTable.get(admin) == 0) {
+      smartCharacter.createCharacter(
+        123,
+        admin,
+        200003,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
 
-    smartCharacter.createCharacter(
-      0000002,
-      player,
-      200003,
-      CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-      EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
-      ""
-    );
+    if (CharactersByAddressTable.get(player) == 0) {
+      smartCharacter.createCharacter(
+        456,
+        player,
+        200003,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
