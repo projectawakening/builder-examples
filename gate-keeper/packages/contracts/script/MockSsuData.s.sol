@@ -67,7 +67,7 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(
-        123,
+        333333,
         admin,
         200003,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
@@ -78,9 +78,9 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        456,
+        66666,
         player,
-        200003,
+        200004,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""
@@ -89,7 +89,7 @@ contract MockSsuData is Script {
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 inventoryItem = vm.envUint("INVENTORY_ITEM_ID");
-    createAnchorAndOnline(smartStorageUnitId, admin, inventoryItem);
+    createAnchorAndOnline(smartStorageUnitId, admin);
 
     //Create item entity record on-chain
     entityRecord.createEntityRecord(inventoryItem, 0, 23, 50);
@@ -109,7 +109,7 @@ contract MockSsuData is Script {
     vm.stopBroadcast();
   }
 
-  function createAnchorAndOnline(uint256 smartStorageUnitId, address admin, uint256 inventoryItem) private {
+  function createAnchorAndOnline(uint256 smartStorageUnitId, address admin) private {
     //Create, anchor the ssu and bring online
     smartStorageUnit.createAndAnchorSmartStorageUnit(
       smartStorageUnitId,
