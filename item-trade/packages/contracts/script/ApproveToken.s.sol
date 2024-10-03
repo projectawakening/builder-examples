@@ -20,9 +20,9 @@ import { ItemTradeSystem } from "../src/systems/ItemTradeSystem.sol";
 contract ApproveToken is Script {
   function run(address worldAddress) external {
     // Private key for the ERC20 Contract owner/deployer loaded from ENV
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 ownerPrivateKey = vm.envUint("PRIVATE_KEY");
     address tokenAddress = vm.envAddress("ERC20_TOKEN_ADDRESS");
-    address owner = vm.addr(playerPrivateKey);
+    address owner = vm.addr(ownerPrivateKey);
 
     console.log(owner);
 
@@ -34,7 +34,7 @@ contract ApproveToken is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
-    vm.startBroadcast(playerPrivateKey);
+    vm.startBroadcast(ownerPrivateKey);
     ResourceId systemId = Utils.itemSellerSystemId();
     address itemSellerAddress = abi.decode(
       world.call(systemId, abi.encodeCall(ItemTradeSystem.getItemTradeContractAddress, ())),

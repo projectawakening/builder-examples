@@ -10,7 +10,7 @@ The gate keeper allows you to crowdfund items toward a specific goal. For exampl
 For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
 ## Deployment and Testing
-### Step 0: Deploy the gate keeper contracts to the existing world 
+### Step 0: Deploy the gate keeper contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
 ![alt text](../readme-imgs/docker_deployment.png)
@@ -34,52 +34,71 @@ pnpm deploy:local --worldAddress <worldAddress>
 To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
 
 Devnet which connects to Nova - Builder Sandbox
- 
+
 https://blockchain-gateway-nova.nursery.reitnorf.com/config
 
 ```bash
-pnpm run deploy:devnet --worldAddress <worldAddress> 
+pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
 
 Production which connects to Nebula
- 
+
 https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
 
-```bash
-pnpm run deploy:prod --worldAddress <worldAddress> 
-```
-
-eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Gate Keeper contract. <br>
+
 ![alt text](./readme-imgs/deployment.png)
 
 
 ### Step 1: Setup the environment variables 
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the values you copied earlier:
+Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
 
-If you are on Devnet, then you can get your SSU_ID through 
+You can change values in the .env file for Nova and Nebula, though they are optional for local testing.
+
+For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
 
 ```bash
-#WORLD ADDRESS COPIED FROM DOCKER LOGS
-WORLD_ADDRESS=
-
-#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
-SSU_ID=
+PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-You can adjust the remaining values in the .env file as needed, though they are optional.
+For Nova and Nebula, get the world address from the configs
 
+https://blockchain-gateway-nova.nursery.reitnorf.com/config
+https://blockchain-gateway-nebula.nursery.reitnorf.com/config
 
-<details markdown="block">
-<summary>Changing optional environment values</summary>
+![alt text](../readme-imgs/worldAddress.png)
 
-#### Setting item wanted and amount
-You can set the item you want to crowdfund and the quantity for the goal.
+```bash
+#WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
+WORLD_ADDRESS=
+```
+For Nova or Nebula, Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
+
+Right click your Smart Storage Unit, click Interact and open the dapp window and copy the smart storage unit id.
+
+![alt text](../readme-imgs/ssuid.png)
+
+```bash
+#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
+SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
+```
+
+For Nova or Nebula, the Inventory item id can be copied from the world api by using the below links and replace the `ssu_id` by your own SSU_ID.
+
+NOTE: Its a prerequisite to have already deposit the item into the SSU. This is to ensure that the game logic has updated those specific item data on-chain.
+
+https://blockchain-gateway-nebula.nursery.reitnorf.com/smartassemblies/<ssu_id>
+https://blockchain-gateway-nova.nursery.reitnorf.com/smartassemblies/<ssu_id>
+
+Fetch the `itemId` from `{inventory.storageItems.itemId}`
+
+![alt text](readme-imgs/itemId.png)
 
 ```bash
 #Item for the goal
-INVENTORY_ITEM_ID=1135
+INVENTORY_ITEM_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 #Quantity needed to reach the goal
 TARGET_QUANTITY=10
 ```

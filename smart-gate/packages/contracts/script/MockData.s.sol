@@ -41,7 +41,10 @@ contract MockData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address player = vm.addr(deployerPrivateKey);
+    address admin = vm.addr(deployerPrivateKey);
+
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -63,9 +66,9 @@ contract MockData is Script {
     //Create a smart character
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        111901,
+        666666666,
         player,
-        555,
+        3434306,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
         ""
@@ -78,11 +81,11 @@ contract MockData is Script {
     vm.stopBroadcast();
   }
 
-  function anchorFuelAndOnline(uint256 smartObjectId, address owner) public {
+  function anchorFuelAndOnline(uint256 smartObjectId, address player) public {
     smartGate.createAndAnchorSmartGate(
       smartObjectId,
       EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 }),
-      SmartObjectData({ owner: owner, tokenURI: "test" }),
+      SmartObjectData({ owner: player, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionIntervalInSeconds,

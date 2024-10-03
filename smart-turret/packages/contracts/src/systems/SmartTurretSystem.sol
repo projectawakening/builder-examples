@@ -25,6 +25,7 @@ import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/m
  * @dev This contract is an example for implementing logic to a smart turret
  */
 contract SmartTurretSystem is System {
+  using EntityRecordUtils for bytes14;
   using SmartDeployableUtils for bytes14;
   using SmartCharacterUtils for bytes14;
 

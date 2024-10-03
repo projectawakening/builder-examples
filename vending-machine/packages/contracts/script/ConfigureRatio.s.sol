@@ -15,7 +15,7 @@ import { VendingMachineSystem } from "../src/systems/vending_machine/VendingMach
 contract ConfigureRatio is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     vm.startBroadcast(playerPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
