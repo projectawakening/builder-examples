@@ -33,7 +33,7 @@ contract SmartTurretSystem is System {
    * @dev a function to implement logic for smart turret based on proximity
    * @param smartTurretId The smart turret id
    * @param characterId is the owner of the smart turret
-   * @param priorityQueue is the queue of exisitng targets ordered by priority, index 0 being the lowest priority
+   * @param priorityQueue is the queue of existing targets ordered by priority, index 0 being the lowest priority
    * @param turret is the turret data
    * @param turretTarget is the target data
    */
@@ -52,7 +52,7 @@ contract SmartTurretSystem is System {
    * @dev a function to implement logic for smart turret based on aggression
    * @param smartTurretId The smart turret id
    * @param characterId is the owner of the smart turret
-   * @param priorityQueue is the queue of exisitng targets ordered by priority, index 0 being the lowest priority
+   * @param priorityQueue is the queue of existing targets ordered by priority, index 0 being the lowest priority
    * @param turret is the turret data
    * @param aggressor is the aggressor
    * @param victim is the victim
