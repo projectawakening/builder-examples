@@ -30,8 +30,8 @@ importers:
         specifier: 8.29.0
         version: 8.29.0
       mprocs:
-        specifier: ^0.6.4
-        version: 0.6.4
+        specifier: ^0.7.1
+        version: 0.7.1
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -11337,8 +11337,8 @@ packages:
       '@motionone/vue': 10.16.4
     dev: true
 
-  /mprocs@0.6.4:
-    resolution: {integrity: sha512-Y4eqnAjp3mjy0eT+zPoMQ+P/ISOzjgRG/4kh4I5cRA4Tv0rPxTCBRadn3+j+boMF5id7IoLhrVq9NFWFPuzD9A==}
+  /mprocs@0.7.1:
+    resolution: {integrity: sha512-v22SIwcOphZm6XLdNfeHf4ZDYHqV1hghyfqNLwmZ604lEXlEkiuazYBWUz3xEB2GdABEAKfCZ8qiOVIoREM6CQ==}
     engines: {node: '>=0.10.0'}
     hasBin: true
     dev: true
