@@ -29,6 +29,8 @@ This will deploy the contracts to your local world.
 ```bash
 pnpm deploy:local --worldAddress <worldAddress> 
 ```
+**Devnet/Production Deployment**
+To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
 
 **Devnet/Production Deployment**
 To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 

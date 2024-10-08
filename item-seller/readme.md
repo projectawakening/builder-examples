@@ -52,7 +52,11 @@ Production which connects to Nebula
 
 https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
 
-eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
+```bash
+pnpm run deploy:prod --worldAddress <worldAddress> 
+```
+
+eg: `pnpm run deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Item Seller contract and a test ERC20 token required for the Item Seller. Be sure to copy the ERC20 token address and save it for future use.
 ![alt text](./readme-imgs/deployment.png)
