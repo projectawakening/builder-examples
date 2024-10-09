@@ -3,6 +3,7 @@ import { App } from "./App";
 import { setup } from "./mud/setup";
 import { MUDProvider } from "./MUDContext";
 import mudConfig from "contracts/mud.config";
+import React from "react";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -13,7 +14,7 @@ setup().then(async (result) => {
   root.render(
     <MUDProvider value={result}>
       <App />
-    </MUDProvider>,
+    </MUDProvider>
   );
 
   // https://vitejs.dev/guide/env-and-mode.html

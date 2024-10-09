@@ -11,7 +11,11 @@
     "test": "tsc --noEmit"
   },
   "dependencies": {
+    "@eveworld/types": "^0.0.5",
+    "@eveworld/ui-components": "^0.0.6",
+    "@eveworld/utils": "^0.0.5",
     "@latticexyz/common": "2.2.9",
+    "@latticexyz/faucet": "2.2.9",
     "@latticexyz/dev-tools": "2.2.9",
     "@latticexyz/react": "2.2.9",
     "@latticexyz/schema-type": "2.2.9",
@@ -19,18 +23,22 @@
     "@latticexyz/utils": "2.2.9",
     "@latticexyz/world": "2.2.9",
     "contracts": "workspace:*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "rxjs": "7.5.5",
+    "tailwindcss": "^3.4.12",
     "viem": "2.21.6"
   },
   "devDependencies": {
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.20",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
-    "vite": "^4.2.1",
-    "wait-port": "^1.0.4"
+    "postcss": "^8.4.47",
+    "vite": "^4.5.5",
+    "vite-plugin-svgr": "3.3.0",
+    "wait-port": "^1.1.0"
   }
 }
