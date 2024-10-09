@@ -20,6 +20,7 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@ev
 import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
+import { TurretWhitelist } from "../codegen/tables/TurretWhitelist.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart turret
@@ -44,8 +45,29 @@ contract SmartTurretSystem is System {
     Turret memory turret,
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //TODO: Implement the logic
+    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+
+    for(uint256 i = 0; i < whitelist.length; i++){      
+      console.log("WHITELIST", whitelist[i]);
+    }
+    
     return priorityQueue;
+  }
+
+  function addToWhitelist(uint256 smartTurretId, uint256 characterId) public {    
+    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+
+    uint256[] memory newWhitelist = new uint256[](whitelist.length+1);
+    
+    for(uint256 i = 0; i < whitelist.length; i++){
+      newWhitelist[i] = whitelist[i];
+    }
+
+    console.log("ADDING TO WHITELIST", characterId);
+
+    newWhitelist[newWhitelist.length-1] = characterId;
+
+    TurretWhitelist.set(smartTurretId, newWhitelist);
   }
 
   /**

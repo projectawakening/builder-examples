@@ -21,6 +21,8 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
 import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
+import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
+import { Utils } from "../src/systems/Utils.sol";
 
 contract MockData is Script {
   using SmartCharacterUtils for bytes14;
@@ -73,6 +75,11 @@ contract MockData is Script {
         "tokenCid"
       );
     }
+    
+    IBaseWorld world = IBaseWorld(worldAddress);
+    ResourceId systemId = Utils.smartTurretSystemId();
+
+    world.call(systemId, abi.encodeCall(SmartTurretSystem.addToWhitelist, (smartTurretId, 77777)));
 
     anchorAndOnlineSmartTurret(smartTurretId, player);
 
