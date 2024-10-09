@@ -31,6 +31,8 @@ contract ExecuteInProximity is Script {
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     vm.startBroadcast(playerPrivateKey);
 
+    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
+
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
@@ -39,11 +41,8 @@ contract ExecuteInProximity is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
-
     console.log("-------------------");
     console.log("Deployable State:", uint8(DeployableState.getCurrentState(smartTurretId)));
-
     console.log("-------------------");
     console.log("TESTING NOT WHITELISTED");
 
@@ -95,6 +94,7 @@ contract ExecuteInProximity is Script {
       shieldRatio: 100,
       armorRatio: 100
     });
+    
     priorityQueue[1] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
 
     TargetPriority[] memory returnTargetQueueWhitelisted = smartTurret.inProximity(

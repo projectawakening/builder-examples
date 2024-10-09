@@ -79,7 +79,7 @@ contract SmartTurretSystem is System {
     } 
     //Check if the character is in the queue
     else{
-      bool found = false;      
+      found = false;      
       //Clone current priorityQueue
       for (uint256 i = 0; i < priorityQueue.length; i++) {
         if(turretTarget.characterId == priorityQueue[i].target.characterId) found = true;
@@ -102,8 +102,7 @@ contract SmartTurretSystem is System {
 
       //Return the original queue
       return priorityQueue;
-    }
-    
+    }    
   }
 
   /**
