@@ -45,47 +45,67 @@ contract SmartTurretSystem is System {
     Turret memory turret,
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
+    //Get MUD whitelist table
     uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+
+    //Log the character ID
+    console.log("CHARACTER ID", turretTarget.characterId);
 
     bool found = false;
 
-    console.log("CHARACTER ID", characterId);
-
+    //Check through whitelist
     for(uint256 i = 0; i < whitelist.length; i++){      
       console.log("WHITELIST", whitelist[i]);
-      if(characterId == whitelist[i]) found = true;
+      if(turretTarget.characterId == whitelist[i]) found = true;
     }
 
+    //If the character isn't in the whitelist
     if(!found){
+      //Create new array to add to
       updatedPriorityQueue = new TargetPriority[](priorityQueue.length + 1);
 
+      //Clone current priorityQueue
       for (uint256 i = 0; i < priorityQueue.length; i++) {
         updatedPriorityQueue[i] = priorityQueue[i];
       }
 
-      updatedPriorityQueue[priorityQueue.length] = TargetPriority({ target: turretTarget, weight: 1 }); //should the weight be 1? or the heighest of all weights in the array ?
+      //Add to the target queue
+      updatedPriorityQueue[priorityQueue.length] = TargetPriority({ target: turretTarget, weight: 1 }); 
     
-      console.log("ADD TO QUEUE");
+      console.log("ADD TO QUEUE", turretTarget.characterId);
 
+      //Return the new queue
       return updatedPriorityQueue;
     }
     
+    //Return the original queue
     return priorityQueue;
   }
 
+  /**
+   * @dev a function to add a character to the whitelist
+   * @param smartTurretId The smart turret id
+   * @param characterId is the owner to add 
+   */
   function addToWhitelist(uint256 smartTurretId, uint256 characterId) public {    
+    //Get current whitelist
     uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
 
+    //Create new whitelist
     uint256[] memory newWhitelist = new uint256[](whitelist.length+1);
     
+    //Clone current whitelist
     for(uint256 i = 0; i < whitelist.length; i++){
       newWhitelist[i] = whitelist[i];
     }
 
+    //Log character ID
     console.log("ADDING TO WHITELIST", characterId);
 
+    //Add to whitelist
     newWhitelist[newWhitelist.length-1] = characterId;
 
+    //Set the MUD table data
     TurretWhitelist.set(smartTurretId, newWhitelist);
   }
 
