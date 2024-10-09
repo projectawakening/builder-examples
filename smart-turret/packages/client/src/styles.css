@@ -2,3 +2,32 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "@eveworld/ui-components/styles";
+
+body,
+#root {
+  background-image: url("./assets/background.gif");
+  height: 100%;
+}
+
+@layer base {
+  div.TextField:focus-within .MuiFormControl-root.MuiTextField-root {
+    @apply border-neutral;
+  }
+}
+
+@layer components {
+
+}
+
+@layer utilities {
+  .empty-span-full:has(+ .Eve-Module:empty) {
+    @apply col-span-full;
+  }
+}
+
+.Custom-Title{
+    font-size:30px;
+    font-weight: bolder;
+    text-align:center;
+}
+

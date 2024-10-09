@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "test",
+  namespace: "dapp_dev",
   tables: {
     TurretWhitelist: {
       schema: {
@@ -10,5 +10,12 @@ export default defineWorld({
       },
       key: ["smartObjectId"],
     },
+    TestList: {      
+      schema: {
+        smartObjectId: "uint256",
+        whitelist: "uint256"
+      },
+      key: ["smartObjectId"],
+    }
   },
 });

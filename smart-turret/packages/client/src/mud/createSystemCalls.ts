@@ -29,6 +29,21 @@ export function createSystemCalls(
 	 * And must be used with the test__ prefix due to namespacing
 	 */
 
+  const getWhitelist = async (id) => {
+		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
+    console.log(result);
+		return result;
+	};
+
+  const addToWhitelist = async (id) => {
+		await worldContract.write.dapp_dev__addToWhitelist([
+			42286255167959065515159482724089294794766243679345523240407516329986919866605,
+      id
+		]);		
+	};
+
 	return {
+    getWhitelist,
+    addToWhitelist
 	};
 }
