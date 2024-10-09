@@ -43,10 +43,15 @@ contract ExecuteInProximity is Script {
 
     console.log(uint8(DeployableState.getCurrentState(smartTurretId)));
 
+    /*
     console.logBool(ResourceIds.getExists(SmartTurretConfigTable.get(smartTurretId)));
 
     console.log(CharactersTable.getCorpId(11112));
     console.log(CharactersTable.getCorpId(11111));
+    */
+
+    console.log("-------------------");
+    console.log("TESTING NOT WHITELISTED");
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
@@ -71,7 +76,30 @@ contract ExecuteInProximity is Script {
       turretTarget
     );
 
-    console.log(returnTargetQueue.length); //2
+    console.log("Queue Length:", returnTargetQueue.length); //2
+    
+    console.log("-------------------");
+    console.log("TESTING WHITELISTED");
+
+    SmartTurretTarget memory turretTargetWhitelisted = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: 77777,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+    priorityQueue[0] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
+
+    TargetPriority[] memory returnTargetQueueWhitelisted = smartTurret.inProximity(
+      smartTurretId,
+      11111,
+      priorityQueue,
+      turret,
+      turretTargetWhitelisted
+    );
+    
+    console.log("Queue Length:", returnTargetQueueWhitelisted.length); //2
 
     vm.stopBroadcast();
   }
