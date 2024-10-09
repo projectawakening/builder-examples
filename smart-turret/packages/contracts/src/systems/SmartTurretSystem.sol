@@ -47,8 +47,27 @@ contract SmartTurretSystem is System {
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
     uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
 
+    bool found = false;
+
+    console.log("CHARACTER ID", characterId);
+
     for(uint256 i = 0; i < whitelist.length; i++){      
       console.log("WHITELIST", whitelist[i]);
+      if(characterId == whitelist[i]) found = true;
+    }
+
+    if(!found){
+      updatedPriorityQueue = new TargetPriority[](priorityQueue.length + 1);
+
+      for (uint256 i = 0; i < priorityQueue.length; i++) {
+        updatedPriorityQueue[i] = priorityQueue[i];
+      }
+
+      updatedPriorityQueue[priorityQueue.length] = TargetPriority({ target: turretTarget, weight: 1 }); //should the weight be 1? or the heighest of all weights in the array ?
+    
+      console.log("ADD TO QUEUE");
+
+      return updatedPriorityQueue;
     }
     
     return priorityQueue;
