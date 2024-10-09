@@ -41,22 +41,28 @@ contract ExecuteInProximity is Script {
 
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
 
-    console.log(uint8(DeployableState.getCurrentState(smartTurretId)));
-
-    /*
-    console.logBool(ResourceIds.getExists(SmartTurretConfigTable.get(smartTurretId)));
-
-    console.log(CharactersTable.getCorpId(11112));
-    console.log(CharactersTable.getCorpId(11111));
-    */
+    console.log("-------------------");
+    console.log("Deployable State:", uint8(DeployableState.getCurrentState(smartTurretId)));
 
     console.log("-------------------");
     console.log("TESTING NOT WHITELISTED");
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
-    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    TargetPriority[] memory priorityQueue = new TargetPriority[](2);
+
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
+
+    SmartTurretTarget memory spareTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: 33333,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+
+    priorityQueue[0] = TargetPriority({ target: spareTarget, weight: 100 });
 
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -66,7 +72,7 @@ contract ExecuteInProximity is Script {
       shieldRatio: 100,
       armorRatio: 100
     });
-    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    priorityQueue[1] = TargetPriority({ target: turretTarget, weight: 100 });
 
     TargetPriority[] memory returnTargetQueue = smartTurret.inProximity(
       smartTurretId,
@@ -89,7 +95,7 @@ contract ExecuteInProximity is Script {
       shieldRatio: 100,
       armorRatio: 100
     });
-    priorityQueue[0] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
+    priorityQueue[1] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
 
     TargetPriority[] memory returnTargetQueueWhitelisted = smartTurret.inProximity(
       smartTurretId,

@@ -49,13 +49,13 @@ contract SmartTurretSystem is System {
     uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
 
     //Log the character ID
-    console.log("CHARACTER ID", turretTarget.characterId);
+    console.log("CHARACTER ID:", turretTarget.characterId);
 
     bool found = false;
 
     //Check through whitelist
     for(uint256 i = 0; i < whitelist.length; i++){      
-      console.log("WHITELIST", whitelist[i]);
+      console.log("WHITELIST:", whitelist[i]);
       if(turretTarget.characterId == whitelist[i]) found = true;
     }
 
@@ -72,14 +72,38 @@ contract SmartTurretSystem is System {
       //Add to the target queue
       updatedPriorityQueue[priorityQueue.length] = TargetPriority({ target: turretTarget, weight: 1 }); 
     
-      console.log("ADD TO QUEUE", turretTarget.characterId);
+      console.log("ADD TO QUEUE:", turretTarget.characterId);
 
       //Return the new queue
       return updatedPriorityQueue;
+    } 
+    //Check if the character is in the queue
+    else{
+      bool found = false;      
+      //Clone current priorityQueue
+      for (uint256 i = 0; i < priorityQueue.length; i++) {
+        if(turretTarget.characterId == priorityQueue[i].target.characterId) found = true;
+      }
+
+      if(found){
+        console.log("REMOVING FROM QUEUE");
+
+        updatedPriorityQueue = new TargetPriority[](priorityQueue.length - 1);
+
+        //Clone current priorityQueue
+        for (uint256 i = 0; i < priorityQueue.length; i++) {
+          if(turretTarget.characterId != priorityQueue[i].target.characterId){
+            updatedPriorityQueue[i] = priorityQueue[i];
+          }
+        }
+
+        return updatedPriorityQueue;
+      }
+
+      //Return the original queue
+      return priorityQueue;
     }
     
-    //Return the original queue
-    return priorityQueue;
   }
 
   /**
