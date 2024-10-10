@@ -88,8 +88,8 @@ export const App = () => {
 
 	var arrayData = <WhitelistEntry id="LOADING...."></WhitelistEntry>;
 
-	const click = () => {
-		console.log("CLICK");
+	const remove = (id) => {
+		console.log("Removing: " + id);
 	}
 
 	async function loadWhitelist(){
@@ -99,7 +99,7 @@ export const App = () => {
 		for(var i = 0; i < result.whitelist.length; i++){
 			console.log(result.whitelist[i]);
 		}
-		arrayData = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} onclick={click}>{value}</WhitelistEntry>)
+		arrayData = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
 
 		handleListChange(arrayData);
 		console.log("ARRAY DATA: ", arrayData);

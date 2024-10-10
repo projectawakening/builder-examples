@@ -4,10 +4,10 @@ import { EveButton, Header } from "@eveworld/ui-components";
 const WhitelistEntry = React.memo(
     ({
         id,
-        onClick,
+        handleClick,
     }: {
         id: string | undefined;
-        onClick: () => void;
+        handleClick: (param: string) => void;
     }) => {
         console.log("ENTRY RENDER")
         return (            
@@ -17,11 +17,12 @@ const WhitelistEntry = React.memo(
                 
                 <EveButton typeClass="primary"
                 className="primary-sm"
-                onClick={onClick}
+                onClick={() => handleClick(id)}
                 >
                     
                     REMOVE	
                 </EveButton>
+                <button onClick={handleClick}>TEST</button>
             </div>
             </div>
         )
