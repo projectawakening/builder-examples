@@ -21,7 +21,6 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
 import { TurretWhitelist } from "../codegen/tables/TurretWhitelist.sol";
-import { TestList } from "../codegen/tables/TestList.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart turret

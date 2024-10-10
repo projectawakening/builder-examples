@@ -1,0 +1,186 @@
+/* Loading Animation */
+@keyframes colorChange {
+  0% {
+    background-color: hsla(26, 85%, 58%, 0.5);
+  }
+  80% {
+    background-color: hsla(26, 85%, 58%, 1);
+  }
+}
+
+.animated-box {
+  animation: colorChange 3s infinite;
+  animation-timing-function: steps(1, end);
+}
+
+/* In-browser console */
+.console {
+  position: fixed;
+  font-size: 1rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #222;
+  color: #fff;
+  padding: 10px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.console input {
+  background-color: #222;
+  width: calc(100% - 120px);
+  padding: 5px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.console input:focus {
+  outline: none !important;
+}
+
+.console-logs {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.console-log {
+  font-size: 14px;
+  margin: 2px 0;
+}
+
+/* Alert */
+#eve-alert > div.MuiPaper-root {
+  padding: 0.375rem 1rem;
+}
+
+#eve-alert div.MuiAlert-message {
+  display: flex;
+  align-items: center;
+}
+
+/* Scroll */
+.Eve-Scroll-Container {
+  position: relative;
+  overflow: auto;
+}
+
+.Eve-Scroll-Content {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.Eve-Scrollbar {
+  @apply p-[1px] border border-brightquantum absolute top-0 right-0 h-full w-[0.5rem];
+}
+
+.Eve-Scroll-Thumb {
+  @apply bg-brightquantum relative w-[0.25rem];
+  border-radius: 0px;
+}
+
+/* EVE Button */
+button.Eve-Button {
+  @apply flex justify-center items-center text-sm;
+}
+
+button.Eve-Button.primary {
+  @apply text-sm leading-4 px-8 py-2 bg-brightquantum text-crude relative font-bold self-stretch uppercase;
+}
+button.Eve-Button.primary:hover {
+  @apply bg-neutral;
+}
+button.Eve-Button.primary:disabled {
+  @apply bg-[#381B0C] text-[#5C3421];
+}
+
+button.Eve-Button.primary-sm {
+  @apply px-2 py-1;
+}
+
+button.Eve-Button.secondary {
+  @apply leading-6 px-2 mobile:px-0 py-1 bg-quantum-8 text-crude relative font-bold self-stretch;
+}
+button.Eve-Button.secondary:hover {
+  @apply bg-brightquantum;
+}
+button.Eve-Button.secondary:disabled {
+  @apply bg-[#381B0C] text-[#5C3421];
+}
+
+button.Eve-Button.tertiary {
+  @apply text-xs uppercase font-bold px-2 mobile:px-0 py-1 bg-neutral-20 text-brightquantum self-stretch;
+}
+button.Eve-Button.tertiary:hover {
+  @apply text-neutral;
+}
+button.Eve-Button.tertiary:disabled {
+  @apply text-grayneutral;
+}
+
+button.Eve-Button.ghost {
+  @apply text-sm leading-4 uppercase font-bold px-2 mobile:px-0 py-1 border border-brightquantum self-stretch;
+}
+button.Eve-Button.ghost:hover {
+  @apply border-neutral  text-neutral;
+}
+
+/* Text edit */
+div.MuiFormControl-root.MuiTextField-root,
+.base-NumberInput-root,
+.Eve-Numerical-Input-input {
+  @apply !rounded-none !p-2;
+  border: 1px solid hsla(26, 85%, 58%, 1);
+}
+
+div.MuiInputBase-root.MuiOutlinedInput-root,
+.base-NumberInput-input,
+.Eve-Numerical-Input-input input {
+  color: hsla(60, 100%, 92%, 1);
+  font-family: "Sometype Mono";
+  padding: 0px !important;
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input,
+.base-NumberInput-input,
+.Eve-Numerical-Input-input input {
+  padding: 0px !important;
+  background: inherit;
+}
+
+.MuiOutlinedInput-notchedOutline,
+.base-NumberInput-input input {
+  border: none !important;
+}
+
+.Eve-Numerical-Input-input > div {
+  @apply flex justify-between;
+}
+.Eve-Numerical-Input-input button[aria-label="Increase"],
+.Eve-Numerical-Input-input button[aria-label="Decrease"] {
+  @apply text-sm leading-4 uppercase font-bold px-2 mobile:px-0 py-1 border border-brightquantum self-stretch;
+}
+.Eve-Numerical-Input-input button[aria-label="Increase"]:hover,
+.Eve-Numerical-Input-input button[aria-label="Decrease"]:hover {
+  @apply border-neutral  text-neutral;
+}
+
+/* Active select */
+.Eve-Select-Active {
+  @apply bg-brightquantum text-crude;
+}
+
+/* General */
+
+.Absolute-Center {
+  @apply absolute mx-auto left-0 right-0;
+}
+
+.empty-span-full:has(+ #Eve-Assembly-Module:empty) {
+  @apply !col-span-full grid;
+}
