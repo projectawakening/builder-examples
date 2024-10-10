@@ -41,9 +41,17 @@ export function createSystemCalls(
       id
 		]);		
 	};
+  
+  const removeFromWhitelist = async (id) => {
+		await worldContract.write.dapp_dev__removeFromWhitelist([
+			42286255167959065515159482724089294794766243679345523240407516329986919866605,
+      id
+		]);		
+	};
 
 	return {
     getWhitelist,
-    addToWhitelist
+    addToWhitelist,
+    removeFromWhitelist
 	};
 }

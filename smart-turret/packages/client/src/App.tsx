@@ -26,10 +26,13 @@ export const App = () => {
 			collectTokens,
 			getWhitelist,
 			addToWhitelist,
+			removeFromWhitelist
 		},
 	} = useMUD();
 
 	const characterIDRef = useRef(0);
+
+	const [listVar, setListVar] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
 	
 	const handleEdit = (
 		refString: React.MutableRefObject<number>,
@@ -37,6 +40,10 @@ export const App = () => {
 	): void => {
 		refString.current = eventString;
 	};
+
+	const handleListChange = (newValue) => {
+		setListVar(newValue);
+	}
 
 	/**
 	 * Initializes a SmartCharacter object with default values and sets it using the useState hook.
@@ -54,7 +61,49 @@ export const App = () => {
 			smartAssemblies: [],
 		};
 		setSmartCharacter(smartCharacter);
+
+		setTimeout(function(){
+			loadWhitelist();
+		}, 1000);
 	}, [walletClient.account?.address]);
+
+	/*
+	if (!connected || !publicClient || !walletClient) {
+		return (
+			<>
+			<div>
+			<div className="h-full w-full bg-crude-5 -z-10">
+				<EveConnectWallet
+				handleConnect={handleConnect}
+				availableWallets={availableWallets}
+				/>
+				<GenerateEveFeralCodeGen style="top-12" />
+				<GenerateEveFeralCodeGen style="bottom-12" />
+			</div>
+			</div>
+		</>
+		);
+	}
+		*/
+
+	var arrayData = <WhitelistEntry id="LOADING...."></WhitelistEntry>;
+
+	const click = () => {
+		console.log("CLICK");
+	}
+
+	async function loadWhitelist(){
+		const result = await getWhitelist(
+			"42286255167959065515159482724089294794766243679345523240407516329986919866605"
+		);
+		for(var i = 0; i < result.whitelist.length; i++){
+			console.log(result.whitelist[i]);
+		}
+		arrayData = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} onclick={click}>{value}</WhitelistEntry>)
+
+		handleListChange(arrayData);
+		console.log("ARRAY DATA: ", arrayData);
+	}
 
 	return (
 		<div id="root">
@@ -98,10 +147,7 @@ export const App = () => {
 						<EveButton typeClass="primary"
 						onClick={async (event) => {
 							event.preventDefault();
-							const balance = await getWhitelist(
-								"42286255167959065515159482724089294794766243679345523240407516329986919866605"
-							);
-							console.log("BALANCE: " + balance);
+							loadWhitelist();
 						}}
 						className="primary-sm">
 							Fetch Whitelist						
@@ -114,14 +160,10 @@ export const App = () => {
 					Whitelist
 				
 				</div>
-				<WhitelistEntry id="100"></WhitelistEntry>
-				<WhitelistEntry id="200"></WhitelistEntry>
-				<WhitelistEntry id="350"></WhitelistEntry>
+				<div>
+				{listVar}
 				</div>
-
-				
-
-				
+				</div>				
 				</div>
 				</div>
 				</div>

@@ -133,6 +133,33 @@ contract SmartTurretSystem is System {
     TurretWhitelist.set(smartTurretId, newWhitelist);
   }
 
+  function removeFromWhitelist(uint256 smartTurretId, uint256 characterId) public { 
+    //Get current whitelist
+    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+    
+    bool found = false;
+
+    //Check whitelist
+    for(uint256 i = 0; i < whitelist.length; i++){
+      if(whitelist[i] == characterId) found = true;
+    }
+
+    if(found){
+      uint256[] memory updatedWhitelist = new uint256[](whitelist.length-1);
+
+      //Clone current whitelist
+      uint256 storedIndex = 0;
+      for(uint256 i = 0; i < whitelist.length; i++){
+        if(whitelist[i] != characterId){
+          updatedWhitelist[storedIndex] = whitelist[i];
+          storedIndex++;
+        } 
+      }
+
+      TurretWhitelist.set(smartTurretId, updatedWhitelist);
+    }
+  }
+
   function setWhitelist(uint256 smartTurretId, uint256 characterId) public {    
     TestList.set(smartTurretId, characterId);
   }
