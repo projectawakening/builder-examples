@@ -9,7 +9,7 @@ const WhitelistEntry = React.memo(
         id: string | undefined;
         onClick: () => void;
     }) => {
-
+        console.log("ENTRY RENDER")
         return (            
             <div className="Quantum-Container font-semibold">				
             <div className="grid grid-cols-2 gap-1" id="header">

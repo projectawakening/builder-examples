@@ -30,22 +30,24 @@ export function createSystemCalls(
 	 */
 
   const getWhitelist = async (id) => {
+    console.log("GET:", id);
 		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
     console.log(result);
 		return result;
 	};
 
-  const addToWhitelist = async (id) => {
+  const addToWhitelist = async (id, char) => {
+    console.log("ADD:", id);
 		await worldContract.write.dapp_dev__addToWhitelist([
-			42286255167959065515159482724089294794766243679345523240407516329986919866605,
-      id
+			id,
+      char
 		]);		
 	};
   
-  const removeFromWhitelist = async (id) => {
+  const removeFromWhitelist = async (id, char) => {
 		await worldContract.write.dapp_dev__removeFromWhitelist([
-			42286255167959065515159482724089294794766243679345523240407516329986919866605,
-      id
+			id,
+      char
 		]);		
 	};
 

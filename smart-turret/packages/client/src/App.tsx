@@ -131,10 +131,13 @@ export const App = () => {
 							event.preventDefault();
 							
 							const balance = await addToWhitelist(
+								"42286255167959065515159482724089294794766243679345523240407516329986919866605",
 								characterIDRef.current
 							);
 							
 							console.log("BALANCE: " + characterIDRef.current);``
+
+							loadWhitelist();
 						}}
 						className="primary-sm">
 							Add to Whitelist					

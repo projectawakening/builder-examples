@@ -91,10 +91,12 @@ contract SmartTurretSystem is System {
 
         updatedPriorityQueue = new TargetPriority[](priorityQueue.length - 1);
 
+        uint256 index = 0;
         //Clone current priorityQueue
         for (uint256 i = 0; i < priorityQueue.length; i++) {
           if(turretTarget.characterId != priorityQueue[i].target.characterId){
-            updatedPriorityQueue[i] = priorityQueue[i];
+            updatedPriorityQueue[index] = priorityQueue[i];
+            index++;
           }
         }
 
@@ -147,17 +149,27 @@ contract SmartTurretSystem is System {
     if(found){
       uint256[] memory updatedWhitelist = new uint256[](whitelist.length-1);
 
+      bool removed = false;
+
       //Clone current whitelist
       uint256 storedIndex = 0;
       for(uint256 i = 0; i < whitelist.length; i++){
-        if(whitelist[i] != characterId){
+        if(whitelist[i] != characterId || removed){
           updatedWhitelist[storedIndex] = whitelist[i];
           storedIndex++;
-        } 
+        } else{
+          removed = true;
+        }
       }
 
       TurretWhitelist.set(smartTurretId, updatedWhitelist);
     }
+  }
+
+  function getWhitelist(uint256 smartTurretId) public returns(uint256[] memory whitelist) {
+    whitelist = TurretWhitelist.get(smartTurretId);
+
+    return whitelist;
   }
 
   function setWhitelist(uint256 smartTurretId, uint256 characterId) public {    
