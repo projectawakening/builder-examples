@@ -74,6 +74,9 @@ importers:
       '@latticexyz/world':
         specifier: 2.2.9
         version: 2.2.9(@aws-sdk/client-kms@3.658.0)(asn1.js@5.4.1)(typescript@5.4.2)(zod@3.23.8)
+      '@mui/material':
+        specifier: ^5.16.3
+        version: 5.16.7(@emotion/react@11.13.3)(@emotion/styled@11.13.0)(@types/react@18.2.22)(react-dom@18.3.1)(react@18.3.1)
       contracts:
         specifier: workspace:*
         version: link:../contracts
