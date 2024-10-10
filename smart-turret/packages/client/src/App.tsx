@@ -92,15 +92,14 @@ export const App = () => {
 		console.log("Removing: " + id);
 
 		removeFromWhitelist(
-			"42286255167959065515159482724089294794766243679345523240407516329986919866605",
 			id
 		);
+
+		loadWhitelist();
 	}
 
 	async function loadWhitelist(){
-		const result = await getWhitelist(
-			"42286255167959065515159482724089294794766243679345523240407516329986919866605"
-		);
+		const result = await getWhitelist();
 		for(var i = 0; i < result.whitelist.length; i++){
 			console.log(result.whitelist[i]);
 		}
@@ -136,7 +135,6 @@ export const App = () => {
 							event.preventDefault();
 							
 							const balance = await addToWhitelist(
-								"42286255167959065515159482724089294794766243679345523240407516329986919866605",
 								characterIDRef.current
 							);
 							

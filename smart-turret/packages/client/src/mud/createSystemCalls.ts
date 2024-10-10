@@ -29,22 +29,24 @@ export function createSystemCalls(
 	 * And must be used with the test__ prefix due to namespacing
 	 */
 
-  const getWhitelist = async (id) => {
+  const getWhitelist = async () => {
+    var id = import.meta.env.VITE_SMART_TURRET_ID
     console.log("GET:", id);
 		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
     console.log(result);
 		return result;
 	};
 
-  const addToWhitelist = async (id, char) => {
-    console.log("ADD:", id);
+  const addToWhitelist = async (char) => {
+    var id = import.meta.env.VITE_SMART_TURRET_ID
 		await worldContract.write.dapp_dev__addToWhitelist([
 			id,
       char
 		]);		
 	};
   
-  const removeFromWhitelist = async (id, char) => {
+  const removeFromWhitelist = async (char) => {
+    var id = import.meta.env.VITE_SMART_TURRET_ID
 		await worldContract.write.dapp_dev__removeFromWhitelist([
 			id,
       char

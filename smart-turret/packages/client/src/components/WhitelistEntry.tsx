@@ -22,7 +22,6 @@ const WhitelistEntry = React.memo(
                     
                     REMOVE	
                 </EveButton>
-                <button onClick={handleClick}>TEST</button>
             </div>
             </div>
         )
