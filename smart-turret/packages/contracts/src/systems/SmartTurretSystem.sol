@@ -113,9 +113,9 @@ contract SmartTurretSystem is System {
    * @param smartTurretId The smart turret id
    * @param characterId is the owner to add 
    */
-  function addToWhitelist(uint256 smartTurretId, uint256 characterId) public {    
+  function addToWhitelist(uint256 smartTurretId, uint256 characterId) public returns(uint256[] memory whitelist) {    
     //Get current whitelist
-    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+    whitelist = TurretWhitelist.get(smartTurretId);
 
     //Create new whitelist
     uint256[] memory newWhitelist = new uint256[](whitelist.length+1);
@@ -133,11 +133,13 @@ contract SmartTurretSystem is System {
 
     //Set the MUD table data
     TurretWhitelist.set(smartTurretId, newWhitelist);
+    
+    return newWhitelist;
   }
 
-  function removeFromWhitelist(uint256 smartTurretId, uint256 characterId) public { 
+  function removeFromWhitelist(uint256 smartTurretId, uint256 characterId) public returns(uint256[] memory whitelist) { 
     //Get current whitelist
-    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+    whitelist = TurretWhitelist.get(smartTurretId);
     
     bool found = false;
 
@@ -163,7 +165,10 @@ contract SmartTurretSystem is System {
       }
 
       TurretWhitelist.set(smartTurretId, updatedWhitelist);
+
+      return updatedWhitelist;
     }
+    return whitelist;
   }
 
   function getWhitelist(uint256 smartTurretId) public returns(uint256[] memory whitelist) {

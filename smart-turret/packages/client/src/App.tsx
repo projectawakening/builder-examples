@@ -62,8 +62,8 @@ export const App = () => {
 		};
 		setSmartCharacter(smartCharacter);
 
-		setTimeout(function(){
-			loadWhitelist();
+		setInterval(function(){
+			fetchWhitelist();
 		}, 1000);
 	}, [walletClient.account?.address]);
 
@@ -88,21 +88,29 @@ export const App = () => {
 
 	var arrayData = <WhitelistEntry id="LOADING...."></WhitelistEntry>;
 
-	const remove = (id) => {
+	const remove = async (id) => {
 		console.log("Removing: " + id);
 
-		removeFromWhitelist(
+		const whitelist = await removeFromWhitelist(
 			id
 		);
 
-		loadWhitelist();
+		console.log("Whitelist;", whitelist)
+
+		loadWhitelist(whitelist);
 	}
 
-	async function loadWhitelist(){
-		const result = await getWhitelist();
-		for(var i = 0; i < result.whitelist.length; i++){
-			console.log(result.whitelist[i]);
-		}
+	async function fetchWhitelist(){		
+		const whitelist = await getWhitelist();
+
+		loadWhitelist(whitelist);
+	}
+
+	
+
+	async function loadWhitelist(result){
+
+		console.log(arrayData);
 		arrayData = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
 
 		handleListChange(arrayData);
@@ -134,13 +142,13 @@ export const App = () => {
 						onClick={async (event) => {
 							event.preventDefault();
 							
-							const balance = await addToWhitelist(
+							const whitelist = await addToWhitelist(
 								characterIDRef.current
 							);
-							
-							console.log("BALANCE: " + characterIDRef.current);``
 
-							loadWhitelist();
+							console.log("DATA", whitelist);
+
+							loadWhitelist(whitelist);
 						}}
 						className="primary-sm">
 							Add to Whitelist					
@@ -153,7 +161,7 @@ export const App = () => {
 						<EveButton typeClass="primary"
 						onClick={async (event) => {
 							event.preventDefault();
-							loadWhitelist();
+							fetchWhitelist();
 						}}
 						className="primary-sm">
 							Fetch Whitelist						
