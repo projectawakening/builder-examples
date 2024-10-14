@@ -79,8 +79,6 @@ contract MockData is Script {
     IBaseWorld world = IBaseWorld(worldAddress);
     ResourceId systemId = Utils.smartTurretSystemId();
 
-    world.call(systemId, abi.encodeCall(SmartTurretSystem.addToWhitelist, (smartTurretId, 77777)));
-
     anchorAndOnlineSmartTurret(smartTurretId, player);
 
     vm.stopBroadcast();

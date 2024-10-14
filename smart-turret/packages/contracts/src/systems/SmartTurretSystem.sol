@@ -22,6 +22,7 @@ import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codege
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
 import { TurretWhitelist } from "../codegen/tables/TurretWhitelist.sol";
 import { TestList } from "../codegen/tables/TestList.sol";
+import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart turret
@@ -47,18 +48,14 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
     //Get MUD whitelist table
-    uint256[] memory whitelist = TurretWhitelist.get(smartTurretId);
+    address[] memory whitelist = TurretWhitelist.get(smartTurretId);
 
     //Log the character ID
     console.log("CHARACTER ID:", turretTarget.characterId);
 
-    bool found = false;
+    address targetAddress = CharactersTable.getCharacterAddress(turretTarget.characterId);
 
-    //Check through whitelist
-    for(uint256 i = 0; i < whitelist.length; i++){      
-      console.log("WHITELIST:", whitelist[i]);
-      if(turretTarget.characterId == whitelist[i]) found = true;
-    }
+    bool found = inWhitelist(whitelist, targetAddress);
 
     //If the character isn't in the whitelist
     if(!found){
@@ -111,25 +108,30 @@ contract SmartTurretSystem is System {
   /**
    * @dev a function to add a character to the whitelist
    * @param smartTurretId The smart turret id
-   * @param characterId is the owner to add 
+   * @param character is the owner to add 
    */
-  function addToWhitelist(uint256 smartTurretId, uint256 characterId) public returns(uint256[] memory whitelist) {    
+  function addToWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) {        
+    
+    //address character = CharactersTable.getCharacterAddress(characterId);
     //Get current whitelist
     whitelist = TurretWhitelist.get(smartTurretId);
+    
+    bool found = inWhitelist(whitelist, character);
+
+    if(found){
+      revert("Character is already in the whitelist");
+    }
 
     //Create new whitelist
-    uint256[] memory newWhitelist = new uint256[](whitelist.length+1);
+    address[] memory newWhitelist = new address[](whitelist.length+1);
     
     //Clone current whitelist
     for(uint256 i = 0; i < whitelist.length; i++){
       newWhitelist[i] = whitelist[i];
     }
 
-    //Log character ID
-    console.log("ADDING TO WHITELIST", characterId);
-
     //Add to whitelist
-    newWhitelist[newWhitelist.length-1] = characterId;
+    newWhitelist[newWhitelist.length-1] = character;
 
     //Set the MUD table data
     TurretWhitelist.set(smartTurretId, newWhitelist);
@@ -137,48 +139,49 @@ contract SmartTurretSystem is System {
     return newWhitelist;
   }
 
-  function removeFromWhitelist(uint256 smartTurretId, uint256 characterId) public returns(uint256[] memory whitelist) { 
+  function removeFromWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) { 
     //Get current whitelist
     whitelist = TurretWhitelist.get(smartTurretId);
     
-    bool found = false;
+    bool found = inWhitelist(whitelist, character);
 
-    //Check whitelist
+    if(!found){
+      revert("Character not in whitelist");
+    }
+
+    address[] memory updatedWhitelist = new address[](whitelist.length-1);
+
+    bool removed = false;
+
+    //Clone current whitelist
+    uint256 storedIndex = 0;
     for(uint256 i = 0; i < whitelist.length; i++){
-      if(whitelist[i] == characterId) found = true;
-    }
-
-    if(found){
-      uint256[] memory updatedWhitelist = new uint256[](whitelist.length-1);
-
-      bool removed = false;
-
-      //Clone current whitelist
-      uint256 storedIndex = 0;
-      for(uint256 i = 0; i < whitelist.length; i++){
-        if(whitelist[i] != characterId || removed){
-          updatedWhitelist[storedIndex] = whitelist[i];
-          storedIndex++;
-        } else{
-          removed = true;
-        }
+      if(whitelist[i] != character || removed){
+        updatedWhitelist[storedIndex] = whitelist[i];
+        storedIndex++;
+      } else{
+        removed = true;
       }
-
-      TurretWhitelist.set(smartTurretId, updatedWhitelist);
-
-      return updatedWhitelist;
     }
-    return whitelist;
+
+    TurretWhitelist.set(smartTurretId, updatedWhitelist);
+
+    return updatedWhitelist;
   }
 
-  function getWhitelist(uint256 smartTurretId) public returns(uint256[] memory whitelist) {
+  function inWhitelist(address[] memory whitelist, address character) public returns(bool){    
+    //Check whitelist
+    for(uint256 i = 0; i < whitelist.length; i++){
+      if(whitelist[i] == character) return true;
+    }
+
+    return false;
+  }
+
+  function getWhitelist(uint256 smartTurretId) public returns(address[] memory whitelist) {
     whitelist = TurretWhitelist.get(smartTurretId);
 
     return whitelist;
-  }
-
-  function setWhitelist(uint256 smartTurretId, uint256 characterId) public {    
-    TestList.set(smartTurretId, characterId);
   }
 
   /**

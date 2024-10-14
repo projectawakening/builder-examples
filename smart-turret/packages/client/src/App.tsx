@@ -1,11 +1,21 @@
+//Import packages
 import { useMUD } from "./MUDContext";
 import React, { useEffect, useState, useRef } from "react";
-import { EveButton, EveInput, Header } from "@eveworld/ui-components";
+
+//Import EVE Frontier Packages
+import { EveButton, EveInput } from "@eveworld/ui-components";
 import { SmartCharacter } from "@eveworld/types";
+
+//Import CSS
 import "./styles.css";
 import "./styles-ui.css";
 
+//Import components
 import WhitelistEntry from './components/WhitelistEntry'
+import AppContainer from './components/AppContainer'
+import Title from './components/Title'
+import ContentContainer from './components/ContentContainer'
+import Section from './components/Section'
 
 export const App = () => {
 	const [smartCharacter, setSmartCharacter] = useState<SmartCharacter>({
@@ -30,18 +40,17 @@ export const App = () => {
 
 	const characterIDRef = useRef(0);
 
+	//Pre-populate the UI list 
 	const [listVar, setListVar] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
-	
+	const [addErrorVar, setAddErrorVar] = useState("");
+
+	//Edit character name
 	const handleEdit = (
 		refString: React.MutableRefObject<number>,
 		eventString: number
 	): void => {
 		refString.current = eventString;
 	};
-
-	const handleListChange = (newValue) => {
-		setListVar(newValue);
-	}
 
 	/**
 	 * Initializes a SmartCharacter object with default values and sets it using the useState hook.
@@ -65,92 +74,103 @@ export const App = () => {
 		}, 1000);
 	}, [walletClient.account?.address]);
 
-	var arrayData = <WhitelistEntry id="LOADING...."></WhitelistEntry>;
-
+	//Remove from the whitelist
 	const remove = async (id) => {
-		console.log("Removing: " + id);
-
-		const whitelist = await removeFromWhitelist(
-			id
-		);
+		const whitelist = await removeFromWhitelist(id);
 
 		loadWhitelist(whitelist);
 	}
 
+	//Fetch the whitelist data
 	async function fetchWhitelist(){		
 		const whitelist = await getWhitelist();
 		loadWhitelist(whitelist);
 	}	
 
+	//Load the whitelist UI
 	async function loadWhitelist(result){
-		arrayData = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
-		handleListChange(arrayData);
+		if(result == null) return;
+		
+		var newArray = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
+		setListVar(newArray);
+	}
+
+	//Add to the whitelist
+	async function addToWhitelistButton (){
+		if(characterIDRef.current == ""){			
+			setAddErrorVar("- NO INPUT");
+			return;
+		}
+
+		//Fetch the world API data
+		const response = await fetch(`https://blockchain-gateway-nova.nursery.reitnorf.com/smartcharacters`);
+		const data = await response.json();			
+
+		var address = null;
+
+		//Check to see if the address exists
+		for(var i = 0; i < data.length; i++){
+			if(data[i].name == characterIDRef.current){
+				address = data[i].address;
+			}
+		}
+
+		//If an address wasn't found, exit
+		if(address == null){
+			setAddErrorVar("- CHARACTER NOT FOUND");
+			return;
+		}
+
+		//Clear the error message
+		setAddErrorVar("");
+
+		//Add to whitelist
+		const whitelist = await addToWhitelist(address);
+
+		//Load whitelist if not null
+		if(whitelist != null) loadWhitelist(whitelist);
 	}
 
 	return (
-		<div className="bg-crude-5 w-screen min-h-screen">
-			<div className="flex flex-col align-center max-w-[560px] mx-auto pb-6 min-h-screen h-full">
-				<div className="Quantum-Container my-4">
-					<header className="w-full items-center py-6 Custom-Title" id="header">
-						SMART TURRET WHITELISTING
-					</header>
-				</div>
-				<div className="relative">
-					<div className="grid border border-brightquantum bg-crude">
-					<div className="flex flex-col align-center border border-brightquantum">
-					<div className="Quantum-Container font-semibold ">				
-						<div className="grid grid-cols-1 rows-2 gap-1">
-							<EveInput
-								inputType="string"
-								defaultValue=""
-								fieldName={"Character ID"}
-								onChange={(str) => handleEdit(characterIDRef, str as number)}
-							/>
-							<div></div>
-							<EveButton typeClass="primary"
-							onClick={async (event) => {
-								event.preventDefault();
-								
-								const whitelist = await addToWhitelist(
-									characterIDRef.current
-								);
-
-								console.log("DATA", whitelist);
-
-								loadWhitelist(whitelist);
-							}}
+		<AppContainer>
+			<Title>
+				SMART TURRET WHITELISTING
+			</Title>
+			<ContentContainer>
+				<Section>				
+					<div className="grid grid-cols-1 rows-2 gap-1">
+						<EveInput
+							inputType="string"
+							defaultValue=""
+							fieldName={`Character Name ${addErrorVar}`}
+							onChange={(str) => handleEdit(characterIDRef, str as number)}
+						/>
+						<EveButton 
+							typeClass="primary"
+							onClick={() => addToWhitelistButton()}
 							className="primary-sm">
 								Add to Whitelist					
-							</EveButton>
-							
-						</div>
+						</EveButton>						
 					</div>
-					<div className="Quantum-Container font-semibold">				
-						<div>
-							<EveButton typeClass="primary"
-							onClick={async (event) => {
-								event.preventDefault();
-								fetchWhitelist();
-							}}
-							className="primary-sm">
-								Fetch Whitelist						
-							</EveButton>
-						</div>
-					</div>
-					
-					<div className="Quantum-Container font-semibold">				
-					<div className="w-full items-center py-1" id="header">
-						Whitelist
-					
-					</div>
+				</Section>
+				<Section>				
 					<div>
+						<EveButton 
+							typeClass="primary"
+							onClick={() => fetchWhitelist()}
+							className="primary-sm">
+							Fetch Whitelist						
+						</EveButton>
+					</div>
+				</Section>				
+				<Section>				
+					<div className="w-full items-center py-1" id="header">
+						Whitelist				
+					</div>
+					
 					{listVar}
-					</div>
-					</div>				
-					</div>
-					</div>
-				</div>
-			</div>
-		</div>
+				</Section>		
+			</ContentContainer>
+		</AppContainer>
 	);
 };

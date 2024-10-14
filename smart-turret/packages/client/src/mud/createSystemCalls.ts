@@ -31,7 +31,6 @@ export function createSystemCalls(
 
   const getWhitelist = async () => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
-    console.log("GET:", id);
 		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
     console.log(result);
 		return result;
@@ -39,7 +38,7 @@ export function createSystemCalls(
 
   const addToWhitelist = async (char) => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
-		const result = await worldContract.write.dapp_dev__addToWhitelist([
+		const result = await worldContract.write.dapp_dev2__addToWhitelist([
 			id,
       char
 		]);		
@@ -49,7 +48,7 @@ export function createSystemCalls(
   
   const removeFromWhitelist = async (char) => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
-		const result = await worldContract.write.dapp_dev__removeFromWhitelist([
+		const result = await worldContract.write.dapp_dev2__removeFromWhitelist([
 			id,
       char
 		]);		

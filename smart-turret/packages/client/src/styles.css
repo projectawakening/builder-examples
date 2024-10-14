@@ -31,3 +31,11 @@ body,
     text-align:center;
 }
 
+.character-image{
+  width:40px;
+  display:inline;
+  margin-right:20px;
+  margin-left:5px;
+  border-radius:10px;
+}
+
