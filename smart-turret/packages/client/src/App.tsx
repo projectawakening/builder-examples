@@ -3,8 +3,7 @@ import { useMUD } from "./MUDContext";
 import React, { useEffect, useState, useRef } from "react";
 
 //Import EVE Frontier Packages
-import { EveButton, EveInput } from "@eveworld/ui-components";
-import { SmartCharacter } from "@eveworld/types";
+import { EveButton, EveInput, EveScroll } from "@eveworld/ui-components";
 
 //Import CSS
 import "./styles.css";
@@ -18,17 +17,6 @@ import ContentContainer from './components/ContentContainer'
 import Section from './components/Section'
 
 export const App = () => {
-	const [smartCharacter, setSmartCharacter] = useState<SmartCharacter>({
-		address: `0x`,
-		id: "",
-		name: "",
-		isSmartCharacter: false,
-		eveBalanceWei: 0,
-		gasBalanceWei: 0,
-		image: "",
-		smartAssemblies: []
-	});
-
 	const {
 		network: { walletClient },
 		systemCalls: {
@@ -41,7 +29,7 @@ export const App = () => {
 	const characterIDRef = useRef(0);
 
 	//Pre-populate the UI list 
-	const [listVar, setListVar] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
+	const [whitelist, setWhitelist] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
 	const [addErrorVar, setAddErrorVar] = useState("");
 
 	//Edit character name
@@ -52,27 +40,13 @@ export const App = () => {
 		refString.current = eventString;
 	};
 
-	/**
-	 * Initializes a SmartCharacter object with default values and sets it using the useState hook.
-	 * @returns void
-	 */
+	//Auto reload whitelist
 	useEffect(() => {
-		const smartCharacter: SmartCharacter = {
-			address: walletClient.account?.address as `0x${string}`,
-			id: "",
-			name: "",
-			isSmartCharacter: false,
-			eveBalanceWei: 0,
-			gasBalanceWei: 0,
-			image: "",
-			smartAssemblies: [],
-		};
-		setSmartCharacter(smartCharacter);
-
-		setInterval(function(){
+		fetchWhitelist();
+		setTimeout(function(){
 			fetchWhitelist();
 		}, 1000);
-	}, [walletClient.account?.address]);
+	});
 
 	//Remove from the whitelist
 	const remove = async (id) => {
@@ -83,6 +57,7 @@ export const App = () => {
 
 	//Fetch the whitelist data
 	async function fetchWhitelist(){		
+		console.log("FETCHING");
 		const whitelist = await getWhitelist();
 		loadWhitelist(whitelist);
 	}	
@@ -92,7 +67,7 @@ export const App = () => {
 		if(result == null) return;
 		
 		var newArray = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
-		setListVar(newArray);
+		setWhitelist(newArray);
 	}
 
 	//Add to the whitelist
@@ -147,28 +122,31 @@ export const App = () => {
 						/>
 						<EveButton 
 							typeClass="primary"
-							onClick={() => addToWhitelistButton()}
+							onClick={addToWhitelistButton}
 							className="primary-sm">
 								Add to Whitelist					
 						</EveButton>						
 					</div>
 				</Section>
-				<Section>				
-					<div>
-						<EveButton 
-							typeClass="primary"
-							onClick={() => fetchWhitelist()}
-							className="primary-sm">
-							Fetch Whitelist						
-						</EveButton>
-					</div>
+				<Section>			
+					<EveButton 
+						typeClass="primary"
+						onClick={fetchWhitelist}
+						className="primary-sm">
+						Fetch Whitelist						
+					</EveButton>
 				</Section>				
 				<Section>				
-					<div className="w-full items-center py-1" id="header">
+					<div className="w-full items-center py-1">
 						Whitelist				
 					</div>
-					
-					{listVar}
+
+					<EveScroll
+						maxHeight="200px"
+						classStyles="h-full"
+					>					
+						{whitelist}
+					</EveScroll>
 				</Section>		
 			</ContentContainer>
 		</AppContainer>

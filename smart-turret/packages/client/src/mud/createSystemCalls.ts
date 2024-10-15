@@ -22,13 +22,8 @@ export function createSystemCalls(
    *   - useStore
    *   - tables
    */
-  { worldContract, erc20Contract, useStore, tables }: SetupNetworkResult
+  { worldContract, useStore, tables }: SetupNetworkResult
 ) {
-	/*
-	 * This function is retrieved from the codegen function in contracts/src/codegen/world/IItemTradeSystem.sol
-	 * And must be used with the test__ prefix due to namespacing
-	 */
-
   const getWhitelist = async () => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
 		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
@@ -52,8 +47,6 @@ export function createSystemCalls(
 			id,
       char
 		]);		
-
-    console.log("RESULT: ", result);
 
     return await useStore.getState().getValue(tables.TurretWhitelist, {id});
 	};

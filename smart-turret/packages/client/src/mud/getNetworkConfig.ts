@@ -1,16 +1,4 @@
 /*
- * Network specific configuration for the client.
- * By default connect to the anvil test network.
- *
- */
-
-/*
- * By default the template just creates a temporary wallet
- * (called a burner wallet).
- */
-import { getBurnerPrivateKey } from "@latticexyz/common";
-
-/*
  * Import the addresses of the World, possibly on multiple chains,
  * from packages/contracts/worlds.json. When the contracts package
  * deploys a new `World`, it updates this file.

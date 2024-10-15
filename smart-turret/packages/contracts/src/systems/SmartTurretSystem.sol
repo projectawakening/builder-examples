@@ -21,7 +21,6 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
 import { TurretWhitelist } from "../codegen/tables/TurretWhitelist.sol";
-import { TestList } from "../codegen/tables/TestList.sol";
 import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 
 /**
@@ -78,7 +77,7 @@ contract SmartTurretSystem is System {
     //Check if the character is in the queue
     else{
       found = false;      
-      //Clone current priorityQueue
+      //Check priority queue for character ID
       for (uint256 i = 0; i < priorityQueue.length; i++) {
         if(turretTarget.characterId == priorityQueue[i].target.characterId) found = true;
       }
@@ -110,15 +109,12 @@ contract SmartTurretSystem is System {
    * @param smartTurretId The smart turret id
    * @param character is the owner to add 
    */
-  function addToWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) {        
-    
+  function addToWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) {            
     //address character = CharactersTable.getCharacterAddress(characterId);
     //Get current whitelist
     whitelist = TurretWhitelist.get(smartTurretId);
-    
-    bool found = inWhitelist(whitelist, character);
 
-    if(found){
+    if(inWhitelist(whitelist, character)){
       revert("Character is already in the whitelist");
     }
 
@@ -142,10 +138,8 @@ contract SmartTurretSystem is System {
   function removeFromWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) { 
     //Get current whitelist
     whitelist = TurretWhitelist.get(smartTurretId);
-    
-    bool found = inWhitelist(whitelist, character);
 
-    if(!found){
+    if(!inWhitelist(whitelist, character)){
       revert("Character not in whitelist");
     }
 
@@ -201,7 +195,6 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory aggressor,
     SmartTurretTarget memory victim
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //TODO: Implement the logic
     return priorityQueue;
   }
 

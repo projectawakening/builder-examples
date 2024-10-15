@@ -1,5 +1,5 @@
-import React, { CSSProperties, useState } from "react";
-import { EveButton, Header } from "@eveworld/ui-components";
+import React, { useState } from "react";
+import { EveButton } from "@eveworld/ui-components";
 
 const WhitelistEntry = React.memo(
     ({
@@ -9,7 +9,6 @@ const WhitelistEntry = React.memo(
         id: string | undefined;
         handleClick: (param: string) => void;
     }) => {
-
         const [name, setName] = useState("LOADING....");
         const [img, setImg] = useState("");
 
@@ -26,18 +25,18 @@ const WhitelistEntry = React.memo(
 
         return (            
             <div className="Quantum-Container font-semibold">				
-            <div className="grid grid-cols-2 gap-1" id="header">
-                <p>
-                <img className="character-image" src={img}></img>{name}
-                </p>
-                <EveButton typeClass="primary"
-                className="primary-sm"
-                onClick={() => handleClick(id)}
-                >
-                    
-                    REMOVE	
-                </EveButton>
-            </div>
+                <div className="grid grid-cols-2 gap-1" id="header">
+                    <p>
+                        <img className="character-image" src={img}></img>{name}
+                    </p>
+                    <EveButton 
+                        typeClass="primary"
+                        className="primary-sm"
+                        onClick={() => handleClick(id)}
+                        >                    
+                        REMOVE	
+                    </EveButton>
+                </div>
             </div>
         )
     }
