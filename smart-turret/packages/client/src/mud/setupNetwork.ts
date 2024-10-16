@@ -96,6 +96,11 @@ export async function setupNetwork() {
     address: networkConfig.worldAddress as Hex,
     publicClient,
     startBlock: BigInt(networkConfig.initialBlockNumber),
+    filters: [
+      {
+        tableId: mudConfig.tables.dapp_dev2__TurretWhitelist.tableId,
+      }
+    ]
   });
 
   return {

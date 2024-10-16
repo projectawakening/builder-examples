@@ -44,7 +44,7 @@ export const App = () => {
 
 		setTimeout(function(){
 			fetchWhitelist(null);
-		}, 3000)
+		}, 1000)
 	}, [])
 
 	//Remove from the whitelist
