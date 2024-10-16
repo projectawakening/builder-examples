@@ -17,4 +17,5 @@ import { MUDChain, mudFoundry, redstone, garnet } from "@latticexyz/common/chain
  * See https://mud.dev/guides/hello-world/add-chain-client
  * for instructions on how to add networks.
  */
+
 export const supportedChains: MUDChain[] = [mudFoundry, redstone, garnet];

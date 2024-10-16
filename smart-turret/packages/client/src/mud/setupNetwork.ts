@@ -12,6 +12,8 @@ import {
   Hex,
   ClientConfig,
   getContract,
+  Chain,
+  erc20Abi,
 } from "viem";
 import { syncToZustand } from "@latticexyz/store-sync/zustand";
 import { getNetworkConfig } from "./getNetworkConfig";
@@ -40,7 +42,7 @@ export async function setupNetwork() {
    * (https://viem.sh/docs/clients/public.html)
    */
   const clientOptions = {
-    chain: networkConfig.chain,
+    chain: networkConfig.chain as Chain,
     transport: transportObserver(fallback([webSocket(), http()])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
@@ -75,6 +77,15 @@ export async function setupNetwork() {
   });
 
   /*
+   * Create an object for communicating with the deployed ERC20 contract.
+   */
+  const erc20Contract = getContract({
+    address: import.meta.env.VITE_ERC20_TOKEN_ADDRESS as Hex,
+    abi: erc20Abi,
+    client: { public: publicClient, wallet: burnerWalletClient },
+  });
+
+  /*
    * Sync on-chain state into RECS and keeps our client in sync.
    * Uses the MUD indexer if available, otherwise falls back
    * to the viem publicClient to make RPC calls to fetch MUD
@@ -85,6 +96,11 @@ export async function setupNetwork() {
     address: networkConfig.worldAddress as Hex,
     publicClient,
     startBlock: BigInt(networkConfig.initialBlockNumber),
+    filters: [
+      {
+        tableId: mudConfig.tables.dapp_dev2__TurretWhitelist.tableId,
+      }
+    ]
   });
 
   return {
@@ -96,6 +112,7 @@ export async function setupNetwork() {
     storedBlockLogs$,
     waitForTransaction,
     worldContract,
+    erc20Contract,
     write$: write$.asObservable().pipe(share()),
   };
 }
