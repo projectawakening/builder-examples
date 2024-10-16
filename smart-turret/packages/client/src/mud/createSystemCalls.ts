@@ -22,33 +22,36 @@ export function createSystemCalls(
    *   - useStore
    *   - tables
    */
-  { worldContract, useStore, tables }: SetupNetworkResult
+  { worldContract, useStore, tables, waitForTransaction }: SetupNetworkResult
 ) {
   const getWhitelist = async () => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
 		const result = useStore.getState().getValue(tables.TurretWhitelist, {id})
-    console.log(result);
 		return result;
 	};
 
   const addToWhitelist = async (char) => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
-		const result = await worldContract.write.dapp_dev2__addToWhitelist([
+		const transaction = await worldContract.write.dapp_dev2__addToWhitelist([
 			id,
       char
 		]);		
 
-    return await useStore.getState().getValue(tables.TurretWhitelist, {id});
+    await waitForTransaction(transaction);
+
+    return useStore.getState().getValue(tables.TurretWhitelist, {id});
 	};
   
   const removeFromWhitelist = async (char) => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
-		const result = await worldContract.write.dapp_dev2__removeFromWhitelist([
+		const transaction = await worldContract.write.dapp_dev2__removeFromWhitelist([
 			id,
       char
 		]);		
+    
+    await waitForTransaction(transaction);
 
-    return await useStore.getState().getValue(tables.TurretWhitelist, {id});
+    return useStore.getState().getValue(tables.TurretWhitelist, {id});
 	};
 
 	return {

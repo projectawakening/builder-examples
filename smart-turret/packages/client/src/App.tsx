@@ -40,13 +40,12 @@ export const App = () => {
 		refString.current = eventString;
 	};
 
-	//Auto reload whitelist
 	useEffect(() => {
-		fetchWhitelist();
+
 		setTimeout(function(){
-			fetchWhitelist();
-		}, 1000);
-	});
+			fetchWhitelist(null);
+		}, 3000)
+	}, [])
 
 	//Remove from the whitelist
 	const remove = async (id) => {
@@ -56,8 +55,8 @@ export const App = () => {
 	}
 
 	//Fetch the whitelist data
-	async function fetchWhitelist(){		
-		console.log("FETCHING");
+	async function fetchWhitelist(event){
+		if(event) event.preventDefault();		
 		const whitelist = await getWhitelist();
 		loadWhitelist(whitelist);
 	}	
@@ -131,7 +130,7 @@ export const App = () => {
 				<Section>			
 					<EveButton 
 						typeClass="primary"
-						onClick={fetchWhitelist}
+						onClick={(event) => fetchWhitelist(event)}
 						className="primary-sm">
 						Fetch Whitelist						
 					</EveButton>
@@ -144,8 +143,8 @@ export const App = () => {
 					<EveScroll
 						maxHeight="200px"
 						classStyles="h-full"
-					>					
-						{whitelist}
+					>				
+					{whitelist}	
 					</EveScroll>
 				</Section>		
 			</ContentContainer>
