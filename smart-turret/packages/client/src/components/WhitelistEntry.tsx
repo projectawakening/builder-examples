@@ -12,12 +12,15 @@ const WhitelistEntry = React.memo(
         const [name, setName] = useState("LOADING....");
         const [img, setImg] = useState("");
 
+        //If it isn't the placeholder loading entry, load the name & image
         if(id != "LOADING...."){
+            //API Request to the world API
             Promise.resolve(
                 fetch(`https://blockchain-gateway-nova.nursery.reitnorf.com/smartcharacters/${id}`)
             )
             .then((res) => res.json())
             .then(x => {
+                //Set the name and image values
                 setName(x.name);
                 setImg(x.image);
             });

@@ -18,7 +18,6 @@ import Section from './components/Section'
 
 export const App = () => {
 	const {
-		network: { walletClient },
 		systemCalls: {
 			getWhitelist,
 			addToWhitelist,
@@ -26,7 +25,8 @@ export const App = () => {
 		},
 	} = useMUD();
 
-	const characterIDRef = useRef(0);
+	//Character name input value
+	const characterNameInputRef = useRef(0);
 
 	//Pre-populate the UI list 
 	const [whitelist, setWhitelist] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
@@ -40,8 +40,8 @@ export const App = () => {
 		refString.current = eventString;
 	};
 
+	//Initial load
 	useEffect(() => {
-
 		setTimeout(function(){
 			fetchWhitelist(null);
 		}, 1000)
@@ -71,7 +71,8 @@ export const App = () => {
 
 	//Add to the whitelist
 	async function addToWhitelistButton (){
-		if(characterIDRef.current == ""){			
+		//Check there is a name
+		if(characterNameInputRef.current == ""){			
 			setAddErrorVar("- NO INPUT");
 			return;
 		}
@@ -84,7 +85,7 @@ export const App = () => {
 
 		//Check to see if the address exists
 		for(var i = 0; i < data.length; i++){
-			if(data[i].name == characterIDRef.current){
+			if(data[i].name == characterNameInputRef.current){
 				address = data[i].address;
 			}
 		}
@@ -117,7 +118,7 @@ export const App = () => {
 							inputType="string"
 							defaultValue=""
 							fieldName={`Character Name ${addErrorVar}`}
-							onChange={(str) => handleEdit(characterIDRef, str as number)}
+							onChange={(str) => handleEdit(characterNameInputRef, str as number)}
 						/>
 						<EveButton 
 							typeClass="primary"
