@@ -4,6 +4,13 @@
  */
 
 import { SetupNetworkResult } from "./setupNetwork";
+import React, { useEffect, useState, useRef } from "react";
+
+import {
+	useNotification,
+	useConnection,
+	useSmartObject,
+  } from "@eveworld/contexts";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -33,6 +40,15 @@ export function createSystemCalls(
 
   const addToWhitelist = async (char) => {
     var id = import.meta.env.VITE_SMART_TURRET_ID
+    
+	const {
+		publicClient,
+		walletClient
+	  } = useConnection();
+    
+    console.log("Public Client CALL", publicClient);
+    console.log("Wallet Client CALL", walletClient);
+
 		const result = await worldContract.write.dapp_dev2__addToWhitelist([
 			id,
       char

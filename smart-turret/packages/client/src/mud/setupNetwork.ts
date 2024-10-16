@@ -17,7 +17,7 @@ import {
 } from "viem";
 import { syncToZustand } from "@latticexyz/store-sync/zustand";
 import { getNetworkConfig } from "./getNetworkConfig";
-import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
+import IWorldAbi from "../../../contracts/out/IWorld.sol/IWorld.abi.json";
 import { createBurnerAccount, transportObserver, ContractWrite } from "@latticexyz/common";
 import { transactionQueue, writeObserver } from "@latticexyz/common/actions";
 import { Subject, share } from "rxjs";
@@ -46,6 +46,8 @@ export async function setupNetwork() {
     transport: transportObserver(fallback([webSocket(), http()])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
+
+  console.log("ABI:", IWorldAbi)
 
   const publicClient = createPublicClient(clientOptions);
 
@@ -97,6 +99,8 @@ export async function setupNetwork() {
     publicClient,
     startBlock: BigInt(networkConfig.initialBlockNumber),
   });
+
+  console.log("Burner", burnerWalletClient);
 
   return {
     tables,

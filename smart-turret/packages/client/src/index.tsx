@@ -6,6 +6,7 @@ import mudConfig from "contracts/mud.config";
 import React from "react";
 import { EveWorldProvider } from "@eveworld/contexts";
 
+import TurretWhitelistProvider from './components/TurretContext'
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -14,9 +15,11 @@ const root = ReactDOM.createRoot(rootElement);
 setup().then(async (result) => {
   root.render(
     <EveWorldProvider>
-      <MUDProvider value={result}>
-        <App />
-      </MUDProvider>
+      <TurretWhitelistProvider>
+        <MUDProvider value={result}>
+          <App />
+        </MUDProvider>
+      </TurretWhitelistProvider>
     </EveWorldProvider>
   );
 

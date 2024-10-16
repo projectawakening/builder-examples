@@ -1,9 +1,20 @@
 //Import packages
 import { useMUD } from "./MUDContext";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 
 //Import EVE Frontier Packages
 import { EveButton, EveInput, EveScroll } from "@eveworld/ui-components";
+import { Actions, Severity, State } from "@eveworld/types";
+import IWorldAbi from "../../contracts/out/IWorld.sol/IWorld.abi.json";
+
+import { TurretWhitelistContext } from "./components/TurretContext";
+import {
+	AbiItem,
+	BaseError,
+	ContractFunctionRevertedError,
+	encodeFunctionData,
+	getAbiItem,
+  } from "viem";
 
 //Import CSS
 import "./styles.css";
@@ -16,9 +27,13 @@ import Title from './components/Title'
 import ContentContainer from './components/ContentContainer'
 import Section from './components/Section'
 
+import { SYSTEM_IDS, getDappUrl, getSystemId, isOwner } from "@eveworld/utils";
+
+
 import {
 	useNotification,
 	useConnection,
+	useWorld,
 	useSmartObject,
   } from "@eveworld/contexts";
   import {
@@ -52,6 +67,10 @@ export const App = () => {
 	  } = useConnection();
 
 	const characterIDRef = useRef(0);
+    const { smartAssembly } = useSmartObject();
+	const { handleSendTx, notify } = useNotification();
+
+	console.log("ASSEMBLY:", smartAssembly);
 
 	//Pre-populate the UI list 
 	const [whitelist, setWhitelist] = useState(<WhitelistEntry id={"LOADING...."}></WhitelistEntry>);
@@ -67,10 +86,7 @@ export const App = () => {
 
 	//Auto reload whitelist
 	useEffect(() => {
-		fetchWhitelist();
-		setTimeout(function(){
-			fetchWhitelist();
-		}, 1000);
+		//fetchWhitelist();
 	});
 
 	//Remove from the whitelist
@@ -93,6 +109,133 @@ export const App = () => {
 		
 		var newArray = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
 		setWhitelist(newArray);
+	}
+
+	const {TurretWhitelistContract} = useContext(TurretWhitelistContext)		
+
+	async function addToWhitelistButton3 (){
+		if (!world || !smartAssembly || !walletClient?.account || !publicClient)
+			return;
+
+			const systemId = getSystemId(
+			defaultNetwork.systemIds,
+			SYSTEM_IDS.UPDATE_METADATA,
+			);
+			if (!systemId) return;
+
+		//Fetch the world API data
+		const response = await fetch(`https://blockchain-gateway-nova.nursery.reitnorf.com/smartcharacters`);
+		const data = await response.json();			
+
+		var address = null;
+
+		//Check to see if the address exists
+		for(var i = 0; i < data.length; i++){
+			if(data[i].name == characterIDRef.current){
+				address = data[i].address;
+			}
+		}
+
+		//If an address wasn't found, exit
+		if(address == null){
+			setAddErrorVar("- CHARACTER NOT FOUND");
+			return;
+		}
+
+		try {
+		const setMetadataAbiItem: AbiItem | undefined = getAbiItem({
+			abi: IWorldAbi,
+			name: "dapp_dev2__addToWhitelist",
+		});
+
+		const callData = encodeFunctionData({
+			abi: [setMetadataAbiItem],
+			functionName: "dapp_dev2__addToWhitelist",
+			args: [
+			smartAssembly.id,
+			address
+			],
+		});
+
+		console.log("SYSTEM: ", defaultNetwork);
+		console.log("SYSTEM_ID: ", systemId);
+
+		handleSendTx({
+			encodedFunctionData: callData,
+			systemId,
+			onClose: () => {},
+		});
+		} catch (e) {
+		notify({
+			type: Severity.Error,
+			message: "Transaction failed to execute",
+		});
+		console.error(e);
+		}
+	}
+
+	async function addToWhitelistButton2 (){
+		if (!world || !smartAssembly || !walletClient?.account || !publicClient)
+			return;
+	
+		//Fetch the world API data
+		const response = await fetch(`https://blockchain-gateway-nova.nursery.reitnorf.com/smartcharacters`);
+		const data = await response.json();			
+
+		var address = null;
+
+		//Check to see if the address exists
+		for(var i = 0; i < data.length; i++){
+			if(data[i].name == characterIDRef.current){
+				address = data[i].address;
+			}
+		}
+
+		//If an address wasn't found, exit
+		if(address == null){
+			setAddErrorVar("- CHARACTER NOT FOUND");
+			return;
+		}
+
+		try {	
+		const systemId = getSystemId(
+			defaultNetwork.systemIds,
+			SYSTEM_IDS.LINK_GATE,
+		);
+		if (!systemId) return;
+
+		const setMetadataAbiItem: AbiItem | undefined = getAbiItem({
+			abi: IWorldAbi,
+			name: "dapp_dev2__addToWhitelist",
+		});
+
+		console.log("ABI2", setMetadataAbiItem);
+
+		const callData = encodeFunctionData({
+			abi: [setMetadataAbiItem],
+			functionName: "dapp_dev2__addToWhitelist",
+			args: [
+			BigInt(smartAssembly.id),
+			address
+			],
+		});
+
+		console.log("SYSTEM: ", defaultNetwork);
+		console.log("SYSTEM_ID: ", systemId);
+		console.log("CALL DATA: ", callData);
+
+		handleSendTx({
+			encodedFunctionData: callData,
+			systemId,
+			onClose: () => {},
+		});
+		} catch (e) {
+		notify({
+			type: Severity.Error,
+			message: "Transaction failed to execute",
+		});
+		console.error(e);
+		}
 	}
 
 	//Add to the whitelist
@@ -132,11 +275,13 @@ export const App = () => {
 	}
 
 	const { connected } = connectedProvider;
+    const { world } = useWorld();
 
 	console.log("Connected", connected);
 	console.log("Public Client", publicClient);
 	console.log("Wallet Client", walletClient);
-	
+	console.log("World", world);
+
 	if (!connected || !publicClient || !walletClient) {
 		return (
 		<div className="h-full w-full bg-crude-5 -z-10">
@@ -166,7 +311,7 @@ export const App = () => {
 						/>
 						<EveButton 
 							typeClass="primary"
-							onClick={addToWhitelistButton}
+							onClick={addToWhitelistButton2}
 							className="primary-sm">
 								Add to Whitelist					
 						</EveButton>						
