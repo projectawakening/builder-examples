@@ -16,15 +16,40 @@ import Title from './components/Title'
 import ContentContainer from './components/ContentContainer'
 import Section from './components/Section'
 
+import {
+	useNotification,
+	useConnection,
+	useSmartObject,
+  } from "@eveworld/contexts";
+  import {
+	EveConnectWallet,
+	EveFeralCodeGen,
+	ErrorNotice,
+	ErrorNoticeTypes,
+	EveLayout,
+	EveAlert,
+  } from "@eveworld/ui-components";
+
 export const App = () => {
 	const {
-		network: { walletClient },
 		systemCalls: {
 			getWhitelist,
 			addToWhitelist,
 			removeFromWhitelist
 		},
 	} = useMUD();
+
+	
+	const {
+		connectedProvider,
+		publicClient,
+		walletClient,
+		isCurrentChain,
+		handleConnect,
+		handleDisconnect,
+		availableWallets,
+		defaultNetwork,
+	  } = useConnection();
 
 	const characterIDRef = useRef(0);
 
@@ -106,6 +131,25 @@ export const App = () => {
 		if(whitelist != null) loadWhitelist(whitelist);
 	}
 
+	const { connected } = connectedProvider;
+
+	console.log("Connected", connected);
+	console.log("Public Client", publicClient);
+	console.log("Wallet Client", walletClient);
+	
+	if (!connected || !publicClient || !walletClient) {
+		return (
+		<div className="h-full w-full bg-crude-5 -z-10">
+			<EveConnectWallet
+			handleConnect={handleConnect}
+			availableWallets={availableWallets}
+			/>
+			<GenerateEveFeralCodeGen style="top-12" />
+			<GenerateEveFeralCodeGen style="bottom-12" />
+		</div>
+		);
+	}
+
 	return (
 		<AppContainer>
 			<Title>
@@ -152,3 +196,23 @@ export const App = () => {
 		</AppContainer>
 	);
 };
+
+const GenerateEveFeralCodeGen = ({
+	style,
+	count = 5,
+  }: {
+	style?: string;
+	count?: number;
+  }) => {
+	const codes = Array.from({ length: count }, (_, i) => i);
+	return (
+	  <div
+		className={`absolute flex justify-between px-10 justify-items-center w-full text-xs ${style}`}
+	  >
+		{codes.map((index) => (
+		  <EveFeralCodeGen key={index} />
+		))}{" "}
+	  </div>
+	);
+  };
+  

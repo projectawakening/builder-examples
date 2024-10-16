@@ -4,6 +4,8 @@ import { setup } from "./mud/setup";
 import { MUDProvider } from "./MUDContext";
 import mudConfig from "contracts/mud.config";
 import React from "react";
+import { EveWorldProvider } from "@eveworld/contexts";
+
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
@@ -11,9 +13,11 @@ const root = ReactDOM.createRoot(rootElement);
 
 setup().then(async (result) => {
   root.render(
-    <MUDProvider value={result}>
-      <App />
-    </MUDProvider>
+    <EveWorldProvider>
+      <MUDProvider value={result}>
+        <App />
+      </MUDProvider>
+    </EveWorldProvider>
   );
 
   // https://vitejs.dev/guide/env-and-mode.html

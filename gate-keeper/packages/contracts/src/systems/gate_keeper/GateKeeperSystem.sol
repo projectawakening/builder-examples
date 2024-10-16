@@ -72,7 +72,7 @@ contract GateKeeperSystem is System {
     uint256 inventoryItemId,
     uint256 targetQuantity
   ) public onlyOwner(smartObjectId) {
-    require(targetQuantity > 0, "Price cannot be 0");
+    require(targetQuantity > 0, "Price cannot be 0 or less");
     GateKeeperConfig.setTargetItemQuantity(smartObjectId, targetQuantity);
   }
 
@@ -89,10 +89,12 @@ contract GateKeeperSystem is System {
 
     uint256 quantityInInventory = InventoryItemTable.getQuantity(smartObjectId, gatekeeperConfig.itemIn);
 
+    //If the items in and current quantity is higher than the goal, lower the amount transfered
     if (quantityInInventory + quantity > gatekeeperConfig.targetItemQuantity) {
       quantity = gatekeeperConfig.targetItemQuantity - quantityInInventory;
     }
 
+    //Check if the goal has been reached
     if (quantityInInventory + quantity == gatekeeperConfig.targetItemQuantity) {
       GateKeeperConfig.setIsGoalReached(smartObjectId, true);
     }
@@ -106,6 +108,7 @@ contract GateKeeperSystem is System {
     TransferItem[] memory ephInvTransferItems = new TransferItem[](1);
     ephInvTransferItems[0] = TransferItem(gatekeeperConfig.itemIn, _msgSender(), quantity);
 
+    //Transfer items
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, ephInvTransferItems);
   }
 
