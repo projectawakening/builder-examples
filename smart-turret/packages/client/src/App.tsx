@@ -65,7 +65,7 @@ export const App = () => {
 	async function loadWhitelist(result){
 		if(result == null) return;
 		
-		var newArray = result.whitelist.map((value) => <WhitelistEntry id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
+		var newArray = result.whitelist.map((value) => <WhitelistEntry key={value.toString()} id={value.toString()} handleClick={remove}>{value}</WhitelistEntry>)
 		setWhitelist(newArray);
 	}
 
