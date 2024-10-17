@@ -29,6 +29,10 @@
   z-index: 1000;
 }
 
+.custom-tab{
+  width: 100%!important;
+}
+
 .console input {
   background-color: #222;
   width: calc(100% - 120px);

@@ -18,6 +18,23 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { SmartTurretConfigTable } from "@eveworld/world/src/codegen/tables/SmartTurretConfigTable.sol";
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 
+/*
+  This script will test the whitelisting functionality of the Smart Turret example.
+  The first test tests the functionality of a character that is not whitelisted:
+    Queue:
+      1. Not whitelisted - 33333
+      2. Not whitelisted - 11112
+    Target:
+       Not whitelisted - 11112
+
+  The second test tests the functionality of a character that is whitelisted:
+    Queue:
+      1. Not whitelisted - 33333
+      2. Whitelisted - 200
+    Target:
+       Whitelisted - 200
+*/
+
 contract ExecuteInProximity is Script {
   using SmartTurretUtils for bytes14;
   using SmartTurretLib for SmartTurretLib.World;
@@ -74,11 +91,11 @@ contract ExecuteInProximity is Script {
     priorityQueue[1] = TargetPriority({ target: turretTarget, weight: 100 });
 
     TargetPriority[] memory returnTargetQueue = smartTurret.inProximity(
-      smartTurretId,
-      11111,
-      priorityQueue,
-      turret,
-      turretTarget
+      smartTurretId, //Smart Turret ID
+      11111, //Owner Character ID
+      priorityQueue, //Current target queue
+      turret, //Turret Data
+      turretTarget //Target Data
     );
 
     console.log("Queue Length:", returnTargetQueue.length); //2
@@ -89,7 +106,7 @@ contract ExecuteInProximity is Script {
     SmartTurretTarget memory turretTargetWhitelisted = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
-      characterId: 77777,
+      characterId: 200,
       hpRatio: 100,
       shieldRatio: 100,
       armorRatio: 100
@@ -98,11 +115,11 @@ contract ExecuteInProximity is Script {
     priorityQueue[1] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
 
     TargetPriority[] memory returnTargetQueueWhitelisted = smartTurret.inProximity(
-      smartTurretId,
-      11111,
-      priorityQueue,
-      turret,
-      turretTargetWhitelisted
+      smartTurretId, //Smart Turret ID
+      11111, //Owner Character ID
+      priorityQueue, //Current target queue
+      turret, //Turret Data
+      turretTargetWhitelisted //Target Data
     );
     
     console.log("Queue Length:", returnTargetQueueWhitelisted.length); //2

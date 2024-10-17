@@ -34,9 +34,13 @@ contract ConfigureSmartTurret is Script {
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
 
     ResourceId systemId = Utils.smartTurretSystemId();
-    
+
     //This function can only be called by the owner of the smart turret
     smartTurret.configureSmartTurret(smartTurretId, systemId);
+
+    address player = vm.addr(playerPrivateKey);
+
+    world.call(systemId, abi.encodeCall(SmartTurretSystem.addToWhitelist, (smartTurretId, player)));
 
     vm.stopBroadcast();
   }

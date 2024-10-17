@@ -49,9 +49,6 @@ contract SmartTurretSystem is System {
     //Get MUD whitelist table
     address[] memory whitelist = TurretWhitelist.get(smartTurretId);
 
-    //Log the character ID
-    console.log("CHARACTER ID:", turretTarget.characterId);
-
     address targetAddress = CharactersTable.getCharacterAddress(turretTarget.characterId);
 
     bool found = inWhitelist(whitelist, targetAddress);
@@ -69,8 +66,6 @@ contract SmartTurretSystem is System {
       //Add to the target queue
       updatedPriorityQueue[priorityQueue.length] = TargetPriority({ target: turretTarget, weight: 1 }); 
     
-      console.log("ADD TO QUEUE:", turretTarget.characterId);
-
       //Return the new queue
       return updatedPriorityQueue;
     } 
@@ -83,8 +78,6 @@ contract SmartTurretSystem is System {
       }
 
       if(found){
-        console.log("REMOVING FROM QUEUE");
-
         updatedPriorityQueue = new TargetPriority[](priorityQueue.length - 1);
 
         uint256 index = 0;
@@ -107,7 +100,7 @@ contract SmartTurretSystem is System {
   /**
    * @dev a function to add a character to the whitelist
    * @param smartTurretId The smart turret id
-   * @param character is the owner to add 
+   * @param character is the character to add 
    */
   function addToWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) {            
     //address character = CharactersTable.getCharacterAddress(characterId);
@@ -135,6 +128,22 @@ contract SmartTurretSystem is System {
     return newWhitelist;
   }
 
+  /**
+   * @dev a function to add a character to the whitelist by ID
+   * @param smartTurretId The smart turret id
+   * @param characterID is the character to add 
+   */
+  function addToWhitelistByID(uint256 smartTurretId, uint256 characterID) public returns(address[] memory whitelist) {            
+    address characterAddress = CharactersTable.getCharacterAddress(characterID);
+
+    addToWhitelist(smartTurretId, characterAddress);
+  }
+
+  /**
+   * @dev a function to remove a character from the whitelist
+   * @param smartTurretId The smart turret id
+   * @param characterID is the character to add 
+   */
   function removeFromWhitelist(uint256 smartTurretId, address character) public returns(address[] memory whitelist) { 
     //Get current whitelist
     whitelist = TurretWhitelist.get(smartTurretId);
@@ -163,6 +172,11 @@ contract SmartTurretSystem is System {
     return updatedWhitelist;
   }
 
+  /**
+   * @dev a function to check if a character is in the whitelist
+   * @param whitelist the whitelist array
+   * @param character the character for the check
+   */
   function inWhitelist(address[] memory whitelist, address character) public returns(bool){    
     //Check whitelist
     for(uint256 i = 0; i < whitelist.length; i++){
@@ -172,6 +186,10 @@ contract SmartTurretSystem is System {
     return false;
   }
 
+  /**
+   * @dev a function to get the whitelist for a turret
+   * @param smartTurretId the smart turret ID
+   */
   function getWhitelist(uint256 smartTurretId) public returns(address[] memory whitelist) {
     whitelist = TurretWhitelist.get(smartTurretId);
 

@@ -66,8 +66,9 @@ contract MockData is Script {
 
     //Create a smart character
     if (CharactersByAddressTable.get(player) == 0) {
+      console.log("CREATE CHAR");
       smartCharacter.createCharacter(
-        77777,
+        200,
         player,
         100,
         EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),

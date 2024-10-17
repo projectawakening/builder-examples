@@ -16,6 +16,9 @@ import Title from './components/Title'
 import ContentContainer from './components/ContentContainer'
 import Section from './components/Section'
 
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
 export const App = () => {
 	const {
 		systemCalls: {
@@ -50,7 +53,6 @@ export const App = () => {
 	//Remove from the whitelist
 	const remove = async (id) => {
 		const whitelist = await removeFromWhitelist(id);
-
 		loadWhitelist(whitelist);
 	}
 
@@ -112,7 +114,22 @@ export const App = () => {
 				SMART TURRET WHITELISTING
 			</Title>
 			<ContentContainer>
-				<Section>				
+				<Section>		
+				<ToggleButtonGroup
+					value={"TEST"}
+					exclusive
+					onChange={() => {}}
+					>
+					<ToggleButton className="Eve-Button primary" value="list" aria-label="list">
+						Name
+					</ToggleButton>
+					<ToggleButton className="Eve-Button primary" value="module" aria-label="module">
+						ID
+					</ToggleButton>
+					<ToggleButton className="Eve-Button primary" value="quilt" aria-label="quilt">
+						Address
+					</ToggleButton>
+				</ToggleButtonGroup>		
 					<div className="grid grid-cols-1 rows-2 gap-1">
 						<EveInput
 							inputType="string"
