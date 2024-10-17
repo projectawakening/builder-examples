@@ -22,11 +22,11 @@
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",
     "@eveworld/world": "0.0.17",
-    "@latticexyz/cli": "2.2.9",
-    "@latticexyz/schema-type": "2.2.9",
-    "@latticexyz/store": "2.2.9",
-    "@latticexyz/world": "2.2.9",
-    "@latticexyz/world-modules": "2.2.9",
+    "@latticexyz/cli": "2.2.10",
+    "@latticexyz/schema-type": "2.2.10",
+    "@latticexyz/store": "2.2.10",
+    "@latticexyz/world": "2.2.10",
+    "@latticexyz/world-modules": "2.2.10",
     "i": "^0.3.7",
     "npm": "^10.8.0"
   },
