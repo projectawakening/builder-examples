@@ -10,6 +10,7 @@ import { Utils } from "../src/systems/Utils.sol";
 import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
 
 contract ConfigureSmartTurret is Script {
   using SmartTurretUtils for bytes14;
@@ -36,6 +37,10 @@ contract ConfigureSmartTurret is Script {
 
     //This function can only be called by the owner of the smart turret
     smartTurret.configureSmartTurret(smartTurretId, systemId);
+
+    address player = vm.addr(playerPrivateKey);
+
+    world.call(systemId, abi.encodeCall(SmartTurretSystem.addToWhitelist, (smartTurretId, player)));
 
     vm.stopBroadcast();
   }

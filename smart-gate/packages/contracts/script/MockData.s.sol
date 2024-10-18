@@ -66,15 +66,16 @@ contract MockData is Script {
     //Create a smart character
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        666666666,
-        player,
-        3434306,
+        666666666, //Character ID
+        player, // Character Address
+        34343061, // Corp ID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
         ""
       );
     }
 
+    //Anchor both smart gates
     anchorFuelAndOnline(sourceGateId, player);
     anchorFuelAndOnline(destinationGateId, player);
 

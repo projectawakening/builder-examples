@@ -18,6 +18,23 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { SmartTurretConfigTable } from "@eveworld/world/src/codegen/tables/SmartTurretConfigTable.sol";
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 
+/*
+  This script will test the whitelisting functionality of the Smart Turret example.
+  The first test tests the functionality of a character that is not whitelisted:
+    Queue:
+      1. Not whitelisted - 33333
+      2. Not whitelisted - 11112
+    Target:
+       Not whitelisted - 11112
+
+  The second test tests the functionality of a character that is whitelisted:
+    Queue:
+      1. Not whitelisted - 33333
+      2. Whitelisted - 200
+    Target:
+       Whitelisted - 200
+*/
+
 contract ExecuteInProximity is Script {
   using SmartTurretUtils for bytes14;
   using SmartTurretLib for SmartTurretLib.World;
@@ -31,6 +48,8 @@ contract ExecuteInProximity is Script {
     uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     vm.startBroadcast(playerPrivateKey);
 
+    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
+
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
@@ -39,19 +58,27 @@ contract ExecuteInProximity is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
-
-    console.log(uint8(DeployableState.getCurrentState(smartTurretId)));
-
-    console.logBool(ResourceIds.getExists(SmartTurretConfigTable.get(smartTurretId)));
-
-    console.log(CharactersTable.getCorpId(11112));
-    console.log(CharactersTable.getCorpId(11111));
+    console.log("-------------------");
+    console.log("Deployable State:", uint8(DeployableState.getCurrentState(smartTurretId)));
+    console.log("-------------------");
+    console.log("TESTING NOT WHITELISTED");
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
-    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    TargetPriority[] memory priorityQueue = new TargetPriority[](2);
+
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
+
+    SmartTurretTarget memory spareTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: 33333,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+
+    priorityQueue[0] = TargetPriority({ target: spareTarget, weight: 100 });
 
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -61,17 +88,41 @@ contract ExecuteInProximity is Script {
       shieldRatio: 100,
       armorRatio: 100
     });
-    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    priorityQueue[1] = TargetPriority({ target: turretTarget, weight: 100 });
 
     TargetPriority[] memory returnTargetQueue = smartTurret.inProximity(
-      smartTurretId,
-      11111,
-      priorityQueue,
-      turret,
-      turretTarget
+      smartTurretId, //Smart Turret ID
+      11111, //Owner Character ID
+      priorityQueue, //Current target queue
+      turret, //Turret Data
+      turretTarget //Target Data
     );
 
-    console.log(returnTargetQueue.length); //2
+    console.log("Queue Length:", returnTargetQueue.length); //2
+    
+    console.log("-------------------");
+    console.log("TESTING WHITELISTED");
+
+    SmartTurretTarget memory turretTargetWhitelisted = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: 200,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+    
+    priorityQueue[1] = TargetPriority({ target: turretTargetWhitelisted, weight: 100 });
+
+    TargetPriority[] memory returnTargetQueueWhitelisted = smartTurret.inProximity(
+      smartTurretId, //Smart Turret ID
+      11111, //Owner Character ID
+      priorityQueue, //Current target queue
+      turret, //Turret Data
+      turretTargetWhitelisted //Target Data
+    );
+    
+    console.log("Queue Length:", returnTargetQueueWhitelisted.length); //2
 
     vm.stopBroadcast();
   }

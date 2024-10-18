@@ -78,7 +78,7 @@ contract MockSsuData is Script {
 
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        66666,
+        66661,
         player,
         200004,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),

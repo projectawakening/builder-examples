@@ -21,6 +21,8 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
 import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
+import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
+import { Utils } from "../src/systems/Utils.sol";
 
 contract MockData is Script {
   using SmartCharacterUtils for bytes14;
@@ -64,8 +66,9 @@ contract MockData is Script {
 
     //Create a smart character
     if (CharactersByAddressTable.get(player) == 0) {
+      console.log("CREATE CHAR");
       smartCharacter.createCharacter(
-        77777,
+        200,
         player,
         100,
         EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
@@ -73,6 +76,9 @@ contract MockData is Script {
         "tokenCid"
       );
     }
+    
+    IBaseWorld world = IBaseWorld(worldAddress);
+    ResourceId systemId = Utils.smartTurretSystemId();
 
     anchorAndOnlineSmartTurret(smartTurretId, player);
 
