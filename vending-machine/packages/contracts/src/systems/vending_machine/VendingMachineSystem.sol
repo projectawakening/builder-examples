@@ -70,7 +70,8 @@ contract VendingMachineSystem is System {
    * @dev Ideally the ration can be configured in a seperate function and stored on-chain
    * //TODO this function needs to be authorized by the builder to access inventory functions through RBAC
    * @param smartObjectId The smart object id of the smart storage unit
-   * @param quantity is the quanity of the item to be exchanged
+   * @param quantity The quantity of the item to be exchanged
+   * @param inventoryItemIdIn The inventory item id of the item that goes in
    */
   function executeVendingMachine(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
@@ -87,10 +88,6 @@ contract VendingMachineSystem is System {
     );
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
-
-    EntityRecordTableData memory itemInEntity = EntityRecordTable.get(inventoryItemIdIn);
-
-    EntityRecordTableData memory itemOutEntity = EntityRecordTable.get(itemObjectIdOut);
 
     TransferItem[] memory inItems = new TransferItem[](1);
     inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, quantity);

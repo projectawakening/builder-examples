@@ -8,3 +8,6 @@ procs:
   mock-data:
     cwd: packages/mock-data
     shell: pnpm run dev
+  explorer:
+    cwd: packages/contracts
+    shell: pnpm explorer

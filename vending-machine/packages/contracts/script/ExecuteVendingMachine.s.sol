@@ -37,7 +37,7 @@ contract ExecuteVendingMachine is Script {
     console.log(invItem.quantity); //0
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(VendingMachineSystem.executeVendingMachine, (smartStorageUnitId, 1, itemIn)));
+    world.call(systemId, abi.encodeCall(VendingMachineSystem.executeVendingMachine, (smartStorageUnitId, 5, itemIn)));
 
     //Check Players ephemeral inventory after
     invItem = EphemeralInvItemTable.get(smartStorageUnitId, itemOut, player);
