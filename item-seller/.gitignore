@@ -1,8 +1,0 @@
-node_modules
-node_modules/
-packages/contracts/worlds.json
-packages/contracts/src/codegen/
-packages/mock-data/out/
-packages/mock-data/package.json
-packages/mock-data/broadcast/
-packages/mock-data/cache/

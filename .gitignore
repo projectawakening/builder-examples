@@ -3,7 +3,5 @@ mock-data/node_modules/
 mock-data/node_modules/.pnpm/
 mock-data/out/
 mock-data/broadcast/
-gate-keeper/packages/contracts/.env
-item-seller/packages/contracts/.env
-item-seller/packages/client/.env
 vending-machine/packages/contracts/.env
+.DS_Store

@@ -1,9 +1,9 @@
 # Vending Machine Example
 
 ## Introduction
-This guide will walk you through the process of building contracts for the vending machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for a Smart Storage Unit Vending Machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-A vending machine is a SSU (Smart Storage Unit) in the game which can be setup to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange 1 ore for 2 mining crystals
+A Smart Storage Unit may be configured to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, or vend, 1 ore for 2 mining crystals.
 
 ### Additional Information
 
