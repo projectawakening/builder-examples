@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
+import { console } from "forge-std/console.sol";
 import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -23,29 +24,29 @@ import { Utils as InventoryUtils } from "@eveworld/world/src/modules/inventory/U
 import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
-import { RatioConfig, RatioConfigData } from "../../codegen/tables/RatioConfig.sol";
+import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
 import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
- * This contract implements vending machine as a feature to the existing inventoryIn logic
+ * This contract implements item trade as a feature to the existing inventoryIn logic
  */
-contract VendingMachineSystem is System {
+contract SmartStorageUnitSystem is System {
   using InventoryLib for InventoryLib.World;
   using EntityRecordUtils for bytes14;
   using InventoryUtils for bytes14;
   using SmartDeployableUtils for bytes14;
 
   /**
-   * @dev Define what goes in and out and set the exchange ratio for a vending machine
-   * @param smartObjectId The smart object id of the vending machine
+   * @dev Define what goes in and out and set the exchange ratio for a item trade
+   * @param smartObjectId The smart object id of the item trade
    * @param inventoryItemIdIn The inventory item id of the item that goes in
    * @param inventoryItemIdOut The inventory item id of the item that goes out
    * @param quantityIn The ratio of the item that goes in
    * @param quantityOut The ratio of the item that goes out
    * The ratios are whole numbers as an item cannot exist as float in game
    */
-  function setVendingMachineRatio(
+  function setRatio(
     uint256 smartObjectId,
     uint256 inventoryItemIdIn,
     uint256 inventoryItemIdOut,
@@ -60,20 +61,20 @@ contract VendingMachineSystem is System {
     EntityRecordTableData memory entityOutRecord = EntityRecordTable.get(inventoryItemIdOut);
 
     if (entityInRecord.recordExists == false || entityOutRecord.recordExists == false) {
-      revert IInventoryErrors.Inventory_InvalidItem("VendingMachine: item is not created on-chain", inventoryItemIdIn);
+      revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
     }
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, quantityIn, quantityOut);
   }
 
   /**
-   * @notice Handle the interaction flow for vending machine to exchange 2x:10y items between two players
+   * @notice Handle the interaction flow for item trade to exchange x:y items between two players
    * @dev Ideally the ration can be configured in a seperate function and stored on-chain
    * //TODO this function needs to be authorized by the builder to access inventory functions through RBAC
    * @param smartObjectId The smart object id of the smart storage unit
    * @param quantity The quantity of the item to be exchanged
    * @param inventoryItemIdIn The inventory item id of the item that goes in
    */
-  function executeVendingMachine(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) public {
+  function execute(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
     if (ratioConfigData.ratioIn == 0 || ratioConfigData.ratioOut == 0) {
       return;
@@ -99,6 +100,9 @@ contract VendingMachineSystem is System {
 
     ephTransferItems = new TransferItem[](1);
     ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
+
+    console.log("**");
+    console.log(inItems[0].quantity);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);

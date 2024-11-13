@@ -21,11 +21,11 @@
     "execute": ". ./.env && pnpm forge script ./script/ExecuteInProximity.s.sol:ExecuteInProximity --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvvv"
   },
   "dependencies": {
-    "@latticexyz/cli": "2.2.9",
-    "@latticexyz/schema-type": "2.2.9",
-    "@latticexyz/store": "2.2.9",
-    "@latticexyz/world": "2.2.9",
-    "@latticexyz/world-modules": "2.2.9",
+    "@latticexyz/cli": "2.2.14",
+    "@latticexyz/schema-type": "2.2.14",
+    "@latticexyz/store": "2.2.14",
+    "@latticexyz/world": "2.2.14",
+    "@latticexyz/world-modules": "2.2.14",
     "@eveworld/common-constants": "0.0.13",
     "@eveworld/world": "0.0.17"
   },

@@ -2,12 +2,12 @@ procs:
   client:
     cwd: packages/client
     shell: pnpm run dev
-  contracts:
-    cwd: packages/contracts
-    shell: pnpm mud dev-contracts --rpc http://127.0.0.1:8545
   anvil:
     cwd: packages/contracts
-    shell: anvil --base-fee 0 --block-time 2
+    shell: anvil --base-fee 0 --block-time 2 --fork-url http://127.0.0.1:8546
+  contracts:
+    cwd: packages/contracts
+    shell: pnpm mud dev-contracts --rpc http://127.0.0.1:8545 --worldAddress 0x8a791620dd6260079bf849dc5567adc3f2fdc318
   explorer:
     cwd: packages/contracts
     shell: pnpm explorer

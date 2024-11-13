@@ -1,22 +1,22 @@
-# Vending Machine Example
+# Smart Storage Unit Example
 
 ## Introduction
-This guide will walk you through the process of building contracts for a Smart Storage Unit Vending Machine, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for a Smart Storage Unit, deploying them into an existing world running, and testing their functionality by executing scripts.
 
-A Smart Storage Unit may be configured to automatically trade items between the owner and other players. Prices are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, or vend, 1 ore for 2 mining crystals.
+A Smart Storage Unit can be configured to automatically to trade items between the owner and other players. Exchange quantity are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
 
 ### Additional Information
 
 For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
-## Deployment and Testing
-### Step 0: Deploy the vending machine contracts to the existing world 
+## Deployment and Testing in Local
+### Step 0: Deploy the example contracts to the existing world 
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
 
 ![alt text](../readme-imgs/docker_deployment.png)
 
 ```bash
-cd vending-machine/packages/contracts
+cd smart-storage-unit/packages/contracts
 ```
 
 Install the Solidity dependencies for the contracts:
@@ -141,13 +141,6 @@ ITEM_IN_ID=705052004874891294915332727169104086037532565953637807148820653328761
 ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 ```
 
-```bash
-#ITEM ID 77800 - Common Ore
-ITEM_IN_ID=888
-#ITEM ID 77811 - Carbonaceous Ore
-ITEM_OUT_ID=999
-```
-
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
 
 You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
@@ -168,7 +161,7 @@ pnpm mock-data
 
 This will create the on-chain SSU, fuel it and bring it online.
 
-### Step 3: Configure Vending Machine
+### Step 3: Configure SSU
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
@@ -177,8 +170,8 @@ pnpm configure-ratio
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
 
-### Step 4: Test The Vending Machine (Optional)
-To test the vending machine, execute the following command:
+### Step 4: Test The SSU (Optional)
+To test the SSU, execute the following command:
 
 ```bash
 pnpm execute

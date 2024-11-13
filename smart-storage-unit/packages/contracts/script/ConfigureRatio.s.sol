@@ -9,13 +9,13 @@ import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResou
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
-import { Utils } from "../src/systems/vending_machine/Utils.sol";
-import { VendingMachineSystem } from "../src/systems/vending_machine/VendingMachineSystem.sol";
+import { Utils } from "../src/systems/Utils.sol";
+import { SmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 
 contract ConfigureRatio is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 deployerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
@@ -32,15 +32,12 @@ contract ConfigureRatio is Script {
     console.log("itemIn", itemIn);
     console.log("itemOut", itemOut);
 
-    ResourceId systemId = Utils.vendingMachineSystemId();
+    ResourceId systemId = Utils.smartStorageUnitSystemId();
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
     world.call(
       systemId,
-      abi.encodeCall(
-        VendingMachineSystem.setVendingMachineRatio,
-        (smartStorageUnitId, itemIn, itemOut, inRatio, outRatio)
-      )
+      abi.encodeCall(SmartStorageUnitSystem.setRatio, (smartStorageUnitId, itemIn, itemOut, inRatio, outRatio))
     );
 
     vm.stopBroadcast();
