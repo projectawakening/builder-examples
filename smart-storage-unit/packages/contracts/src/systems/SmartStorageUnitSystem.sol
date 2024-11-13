@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { console } from "forge-std/console.sol";
 import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -100,9 +99,6 @@ contract SmartStorageUnitSystem is System {
 
     ephTransferItems = new TransferItem[](1);
     ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
-
-    console.log("**");
-    console.log(inItems[0].quantity);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);

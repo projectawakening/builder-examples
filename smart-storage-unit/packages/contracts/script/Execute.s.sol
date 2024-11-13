@@ -34,6 +34,7 @@ contract Execute is Script {
     ResourceId systemId = Utils.smartStorageUnitSystemId();
 
     //Check Players ephemeral inventory before
+    console.log("BEFORE");
     InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
     console.log(invItem.quantity); //15
 
@@ -41,9 +42,10 @@ contract Execute is Script {
     console.log(ephInvItem.quantity); //15
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, 5, itemIn)));
+    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, 7, itemIn)));
 
     //Check Players ephemeral inventory after
+    console.log("AFTER");
     ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, itemIn, player);
     console.log(ephInvItem.quantity); //10
 
