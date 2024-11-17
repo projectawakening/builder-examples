@@ -3,7 +3,7 @@ version: "3.8"
 services:
   foundry:
     container_name: foundry
-    image: ghcr.io/foundry-rs/foundry:nightly-515a4cc8aba1627a717a1057ff4f09c8cd3bf51f
+    image: ghcr.io/foundry-rs/foundry:nightly-d14c09f15a9849fe177d097451919810e5877617
     platform: linux/amd64 # Specify the platform
     entrypoint: anvil --block-time 1 --block-base-fee-per-gas 0 --gas-limit 3000000000 --hardfork cancun --host 0.0.0.0 --port 8546
     ports:
