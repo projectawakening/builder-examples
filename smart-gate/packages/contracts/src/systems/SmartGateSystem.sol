@@ -13,6 +13,9 @@ import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
  */
 contract SmartGateSystem is System {
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    return false;
+    //Check to see if the player can access
+    if(true){
+      return true;
+    }
   }
 }

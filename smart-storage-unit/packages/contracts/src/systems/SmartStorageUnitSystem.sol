@@ -52,7 +52,7 @@ contract SmartStorageUnitSystem is System {
     uint256 quantityIn,
     uint256 quantityOut
   ) public {
-    require(quantityIn > 0 && quantityOut > 0, "ratio cannot be set to 0");
+    require(quantityIn > 0 && quantityOut > 0, "ratio cannot be set to 0 or less");
     //make sure the inventoryItem out item exists
     //Revert if the items to deposit is not created on-chain
     EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
@@ -87,17 +87,14 @@ contract SmartStorageUnitSystem is System {
       quantity
     );
 
+    uint256 calculatedInput = quantity-quantityInputItemLeftOver;
+
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 
     TransferItem[] memory inItems = new TransferItem[](1);
-    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, quantity);
+    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
 
     TransferItem[] memory ephTransferItems = new TransferItem[](1);
-    ephTransferItems[0] = TransferItem(itemObjectIdOut, ssuOwner, quantityInputItemLeftOver);
-
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
-
-    ephTransferItems = new TransferItem[](1);
     ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
@@ -117,10 +114,8 @@ contract SmartStorageUnitSystem is System {
     uint256 outputRatio,
     uint256 inputAmount
   ) public pure returns (uint256 outputAmount, uint256 remainingInput) {
-    require(inputRatio != 0, "Input ratio cannot be zero");
-    require(outputRatio != 0, "Output ratio cannot be zero");
-
     (inputRatio, outputRatio) = _simplifyRatio(inputRatio, outputRatio);
+
     remainingInput = inputAmount % inputRatio;
     uint256 usedInput = inputAmount - remainingInput;
     outputAmount = (usedInput * outputRatio) / inputRatio;

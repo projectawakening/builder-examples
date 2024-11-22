@@ -84,55 +84,24 @@ Right click your Smart Storage Unit, and open the dapp window and copy the smart
 SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 ```
 
-For Nova or Nebula, You can get the item you want to sell and the item you want to buy from the world api by using the below links and replace the `ssu_id` by your own SSU_ID.
+To get the Item ID's you can use https://blockchain-gateway-nebula.nursery.reitnorf.com/types and then search for the item name.
 
-NOTE: Its a prerequisite to have already deposited these items into the SSU. This is to ensure that the game logic has updated those specific items data on-chain.
-
-https://blockchain-gateway-nebula.nursery.reitnorf.com/smartassemblies/<ssu_id>
-https://blockchain-gateway-nova.nursery.reitnorf.com/smartassemblies/<ssu_id>
-
-You should now have similar JSON to this. You want to get the item ID from the itemId in the storage items array and ephemeralInventoryItems array. The item ID should look something like: 
+You can use the "smartItemId" as the Item ID below.
 
 ```json
-"112603025077760770783264636189502217226733230421932850697496331082050661822826"
+"83839": {
+        "name": "Salt",
+        "description": "Computational Salt is a crystalline substance primarily used in exotronic computing. It is one of the products of Crude Matter industry. The larger the crystal, the more massive models for computation it can contain, but we are still talking about microscopic sizes invisible to the naked human eye.",
+        "smartItemId": "70505200487489129491533272716910408603753256595363780714882065332876101173161",
+        "attributes": [
+            {
+                "trait_type": "typeID",
+                "value": 83839
+            },
+            ...
+        ]
+}
 ```
-
-```json
-"inventory": {
-  "storageCapacity": 100000000000000,
-  "usedCapacity": 490000000000,
-  "storageItems": [
-    {
-      "typeId": 77518,
-      "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
-      "quantity": 49,
-      "name": "Lens 3X",
-      "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
-    }
-  ],
-  "ephemeralInventoryList": [
-    {
-      "ownerId": "0xbc07106cc909d37e36a1c3db35411805836bdf67",
-      "ownerName": "skygirl",
-      "storageCapacity": 1000000000000,
-      "usedCapacity": 10000000000,
-      "ephemeralInventoryItems": [
-        {
-          "typeId": 77518,
-          "itemId": "112603025077760770783264636189502217226733230421932850697496331082050661822826",
-          "quantity": 1,
-          "name": "Lens 3X",
-          "image": "https://devnet-data-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"
-        }
-      ]
-    }
-  ]
-},
-```
-
-Fetch the `itemId` from `{inventory.storageItems.itemId}`
-
-![alt text](../readme-imgs/itemIds.png)
 
 ```bash
 #ITEM IN : SALT
