@@ -30,6 +30,8 @@ import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/Global
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
+import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
+
 
 contract SmartGateTest is MudTest {
   using SmartDeployableLib for SmartDeployableLib.World;
@@ -48,7 +50,6 @@ contract SmartGateTest is MudTest {
 
   uint256 sourceGateId;
   uint256 destinationGateId;
-  uint256 testCharacterId = 11111;
 
   //Setup for the tests
   function setUp() public override {
@@ -81,11 +82,24 @@ contract SmartGateTest is MudTest {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
+    //Get the allowed corp
+    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
+    sourceGateId = vm.envUint("SOURCE_GATE_ID");
+    sourceGateId = vm.envUint("DESTINATION_GATE_ID");
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.setAllowedCorp,
+        (sourceGateId, corpID)
+      )
+    );
+
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(
-        123,
+        400,
         admin,
-        200003,
+        corpID,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
         ""
@@ -95,18 +109,15 @@ contract SmartGateTest is MudTest {
       smartCharacter.createCharacter(
         456,
         player,
-        200004,
+        4041,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""
       );
     }
 
-    sourceGateId = vm.envUint("SOURCE_GATE_ID");
     createAnchorAndOnline(sourceGateId, admin);
-
-    sourceGateId = vm.envUint("DESTINATION_GATE_ID");
-    createAnchorAndOnline(destinationGateId, admin);
+    createAnchorAndOnline(destinationGateId, admin);    
   }
 
   //Test if the world exists
@@ -119,36 +130,49 @@ contract SmartGateTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
-  //Test can jump to the destination gate
-  function testSourceCanJump() public {    
-    bool canJumpResult = abi.decode(
-      world.call(
-        systemId,
-        abi.encodeCall(
-          SmartGateSystem.canJump,
-          (testCharacterId, sourceGateId, destinationGateId)
-        )
-      ),
-      (bool)
+  function testSetAllowedCorp() public {
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.setAllowedCorp,
+        (sourceGateId, 200)
+      )
     );
 
-    assertTrue(canJumpResult, "Should be able to jump from the source gate to the destination gate");
+    uint256 allowedCorp = GateAccess.get(sourceGateId);
+
+    assertEq(allowedCorp, 200, "Allowed corp should now be 200");
   }
 
-  //Test can jump to the source gate
-  function testDestinationCanJump() public {    
+  //Test can jump to the destination gate
+  function testSourceCanJump() public {    
+    //Test acccess
     bool canJumpResult = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
           SmartGateSystem.canJump,
-          (testCharacterId, destinationGateId, sourceGateId)
+          (400, sourceGateId, destinationGateId)
         )
       ),
       (bool)
     );
 
-    assertTrue(canJumpResult, "Should be able to jump from the destination gate to the source gate");
+    assertTrue(canJumpResult, "Should have access to jump to destination");
+
+    //Test no access
+    bool canJumpResult2 = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartGateSystem.canJump,
+          (456, sourceGateId, destinationGateId)
+        )
+      ),
+      (bool)
+    );
+
+    assertTrue(canJumpResult2 == false, "Should not have access to jump to destination");
   }
 
   function createAnchorAndOnline(uint256 anchoredSmartGateId, address admin) private {
@@ -158,10 +182,10 @@ contract SmartGateTest is MudTest {
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
       SmartObjectData({ owner: admin, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
-      1e18,            // fuelUnitVolume,
-      1,               // fuelConsumptionPerMinute,
+      1e18,             // fuelUnitVolume,
+      1,                // fuelConsumptionPerMinute,
       1000000 * 1e18,   // fuelMaxCapacity,
-      100010000 * 1e18 // maxDistance
+      100010000 * 1e18  // maxDistance
     );
 
     // check global state and resume if needed

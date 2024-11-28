@@ -31,7 +31,11 @@ contract CanJump is Script {
     uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
     uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    console.log(smartGate.canJump(11111, sourceGateId, destinationGateId));
+    console.log("-------------------\nTESTING CORRECT CORP");
+    console.log("Can Jump:", smartGate.canJump(100, sourceGateId, destinationGateId));
+
+    console.log("-------------------\nTESTING INCORRECT CORP");
+    console.log("Can Jump:", smartGate.canJump(1234, sourceGateId, destinationGateId));
 
     vm.stopBroadcast();
   }

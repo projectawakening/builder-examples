@@ -41,11 +41,15 @@ contract ExecuteInProximity is Script {
 
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
 
+    console.log("SMART TURRET DEPLOYABLE STATE:");
     console.log(uint8(DeployableState.getCurrentState(smartTurretId)));
 
+    console.log("SMART TURRET RESOURCE EXISTS:");
     console.logBool(ResourceIds.getExists(SmartTurretConfigTable.get(smartTurretId)));
 
+    console.log("CHARACTERS FROM CORP [11112]:");
     console.log(CharactersTable.getCorpId(11112));
+    console.log("CHARACTERS FROM CORP [11111]:");
     console.log(CharactersTable.getCorpId(11111));
 
     ResourceId systemId = Utils.smartTurretSystemId();
