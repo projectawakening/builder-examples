@@ -3,7 +3,9 @@
 ## Introduction
 This guide will walk you through the process of building contracts for the Smart Gate, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-This example shows how to interact with the Smart gate smart assembly and how to create contracts for it. The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it.
+This example shows how to interact with the Smart gate smart assembly and how to create contracts for it. The example only allows members of the specified corporation to jump through the smart gate.
+
+The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it.
 
 ### Additional Information
 
@@ -62,7 +64,7 @@ For Nova and Nebula, Get your recovery phrase from the game wallet, import into 
 PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-For Nova and Nebula, get the world address from the configs
+For Nova and Nebula, retrieve the world address from the configs
 
 https://blockchain-gateway-nova.nursery.reitnorf.com/config
 https://blockchain-gateway-nebula.nursery.reitnorf.com/config
@@ -77,12 +79,30 @@ For Nova or Nebula, the smart gate id is available once you have deployed an Sma
 
 Right click your Smart Gate, click Interact and open the dapp window and copy the smart gate id.
 
+You can retrieve the Corp ID from:
+1. Retrieve your public address from searching your username here: [Smart Characters World API](https://blockchain-gateway-nebula.nursery.reitnorf.com/smartcharacters)
+2. Use this link: https://blockchain-gateway-nebula.nursery.reitnorf.com/smartcharacters/ADDRESS and replace "ADDRESS" with the address from the previous step.
+3. Use the "corpId" value which should be in:
+```json
+{
+    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+    "corpId": "98000002",
+    "name": "CCP Red Dragon",
+    ...
+```
+
+Then set the below values:
+
 ```bash
 # Copy this info from in game smart gate
 SOURCE_GATE_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 
 # Copy this info from in game smart gate
 DESTINATION_GATE_ID=67387866010353549996346280963079126762450299713900890730943797543376801696007
+
+# Copy this information from your Smart Character corp ID
+ALLOWED_CORP_ID=3434306
 ```
 
 ### Step 2: Mock data for the existing world **(Local Development Only)**
