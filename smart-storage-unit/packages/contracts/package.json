@@ -16,7 +16,7 @@
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test": "tsc --noEmit && mud test",
-    "test:dev": ". ./.env && forge test --fork-url $RPC_URL",
+    "test:dev": ". ./.env && forge test --fork-url $RPC_URL -vv",
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-ratio": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv"

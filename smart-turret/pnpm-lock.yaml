@@ -143,11 +143,11 @@ importers:
         specifier: ^3.3.7
         version: 3.6.2(typescript@5.4.2)
       solhint-config-mud:
-        specifier: 2.2.9
-        version: 2.2.9
+        specifier: 2.2.10
+        version: 2.2.10
       solhint-plugin-mud:
-        specifier: 2.2.9
-        version: 2.2.9
+        specifier: 2.2.10
+        version: 2.2.10
 
 packages:
 
@@ -6238,11 +6238,11 @@ packages:
     resolution: {integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==}
     engines: {node: '>=10.0.0'}
 
-  solhint-config-mud@2.2.9:
-    resolution: {integrity: sha512-SLFmKDhuQlVsp1cHKTrqMZrjXhf87+CrtZ6nq/Du49BzR+VFTckXIVpwrZ9Pzb7PZ/VUK5WtiIb5yfiGmHg4ow==}
+  solhint-config-mud@2.2.10:
+    resolution: {integrity: sha512-kJFYj7rPg2lOiT26lNdQMKZJy9jbsYhEsuct7muzq2+SGfx++rfHhR9ISWPhTfkknkIzbM95N4KxlXYMQk5w4A==}
 
-  solhint-plugin-mud@2.2.9:
-    resolution: {integrity: sha512-wWuDKLhRrHwIWfx7sNi8+tfHeMdoNM9JmHAY0MPgTkjdY3n90rIAUa9OIhYchWsosrTZj5dDfLTLFc6dBQNMVA==}
+  solhint-plugin-mud@2.2.10:
+    resolution: {integrity: sha512-28NslYlSCSfPOzkW/gFO+UxerLTjINlff+QmneUbnH8/JHb0pkyULpntCliryHFllxqtrhSm3X1g2kFgRPT9mQ==}
 
   solhint@3.6.2:
     resolution: {integrity: sha512-85EeLbmkcPwD+3JR7aEMKsVC9YrRSxd4qkXuMzrlf7+z2Eqdfm1wHWq1ffTuo5aDhoZxp2I9yF3QkxZOxOL7aQ==}
@@ -15211,9 +15211,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  solhint-config-mud@2.2.9: {}
+  solhint-config-mud@2.2.10: {}
 
-  solhint-plugin-mud@2.2.9:
+  solhint-plugin-mud@2.2.10:
     dependencies:
       '@solidity-parser/parser': 0.16.2
 

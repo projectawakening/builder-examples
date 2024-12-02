@@ -36,23 +36,25 @@ contract SmartStorageUnitSystem is System {
   using InventoryUtils for bytes14;
   using SmartDeployableUtils for bytes14;
 
+  error InvalidRatio(string message);
+
   /**
    * @dev Define what goes in and out and set the exchange ratio for a item trade
    * @param smartObjectId The smart object id of the item trade
    * @param inventoryItemIdIn The inventory item id of the item that goes in
    * @param inventoryItemIdOut The inventory item id of the item that goes out
-   * @param quantityIn The ratio of the item that goes in
-   * @param quantityOut The ratio of the item that goes out
+   * @param ratioIn The ratio of the item that goes in
+   * @param ratioOut The ratio of the item that goes out
    * The ratios are whole numbers as an item cannot exist as float in game
    */
   function setRatio(
     uint256 smartObjectId,
     uint256 inventoryItemIdIn,
     uint256 inventoryItemIdOut,
-    uint256 quantityIn,
-    uint256 quantityOut
+    uint256 ratioIn,
+    uint256 ratioOut
   ) public {
-    require(quantityIn > 0 && quantityOut > 0, "ratio cannot be set to 0 or less");
+    require(ratioIn > 0 && ratioOut > 0, "ratio cannot be set to 0 or less");
     //make sure the inventoryItem out item exists
     //Revert if the items to deposit is not created on-chain
     EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
@@ -62,7 +64,7 @@ contract SmartStorageUnitSystem is System {
     if (entityInRecord.recordExists == false || entityOutRecord.recordExists == false) {
       revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
     }
-    RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, quantityIn, quantityOut);
+    RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
   }
 
   /**
@@ -75,9 +77,9 @@ contract SmartStorageUnitSystem is System {
    */
   function execute(uint256 smartObjectId, uint256 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
-    if (ratioConfigData.ratioIn == 0 || ratioConfigData.ratioOut == 0) {
-      return;
-    }
+    require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
+    require(quantity > 0, "Quantity cannot be 0");
+
     address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
 
     // Make sure there are enough items
@@ -86,15 +88,21 @@ contract SmartStorageUnitSystem is System {
       ratioConfigData.ratioOut,
       quantity
     );
-
-    uint256 calculatedInput = quantity-quantityInputItemLeftOver;
+    require(quantityOutputItem > 0, "Output quantity cannot be 0");
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 
     TransferItem[] memory inItems = new TransferItem[](1);
-    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
+    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, quantity);
 
     TransferItem[] memory ephTransferItems = new TransferItem[](1);
+    ephTransferItems[0] = TransferItem(itemObjectIdOut, ssuOwner, quantityInputItemLeftOver);
+
+    if (quantityInputItemLeftOver > 0) {
+      _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, ssuOwner, ephTransferItems);
+    }
+
+    ephTransferItems = new TransferItem[](1);
     ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
