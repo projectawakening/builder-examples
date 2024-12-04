@@ -30,7 +30,7 @@ contract Execute is Script {
   uint256 itemOut;
 
   //Testing
-  uint256 testQuantityIn = 7;
+  uint64 testQuantityIn;
 
   function displayInventory() public {    
     InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
@@ -53,6 +53,7 @@ contract Execute is Script {
     smartStorageUnitId = vm.envUint("SSU_ID");
     itemIn = vm.envUint("ITEM_IN_ID");
     itemOut = vm.envUint("ITEM_OUT_ID");
+    testQuantityIn = uint64(vm.envUint("EXECUTE_QUANTITY"));
 
     ResourceId systemId = Utils.smartStorageUnitSystemId();
 

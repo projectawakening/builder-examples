@@ -145,7 +145,7 @@ contract SmartGateTest is MudTest {
   }
 
   //Test can jump to the destination gate
-  function testSourceCanJump() public {    
+  function testSourceCanJumpAllowed() public {    
     //Test acccess
     bool canJumpResult = abi.decode(
       world.call(
@@ -159,9 +159,11 @@ contract SmartGateTest is MudTest {
     );
 
     assertTrue(canJumpResult, "Should have access to jump to destination");
+  }
 
+  function testSourceCanJumpNotAllowed() public {
     //Test no access
-    bool canJumpResult2 = abi.decode(
+    bool canJumpResult = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
@@ -172,7 +174,7 @@ contract SmartGateTest is MudTest {
       (bool)
     );
 
-    assertTrue(canJumpResult2 == false, "Should not have access to jump to destination");
+    assertTrue(canJumpResult == false, "Should not have access to jump to destination");
   }
 
   function createAnchorAndOnline(uint256 anchoredSmartGateId, address admin) private {

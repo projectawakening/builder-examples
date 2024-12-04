@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "rddragon",
+  namespace: "test",
   tables: {
     GateAccess: {
       schema: {

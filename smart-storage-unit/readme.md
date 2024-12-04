@@ -5,50 +5,75 @@ This guide will walk you through the process of building contracts for a Smart S
 
 A Smart Storage Unit can be configured to automatically to trade items between the owner and other players. Exchange quantity are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
 
+You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Nebula / Nova](#Nebula) to deploy it to the game.
+
 ### Additional Information
 
 For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
-## Deployment and Testing in Local
-### Step 0: Deploy the example contracts to the existing world 
-First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
+## Deployment and Testing in Local<a id='Local'></a>
+### Step 0: Deploy the example contracts to the existing world
+First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
 ![alt text](../readme-imgs/docker_deployment.png)
+
+Move to the example directory with:
+
+```bash
+cd smart-storage-unit
+```
+
+Then install the Solidity dependencies for the contracts:
+```bash
+pnpm install
+```
+
+This will deploy the contracts to a forked version of your local world for testing.
+```bash
+pnpm dev
+```
+
+### Step 1: Tests for the existing world **(Local Development Only)**
+To run tests to make sure that the SSU example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
+
+
+```bash
+pnpm test
+```
+![Processes Image](../readme-imgs/processes.png)
+
+You should then see the tests pass:
+
+![SSU Tests](../readme-imgs/tests-ssu.png)
+
+## Deployment to Nebula / Nova<a id='Nebula'></a>
+### Step 0: Deploy the example contracts to Nova or Nebula
+Move to the example directory with:
 
 ```bash
 cd smart-storage-unit/packages/contracts
 ```
 
-Install the Solidity dependencies for the contracts:
+Then install the Solidity dependencies for the contracts:
 ```bash
 pnpm install
 ```
 
-**Local Deployment**
-This will deploy the contracts to your local world.
-```bash
-pnpm deploy:local --worldAddress <worldAddress> 
-```
-**Devnet/Production Deployment**
-To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
+Next, retrieve the world address through the below links depending on which server you want to deploy to and then replace <worldAddress> with the world address. 
 
-Devnet which connects to Nova - Builder Sandbox
+- [Nebula World Address](https://blockchain-gateway-nebula.nursery.reitnorf.com/config)
+- [Nova World Address](https://blockchain-gateway-nova.nursery.reitnorf.com/config)
 
-https://blockchain-gateway-nova.nursery.reitnorf.com/config
+<br />
 
 ```bash
 pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
 
-Production which connects to Nebula
+eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
-
-eg: `pnpm deploy:local --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
-
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Vending Machine contract. 
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
 ![alt text](./readme-imgs/deployment.png)
-
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
@@ -63,9 +88,6 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
 For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
 
-https://blockchain-gateway-nova.nursery.reitnorf.com/config
-https://blockchain-gateway-nebula.nursery.reitnorf.com/config
-
 ![alt text](../readme-imgs/worldAddress.png)
 
 ```bash
@@ -73,7 +95,7 @@ https://blockchain-gateway-nebula.nursery.reitnorf.com/config
 WORLD_ADDRESS=
 ```
 
-For Nova or Nebula, Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
+For Nova or Nebula, the Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
 
 Right click your Smart Storage Unit, and open the dapp window and copy the smart storage unit id.
 
@@ -121,16 +143,7 @@ IN_RATIO=1
 OUT_RATIO=2
 ```
 
-### Step 2: Mock data for the existing world **(Local Development Only)**
-To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
-
-```bash
-pnpm mock-data
-```
-
-This will create the on-chain SSU, fuel it and bring it online.
-
-### Step 3: Configure SSU
+### Step 2: Configure SSU
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
@@ -139,8 +152,8 @@ pnpm configure-ratio
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
 
-### Step 4: Test The SSU (Optional)
-To test the SSU, execute the following command:
+### Step 3: Execute the trade
+To trade items, make sure the items are in the inventories and then you need to run:
 
 ```bash
 pnpm execute

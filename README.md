@@ -1,7 +1,7 @@
 ![alt text](readme-imgs/banner7.png)
 
 ## Welcome to EVE Frontier Building!
-Welcome, this repository contains guides and examples to get started building on EVE Frontier. For more information, you can visit https://docs.evefrontier.com/. 
+Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
 
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
@@ -83,7 +83,7 @@ docker compose cp world-deployer:/monorepo/abis .
 Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file. For more information on Smart Assemblies you can visit [this page](https://docs.evefrontier.com/SmartAssemblies) on the documentation.
 
 ```bash
-cd item-seller
+cd smart-storage-unit
 cat readme.md
 ```
 
@@ -112,17 +112,11 @@ You can interact in the inteact tab and explore the values in the explore tab an
 ![alt text](readme-imgs/query.png)
 
 ## Guides
+### Smart Storage Unit: [View](./vending-machine/readme.md)
+Create a Vending Machine Smart Storage Unit (SSU) in the game which trade items between the owner and players.
+
 ### Smart Turret: [View](./smart-turret/readme.md)
 Configure and deploy a Smart Turret smart contract, ready to be further developed.
 
-### Item Seller: [View](./item-seller/readme.md)
-Create a Smart Storage Unit (SSU) which can accept ERC20 tokens to transfer items to players.
-
 ### Smart Gate: [View](./smart-turret/readme.md)
-Configure and deploy a Smart Gate smart contract, ready to be further developed.
-
-### Vending Machine: [View](./vending-machine/readme.md)
-Create a Vending Machine Smart Storage Unit (SSU) in the game which trade items between the owner and players.
-
-### Gate Keeper: [View](./gate-keeper/readme.md)
-Create a Smart Storage Unit (SSU) which can accept item donations toward a specific goal.
+Configure and deploy a Smart Gate smart contract which only allows members from a specific corporation to use the Smart Gate.

@@ -25,8 +25,8 @@ contract ConfigureRatio is Script {
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     uint256 itemIn = vm.envUint("ITEM_IN_ID");
     uint256 itemOut = vm.envUint("ITEM_OUT_ID");
-    uint256 inRatio = vm.envUint("IN_RATIO");
-    uint256 outRatio = vm.envUint("OUT_RATIO");
+    uint64 inRatio = uint64(vm.envUint("IN_RATIO"));
+    uint64 outRatio = uint64(vm.envUint("OUT_RATIO"));
 
     //Configure the vending machine
     console.log("itemIn", itemIn);
