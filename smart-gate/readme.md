@@ -1,55 +1,82 @@
 # Smart Gate Example
 
 ## Introduction
-This guide will walk you through the process of building contracts for the Smart Gate, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+This guide will walk you through the process of building contracts for a Smart Gate, deploying them into an existing world running, and testing their functionality by executing scripts.
 
-This example shows how to interact with the Smart gate smart assembly and how to create contracts for it. The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it.
+The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
+
+This example shows how to create a Smart Gate that only allows members of a specific corporation to use the Smart Gate.
+
+You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Nebula / Nova](#Nebula) to deploy it to the game.
 
 ### Additional Information
 
 For additional information on the Smart Gate you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartGate](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
 
-## Deployment and Testing
-### Step 0: Deploy the smart gate contracts to the existing world 
-First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following command:
+## Deployment and Testing in Local<a id='Local'></a>
+### Step 0: Deploy the example contracts to the existing world
+First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
-![alt text](../readme-imgs/docker_deployment.png)
+![alt text](../readme-imgs/docker-deployment.png)
+
+Move to the example directory with:
+
+```bash
+cd smart-gate
+```
+
+Then install the Solidity dependencies for the contracts:
+```bash
+pnpm install
+```
+
+This will deploy the contracts to a forked version of your local world for testing.
+```bash
+pnpm dev
+```
+
+### Step 1: Tests for the existing world **(Local Development Only)**
+To run tests to make sure that the SSU example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
+
+
+```bash
+pnpm test
+```
+![Processes Image](../readme-imgs/processes.png)
+
+You should then see the tests pass:
+
+![SSU Tests](../readme-imgs/tests-gate.png)
+
+## Deployment to Nebula / Nova<a id='Nebula'></a>
+### Step 0: Deploy the example contracts to Nova or Nebula
+Move to the example directory with:
 
 ```bash
 cd smart-gate/packages/contracts
 ```
 
-Install the Solidity dependencies for the contracts:
+Then install the Solidity dependencies for the contracts:
 ```bash
 pnpm install
 ```
 
-**Local Deployment**
-This will deploy the contracts to your local world.
-```bash
-pnpm deploy:local --worldAddress <worldAddress> 
-```
+Next, retrieve the world address through the below links depending on which server you want to deploy to and then replace <worldAddress> with the world address. 
 
-**Devnet/Production Deployment**
-To deploy in devenet or production you can retrieve the world address through the below links and then replace <worldAddress> with the world address. 
+- [Nebula World Address](https://blockchain-gateway-nebula.nursery.reitnorf.com/config)
+- [Nova World Address](https://blockchain-gateway-nova.nursery.reitnorf.com/config)
 
-Devnet which connects to Nova - Builder Sandbox
-
-https://blockchain-gateway-nova.nursery.reitnorf.com/config
+<br />
 
 ```bash
 pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
 
-Production which connects to Nebula
-
-https://blockchain-gateway-nebula.nursery.reitnorf.com/config 
-
 eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Gate contract. <br>
-![alt text](./readme-imgs/deployment.png)
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
 
+![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
@@ -59,15 +86,12 @@ You can change values in the .env file for Nova and Nebula, though they are opti
 For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
 
 ```bash
-PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-For Nova and Nebula, get the world address from the configs
+For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
 
-https://blockchain-gateway-nova.nursery.reitnorf.com/config
-https://blockchain-gateway-nebula.nursery.reitnorf.com/config
-
-![alt text](../readme-imgs/worldAddress.png)
+![alt text](../readme-imgs/world-address.png)
 
 ```bash
 #WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
@@ -77,45 +101,40 @@ For Nova or Nebula, the smart gate id is available once you have deployed an Sma
 
 Right click your Smart Gate, click Interact and open the dapp window and copy the smart gate id.
 
+You can retrieve the Corp ID from:
+1. Retrieve your public address from searching your username here: [Smart Characters World API](https://blockchain-gateway-nebula.nursery.reitnorf.com/smartcharacters)
+2. Use this link: https://blockchain-gateway-nebula.nursery.reitnorf.com/smartcharacters/ADDRESS and replace "ADDRESS" with the address from the previous step.
+3. Use the "corpId" value which should be in:
+```json
+{
+    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+    "corpId": "98000002",
+    "name": "CCP Red Dragon",
+    ...
+```
+
+Then set the below values:
+
 ```bash
 # Copy this info from in game smart gate
 SOURCE_GATE_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 
 # Copy this info from in game smart gate
 DESTINATION_GATE_ID=67387866010353549996346280963079126762450299713900890730943797543376801696007
+
+# Copy this information from your Smart Character corp ID
+ALLOWED_CORP_ID=3434306
 ```
 
-### Step 2: Mock data for the existing world **(Local Development Only)**
-To generate mock data for testing the Smart Gate logic on the local world, run the following command:
-
-```bash
-pnpm mock-data
-```
-
-This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
-
-### Step 3: Configure Smart Gate
+### Step 2: Configure Smart Gate
 To configure which smart gates will be used, run:
 
 ```bash
 pnpm configure-smart-gate
 ```
 
-You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
-
-### Step 4: Link Gates
-To use the smart gates, you need to link them together to create a connection. To link the source and destination gates use:
-
-```bash copy
-pnpm link-gates
-```
-
-### Step 5: Test The Smart Gate (Optional)
-To test the smart gate and check the canJump, use the following command:
-
-```bash
-pnpm execute
-```
+You can alter the gate ID's and the allowed corp in the .env file as needed.
 
 ### Troubleshooting
 
@@ -125,9 +144,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Gate IDs Mismatch**: If you are using Garnet make sure you have set the SOURCE_GATE_ID and DESTINATION_GATE_ID correctly. 
-
-4. **Not Linked**: Make sure you link the gates as seen in Step 4, as otherwise the Smart Gates will not work.
+3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.  
 
 ### Still having issues?
 If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

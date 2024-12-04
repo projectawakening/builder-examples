@@ -8,8 +8,8 @@ export default defineWorld({
         smartObjectId: "uint256",
         itemIn: "uint256",
         itemOut: "uint256",
-        ratioIn: "uint256",
-        ratioOut: "uint256",
+        ratioIn: "uint64",
+        ratioOut: "uint64",
       },
       key: ["smartObjectId", "itemIn"],
     }

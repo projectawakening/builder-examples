@@ -93,9 +93,9 @@ contract MockData is Script {
       entityRecordData,
       smartObjectData,
       worldPosition,
-      1e18, // fuelUnitVolume,
-      1, // fuelConsumptionIntervalInSeconds,
-      1000000 * 1e18 // fuelMaxCapacity,
+      1e18,           // fuelUnitVolume,
+      1,              // fuelConsumptionIntervalInSeconds,
+      1000000 * 1e18  // fuelMaxCapacity,
     );
 
     smartDeployable.depositFuel(smartObjectId, 1);

@@ -16,10 +16,33 @@ import { Utils } from "../src/systems/Utils.sol";
 import { SmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 
 contract Execute is Script {
-  using InventoryUtils for bytes14;
+  using InventoryUtils for bytes14;  
+
+  //Player
+  uint256 playerPrivateKey;
+  address player;
+
+  //SSU ID
+  uint256 smartStorageUnitId;
+
+  //Items
+  uint256 itemIn; 
+  uint256 itemOut;
+
+  //Testing
+  uint64 testQuantityIn;
+
+  function displayInventory() public {    
+    InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
+    console.log("[INVENTORY] Owner's Inventory [Item Out]: ", invItem.quantity);
+
+    EphemeralInvItemTableData memory ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, itemIn, player);
+    console.log("[EPHEMERAL] Other Player's Inventory [Item In]: ", ephInvItem.quantity);
+  }
+
   function run(address worldAddress) external {
-    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
-    address player = vm.addr(playerPrivateKey);
+    playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    player = vm.addr(playerPrivateKey);
 
     vm.startBroadcast(playerPrivateKey);
 
@@ -27,30 +50,23 @@ contract Execute is Script {
     IBaseWorld world = IBaseWorld(worldAddress);
 
     //Read from .env
-    uint256 smartStorageUnitId = vm.envUint("SSU_ID");
-    uint256 itemIn = vm.envUint("ITEM_IN_ID");
-    uint256 itemOut = vm.envUint("ITEM_OUT_ID");
+    smartStorageUnitId = vm.envUint("SSU_ID");
+    itemIn = vm.envUint("ITEM_IN_ID");
+    itemOut = vm.envUint("ITEM_OUT_ID");
+    testQuantityIn = uint64(vm.envUint("EXECUTE_QUANTITY"));
 
     ResourceId systemId = Utils.smartStorageUnitSystemId();
 
     //Check Players ephemeral inventory before
-    console.log("BEFORE");
-    InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
-    console.log(invItem.quantity); //15
-
-    EphemeralInvItemTableData memory ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, itemIn, player);
-    console.log(ephInvItem.quantity); //15
+    console.log("Inventories Before");
+    displayInventory();
 
     //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, 7, itemIn)));
+    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, testQuantityIn, itemIn)));
 
     //Check Players ephemeral inventory after
-    console.log("AFTER");
-    ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, itemIn, player);
-    console.log(ephInvItem.quantity); //10
-
-    invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
-    console.log(invItem.quantity); //14
+    console.log("\nInventories After");
+    displayInventory();
 
     vm.stopBroadcast();
   }

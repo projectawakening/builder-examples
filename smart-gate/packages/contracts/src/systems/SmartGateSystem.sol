@@ -8,11 +8,29 @@ import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.
 import { System } from "@latticexyz/world/src/System.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
+import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
+import { GateAccess } from "../codegen/tables/GateAccess.sol";
+
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
 contract SmartGateSystem is System {
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    return false;
+    //Get the allowed corp
+    uint256 allowedCorp = GateAccess.get(sourceGateId);
+
+    //Get the character corp
+    uint256 characterCorp = CharactersTable.getCorpId(characterId);
+
+    //If the corp is the same, allow jumps
+    if(allowedCorp == characterCorp){
+      return true;
+    } else{
+      return false;
+    }    
+  }
+
+  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
+    GateAccess.set(sourceGateId, corpID);
   }
 }

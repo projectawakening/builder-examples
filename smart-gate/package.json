@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm recursive run build",
-    "dev": "mprocs",
+    "dev": ". ./packages/contracts/.env && mprocs",
     "dev:client": "pnpm --filter 'client' run dev",
     "dev:contracts": "pnpm --filter 'contracts' dev",
     "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
@@ -17,7 +17,8 @@
     "@latticexyz/explorer": "2.2.14",
     "@types/debug": "4.1.7",
     "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
+    "@typescript-eslint/parser": "7.1.1",    
+    "@latticexyz/store": "2.2.14",
     "eslint": "8.57.0",
     "mprocs": "^0.7.1",
     "shx": "^0.3.4",

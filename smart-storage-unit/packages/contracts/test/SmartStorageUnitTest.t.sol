@@ -48,18 +48,24 @@ contract SmartStorageUnitTest is MudTest {
   address player;
 
   uint256 smartStorageUnitId = uint256(17614304337475056394242299294383532840873792487945557467064313427436901763821);
-  uint256 inventoryItemIn = uint256(72303041834441799565597028082148290553073890313361053989246429514519533100780);
-  uint256 inventoryItemOut = uint256(112603025077760770783264636189502217226733230421932850697496331082050661822825);
+  uint256 inventoryItemIn;
+  uint256 inventoryItemOut;
+  uint64 invItemQuantity = 100;
+  uint64 ephItemQuantity = 100;
+  uint64 inRatio = 15;
+  uint64 outRatio = 5;
 
   function setUp() public override {
     super.setUp();
     world = IWorld(worldAddress);
 
+    inventoryItemIn = vm.envUint("ITEM_IN_ID");
+    inventoryItemOut = vm.envUint("ITEM_OUT_ID");
+
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     owner = vm.addr(deployerPrivateKey);
 
-    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
-    player = vm.addr(playerPrivateKey);
+    player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls
 
     smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
@@ -110,7 +116,7 @@ contract SmartStorageUnitTest is MudTest {
       itemId: 1,
       typeId: 23,
       volume: 10,
-      quantity: 15
+      quantity: invItemQuantity
     });
 
     InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
@@ -120,11 +126,34 @@ contract SmartStorageUnitTest is MudTest {
       itemId: 2,
       typeId: 24,
       volume: 10,
-      quantity: 10
+      quantity: ephItemQuantity
     });
 
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
+  }  
+
+  /**
+   * @dev Check inventory values are correct.
+   * @param inventoryItemOutCount The number of items that are traded to the user in the inventory.
+   * @param inventoryItemInCount The number of items that are recieved from the user in the inventory.
+   * @param ephemeralItemOutCount The number of items that are traded to the SSU in the ephemeral inventory.
+   * @param ephemeralItemInCount The number of items that are recieved from the SSU in the ephemeral inventory.
+   */
+  function checkInventory(uint256 inventoryItemOutCount, uint256 inventoryItemInCount, uint256 ephemeralItemInCount, uint256 ephemeralItemOutCount) public {
+    //Inventory
+    InventoryItemTableData memory invItemOut = InventoryItemTable.get(smartStorageUnitId, inventoryItemOut);    
+    assertEq(invItemOut.quantity, inventoryItemOutCount, "Incorrect amount of items left in the inventory [Item Out]");
+    
+    InventoryItemTableData memory invItemIn = InventoryItemTable.get(smartStorageUnitId, inventoryItemIn);    
+    assertEq(invItemIn.quantity, inventoryItemInCount, "Incorrect amount of items into in the inventory [Item In]");
+
+    //Ephemeral
+    EphemeralInvItemTableData memory ephInvItemIn = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemIn, player);
+    assertEq(ephInvItemIn.quantity, ephemeralItemInCount, "Incorrect amount of items left in the ephemeral inventory [Item In]");
+
+    EphemeralInvItemTableData memory ephInvItemOut = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemOut, player);
+    assertEq(ephInvItemOut.quantity, ephemeralItemOutCount, "Incorrect amount of items put into the ephemeral inventory [Item Out]");
   }
 
   function testWorldExists() public {
@@ -137,9 +166,6 @@ contract SmartStorageUnitTest is MudTest {
   }
 
   function testSetRatio() public {
-    uint256 inRatio = vm.envUint("IN_RATIO");
-    uint256 outRatio = vm.envUint("OUT_RATIO");
-
     //Set the ratio
     world.call(
       systemId,
@@ -155,14 +181,141 @@ contract SmartStorageUnitTest is MudTest {
     assertTrue(ratioConfig.ratioOut == outRatio);
   }
 
-  function testExecute() public {
-    //Execute the ssu
-    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, 10, inventoryItemIn)));
-
-    //Bug: State changes does not update correctly in the test environment
+  function testRevertSetRatioOverflow() public {    
+    vm.expectRevert();
+    //Set the ratio
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartStorageUnitSystem.setRatio,
+        (smartStorageUnitId, inventoryItemIn, inventoryItemOut, type(uint64).max, type(uint64).max)
+      )
+    );
   }
 
-  function createAnchorAndOnline(uint256 smartStorageUnitId, address owner) private {
+  function testExecute() public {
+    uint64 quantityIn = 15;
+    // Set the trade ratio
+    testSetRatio();
+
+    // Verify initial inventory quantities
+    InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, inventoryItemOut);
+    assertEq(invItem.quantity, invItemQuantity);
+
+    EphemeralInvItemTableData memory ephInvItem = EphemeralInvItemTable.get(
+      smartStorageUnitId,
+      inventoryItemIn,
+      player
+    );
+    assertEq(ephInvItem.quantity, ephItemQuantity);
+
+    // Execute the storage unit exchange
+    world.call(
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, quantityIn, inventoryItemIn))
+    );
+
+    // Verify inventory after execution    
+    checkInventory(
+      invItemQuantity - outRatio,   // Inventory Item Out
+      quantityIn,                   // Inventory Item In
+      ephItemQuantity - quantityIn, // Ephemeral Item In
+      outRatio                      // Ephemeral Item Out
+    );
+  }
+
+  function testRevertExecuteForLessItemIn() public {
+    uint64 quantityIn = 150;
+    // Set the trade ratio
+    testSetRatio();
+
+    vm.expectRevert();
+    // Execute the storage unit exchange
+    world.call(
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, quantityIn, inventoryItemIn))
+    );    
+
+    // Verify there have been no changes to the inventories
+    checkInventory(
+      invItemQuantity,  // Inventory Item Out
+      0,                // Inventory Item In
+      ephItemQuantity,  // Ephemeral Item In
+      0                 // Ephemeral Item Out
+    );
+  }
+  
+
+  function testRevertExecuteNoItems() public {
+    uint64 quantityIn = 0;
+    // Set the trade ratio
+    testSetRatio();
+
+    vm.expectRevert();
+    // Execute the storage unit exchange
+    world.call(
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, quantityIn, inventoryItemIn))
+    );
+    
+    // Verify there have been no changes to the inventories
+    checkInventory(
+      invItemQuantity, // Inventory Item Out
+      0,               // Inventory Item In
+      ephItemQuantity, // Ephemeral Item In
+      0                // Ephemeral Item Out
+    );
+  }
+
+  function testExecute1To1Ratio() public {
+    uint64 quantityIn = 100;
+    
+    inRatio = 1;
+    outRatio = 1;
+
+    // Set the trade ratio
+    testSetRatio();
+
+    // Execute the storage unit exchange
+    world.call(
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, quantityIn, inventoryItemIn))
+    );  
+    
+    // Verify inventory after execution    
+    checkInventory(
+      0,    // Inventory Item Out
+      100,  // Inventory Item In
+      0,    // Ephemeral Item In
+      100   // Ephemeral Item Out
+    );
+  }
+  
+  function testExecuteItemLeft() public {
+    uint64 quantityIn = 100;
+    
+    inRatio = 11;
+    outRatio = 1;
+
+    // Set the trade ratio
+    testSetRatio();
+
+    // Execute the storage unit exchange
+    world.call(
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, quantityIn, inventoryItemIn))
+    );    
+    
+    // Verify inventory after execution    
+    checkInventory(
+      91,  // Inventory Item Out
+      99,  // Inventory Item In
+      1,   // Ephemeral Item In
+      9    // Ephemeral Item Out
+    );
+  }
+
+  function createAnchorAndOnline(uint256 smartStorageUnitIdToCreate, address ssuOwner) private {
     // check global state and resume if needed
     if (GlobalDeployableState.getIsPaused() == false) {
       smartDeployable.globalResume();
@@ -170,9 +323,9 @@ contract SmartStorageUnitTest is MudTest {
 
     //Create, anchor the ssu and bring online
     smartStorageUnit.createAndAnchorSmartStorageUnit(
-      smartStorageUnitId,
+      smartStorageUnitIdToCreate,
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: owner, tokenURI: "test" }),
+      SmartObjectData({ owner: ssuOwner, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18, // fuelUnitVolume,
       1, // fuelConsumptionPerMinute,
@@ -181,7 +334,7 @@ contract SmartStorageUnitTest is MudTest {
       100000000000 // ephemeralStorageCapacity
     );
 
-    smartDeployable.depositFuel(smartStorageUnitId, 200010);
-    smartDeployable.bringOnline(smartStorageUnitId);
+    smartDeployable.depositFuel(smartStorageUnitIdToCreate, 200010);
+    smartDeployable.bringOnline(smartStorageUnitIdToCreate);
   }
 }

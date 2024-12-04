@@ -34,7 +34,7 @@ contract ConfigureSmartTurret is Script {
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
-    //This function can only be called by the owner of the smart turret
+    // This function can only be called by the owner of the smart turret
     smartTurret.configureSmartTurret(smartTurretId, systemId);
 
     vm.stopBroadcast();
