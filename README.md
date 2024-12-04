@@ -1,4 +1,4 @@
-![alt text](readme-imgs/banner7.png)
+![alt text](readme-imgs/evefrontier.png)
 
 ## Welcome to EVE Frontier Building!
 Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
@@ -58,7 +58,7 @@ We have provided a docker compose file which bundles the running of the local no
 ```bash
 docker compose up -d
 ```
-![alt text](readme-imgs/docker1.png)
+![alt text](readme-imgs/docker-success.png)
 
 Monitor the progress of the world deployment with:
 
@@ -68,7 +68,7 @@ docker compose logs -f world-deployer
 
 The deployment progress and relevant addresses will be displayed during the process. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
 
-![alt text](readme-imgs/docker_deployment.png)
+![alt text](readme-imgs/docker-deployment.png)
 
 
 ### Step 0.4 (Optional): Retrieving world ABIs
@@ -93,7 +93,7 @@ cat readme.md
 From any of the example root folder run the below command to run a local world explorer to see all the state changes
 
 ```sh
-builder-examples/gate-keeper/
+builder-examples/smart-storage-unit/
 pnpm explorer <worldAddress>
 ```
 

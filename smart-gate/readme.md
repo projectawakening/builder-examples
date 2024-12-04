@@ -17,7 +17,7 @@ For additional information on the Smart Gate you can visit: [https://docs.evefro
 ### Step 0: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
-![alt text](../readme-imgs/docker_deployment.png)
+![alt text](../readme-imgs/docker-deployment.png)
 
 Move to the example directory with:
 
@@ -75,7 +75,8 @@ pnpm run deploy:garnet --worldAddress <worldAddress>
 eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
-![alt text](./readme-imgs/deployment.png)
+
+![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the respective values 
@@ -90,7 +91,7 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
 For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
 
-![alt text](../readme-imgs/worldAddress.png)
+![alt text](../readme-imgs/world-address.png)
 
 ```bash
 #WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
