@@ -95,6 +95,7 @@ contract MockSsuData is Script {
       volume: 10,
       quantity: 15
     });
+
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
 
     InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
@@ -118,11 +119,11 @@ contract MockSsuData is Script {
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
       SmartObjectData({ owner: owner, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
-      1e18, // fuelUnitVolume,
-      1, // fuelConsumptionPerMinute,
-      1000000 * 1e18, //fuelMaxCapacity,
-      100000000, // storageCapacity,
-      100000000000 // ephemeralStorageCapacity
+      1e18,           // fuelUnitVolume,
+      1,              // fuelConsumptionPerMinute,
+      1000000 * 1e18, // fuelMaxCapacity,
+      100000000,      // storageCapacity,
+      100000000000    // ephemeralStorageCapacity
     );
 
     // check global state and resume if needed

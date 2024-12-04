@@ -1,0 +1,116 @@
+{
+    "Create Smart Character": {
+        "prefix": "createCharacter",
+        "body": [
+        "smartCharacter.createCharacter(",
+        "    77777,",
+        "    ${1:playerAddress},",
+        "    ${0:characterID},",
+        "    EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),",
+        "    EntityRecordOffchainTableData({ name: \"characterName\", dappURL: \"noURL\", description: \".\" }),",
+        "    \"tokenCid\"",
+        ");"
+        ],
+        "description": "Create a new smart character"
+    },
+    "Create And Anchor SSU": {
+        "prefix": "createAndAnchorSSU",
+        "body": [
+            "smartStorageUnit.createAndAnchorSmartStorageUnit(",
+            "    ${1:smartStorageUnitId},",
+            "    EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),",
+            "    SmartObjectData({ owner: ${0:smartStorageUnitId}, tokenURI: \"test\" }),",
+            "    WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),",
+            "    1e18,           // fuelUnitVolume,",
+            "    1,              // fuelConsumptionPerMinute,",
+            "    1000000 * 1e18, // fuelMaxCapacity,",
+            "    100000000,      // storageCapacity,",
+            "    100000000000    // ephemeralStorageCapacity",
+            ");"
+        ],
+        "description": "Create and anchor a SSU"
+    },
+    "Create And Anchor SSU 2": {
+        "prefix": "smartStorageUnit.createAndAnchorSmartStorageUnit",
+        "body": [
+            "smartStorageUnit.createAndAnchorSmartStorageUnit(",
+            "    ${1:smartStorageUnitId},",
+            "    EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),",
+            "    SmartObjectData({ owner: ${0:smartStorageUnitId}, tokenURI: \"test\" }),",
+            "    WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),",
+            "    1e18,           // fuelUnitVolume,",
+            "    1,              // fuelConsumptionPerMinute,",
+            "    1000000 * 1e18, // fuelMaxCapacity,",
+            "    100000000,      // storageCapacity,",
+            "    100000000000    // ephemeralStorageCapacity",
+            ");"
+        ],
+        "description": "Create and anchor a SSU"
+    },
+    "Inventory Item": {
+        "prefix": "InventoryItem(",
+        "body": [
+            "InventoryItem({",
+            "    inventoryItemId: ${2:smartItemID},",
+            "    owner: ${1:owner},",
+            "    itemId: 0,",
+            "    typeId: 23,",
+            "    volume: 10,",
+            "    quantity: ${0:quantity}",
+            "});"
+        ],
+        "description": "Create a inventory item"
+    },
+    "Lib.World(": {
+        "prefix": "Lib.World(",
+        "body": [
+            "${0:SmartDeployableLib}.World({",
+            "    iface: IBaseWorld(worldAddress),",
+            "    namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE",
+            "});"
+        ],
+    },
+    "SSU Lib Imports": {
+        "prefix": "SSULibImports",
+        "body": [
+            "import { ResourceId } from \"@latticexyz/world/src/WorldResourceId.sol\";",
+            "import { console } from \"forge-std/console.sol\";",
+            "import { ResourceIds } from \"@latticexyz/store/src/codegen/tables/ResourceIds.sol\";",
+            "import { WorldResourceIdLib } from \"@latticexyz/world/src/WorldResourceId.sol\";",
+            "import { IBaseWorld } from \"@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol\";",
+            "import { System } from \"@latticexyz/world/src/System.sol\";"
+            "import { IERC721 } from \"@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol\";",
+            "import { InventoryLib } from \"@eveworld/world/src/modules/inventory/InventoryLib.sol\";",
+            "import { InventoryItem } from \"@eveworld/world/src/modules/inventory/types.sol\";",
+            "import { IInventoryErrors } from \"@eveworld/world/src/modules/inventory/IInventoryErrors.sol\";"
+            "import { DeployableTokenTable } from \"@eveworld/world/src/codegen/tables/DeployableTokenTable.sol\";",
+            "import { InventoryItemTable } from \"@eveworld/world/src/codegen/tables/InventoryItemTable.sol\";",
+            "import { EphemeralInvTable } from \"@eveworld/world/src/codegen/tables/EphemeralInvTable.sol\";",
+            "import { EphemeralInvItemTable } from \"@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol\";",
+            "import { EntityRecordTable, EntityRecordTableData } from \"@eveworld/world/src/codegen/tables/EntityRecordTable.sol\";",
+            "import { EphemeralInvItemTableData, EphemeralInvItemTable } from \"@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol\";",
+            "import { InventoryItemTableData, InventoryItemTable } from \"@eveworld/world/src/codegen/tables/InventoryItemTable.sol\";"
+            "import { Utils as EntityRecordUtils } from \"@eveworld/world/src/modules/entity-record/Utils.sol\";",
+            "import { Utils as InventoryUtils } from \"@eveworld/world/src/modules/inventory/Utils.sol\";",
+            "import { Utils as SmartDeployableUtils } from \"@eveworld/world/src/modules/smart-deployable/Utils.sol\";",
+            "import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from \"@eveworld/common-constants/src/constants.sol\";"
+        ],
+    },
+    "Eph To Inv Transfer": {
+        "prefix": "_inventoryLib().ephemeralToInventoryTransfer",
+        "body": [
+            "_inventoryLib().ephemeralToInventoryTransfer(${1:smartObjectId}, ${0:inItems});"
+        ],
+    },
+    "Inv To Eph Transfer": {
+        "prefix": "_inventoryLib().inventoryToEphemeralTransfer",
+        "body": [
+        "_inventoryLib().inventoryToEphemeralTransfer(${2:smartObjectId}, ${0:_msgSender()}, ${1:inItems});"
+        ],
+    },
+    "Get Owner": {
+        "prefix": "GetOwnerAddress",
+        "body": [
+            "address ${0:owner} = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(${1:smartObjectId});"
+        ],
+    }}

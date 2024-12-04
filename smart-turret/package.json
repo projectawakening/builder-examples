@@ -1,5 +1,5 @@
 {
-  "name": "mud-template-react",
+  "name": "smart-turret-example",
   "private": true,
   "scripts": {
     "build": "pnpm recursive run build",
