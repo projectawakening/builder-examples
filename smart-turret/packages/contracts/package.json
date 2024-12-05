@@ -1,14 +1,14 @@
 {
-  "name": "contracts",
+  "name": "smart-turret-example-contracts",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
     "build": "mud build",
     "clean": "forge clean && shx rm -rf src/**/codegen",
-    "deploy:local": "pnpm run build && mud deploy --profile=local",
-    "deploy:garnet": "pnpm run build && mud deploy --profile=garnet",
-    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone",
+    "deploy:local": "pnpm run build && mud deploy --profile=local --worldAddress $WORLD_ADDRESS",
+    "deploy:garnet": "pnpm run build && mud deploy --profile=garnet --worldAddress $WORLD_ADDRESS",
+    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone --worldAddress $WORLD_ADDRESS",
     "dev": "mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",

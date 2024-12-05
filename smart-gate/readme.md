@@ -61,18 +61,18 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, retrieve the world address through the below links depending on which server you want to deploy to and then replace <worldAddress> with the world address. 
+Next, replace the following values in the [.env](./packages/contracts/.env) file with the world address which you can find through the below links depending on which server you want to deploy to and then replace set WORLD_ADDRESS to the world address. 
 
 - [Nebula World Address](https://blockchain-gateway-nebula.nursery.reitnorf.com/config)
 - [Nova World Address](https://blockchain-gateway-nova.nursery.reitnorf.com/config)
+
+![alt text](../readme-imgs/deploy.png)
 
 <br />
 
 ```bash
 pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
-
-eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
 
@@ -89,14 +89,6 @@ For Nova and Nebula, Get your recovery phrase from the game wallet, import into 
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
-
-![alt text](../readme-imgs/world-address.png)
-
-```bash
-#WORLD ADDRESS COPIED FROM DOCKER LOGS FOR LOCAL
-WORLD_ADDRESS=
-```
 For Nova or Nebula, the smart gate id is available once you have deployed an Smart Gate in the game. 
 
 Right click your Smart Gate, click Interact and open the dapp window and copy the smart gate id.

@@ -45,7 +45,7 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
     //TODO: Implement the logic
-
+    
     if(true){
       return priorityQueue;
     }

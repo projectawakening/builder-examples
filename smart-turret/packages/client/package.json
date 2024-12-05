@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "smart-turret-example-client",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
