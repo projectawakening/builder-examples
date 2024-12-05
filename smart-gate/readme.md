@@ -66,15 +66,13 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 - [Nebula World Address](https://blockchain-gateway-nebula.nursery.reitnorf.com/config)
 - [Nova World Address](https://blockchain-gateway-nova.nursery.reitnorf.com/config)
 
-![alt text](../readme-imgs/deploy.png)
-
 <br />
 
 ```bash
 pnpm run deploy:garnet --worldAddress <worldAddress> 
 ```
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Gate contracts. 
 
 ![alt text](../readme-imgs/deploy.png)
 

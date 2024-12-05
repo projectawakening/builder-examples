@@ -75,7 +75,7 @@ pnpm run deploy:garnet --worldAddress <worldAddress>
 
 eg: `pnpm deploy:garnet --worldAddress 0xafc8e4fd5eee66590c93feebf526e1aa2e93c6c3`
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
+Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Turret contract. 
 ![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
