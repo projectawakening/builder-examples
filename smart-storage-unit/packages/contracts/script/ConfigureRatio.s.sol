@@ -15,7 +15,7 @@ import { SmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.so
 contract ConfigureRatio is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 deployerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);

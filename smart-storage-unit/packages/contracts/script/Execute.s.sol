@@ -41,7 +41,7 @@ contract Execute is Script {
   }
 
   function run(address worldAddress) external {
-    playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     player = vm.addr(playerPrivateKey);
 
     vm.startBroadcast(playerPrivateKey);

@@ -59,7 +59,7 @@ contract SmartGateTest is MudTest {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 
-    uint256 playerPrivateKey = vm.envUint("PLAYER_PRIVATE_KEY");
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
     smartDeployable = SmartDeployableLib.World({

@@ -36,10 +36,10 @@ pnpm dev
 ### Step 1: Tests for the existing world **(Local Development Only)**
 To run tests to make sure that the SSU example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
 
-
 ```bash
 pnpm test
 ```
+
 ![Processes Image](../readme-imgs/processes.png)
 
 You should then see the tests pass:
@@ -81,13 +81,21 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 
 You can change values in the .env file for Nova and Nebula, though they are optional for local testing.
 
-For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
+For Nova and Nebula, get your recovery phrase from the game wallet, import it into the EVE Wallet and then retrieve the private key from there.
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-For Nova and Nebula, get the world address from the configs. You can deploy your own ERC20 token or use the EVE Token address in the config
+Now set the test player private key. This will be used for the execute script, and so set it to the private key of the player account that you want to trade with.
+
+- Note: This is only for testing, and an example not requiring this is on it's way.
+
+```bash
+TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+For Nova and Nebula, get the world address from the configs.
 
 ![alt text](../readme-imgs/world-address.png)
 
