@@ -63,15 +63,21 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, replace the world address in the [.env](./packages/contracts/.env) file with the world address which you can find through the below links depending on which server you want to deploy to.
-
-- [Nebula World Address](https://blockchain-gateway-nebula.nursery.reitnorf.com/config)
-- [Nova World Address](https://blockchain-gateway-nova.nursery.reitnorf.com/config)
-
-<br />
+Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** value to either Nebula or Nova using the following command for Nebula:
 
 ```bash
-WORLD_ADDRESS=0x972bfea201646a87dc59f042ad91254628974f0d
+pnpm env-nebula
+```
+
+Or for Nova:
+```bash
+pnpm env-nova
+```
+
+Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
+
+```bash
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
 Then deploy the contract using:
@@ -85,12 +91,6 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
-
-For Nova and Nebula, Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
-
-```bash
-PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-```
 
 For Nova or Nebula, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 

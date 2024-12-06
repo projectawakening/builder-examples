@@ -18,7 +18,10 @@
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-smart-gates": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvvv"
+    "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvvv",
+    "env-nebula": "bash ../../batch-files/ConvertEnvToNebula.sh",
+    "env-nova": "bash ../../batch-files/ConvertEnvToNova.sh",
+    "env-local": "bash ../../batch-files/ConvertEnvToLocal.sh"
   },
   "dependencies": {
     "@latticexyz/cli": "2.2.14",

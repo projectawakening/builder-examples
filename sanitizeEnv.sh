@@ -1,0 +1,21 @@
+# Script to sanitize private keys for if you are editing .env files
+
+ENV_FILE="packages/contracts/.env"
+DEFAULT_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+PROJECT="smart-storage-unit"
+
+sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+
+PROJECT="smart-gate"
+
+sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+
+PROJECT="smart-turret"
+
+sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+
+echo "Sanitized env private keys!"
