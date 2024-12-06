@@ -6,9 +6,9 @@
   "scripts": {
     "build": "mud build",
     "clean": "forge clean && shx rm -rf src/**/codegen",
-    "deploy:local": "pnpm run build && mud deploy --profile=local --worldAddress $WORLD_ADDRESS",
-    "deploy:garnet": "pnpm run build && mud deploy --profile=garnet --worldAddress $WORLD_ADDRESS",
-    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone --worldAddress $WORLD_ADDRESS",
+    "deploy:local": "pnpm run build && mud deploy --profile=local --worldAddress ${WORLD_ADDRESS:-$1}",
+    "deploy:garnet": "pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
+    "deploy:redstone": "pnpm run build && mud deploy --profile=redstone --worldAddress ${WORLD_ADDRESS:-$1}",
     "dev": "mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
@@ -16,7 +16,7 @@
     "test:deploy": "mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "configure-smart-gate": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "configure-smart-gates": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvvv"
   },
