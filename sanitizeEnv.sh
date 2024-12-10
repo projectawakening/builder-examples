@@ -1,21 +1,25 @@
-# Script to sanitize private keys for if you are editing .env files
 
-ENV_FILE="packages/contracts/.env"
-DEFAULT_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+ENV_FILE=".env"
+WORLD_ADDRESS="0x8a791620dd6260079bf849dc5567adc3f2fdc318"
+CHAIN_ID="31337"
+RPC_URL="http://127.0.0.1:8545"
+PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 
-PROJECT="smart-storage-unit"
+#COLORS
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RESET="\033[0m"
 
-sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
-sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
+function sanitize() {
+    FILE_NAME=$1
+    sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$PRIVATE_KEY/" "$FILE_NAME"
+    sed -i "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$WORLD_ADDRESS #Local World Address/" "$FILE_NAME"
+    sed -i "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Local Chain ID/" "$FILE_NAME"
+    sed -i "s|^RPC_URL=.*|RPC_URL=$RPC_URL #Local RPC URL|" "$FILE_NAME"
 
-PROJECT="smart-gate"
+    printf "\n${GREEN}[SANITIZED]${RESET} file ${YELLOW}${FILE_NAME}${RESET}\n\n"
+}
 
-sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
-sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
-
-PROJECT="smart-turret"
-
-sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
-sed -i "s/^TEST_PLAYER_PRIVATE_KEY=.*/TEST_PLAYER_PRIVATE_KEY=$DEFAULT_PRIVATE_KEY/" "$PROJECT/$ENV_FILE"
-
-echo "Sanitized env private keys!"
+sanitize "smart-gate/packages/contracts/.env"
+sanitize "smart-storage-unit/packages/contracts/.env"
+sanitize "smart-turret/packages/contracts/.env"

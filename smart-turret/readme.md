@@ -5,7 +5,7 @@ This guide will walk you through the process of building contracts for the smart
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
-You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Stillness / Nova](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Stillness](#Stillness) to deploy it to the game.
 
 ### Additional Information
 
@@ -51,8 +51,8 @@ You should then see the tests pass:
 ![SSU Tests](../readme-imgs/tests-turret.png)
 
 
-## Deployment to Stillness / Nova<a id='Stillness'></a>
-### Step 0: Deploy the example contracts to Nova or Stillness
+## Deployment to Stillness<a id='Stillness'></a>
+### Step 0: Deploy the example contracts to Stillness
 Move to the example directory with:
 
 ```bash
@@ -89,7 +89,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-For Nova or Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
+For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 
 ```bash
 #SMART TURRET ID (Only need to change if you are running on Devnet)
