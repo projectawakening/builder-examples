@@ -60,15 +60,10 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** value to either Nebula or Nova using the following command for Nebula:
+Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_URL** value to point to Stillness using: 
 
 ```bash
-pnpm env-nebula
-```
-
-Or for Nova:
-```bash
-pnpm env-nova
+pnpm env-stillness
 ```
 
 Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.

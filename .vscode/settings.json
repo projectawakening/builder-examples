@@ -1,4 +1,5 @@
 {
     "solidity.compileUsingRemoteVersion": "v0.8.25+commit.b61c2a91",
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "window.title": "EVE Frontier Builder Examples"
 }

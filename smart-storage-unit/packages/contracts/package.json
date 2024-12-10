@@ -18,9 +18,9 @@
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-ratio": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "env-nebula": "bash ../../batch-files/ConvertEnvToNebula.sh",
-    "env-nova": "bash ../../batch-files/ConvertEnvToNova.sh",
-    "env-local": "bash ../../batch-files/ConvertEnvToLocal.sh"
+    "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
+    "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
+    "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh"
   },
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",

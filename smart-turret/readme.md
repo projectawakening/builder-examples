@@ -5,7 +5,7 @@ This guide will walk you through the process of building contracts for the smart
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
-You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Nebula / Nova](#Nebula) to deploy it to the game.
+You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Stillness / Nova](#Stillness) to deploy it to the game.
 
 ### Additional Information
 
@@ -43,6 +43,7 @@ To run tests to make sure that the Smart Turret example is working, you can clic
 ```bash
 pnpm test
 ```
+
 ![Processes Image](../readme-imgs/processes.png)
 
 You should then see the tests pass:
@@ -50,8 +51,8 @@ You should then see the tests pass:
 ![SSU Tests](../readme-imgs/tests-turret.png)
 
 
-## Deployment to Nebula / Nova<a id='Nebula'></a>
-### Step 0: Deploy the example contracts to Nova or Nebula
+## Deployment to Stillness / Nova<a id='Stillness'></a>
+### Step 0: Deploy the example contracts to Nova or Stillness
 Move to the example directory with:
 
 ```bash
@@ -63,15 +64,10 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** value to either Nebula or Nova using the following command for Nebula:
+Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_URL** value to point to Stillness using: 
 
 ```bash
-pnpm env-nebula
-```
-
-Or for Nova:
-```bash
-pnpm env-nova
+pnpm env-stillness
 ```
 
 Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then grab the private key from there.
@@ -87,12 +83,13 @@ pnpm run deploy:garnet
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Turret contract. 
+
 ![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-For Nova or Nebula, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
+For Nova or Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 
 ```bash
 #SMART TURRET ID (Only need to change if you are running on Devnet)
