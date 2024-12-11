@@ -48,8 +48,7 @@ pnpm test
 
 You should then see the tests pass:
 
-![SSU Tests](../readme-imgs/tests-turret.png)
-
+![Turret Tests](../readme-imgs/tests-turret.png)
 
 ## Deployment to Stillness<a id='Stillness'></a>
 ### Step 0: Deploy the example contracts to Stillness

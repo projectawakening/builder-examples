@@ -104,7 +104,7 @@ Right click your Smart Storage Unit, and open the DApp window and copy the smart
 SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 ```
 
-To get the Item ID's you can use https://blockchain-gateway-stillness.nursery.reitnorf.com/types and then search for the item name.
+To get the Item ID's you can use https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and then search for the item name.
 
 You can use the "smartItemId" as the Item ID below.
 

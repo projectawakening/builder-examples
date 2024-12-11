@@ -98,8 +98,8 @@ DESTINATION_GATE_ID=673878660103535499963462809630791267624502997139008907309437
 ```
 
 Now set the allowed corp ID variable. You can retrieve the Corp ID by:
-1. Retrieve your public address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.nursery.reitnorf.com/smartcharacters)
-2. Use this link: https://blockchain-gateway-stillness.nursery.reitnorf.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
+2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 3. Use the **"corpId"** value which should be in:
 ```json
 {
