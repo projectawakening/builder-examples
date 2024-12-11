@@ -35,19 +35,47 @@ This will deploy the contracts to a forked version of your local world for testi
 pnpm dev
 ```
 
-### Step 1: Tests for the existing world **(Local Development Only)**
-To run tests to make sure that the SSU example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
+Once deployment is successful, you'll see a screen similar to the one below. This process creates a forked version of the local world and deploys the Smart Turret contracts.
 
+![alt text](../readme-imgs/deploy.png)
 
-```bash
-pnpm test
-```
+The forked local world means that any changes that happen when running pnpm dev are reverted when closing it, allowing you to quickly reset and try something different.
+
+### Step 1: Mock data for the existing world **(Local Development Only)**
+Click on the "shell" process and then click on the main terminal window. 
+
+To generate mock data for testing the Smart Gate logic on the local world, run the following command:
+
 ![Processes Image](../readme-imgs/processes.png)
 
-You should then see the tests pass:
+```bash
+pnpm mock-data
+```
 
-![SSU Tests](../readme-imgs/tests-gate.png)
+This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
 
+### Step 2: Configure Smart Gate
+To configure which smart gates will be used, run:
+
+```bash
+pnpm configure-smart-gate
+```
+
+You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+
+### Step 3: Link Gates
+To use the smart gates, you need to link them together to create a connection. To link the source and destination gates use:
+
+```bash copy
+pnpm link-gates
+```
+
+### Step 4: Test The Smart Gate (Optional)
+To test the smart gate and check the canJump, use the following command:
+
+```bash
+pnpm execute
+```
 
 ## Deployment to Stillness<a id='Stillness'></a>
 ### Step 0: Deploy the example contracts to Stillness

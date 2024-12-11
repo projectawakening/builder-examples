@@ -33,18 +33,48 @@ This will deploy the contracts to a forked version of your local world for testi
 pnpm dev
 ```
 
-### Step 1: Tests for the existing world **(Local Development Only)**
-To run tests to make sure that the SSU example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
+### Step 1: Setup the environment variables 
+Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
+
+A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
+
+You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ```bash
-pnpm test
+#IN Ratio
+IN_RATIO=1
+#OUT Ratio
+OUT_RATIO=2
 ```
+
+### Step 2: Mock data for the existing world **(Local Development Only)**
+Click on the "shell" process and then click on the main terminal window. 
+
+To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
 ![Processes Image](../readme-imgs/processes.png)
 
-You should then see the tests pass:
+```bash
+pnpm mock-data
+```
 
-![SSU Tests](../readme-imgs/tests-ssu.png)
+This will create the on-chain SSU, fuel it and bring it online.
+
+### Step 3: Configure SSU
+To configure which items should be traded and the ratio's to trade for run:
+
+```bash
+pnpm configure-ratio
+```
+
+You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+
+### Step 4: Test The SSU (Optional)
+To test the SSU, execute the following command:
+
+```bash
+pnpm execute
+```
 
 
 ## Deployment to Stillness<a id='Stillness'></a>

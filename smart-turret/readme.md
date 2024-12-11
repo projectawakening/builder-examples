@@ -37,18 +37,34 @@ Once the contracts have been deployed you should see the below message. When cha
 
 ![](../readme-imgs/deploy.png)
 
-### Step 1: Tests for the existing world **(Local Development Only)**
-To run tests to make sure that the Smart Turret example is working, you can click on the shell process as seen in the image below, click in the terminal and then run:
+### Step 1: Mock data for the existing world **(Local Development Only)**
+Click on the "shell" process and then click on the main terminal window. 
 
-```bash
-pnpm test
-```
+To generate mock data for testing the Smart Turret logic on the local world, you can click on the shell process as seen in the image below, click in the terminal and then run:
 
 ![Processes Image](../readme-imgs/processes.png)
 
-You should then see the tests pass:
+```bash
+pnpm mock-data
+```
 
-![Turret Tests](../readme-imgs/tests-turret.png)
+This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
+
+### Step 2: Configure Smart Turret
+To set the Smart Turret, turret ID use:
+
+```bash
+pnpm configure-smart-turret
+```
+
+You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+
+### Step 3: Test The Smart Turret (Optional)
+To test the Smart Turret In Proximity functionality you can use the follow command:
+
+```bash
+pnpm execute
+```
 
 ## Deployment to Stillness<a id='Stillness'></a>
 ### Step 0: Deploy the example contracts to Stillness
