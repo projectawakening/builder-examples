@@ -112,11 +112,11 @@ You can interact in the inteact tab and explore the values in the explore tab an
 ![alt text](readme-imgs/query.png)
 
 ## Guides
-### Smart Storage Unit: [View](./vending-machine/readme.md)
+### Smart Storage Unit: [View](./smart-storage-unit/readme.md)
 Create a Vending Machine Smart Storage Unit (SSU) in the game which trade items between the owner and players.
 
 ### Smart Turret: [View](./smart-turret/readme.md)
 Configure and deploy a Smart Turret smart contract, ready to be further developed.
 
-### Smart Gate: [View](./smart-turret/readme.md)
+### Smart Gate: [View](./smart-gate/readme.md)
 Configure and deploy a Smart Gate smart contract which only allows members from a specific corporation to use the Smart Gate.
