@@ -12,6 +12,7 @@ function validate_input(){
     local INPUT=""
     read -p "Please insert your $1: " INPUT
     local MIN_LENGTH="$2"
+    local MAX_LENGTH="$3"
     while true 
     do
         if [[ -z "$INPUT" ]]; then
@@ -19,10 +20,15 @@ function validate_input(){
             read -p "You did not input anything. Please insert your $1: " INPUT
         else
             if [[ ${#INPUT} -ge $MIN_LENGTH ]]; then
-                break;
+                if [[ ${#INPUT} -le $MAX_LENGTH ]]; then
+                    break;
+                else
+                    echo "${YELLOW}[WARNING]${RESET}"
+                    read -p "Inputted namespace was too long. Please insert your $1: " INPUT
+                fi
             else
                 echo "${YELLOW}[WARNING]${RESET}"
-                read -p "Inputted key was not long enough. Please insert your $1: " INPUT
+                read -p "Inputted namespace was not long enough. Please insert your $1: " INPUT
             fi
         fi
     done
@@ -30,7 +36,7 @@ function validate_input(){
     echo $INPUT
 }
 
-NAMESPACE=$(validate_input "Namespace" "2")
+NAMESPACE=$(validate_input "Namespace" "2" "14")
 
 sed -i "s/^bytes14 constant SMART_GATE_DEPLOYMENT_NAMESPACE.*/bytes14 constant SMART_GATE_DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
 sed -i "s/^  namespace.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
