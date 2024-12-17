@@ -15,7 +15,7 @@ function sanitize() {
     sed -i "s/^PRIVATE_KEY=.*/PRIVATE_KEY=$PRIVATE_KEY/" "$FILE_NAME"
     sed -i "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$WORLD_ADDRESS #Local World Address/" "$FILE_NAME"
     sed -i "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Local Chain ID/" "$FILE_NAME"
-    sed -i "s|^RPC_URL=.*|RPC_URL=$RPC_URL #Forked Anvil Local RPC URL|" "$FILE_NAME"
+    sed -i "s|^RPC_URL=.*|RPC_URL=$RPC_URL #Forked Anvil Forked Anvil Local RPC Url|" "$FILE_NAME"
 
     printf "\n${GREEN}[SANITIZED]${RESET} file ${YELLOW}${FILE_NAME}${RESET}\n\n"
 }

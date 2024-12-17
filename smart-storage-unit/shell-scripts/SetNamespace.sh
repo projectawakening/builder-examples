@@ -38,7 +38,14 @@ function validate_input(){
 
 NAMESPACE=$(validate_input "Namespace" "2" "14")
 
-sed -i "s/^bytes14 constant DEPLOYMENT_NAMESPACE.*/bytes14 constant DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
-sed -i "s/^  namespace.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
+SED_CMD="sed"
+if [[ $OSTYPE == 'darwin'* ]]; then
+    SED_OPTS="-i ''"
+else
+    SED_OPTS="-i"
+fi
+
+$SED_CMD $SED_OPTS "s/^bytes14 constant DEPLOYMENT_NAMESPACE.*/bytes14 constant DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
+$SED_CMD $SED_OPTS "s/^  namespace.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
 
 printf "\n${GREEN}[COMPLETED]${RESET} Set ${YELLOW}DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n\n"
