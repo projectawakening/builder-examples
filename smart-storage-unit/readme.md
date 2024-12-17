@@ -96,6 +96,14 @@ Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_
 pnpm env-stillness
 ```
 
+Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the Item Seller or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+
+Use this command and then input your new namespace to change it:
+
+```bash
+pnpm set-namespace
+```
+
 Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
 
 ![Private Key](../readme-imgs/private-key.png)
