@@ -9,15 +9,16 @@ import {
   ErrorNotice,
   ErrorNoticeTypes,
   EveButton,
+  SmartAssemblyInfo
 } from "@eveworld/ui-components";
-import SmartAssemblyInfo from "./SmartAssemblyInfo";
 import { useAccount } from "wagmi";
 import { abbreviateAddress } from "@eveworld/utils";
+import Toggle from "./Toggle";
 
 export default function EntityView() {
   const { smartAssembly, smartCharacter, loading } = useSmartObject();
   const { notify, handleClose } = useNotification();
-  const {chain} = useAccount()
+  const { chain } = useAccount()
 
   useEffect(() => {
     if (loading) {
@@ -27,7 +28,7 @@ export default function EntityView() {
     }
   }, [loading]);
 
-  if (!loading && !smartAssembly) {
+  if (!loading && !smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
   }
 
@@ -50,6 +51,10 @@ export default function EntityView() {
       >
         dApp link
       </EveButton>
+
+      <Toggle
+        smartAssembly={smartAssembly} />
+
       <div>
         <SmartAssemblyInfo
           smartAssembly={smartAssembly}

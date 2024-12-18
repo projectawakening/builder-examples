@@ -1,6 +1,6 @@
 import { useAccount, useClient, useConnectorClient } from "wagmi";
 import { chainId, worldAbi } from "../common";
-import { erc20Abi, getContract, Hex } from "viem";
+import { getContract } from "viem";
 import { useSync } from "./useSync";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "@latticexyz/explorer/observer";
@@ -11,11 +11,9 @@ type InferredUseSyncResult = ReturnType<typeof useSync>;
 
 export function useWorldContract(): {
   worldContract: any,
-  erc20Contract: any,
   waitForTransaction: InferredUseSyncResult['waitForTransaction'];
 } | {
   worldContract?: undefined;
-  erc20Contract?: undefined;
   waitForTransaction?: undefined;
 } {
   const [worldAddress, setWorldAddress] = useState<`0x${string}`>("0x");
@@ -55,25 +53,12 @@ export function useWorldContract(): {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   });
-  
-	/*
-	 * Create an object for communicating with the deployed ERC20 Contract.
-	 */
-	const erc20Contract = sessionClient && getContract({
-		address: import.meta.env.VITE_ERC20_TOKEN_ADDRESS as Hex,
-		abi: erc20Abi,
-    client: {
-      public: client,
-      wallet: sessionClient.extend(observer()),
-    },
-	});
 
   // console.log(client, sessionClient)
 
   return worldContract && waitForTransaction
     ? {
         worldContract,
-        erc20Contract,
         waitForTransaction,
       }
     : {};

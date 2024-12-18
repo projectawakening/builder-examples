@@ -11,7 +11,7 @@ import Header from "./components/Header";
 
 export const App = () => {
 	const { isLive, message, percentage } = useSyncProgress();
-	const { smartAssembly, smartCharacter } = useSmartObject();
+	const { smartCharacter } = useSmartObject();
 	const { chain } = useAccount();
 	const { notification } = useNotification();
 
@@ -27,17 +27,11 @@ export const App = () => {
 				txHash={notification.txHash}
 			/>
 
-			<Header smartCharacter={smartCharacter} />
+			<EveLayout
+				smartCharacter={smartCharacter}
+			>
 
-{/* <EveLayout
-        isCurrentChain={true}
-        connected={connected}
-        handleDisconnect={() => {}}
-        walletClient={walletClient}
-        smartCharacter={smartCharacter}
-      > */}
-
-{isLive ? (
+				{isLive ? (
 					<div className="flex flex-col align-center max-w-[1250px] mx-auto px-4">
 						<EntityView />
 					</div>
@@ -46,7 +40,7 @@ export const App = () => {
 						{message} ({percentage.toFixed(1)}%)…
 					</div>
 				)}
-      {/* </EveLayout> */}
+			</EveLayout>
 		</>
 	);
 };
