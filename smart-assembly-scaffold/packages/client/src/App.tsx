@@ -7,7 +7,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { EveAlert, EveLayout } from "@eveworld/ui-components";
 import { useNotification, useSmartObject } from "@eveworld/contexts";
 import EntityView from "./components/EntityView";
-import Header from "./components/Header";
+import { Explorer } from "./Explorer";
 
 export const App = () => {
 	const { isLive, message, percentage } = useSyncProgress();
@@ -41,6 +41,8 @@ export const App = () => {
 					</div>
 				)}
 			</EveLayout>
+
+			<Explorer />
 		</>
 	);
 };

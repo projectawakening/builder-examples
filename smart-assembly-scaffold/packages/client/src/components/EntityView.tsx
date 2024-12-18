@@ -52,8 +52,7 @@ export default function EntityView() {
         dApp link
       </EveButton>
 
-      <Toggle
-        smartAssembly={smartAssembly} />
+      <Toggle />
 
       <div>
         <SmartAssemblyInfo

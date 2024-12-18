@@ -3,13 +3,13 @@ import mudConfig from "contracts/mud.config";
 import { stash } from "../mud/stash";
 import { useRecord } from "../mud/useRecord";
 import { useWorldContract } from "../mud/useWorldContract";
-import { Severity, SmartAssemblies, SmartAssemblyType } from "@eveworld/types";
+import { Severity } from "@eveworld/types";
 import setToggle from "./systemCalls/handleToggle";
 import { EveButton } from "@eveworld/ui-components";
-import { useNotification } from "@eveworld/contexts";
+import { useNotification, useSmartObject } from "@eveworld/contexts";
 
-const Toggle = React.memo(function Header({ smartAssembly }: { smartAssembly: SmartAssemblyType<SmartAssemblies> }) {
-
+const Toggle = React.memo(function Toggle() {
+    const { smartAssembly } = useSmartObject()
     const { worldContract } = useWorldContract();
     const { notify } = useNotification()
 
@@ -17,7 +17,7 @@ const Toggle = React.memo(function Header({ smartAssembly }: { smartAssembly: Sm
         stash,
         table: mudConfig.namespaces.example.tables.ToggleTable,
         key: {
-            smartObjectId: BigInt(smartAssembly.id)
+            smartObjectId: BigInt(smartAssembly?.id || 0)
         },
     });
 
@@ -32,7 +32,7 @@ const Toggle = React.memo(function Header({ smartAssembly }: { smartAssembly: Sm
 
     return (
         <EveButton typeClass="primary" onClick={() => handleToggle()}>
-            {toggleValue?.isSet || "Click to set toggle"}</EveButton>
+            CURRENTLY: {toggleValue?.isSet || "Click here to set toggle"}</EveButton>
     );
 },
 )
