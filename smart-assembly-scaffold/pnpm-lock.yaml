@@ -4,6 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@eveworld/contexts': file:../../eve-frontier-dapps/packages/libs/contexts
+  '@eveworld/contracts': file:../../eve-frontier-dapps/packages/libs/contracts
+  '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types
+  '@eveworld/ui-components': file:../../eve-frontier-dapps/packages/libs/ui-components
+  '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils
+
 importers:
 
   .:
@@ -184,20 +191,20 @@ importers:
         version: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
     devDependencies:
       '@eveworld/contexts':
-        specifier: 0.1.0
-        version: 0.1.0(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8)
+        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/contexts
+        version: file:../../eve-frontier-dapps/packages/libs/contexts(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8)
       '@eveworld/contracts':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/contracts
+        version: file:../../eve-frontier-dapps/packages/libs/contracts
       '@eveworld/types':
-        specifier: 0.0.9
-        version: 0.0.9(typescript@5.6.3)(zod@3.23.8)
+        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/types
+        version: file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
       '@eveworld/ui-components':
-        specifier: 0.0.9
-        version: 0.0.9(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8)
+        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/ui-components
+        version: file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8)
       '@eveworld/utils':
-        specifier: 0.0.9
-        version: 0.0.9(typescript@5.6.3)(zod@3.23.8)
+        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/utils
+        version: file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
       '@types/react':
         specifier: 18.3.1
         version: 18.3.1
@@ -788,7 +795,7 @@ packages:
       '@babel/traverse': 7.25.9
       '@babel/types': 7.26.0
       convert-source-map: 2.0.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -866,7 +873,7 @@ packages:
       '@babel/core': 7.26.0
       '@babel/helper-compilation-targets': 7.25.9
       '@babel/helper-plugin-utils': 7.25.9
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -2055,7 +2062,7 @@ packages:
       '@babel/parser': 7.26.0
       '@babel/template': 7.25.9
       '@babel/types': 7.26.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -2147,7 +2154,7 @@ packages:
       chalk: 4.1.2
       cypress: 12.17.3
       dayjs: 1.11.13
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 4.1.0
       globby: 11.1.0
       istanbul-lib-coverage: 3.2.2
@@ -2241,7 +2248,7 @@ packages:
       '@babel/preset-env': 7.26.0(@babel/core@7.26.0)
       babel-loader: 9.2.1(@babel/core@7.26.0)(webpack@5.95.0)
       bluebird: 3.7.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       lodash: 4.17.21
       webpack: 5.95.0(esbuild@0.17.19)
     transitivePeerDependencies:
@@ -3040,7 +3047,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.2
@@ -3104,51 +3111,6 @@ packages:
       - zod
     dev: false
 
-  /@eveworld/contexts@0.1.0(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8):
-    resolution: {integrity: sha512-H++Koq9atZ3SboXj71eKJihzfb6FtcvWzPKdZjaVJlnV0/IFOunUbpFE2Tb3eLHKx8tadY7/bo+Xfm04RI2y4w==}
-    dependencies:
-      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
-      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
-      '@eveworld/contracts': 0.1.0
-      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
-      '@eveworld/utils': 0.0.9(typescript@5.6.3)(zod@3.23.8)
-      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.19)(wagmi@2.14.0)
-      '@tanstack/react-query': 5.62.7(react@18.3.1)
-      react: 18.3.1
-      viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
-      wagmi: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.19)(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@tanstack/query-core'
-      - '@types/react'
-      - '@upstash/redis'
-      - '@vercel/kv'
-      - babel-plugin-macros
-      - bufferutil
-      - encoding
-      - immer
-      - ioredis
-      - react-dom
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
-
-  /@eveworld/contracts@0.1.0:
-    resolution: {integrity: sha512-UKefoBAGNAI3rH3JhK82Ku3PwzAcqU91AaPoHN0vhiKEc1HfRx7bVphg3+igv8pesY3foa61Fr1D6H265ykCEQ==}
-    dev: true
-
   /@eveworld/smart-object-framework@0.0.8(typescript@5.6.3)(zod@3.23.8):
     resolution: {integrity: sha512-M+tj5F7ZSZKdQ6cbE9KW17AHQJi0duLSdiUKPJSk+tyBxocM3a8S9PUcm+tTTRRXtLUH6NQLLZdPOSV1DZFa5w==}
     dependencies:
@@ -3168,51 +3130,6 @@ packages:
       - utf-8-validate
       - zod
     dev: false
-
-  /@eveworld/types@0.0.9(typescript@5.6.3)(zod@3.23.8):
-    resolution: {integrity: sha512-yLH7D12oo5XR/eX2ZBR0odxsATGQ/pcD8hHNWYbHOxMg4D09oxUO64adCphjJbivzyOwXsU+Gn7UlTdrPs435Q==}
-    dependencies:
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
-
-  /@eveworld/ui-components@0.0.9(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8):
-    resolution: {integrity: sha512-9Rs+2DKGqfqWaa6MSqLa+ugJiJb56It44sKoFxKteszIlSz4zIYjcoleBcuv6k6DOdS8vF6TndQS5dMbV6UKVA==}
-    dependencies:
-      '@base_ui/react': 1.0.0-alpha.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
-      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
-      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
-      '@eveworld/utils': 0.0.9(typescript@5.6.3)(zod@3.23.8)
-      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      react: 18.3.1
-      react-router-dom: 6.28.0(react-dom@18.3.1)(react@18.3.1)
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@types/react'
-      - bufferutil
-      - react-dom
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
-
-  /@eveworld/utils@0.0.9(typescript@5.6.3)(zod@3.23.8):
-    resolution: {integrity: sha512-5OI6IM4h3xkfbm8ynL9I0yVlOUFCaBDoqwDHZZMhs6+RGOur9u0RvVMC5wtGIxwn4hfDLwLibjcgjmM/QRodCA==}
-    dependencies:
-      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
 
   /@eveworld/world@0.0.17(typescript@5.6.3)(zod@3.23.8):
     resolution: {integrity: sha512-/CcLDZ0wSu/otvfb4b4psooLcIq09ulvmPqxzx+E379LBBSkPMb546PAibY7PlUiQmzwOhYytF2YR3RyQgNksQ==}
@@ -3303,7 +3220,7 @@ packages:
     deprecated: Use @eslint/config-array instead
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3465,7 +3382,7 @@ packages:
     resolution: {integrity: sha512-sYcHglGKTxGF+hQ6x67xDfkE9o+NhVlRHBqq6gLywaMc6CojK/5vFZByphdonKinYlMLkEkacm+HEse9HzwgTA==}
     engines: {node: '>= 12'}
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       http-errors: 2.0.0
       koa-compose: 4.1.0
       methods: 1.1.2
@@ -3478,7 +3395,7 @@ packages:
     hasBin: true
     dependencies:
       chalk: 5.3.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       glob: 10.4.5
       yargs: 17.7.2
@@ -3490,7 +3407,7 @@ packages:
     hasBin: true
     dependencies:
       chalk: 5.3.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       glob: 10.4.5
       yargs: 17.7.2
@@ -3503,7 +3420,7 @@ packages:
     dependencies:
       '@latticexyz/common': 2.2.14(@aws-sdk/client-kms@3.679.0)(asn1.js@5.4.1)(typescript@5.4.2)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       rxjs: 7.5.5
       viem: 2.21.19(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
@@ -3520,7 +3437,7 @@ packages:
     dependencies:
       '@latticexyz/common': 2.2.14(typescript@5.6.3)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       rxjs: 7.5.5
       viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
@@ -3538,7 +3455,7 @@ packages:
       viem: 2.x
     dependencies:
       '@latticexyz/common': 2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       rxjs: 7.5.5
       viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
@@ -3554,7 +3471,7 @@ packages:
     dependencies:
       '@latticexyz/common': 2.2.8(@aws-sdk/client-kms@3.679.0)(asn1.js@5.4.1)(typescript@5.4.2)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       rxjs: 7.5.5
       viem: 2.21.6(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
@@ -3588,7 +3505,7 @@ packages:
       asn1.js: 5.4.1
       chalk: 5.3.0
       chokidar: 3.6.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       dotenv: 16.4.5
       execa: 7.2.0
       find-up: 6.3.0
@@ -3632,7 +3549,7 @@ packages:
       asn1.js: 5.4.1
       chalk: 5.3.0
       chokidar: 3.6.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       dotenv: 16.4.5
       execa: 7.2.0
       find-up: 6.3.0
@@ -3672,7 +3589,7 @@ packages:
       '@solidity-parser/parser': 0.16.2
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
       asn1.js: 5.4.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
@@ -3700,7 +3617,7 @@ packages:
       '@latticexyz/schema-type': 2.2.14(typescript@5.6.3)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
@@ -3729,7 +3646,7 @@ packages:
       '@latticexyz/schema-type': 2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
@@ -3758,7 +3675,7 @@ packages:
       '@latticexyz/schema-type': 2.2.8(typescript@5.4.2)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
       asn1.js: 5.4.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
@@ -3786,7 +3703,7 @@ packages:
     dependencies:
       '@latticexyz/schema-type': 2.2.8(typescript@5.6.3)(zod@3.23.8)
       '@solidity-parser/parser': 0.16.2
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       execa: 7.2.0
       p-queue: 7.4.1
       p-retry: 5.1.2
@@ -3924,7 +3841,7 @@ packages:
       class-variance-authority: 0.7.0
       clsx: 2.1.1
       cmdk: 1.0.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       lucide-react: 0.408.0(react@18.3.1)
       monaco-editor: 0.52.0
       next: 14.2.5(@babel/core@7.26.0)(react-dom@18.3.1)(react@18.3.1)
@@ -4027,7 +3944,7 @@ packages:
       class-variance-authority: 0.7.0
       clsx: 2.1.1
       cmdk: 1.0.0(@types/react-dom@18.2.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       lucide-react: 0.408.0(react@18.3.1)
       monaco-editor: 0.52.0
       next: 14.2.5(@babel/core@7.26.0)(react-dom@18.3.1)(react@18.3.1)
@@ -4357,7 +4274,7 @@ packages:
       '@trpc/server': 10.34.0
       accepts: 1.3.8
       better-sqlite3: 8.7.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       dotenv: 16.4.5
       drizzle-orm: 0.28.6(better-sqlite3@8.7.0)(postgres@3.3.5)
       koa: 2.15.3
@@ -4417,7 +4334,7 @@ packages:
       '@trpc/server': 10.34.0
       accepts: 1.3.8
       better-sqlite3: 8.7.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       dotenv: 16.4.5
       drizzle-orm: 0.28.6(better-sqlite3@8.7.0)(postgres@3.3.5)
       koa: 2.15.3
@@ -4472,7 +4389,7 @@ packages:
       '@trpc/client': 10.34.0(@trpc/server@10.34.0)
       '@trpc/server': 10.34.0
       change-case: 5.4.4
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       drizzle-orm: 0.28.6(better-sqlite3@8.7.0)(kysely@0.26.3)(postgres@3.4.5)(sql.js@1.11.0)
       fast-deep-equal: 3.1.3
       kysely: 0.26.3
@@ -4528,7 +4445,7 @@ packages:
       '@trpc/client': 10.34.0(@trpc/server@10.34.0)
       '@trpc/server': 10.34.0
       change-case: 5.4.4
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       drizzle-orm: 0.28.6(better-sqlite3@8.7.0)(kysely@0.26.3)(postgres@3.4.5)(sql.js@1.11.0)
       fast-deep-equal: 3.1.3
       kysely: 0.26.3
@@ -4575,7 +4492,7 @@ packages:
       '@latticexyz/schema-type': 2.2.14(typescript@5.4.2)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.19(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4596,7 +4513,7 @@ packages:
       '@latticexyz/schema-type': 2.2.14(typescript@5.6.3)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4622,7 +4539,7 @@ packages:
       '@latticexyz/schema-type': 2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4775,7 +4692,7 @@ packages:
       '@latticexyz/store': 2.2.14(@aws-sdk/client-kms@3.679.0)(asn1.js@5.4.1)(typescript@5.4.2)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.19(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4797,7 +4714,7 @@ packages:
       '@latticexyz/store': 2.2.14(typescript@5.6.3)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4825,7 +4742,7 @@ packages:
       '@latticexyz/store': 2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4846,7 +4763,7 @@ packages:
       '@latticexyz/store': 2.2.8(@aws-sdk/client-kms@3.679.0)(asn1.js@5.4.1)(typescript@5.4.2)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.4.2)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.6(typescript@5.4.2)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4869,7 +4786,7 @@ packages:
       '@latticexyz/store': 2.2.8(typescript@5.6.3)(zod@3.23.8)
       abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       arktype: 2.0.0-beta.6
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       viem: 2.21.6(typescript@5.6.3)(zod@3.23.8)
     transitivePeerDependencies:
       - '@aws-sdk/client-kms'
@@ -4993,7 +4910,7 @@ packages:
       bufferutil: 4.0.8
       cross-fetch: 4.0.0
       date-fns: 2.30.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eciesjs: 0.3.20
       eventemitter2: 6.4.9
       readable-stream: 3.6.2
@@ -5015,7 +4932,7 @@ packages:
       bufferutil: 4.0.8
       cross-fetch: 4.0.0
       date-fns: 2.30.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eciesjs: 0.4.12
       eventemitter2: 6.4.9
       readable-stream: 3.6.2
@@ -5044,7 +4961,7 @@ packages:
       qr-code-styling: 1.8.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.1)(react@18.3.1)
 
   /@metamask/sdk-install-modal-web@0.31.2:
     resolution: {integrity: sha512-KPv36kQjmTwErU8g2neuHHSgkD5+1hp4D6ERfk5Kc2r73aOYNCdG9wDGRUmFmcY2MKkeK1EuDyZfJ4FPU30fxQ==}
@@ -5070,7 +4987,7 @@ packages:
       '@types/uuid': 10.0.0
       bowser: 2.11.0
       cross-fetch: 4.0.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eciesjs: 0.3.20
       eth-rpc-errors: 4.0.3
       eventemitter2: 6.4.9
@@ -5106,7 +5023,7 @@ packages:
       '@paulmillr/qr': 0.2.1
       bowser: 2.11.0
       cross-fetch: 4.0.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eciesjs: 0.4.12
       eth-rpc-errors: 4.0.3
       eventemitter2: 6.4.9
@@ -5133,7 +5050,7 @@ packages:
     dependencies:
       '@ethereumjs/tx': 4.2.0
       '@types/debug': 4.1.7
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       semver: 7.6.3
       superstruct: 1.0.4
     transitivePeerDependencies:
@@ -5148,7 +5065,7 @@ packages:
       '@noble/hashes': 1.6.1
       '@scure/base': 1.2.1
       '@types/debug': 4.1.7
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       pony-cause: 2.1.11
       semver: 7.6.3
       uuid: 9.0.1
@@ -5164,7 +5081,7 @@ packages:
       '@noble/hashes': 1.6.1
       '@scure/base': 1.2.1
       '@types/debug': 4.1.7
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       pony-cause: 2.1.11
       semver: 7.6.3
       uuid: 9.0.1
@@ -9091,7 +9008,6 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
       - babel-plugin-macros
-    dev: false
 
   /@rainbow-me/rainbowkit@2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.19)(wagmi@2.12.11):
     resolution: {integrity: sha512-DvWbczNmm3BRr+EPZFwDK2vJRYxzSgHL0XzasL4RGMPsPuuRe9meLiTrznPqJvut7yNmib/ROqtblWJuxBvIKA==}
@@ -9281,7 +9197,7 @@ packages:
   /@react-native/normalize-colors@0.76.0:
     resolution: {integrity: sha512-r+pjeIhzehb+bJUUUrztOQb+n6J9DeaLbF6waLgiHa5mFOiwP/4/iWS68inSZnnBtmXHkN2IYiMXzExx8hieWA==}
 
-  /@react-native/virtualized-lists@0.76.0(@types/react@18.3.12)(react-native@0.76.0)(react@18.3.1):
+  /@react-native/virtualized-lists@0.76.0(@types/react@18.3.1)(react-native@0.76.0)(react@18.3.1):
     resolution: {integrity: sha512-WT3Xi1+ikmWWdbrv3xnl8wYxobj1+N5JfiOQx7o/tiGUCx8m12pf5tlutXByH2m7X8bAZ+BBcRuu1vwt7XaRhQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -9292,11 +9208,11 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.3.12
+      '@types/react': 18.3.1
       invariant: 2.2.4
       nullthrows: 1.1.1
       react: 18.3.1
-      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.1)(react@18.3.1)
 
   /@remix-run/router@1.21.0:
     resolution: {integrity: sha512-xfSkCAchbdG5PnbrKqFWwia4Bi61nH+wm8wLEqfHDyp7Y3dZzgqS2itV8i4gAq9pC2HsTpwyBC6Ds8VHZ96JlA==}
@@ -10380,7 +10296,7 @@ packages:
       commander: 11.1.0
       cypress: 12.17.3
       cypress-wait-until: 2.0.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       dotenv: 16.4.5
       dotenv-parse-variables: 2.0.0
       download: 8.0.0
@@ -10925,7 +10841,7 @@ packages:
       '@typescript-eslint/types': 7.13.1
       '@typescript-eslint/typescript-estree': 7.13.1(typescript@5.6.3)
       '@typescript-eslint/visitor-keys': 7.13.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eslint: 8.57.0
       typescript: 5.6.3
     transitivePeerDependencies:
@@ -10952,7 +10868,7 @@ packages:
     dependencies:
       '@typescript-eslint/typescript-estree': 7.13.1(typescript@5.6.3)
       '@typescript-eslint/utils': 7.13.1(eslint@8.57.0)(typescript@5.6.3)
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       eslint: 8.57.0
       ts-api-utils: 1.3.0(typescript@5.6.3)
       typescript: 5.6.3
@@ -10976,7 +10892,7 @@ packages:
     dependencies:
       '@typescript-eslint/types': 7.13.1
       '@typescript-eslint/visitor-keys': 7.13.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -11261,7 +11177,6 @@ packages:
       - supports-color
       - utf-8-validate
       - zod
-    dev: false
 
   /@wagmi/core@2.13.5(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.54):
     resolution: {integrity: sha512-lvX/hApJTSA/H2kOklokjIYiUpnT8CpBH80GeOiKxU0CGK1wNHTu20GRTCy0GF1t7jkNwPSG3m0SmnXmgYMmHw==}
@@ -11354,7 +11269,6 @@ packages:
       - immer
       - react
       - use-sync-external-store
-    dev: false
 
   /@walletconnect/core@2.16.1:
     resolution: {integrity: sha512-UlsnEMT5wwFvmxEjX8s4oju7R3zadxNbZgsFeHEsjh7uknY2zgmUe1Lfc5XU6zyPb1Jx7Nqpdx1KN485ee8ogw==}
@@ -13814,6 +13728,7 @@ packages:
     dependencies:
       ms: 2.1.3
       supports-color: 5.5.0
+    dev: false
 
   /debug@4.3.7(supports-color@8.1.1):
     resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
@@ -13826,7 +13741,6 @@ packages:
     dependencies:
       ms: 2.1.3
       supports-color: 8.1.1
-    dev: true
 
   /decamelize@1.2.0:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
@@ -14130,7 +14044,7 @@ packages:
     resolution: {integrity: sha512-/Tezlx6xpDqR6zKg1V4vLCeQtHWiELhWoBz5A/E0+A1lXN9iIkNbbfc4THSymS0LQUo8F1PMiIwVG8ai/HrnSA==}
     engines: {node: '>= 8.3.0'}
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       is-string-and-not-blank: 0.0.2
     transitivePeerDependencies:
       - supports-color
@@ -14380,7 +14294,7 @@ packages:
     resolution: {integrity: sha512-TAr+NKeoVTjEVW8P3iHguO1LO6RlUz9O5Y8o7EY0fU+gY1NYqas7NN3slpFtbXEsLMHk0h90fJMfKjRkQ0qUIw==}
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       engine.io-parser: 5.2.3
       ws: 8.17.1
       xmlhttprequest-ssl: 2.1.2
@@ -14821,7 +14735,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -15415,7 +15329,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
     dev: true
 
   /for-each@0.3.3:
@@ -15825,6 +15739,7 @@ packages:
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
+    dev: false
 
   /has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -16650,7 +16565,7 @@ packages:
     resolution: {integrity: sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw==}
     engines: {node: '>=10'}
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -17005,7 +16920,7 @@ packages:
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookies: 0.9.1
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       delegates: 1.0.0
       depd: 2.0.0
       destroy: 1.2.0
@@ -19121,9 +19036,9 @@ packages:
       escape-string-regexp: 2.0.0
       invariant: 2.2.4
       react: 18.3.1
-      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1)
+      react-native: 0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.1)(react@18.3.1)
 
-  /react-native@0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.12)(react@18.3.1):
+  /react-native@0.76.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(@types/react@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-isbLzmY7fhhLdN/oss4jlRHeDmEShuTYsp1Zq93UM0/JssQK4g+2Ub4mHdhxDFm2LN+0ryBgVJK1nO7l93cfsA==}
     engines: {node: '>=18'}
     hasBin: true
@@ -19141,8 +19056,8 @@ packages:
       '@react-native/gradle-plugin': 0.76.0
       '@react-native/js-polyfills': 0.76.0
       '@react-native/normalize-colors': 0.76.0
-      '@react-native/virtualized-lists': 0.76.0(@types/react@18.3.12)(react-native@0.76.0)(react@18.3.1)
-      '@types/react': 18.3.12
+      '@react-native/virtualized-lists': 0.76.0(@types/react@18.3.1)(react-native@0.76.0)(react@18.3.1)
+      '@types/react': 18.3.1
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
@@ -20027,7 +19942,7 @@ packages:
     engines: {node: '>=10.0.0'}
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       engine.io-client: 6.6.2
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
@@ -20040,7 +19955,7 @@ packages:
     engines: {node: '>=10.0.0'}
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -20174,7 +20089,7 @@ packages:
   /spdy-transport@3.0.0:
     resolution: {integrity: sha512-hsLVFE5SjA6TCisWeJXFKniGGOpBgMLmerfO2aCyCU5s7nJ/rpAepqmFifv/GCbSbueEeAJJnmSQ2rKC/g8Fcw==}
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       detect-node: 2.1.0
       hpack.js: 2.1.6
       obuf: 1.1.2
@@ -20188,7 +20103,7 @@ packages:
     resolution: {integrity: sha512-r46gZQZQV+Kl9oItvl1JZZqJKGr+oEkB08A6BzkiR7593/7IbtuncXHd2YoYeTsG4157ZssMu9KYvUHLcjcDoA==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       handle-thing: 2.0.1
       http-deceiver: 1.2.7
       select-hose: 2.0.0
@@ -20486,6 +20401,7 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       has-flag: 3.0.0
+    dev: false
 
   /supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -20845,7 +20761,7 @@ packages:
       bundle-require: 4.2.1(esbuild@0.17.19)
       cac: 6.7.14
       chokidar: 3.6.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
       esbuild: 0.17.19
       execa: 5.1.1
       globby: 11.1.0
@@ -21745,7 +21661,6 @@ packages:
       - supports-color
       - utf-8-validate
       - zod
-    dev: false
 
   /wait-on@7.2.0(debug@4.3.7):
     resolution: {integrity: sha512-wCQcHkRazgjG5XoAq9jbTMLpNIjoSlZslrJ2+N9MxDsGEv1HnFoVjOCexL0ESva7Y9cu350j+DWADdk54s4AFQ==}
@@ -21768,7 +21683,7 @@ packages:
     dependencies:
       chalk: 4.1.2
       commander: 9.5.0
-      debug: 4.3.7(supports-color@5.5.0)
+      debug: 4.3.7(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -22319,6 +22234,92 @@ packages:
       '@types/react': 18.3.1
       react: 18.3.1
       use-sync-external-store: 1.2.0(react@18.3.1)
+
+  file:../../eve-frontier-dapps/packages/libs/contexts(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8):
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/contexts, type: directory}
+    id: file:../../eve-frontier-dapps/packages/libs/contexts
+    name: '@eveworld/contexts'
+    dependencies:
+      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
+      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
+      '@eveworld/contracts': file:../../eve-frontier-dapps/packages/libs/contracts
+      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
+      '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
+      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.19)(wagmi@2.14.0)
+      '@tanstack/react-query': 5.62.7(react@18.3.1)
+      react: 18.3.1
+      viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
+      wagmi: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.19)(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@types/react'
+      - bufferutil
+      - react-dom
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
+
+  file:../../eve-frontier-dapps/packages/libs/contracts:
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/contracts, type: directory}
+    name: '@eveworld/contracts'
+    dev: true
+
+  file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8):
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/types, type: directory}
+    id: file:../../eve-frontier-dapps/packages/libs/types
+    name: '@eveworld/types'
+    dependencies:
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
+
+  file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8):
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/ui-components, type: directory}
+    id: file:../../eve-frontier-dapps/packages/libs/ui-components
+    name: '@eveworld/ui-components'
+    dependencies:
+      '@base_ui/react': 1.0.0-alpha.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
+      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
+      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
+      '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
+      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.54)(wagmi@2.14.0)
+      react: 18.3.1
+      react-router-dom: 6.28.0(react-dom@18.3.1)(react@18.3.1)
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@tanstack/react-query'
+      - '@types/react'
+      - babel-plugin-macros
+      - bufferutil
+      - react-dom
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - wagmi
+      - zod
+    dev: true
+
+  file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8):
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/utils, type: directory}
+    id: file:../../eve-frontier-dapps/packages/libs/utils
+    name: '@eveworld/utils'
+    dependencies:
+      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
 
   github.com/dapphub/ds-test/e282159d5170298eb2455a6c05280ab5a73a4ef0:
     resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0}

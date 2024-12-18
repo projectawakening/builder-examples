@@ -1,9 +1,9 @@
 // src/providers/WalletAddressProvider.tsx
 
 import { SmartObjectProvider } from '@eveworld/contexts';
+import { ConnectWallet } from '@eveworld/ui-components';
 import React from 'react';
 import { useAccount } from 'wagmi';
-import ConnectWallet from "../components/ConnectWallet"
 
 interface SmartObjectWalletProviderProps {
   children: React.ReactNode;
