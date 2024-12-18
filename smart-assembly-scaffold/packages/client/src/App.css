@@ -1,0 +1,150 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import url("https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600&display=swap");
+
+body {
+  font-family: "Bai Jamjuree", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  background-color: hsla(22, 77%, 15%, 1);
+  background-image: url("./assets/background.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+*::focus,
+*::focus-visible {
+  outline: none !important;
+}
+
+@keyframes flash-white {
+  from {
+    color: #ffffff;
+  }
+  to {
+    color: hsla(216, 9%, 69%, 1);
+  }
+}
+
+@layer base {
+  body {
+    @apply text-orange-100;
+  }
+
+  button {
+    @apply flex justify-center items-center;
+  }
+
+  button.primary {
+    @apply m-1 px-8 py-[17px] bg-darkquantum hover:bg-opacity-40 disabled:bg-opacity-40 transition-all justify-center items-center flex text-center text-lg font-semibold leading-snug;
+  }
+  button.primary::before,
+  button.primary::after {
+    @apply items-center border-orange-100 border absolute;
+    width: 10px;
+    height: 100%;
+    content: "";
+  }
+  button.primary::before {
+    @apply -mr-1.5 border-r-0;
+    left: 0;
+  }
+  button.primary::after {
+    @apply -ml-1.5 border-l-0;
+    right: 0;
+  }
+
+  button.secondary {
+    @apply h-4 p-4 text-grayneutral hover:opacity-70 text-sm font-semibold uppercase leading-tight tracking-wide border border-grayneutral;
+  }
+  button.secondary:hover {
+    @apply bg-neutral-20 text-orange-100;
+  }
+
+  button.secondary.active {
+    @apply bg-orange-100/10 text-neutral;
+  }
+
+  button.tertiary {
+    @apply m-2 leading-6 px-4 py-1.5 border border-grayneutral hover:bg-crude-btn text-grayneutral text-sm relative;
+  }
+
+  input {
+    @apply bg-crude-btn px-6 py-4 focus:outline-none relative rounded-sm text-sm;
+  }
+
+  .text-header {
+    @apply text-orange-100 text-sm font-semibold uppercase tracking-wide;
+  }
+}
+
+@layer components {
+  a {
+    @apply text-white tracking-wider;
+  }
+
+  a.active,
+  a::hover {
+    @apply underline;
+  }
+
+  #lens-radio-buttons-group {
+    @apply grid;
+  }
+
+  #lens-radio-buttons-group > label {
+    margin: unset;
+  }
+
+  #lens-radio-buttons-group .select {
+    @apply w-full h-[82px] px-6 py-4 border border-orange-100/20 flex-col justify-center items-end gap-1 inline-flex;
+  }
+
+  #lens-radio-buttons-group .select:hover {
+    @apply bg-neutral-10 border border-orange-700;
+  }
+
+  #lens-radio-buttons-group .select.active {
+    @apply bg-neutral-30 border border-neutral;
+  }
+
+  #header div:last-of-type > div {
+    @apply border border-orange-100/10 flex whitespace-nowrap text-header;
+  }
+
+  #header div:last-of-type > button {
+    @apply px-4 py-3 mobile:px-3 mobile:py-2 border border-orange-100/10 flex whitespace-nowrap text-header;
+  }
+
+  #footer .info {
+    @apply text-grayneutral text-sm font-semibold uppercase tracking-wide;
+  }
+
+  #footer div.info:last-of-type {
+    @apply tablet:grid tablet:grid-cols-3 mobile:grid-cols-1 tablet:gap-x-4 tablet:gap-y-2;
+  }
+
+  #footer div.info:last-of-type div {
+    @apply gap-2 flex justify-start mobile:justify-end text-grayneutral;
+  }
+
+  #footer div.info:last-of-type div span {
+    @apply text-orange-100;
+  }
+}
+
+@layer utilities {
+  .background-blur {
+    @apply bg-crude-btn flex backdrop-blur rounded-sm;
+  }
+
+  .flash-white {
+    -moz-animation: flash-white 5s ease 0s 1 alternate;
+    -webkit-animation: flash-white 5s ease 0s 1 alternate;
+    animation: flash-white 5s ease 0s 1 alternate;
+  }
+}

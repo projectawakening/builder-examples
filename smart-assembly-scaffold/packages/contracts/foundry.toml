@@ -1,0 +1,36 @@
+[profile.default]
+solc = "0.8.24"
+evm_version = "cancun"
+ffi = false
+fuzz_runs = 256
+optimizer = true
+optimizer_runs = 3000
+verbosity = 2
+src = "src"
+example = "test"
+out = "out"
+allow_paths = [
+  # pnpm symlinks to the project root's node_modules
+  "../../node_modules",
+  # template uses linked mud packages from within the mud monorepo
+  "../../../../packages",
+  # projects created from this template and using linked mud packages
+  "../../../mud/packages",
+]
+extra_output_files = [
+  "abi",
+  "evm.bytecode"
+]
+fs_permissions = [{ access = "read", path = "./"}]
+
+[profile.local]
+# Local Anvil Instance
+eth_rpc_url = "http://127.0.0.1:8546"
+
+[profile.garnet]
+# Public Testnet
+eth_rpc_url = "https://rpc.garnetchain.com"
+
+[profile.redstone]
+# Public Mainnet
+eth_rpc_url = "https://rpc.redstonechain.com"
