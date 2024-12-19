@@ -16,18 +16,15 @@ function validate_input(){
     while true 
     do
         if [[ -z "$INPUT" ]]; then
-            printf "${YELLOW}[WARNING]${RESET}"
             read -p "You did not input anything. Please insert your $1: " INPUT
         else
             if [[ ${#INPUT} -ge $MIN_LENGTH ]]; then
                 if [[ ${#INPUT} -le $MAX_LENGTH ]]; then
                     break;
                 else
-                    echo "${YELLOW}[WARNING]${RESET}"
                     read -p "Inputted namespace was too long. Please insert your $1: " INPUT
                 fi
             else
-                echo "${YELLOW}[WARNING]${RESET}"
                 read -p "Inputted namespace was not long enough. Please insert your $1: " INPUT
             fi
         fi
