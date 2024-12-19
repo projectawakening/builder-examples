@@ -12,6 +12,6 @@ getWorldDeploy(chainId).then((worldDeploy) => {
       <Providers worldDeploy={worldDeploy}>
         <App />
       </Providers>
-    </StrictMode>
+    </StrictMode>,
   );
 });

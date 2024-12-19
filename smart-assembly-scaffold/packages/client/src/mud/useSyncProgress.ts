@@ -16,6 +16,6 @@ export function useSyncProgress() {
       ...progress,
       isLive: progress.step === SyncStep.LIVE,
     }),
-    [progress]
+    [progress],
   );
 }

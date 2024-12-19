@@ -26,6 +26,6 @@ export function useRecords<const table extends Table>({
     (state) => Object.values(getRecords({ state, ...args })),
     {
       isEqual,
-    }
+    },
   );
 }

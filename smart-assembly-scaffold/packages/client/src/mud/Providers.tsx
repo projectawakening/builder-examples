@@ -12,29 +12,29 @@ import SmartObjectWalletProvider from "./SmartObjectWalletProvider";
 const queryClient = new QueryClient();
 
 export type Props = {
-	worldDeploy: {
-		address: Address;
-		blockNumber: bigint | null;
-	};
-	children: ReactNode;
+  worldDeploy: {
+    address: Address;
+    blockNumber: bigint | null;
+  };
+  children: ReactNode;
 };
 
 export function Providers({ worldDeploy, children }: Props) {
-	return (
-		<WagmiProvider config={wagmiConfig}>
-			<QueryClientProvider client={queryClient}>
-				<RainbowKitProvider initialChain={17069}>
-					<StashSyncProvider
-						address={worldDeploy.address}
-						startBlock={worldDeploy.blockNumber ?? undefined}
-						stash={stash}
-					>
-						<NotificationProvider>
-							<SmartObjectWalletProvider>{children}</SmartObjectWalletProvider>
-						</NotificationProvider>
-					</StashSyncProvider>
-				</RainbowKitProvider>
-			</QueryClientProvider>
-		</WagmiProvider>
-	);
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider initialChain={17069}>
+          <StashSyncProvider
+            address={worldDeploy.address}
+            startBlock={worldDeploy.blockNumber ?? undefined}
+            stash={stash}
+          >
+            <NotificationProvider>
+              <SmartObjectWalletProvider>{children}</SmartObjectWalletProvider>
+            </NotificationProvider>
+          </StashSyncProvider>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
 }

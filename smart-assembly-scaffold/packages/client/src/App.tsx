@@ -10,39 +10,36 @@ import EntityView from "./components/EntityView";
 import { Explorer } from "./Explorer";
 
 export const App = () => {
-	const { isLive, message, percentage } = useSyncProgress();
-	const { smartCharacter } = useSmartObject();
-	const { chain } = useAccount();
-	const { notification } = useNotification();
+  const { isLive, message, percentage } = useSyncProgress();
+  const { smartCharacter } = useSmartObject();
+  const { chain } = useAccount();
+  const { notification } = useNotification();
 
-	return (
-		<>
-			<EveAlert
-				message={notification.message}
-				severity={notification.severity}
-				handleClose={notification.handleClose}
-				isOpen={notification.isOpen}
-				isStyled={false}
-				blockExplorer={chain?.blockExplorers?.default?.url}
-				txHash={notification.txHash}
-			/>
+  return (
+    <>
+      <EveAlert
+        message={notification.message}
+        severity={notification.severity}
+        handleClose={notification.handleClose}
+        isOpen={notification.isOpen}
+        isStyled={false}
+        blockExplorer={chain?.blockExplorers?.default?.url}
+        txHash={notification.txHash}
+      />
 
-			<EveLayout
-				smartCharacter={smartCharacter}
-			>
+      <EveLayout smartCharacter={smartCharacter}>
+        {isLive ? (
+          <div className="flex flex-col align-center max-w-[1250px] mx-auto px-4">
+            <EntityView />
+          </div>
+        ) : (
+          <div className="tabular-nums">
+            {message} ({percentage.toFixed(1)}%)…
+          </div>
+        )}
+      </EveLayout>
 
-				{isLive ? (
-					<div className="flex flex-col align-center max-w-[1250px] mx-auto px-4">
-						<EntityView />
-					</div>
-				) : (
-					<div className="tabular-nums">
-						{message} ({percentage.toFixed(1)}%)…
-					</div>
-				)}
-			</EveLayout>
-
-			<Explorer />
-		</>
-	);
+      <Explorer />
+    </>
+  );
 };

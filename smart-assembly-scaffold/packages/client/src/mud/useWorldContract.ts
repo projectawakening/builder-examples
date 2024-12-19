@@ -9,13 +9,15 @@ import { getWorldDeploy } from "./getWorldDeploy";
 
 type InferredUseSyncResult = ReturnType<typeof useSync>;
 
-export function useWorldContract(): {
-  worldContract: any,
-  waitForTransaction: InferredUseSyncResult['waitForTransaction'];
-} | {
-  worldContract?: undefined;
-  waitForTransaction?: undefined;
-} {
+export function useWorldContract():
+  | {
+      worldContract: any;
+      waitForTransaction: InferredUseSyncResult["waitForTransaction"];
+    }
+  | {
+      worldContract?: undefined;
+      waitForTransaction?: undefined;
+    } {
   const [worldAddress, setWorldAddress] = useState<`0x${string}`>("0x");
 
   const { waitForTransaction } = useSync();
@@ -23,14 +25,14 @@ export function useWorldContract(): {
   const { data: sessionClient } = useConnectorClient();
   const { chain } = useAccount();
 
-    useEffect(() => {
-      const getWorldAddress = async () => {
-        const { address: worldAddress } = await getWorldDeploy(chain?.id ?? 1);
-        setWorldAddress(worldAddress);
-      };
-  
-      getWorldAddress();
-    }, []);
+  useEffect(() => {
+    const getWorldAddress = async () => {
+      const { address: worldAddress } = await getWorldDeploy(chain?.id ?? 1);
+      setWorldAddress(worldAddress);
+    };
+
+    getWorldAddress();
+  }, []);
 
   const { data: worldContract } = useQuery({
     queryKey: ["worldContract", worldAddress, client?.uid, sessionClient?.uid],
