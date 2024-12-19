@@ -1,7 +1,6 @@
 import { http, webSocket } from "viem";
 import { anvil } from "viem/chains";
 import {
-  connectorsForWallets,
   getDefaultConfig,
   getWalletConnectConnector,
   Wallet
