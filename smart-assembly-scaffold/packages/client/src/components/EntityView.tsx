@@ -9,7 +9,7 @@ import {
   SmartAssemblyInfo,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
-import { abbreviateAddress } from "@eveworld/utils";
+import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
 
 export default function EntityView() {
@@ -47,7 +47,7 @@ export default function EntityView() {
 
         <EveButton
           typeClass="secondary"
-          onClick={() => window.open(`http://${smartAssembly?.dappUrl}`)}
+          onClick={() => window.open(getDappUrl(smartAssembly))}
           disabled={!smartAssembly?.dappUrl}
         >
           dApp link
