@@ -32,7 +32,7 @@ const Toggle = React.memo(function Toggle() {
 
     return (
         <EveButton typeClass="primary" onClick={() => handleToggle()}>
-            CURRENTLY: {toggleValue?.isSet || "Click here to set toggle"}</EveButton>
+            {toggleValue !== undefined ? `currently set to: ${toggleValue.isSet}` : "Click here to set toggle"}</EveButton>
     );
 },
 )

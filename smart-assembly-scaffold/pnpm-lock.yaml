@@ -4,13 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@eveworld/contexts': file:../../eve-frontier-dapps/packages/libs/contexts
-  '@eveworld/contracts': file:../../eve-frontier-dapps/packages/libs/contracts
-  '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types
-  '@eveworld/ui-components': file:../../eve-frontier-dapps/packages/libs/ui-components
-  '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils
-
 importers:
 
   .:
@@ -191,20 +184,20 @@ importers:
         version: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.54)(zod@3.23.8)
     devDependencies:
       '@eveworld/contexts':
-        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/contexts
-        version: file:../../eve-frontier-dapps/packages/libs/contexts(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8)
+        specifier: 0.1.0
+        version: 0.1.0(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8)
       '@eveworld/contracts':
-        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/contracts
-        version: file:../../eve-frontier-dapps/packages/libs/contracts
+        specifier: 0.1.0
+        version: 0.1.0
       '@eveworld/types':
-        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/types
-        version: file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
+        specifier: 0.0.9
+        version: 0.0.9(typescript@5.6.3)(zod@3.23.8)
       '@eveworld/ui-components':
-        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/ui-components
-        version: file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8)
+        specifier: 0.0.10
+        version: 0.0.10(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8)
       '@eveworld/utils':
-        specifier: file:/Users/CherylK/Documents/Code/ccp/eve-frontier-dapps/packages/libs/utils
-        version: file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
+        specifier: 0.0.9
+        version: 0.0.9(typescript@5.6.3)(zod@3.23.8)
       '@types/react':
         specifier: 18.3.1
         version: 18.3.1
@@ -3111,6 +3104,51 @@ packages:
       - zod
     dev: false
 
+  /@eveworld/contexts@0.1.0(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8):
+    resolution: {integrity: sha512-H++Koq9atZ3SboXj71eKJihzfb6FtcvWzPKdZjaVJlnV0/IFOunUbpFE2Tb3eLHKx8tadY7/bo+Xfm04RI2y4w==}
+    dependencies:
+      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
+      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
+      '@eveworld/contracts': 0.1.0
+      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
+      '@eveworld/utils': 0.0.9(typescript@5.6.3)(zod@3.23.8)
+      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.19)(wagmi@2.14.0)
+      '@tanstack/react-query': 5.62.7(react@18.3.1)
+      react: 18.3.1
+      viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
+      wagmi: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.19)(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@tanstack/query-core'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/kv'
+      - babel-plugin-macros
+      - bufferutil
+      - encoding
+      - immer
+      - ioredis
+      - react-dom
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
+
+  /@eveworld/contracts@0.1.0:
+    resolution: {integrity: sha512-UKefoBAGNAI3rH3JhK82Ku3PwzAcqU91AaPoHN0vhiKEc1HfRx7bVphg3+igv8pesY3foa61Fr1D6H265ykCEQ==}
+    dev: true
+
   /@eveworld/smart-object-framework@0.0.8(typescript@5.6.3)(zod@3.23.8):
     resolution: {integrity: sha512-M+tj5F7ZSZKdQ6cbE9KW17AHQJi0duLSdiUKPJSk+tyBxocM3a8S9PUcm+tTTRRXtLUH6NQLLZdPOSV1DZFa5w==}
     dependencies:
@@ -3130,6 +3168,55 @@ packages:
       - utf-8-validate
       - zod
     dev: false
+
+  /@eveworld/types@0.0.9(typescript@5.6.3)(zod@3.23.8):
+    resolution: {integrity: sha512-yLH7D12oo5XR/eX2ZBR0odxsATGQ/pcD8hHNWYbHOxMg4D09oxUO64adCphjJbivzyOwXsU+Gn7UlTdrPs435Q==}
+    dependencies:
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
+
+  /@eveworld/ui-components@0.0.10(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8):
+    resolution: {integrity: sha512-8WM+fgun9J8gJqtW/TVLZKSIkDKDiOck8SypsfDgwJh8bH244Yk+MJ07YpFq/5eU3JlHjAoXI8g5xKwqQu+Jng==}
+    dependencies:
+      '@base_ui/react': 1.0.0-alpha.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
+      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
+      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
+      '@eveworld/utils': 0.0.9(typescript@5.6.3)(zod@3.23.8)
+      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
+      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.54)(wagmi@2.14.0)
+      react: 18.3.1
+      react-router-dom: 6.28.0(react-dom@18.3.1)(react@18.3.1)
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@tanstack/react-query'
+      - '@types/react'
+      - babel-plugin-macros
+      - bufferutil
+      - react-dom
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - wagmi
+      - zod
+    dev: true
+
+  /@eveworld/utils@0.0.9(typescript@5.6.3)(zod@3.23.8):
+    resolution: {integrity: sha512-5OI6IM4h3xkfbm8ynL9I0yVlOUFCaBDoqwDHZZMhs6+RGOur9u0RvVMC5wtGIxwn4hfDLwLibjcgjmM/QRodCA==}
+    dependencies:
+      '@eveworld/types': 0.0.9(typescript@5.6.3)(zod@3.23.8)
+      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: true
 
   /@eveworld/world@0.0.17(typescript@5.6.3)(zod@3.23.8):
     resolution: {integrity: sha512-/CcLDZ0wSu/otvfb4b4psooLcIq09ulvmPqxzx+E379LBBSkPMb546PAibY7PlUiQmzwOhYytF2YR3RyQgNksQ==}
@@ -22232,92 +22319,6 @@ packages:
       '@types/react': 18.3.1
       react: 18.3.1
       use-sync-external-store: 1.2.0(react@18.3.1)
-
-  file:../../eve-frontier-dapps/packages/libs/contexts(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(zod@3.23.8):
-    resolution: {directory: ../../eve-frontier-dapps/packages/libs/contexts, type: directory}
-    id: file:../../eve-frontier-dapps/packages/libs/contexts
-    name: '@eveworld/contexts'
-    dependencies:
-      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
-      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
-      '@eveworld/contracts': file:../../eve-frontier-dapps/packages/libs/contracts
-      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
-      '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
-      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.19)(wagmi@2.14.0)
-      '@tanstack/react-query': 5.62.7(react@18.3.1)
-      react: 18.3.1
-      viem: 2.21.19(typescript@5.6.3)(zod@3.23.8)
-      wagmi: 2.14.0(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react@18.3.1)(typescript@5.6.3)(viem@2.21.19)(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@types/react'
-      - bufferutil
-      - react-dom
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
-
-  file:../../eve-frontier-dapps/packages/libs/contracts:
-    resolution: {directory: ../../eve-frontier-dapps/packages/libs/contracts, type: directory}
-    name: '@eveworld/contracts'
-    dev: true
-
-  file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8):
-    resolution: {directory: ../../eve-frontier-dapps/packages/libs/types, type: directory}
-    id: file:../../eve-frontier-dapps/packages/libs/types
-    name: '@eveworld/types'
-    dependencies:
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
-
-  file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(typescript@5.6.3)(wagmi@2.14.0)(zod@3.23.8):
-    resolution: {directory: ../../eve-frontier-dapps/packages/libs/ui-components, type: directory}
-    id: file:../../eve-frontier-dapps/packages/libs/ui-components
-    name: '@eveworld/ui-components'
-    dependencies:
-      '@base_ui/react': 1.0.0-alpha.2(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
-      '@emotion/styled': 11.14.0(@emotion/react@11.14.0)(@types/react@18.3.1)(react@18.3.1)
-      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
-      '@eveworld/utils': file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8)
-      '@mui/material': 5.16.11(@emotion/react@11.14.0)(@emotion/styled@11.14.0)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)
-      '@rainbow-me/rainbowkit': 2.2.1(@tanstack/react-query@5.62.7)(@types/react@18.3.1)(react-dom@18.3.1)(react@18.3.1)(viem@2.21.54)(wagmi@2.14.0)
-      react: 18.3.1
-      react-router-dom: 6.28.0(react-dom@18.3.1)(react@18.3.1)
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - '@tanstack/react-query'
-      - '@types/react'
-      - babel-plugin-macros
-      - bufferutil
-      - react-dom
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - wagmi
-      - zod
-    dev: true
-
-  file:../../eve-frontier-dapps/packages/libs/utils(typescript@5.6.3)(zod@3.23.8):
-    resolution: {directory: ../../eve-frontier-dapps/packages/libs/utils, type: directory}
-    id: file:../../eve-frontier-dapps/packages/libs/utils
-    name: '@eveworld/utils'
-    dependencies:
-      '@eveworld/types': file:../../eve-frontier-dapps/packages/libs/types(typescript@5.6.3)(zod@3.23.8)
-      viem: 2.21.54(typescript@5.6.3)(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: true
 
   github.com/dapphub/ds-test/e282159d5170298eb2455a6c05280ab5a73a4ef0:
     resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0}

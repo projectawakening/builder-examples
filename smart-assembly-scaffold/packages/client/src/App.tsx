@@ -23,7 +23,7 @@ export const App = () => {
 				handleClose={notification.handleClose}
 				isOpen={notification.isOpen}
 				isStyled={false}
-				blockExplorer={chain?.blockExplorers?.default.url}
+				blockExplorer={chain?.blockExplorers?.default?.url}
 				txHash={notification.txHash}
 			/>
 

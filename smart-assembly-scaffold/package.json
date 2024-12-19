@@ -52,7 +52,7 @@
     "node": "^18",
     "pnpm": "^8 || ^9"
   },
-  "pnpm": {
+  "//pnpm": {
 		"overrides": {
 			"@eveworld/contexts": "file:../../eve-frontier-dapps/packages/libs/contexts",
 			"@eveworld/contracts": "file:../../eve-frontier-dapps/packages/libs/contracts",

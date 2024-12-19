@@ -117,7 +117,7 @@ export const wagmiConfig = getDefaultConfig({
     {
       ...redstone,
       blockExplorers: {
-        default: {} as never,
+        ...redstone.blockExplorers,
         worldsExplorer: {
           name: "MUD Worlds Explorer",
           url: "https://explorer.mud.dev/redstone/worlds",
@@ -129,7 +129,7 @@ export const wagmiConfig = getDefaultConfig({
     {
       ...garnet,
       blockExplorers: {
-        default: {} as never,
+        ...garnet.blockExplorers,
         worldsExplorer: {
           name: "MUD Worlds Explorer",
           url: "https://explorer.mud.dev/garnet/worlds",
@@ -141,7 +141,7 @@ export const wagmiConfig = getDefaultConfig({
     {
       ...anvil,
       blockExplorers: {
-        default: {} as never,
+       ...anvil.blockExplorers,
         worldsExplorer: {
           name: "MUD Worlds Explorer",
           url: "http://localhost:13690/anvil/worlds",
