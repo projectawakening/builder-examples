@@ -1,95 +1,75 @@
 # 🏗️ Smart Assembly Scaffold
 
 ## Introduction
-EVE Frontier Smart Assembly Scaffold is a streamlined framework designed for interfacing with the EVE Frontier game. It focuses on providing information about basic blockchain primitives, such as smart assembly info and ownership details, without delving into further module-specific information. Built with MUD, React, Rainbowkit, TypeScript, Tailwind CSS, and Vite, it ensures efficient and scalable development. It utilizes the `example` MUD namespace for contract management.
+
+EVE Frontier Smart Assembly Scaffold is a streamlined framework designed for interfacing with the EVE Frontier game. It focuses on providing information about basic blockchain primitives, such as smart assembly info and ownership details, without delving into further module-specific details. Built with MUD, React, Rainbowkit, TypeScript, Tailwind CSS, and Vite, it ensures efficient and scalable development. It utilizes the `example` MUD namespace for contract management.
 
 ### 🚀 User Flow
+
 The Smart Assembly Scaffold provides a minimal example to toggle the state of an item on or off.
 
-## 🛠️ Deployment and Testing
+---
 
-### Step 0: 🚢 Deploy Contracts to the Existing World
-Copy the World Contract Address from the Docker logs, then use the following commands to set up the contracts:
+## 🛠️ Development & Deployment Steps
 
-1. Navigate to the `smart-assembly-scaffold` contract folder:
-   ```bash
-   cd smart-assembly-scaffold/packages/contracts
-   ```
+### Step 1: 🏗️ Local Development with Docker, Anvil, Contracts, and World Explorer
 
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+From the project’s root directory, run:
 
-3. **Local Deployment**:
-   ```bash
-   pnpm deploy:local --worldAddress <worldAddress>
-   ```
+```bash
+pnpm run dev
+```
 
-4. **Devnet/Production Deployment**:
-   Get the world address from the appropriate config link (e.g., Nova or Nebula) and replace `<worldAddress>`.
+This command will:
+
+- **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
+- **Run a Local Client UI**: Launches a local development server for the UI.
+- **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
+- **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
+
+**Environment Variables**:  
+For this step, ensure you have the appropriate `.env` files configured.
+
+- A copy of required environment variables can be found in `./packages/client/.envsample`. Duplicate `.envsample` into `.env` and then adjust the values accordingly.
+
+### Step 2: 🏗️ Devnet/Production Deployment
+
+When the contracts are ready to be deployed beyond the local environment:
+
+1. Obtain the appropriate World address from the relevant configuration (e.g. Stillness, Nova).
+2. To deploy to Garnet:
 
    ```bash
    pnpm deploy:garnet --worldAddress <worldAddress>
    ```
 
-After deployment, copy the ERC20 token address for future reference. You should see an output similar to the screenshot below:
+**Environment Variables**:
 
-![alt text](./readme-imgs/deployment.png)
+- Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Garnet or other devnets, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
 
----
+### Step 3: 🌐 Client UI Environment Variables and Considerations
 
-### Step 1: 🔑 Set Up Environment Variables
-Edit the `.env` file in `./packages/contracts` to configure deployment values:
+The Smart Assembly Scaffold’s client UI leverages a `<SmartObjectContext>` to provide read-only blockchain primitives, such as smart assembly info. These primitives require access to a deployed world instance and a corresponding World API service to function correctly. This typically means working against an environment like Nova or Stillness, where dedicated API HTTP and WebSocket endpoints are available.
 
-```bash
-# For Local
-WORLD_ADDRESS=<WORLD_ADDRESS_FROM_LOGS>
+By connecting to these endpoints, the client UI can stream real-time updates over WebSockets, enabling dynamic state changes and real-time feedback within your dApp. To fully realize this functionality, you’ll need properly configured environment variables that point to a running instance of the World API service.
 
-# Smart Storage Unit (SSU) ID
-SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
-```
+### Step 4: 💻 Configuring the Client UI Environment Variables
 
-### Step 2: 🔍 Mock Data for Local Testing (Local Development Only)
-Use this command to generate mock data, including items and ERC20 tokens:
+1. Copy the `.envsample` file in `./packages/client/` to `.env`:
+   ```bash
+   cp ./packages/client/.envsample ./packages/client/.env
+   ```
+2. Update the following environment variables in `./packages/client/.env`:
+   - **`VITE_SMARTASSEMBLY_ID`**: The `SSU_ID` obtained from your deployed smart assembly in-game.
+   - **`VITE_GATEWAY_HTTP`**: The HTTP endpoint of a deployed World API instance (e.g., Nova or Stillness).
+   - **`VITE_GATEWAY_WS`**: The WebSocket endpoint corresponding to `VITE_GATEWAY_HTTP`, enabling real-time data streams.
 
-```bash
-pnpm mock-data
-```
-
-### Step 3: ⚙️ Configure Item Trade
-Specify which items to trade for the ERC20 token:
-
-```bash
-pnpm configure-toggle
-```
+With these variables set, the client UI can use Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 
 ---
 
-## 🖥️ Client UI
+## 🖥️ Client UI Overview
 
-The client UI for the Extraction Protocol Depot is built using MUD tooling (`@latticexyz`) with built-in devtools for debugging and Eveworld tooling (`@eveworld`) for managing contexts, smart assembly state, and UI components, creating a seamless integration with EVE Frontier's in-game systems.
+The client UI leverages MUD tooling (`@latticexyz`) and Eveworld tooling (`@eveworld`) to integrate with EVE Frontier’s in-game systems. The UI dynamically updates as on-chain data changes, providing an immersive and real-time experience.
 
-### Step 4: 🌐 Launch the Client UI
-To start the client, navigate to the `client` directory and run the following command:
-
-```bash
-cd ../client
-pnpm run dev
-```
-
-This launches a local development server at `http://localhost:3000`, connected to the world address you set in Step 1. Using MUD devtools, you can inspect interactions and debug in real time, while the Eveworld context layers components manage in-game state and display contextual data, providing a consistent experience aligned with EVE Frontier’s UI standards.
-
-### Step 5: 📝 Configure Client Environment Variables
-Update the following values in the `.env` file located in `./packages/client/` to ensure synchronization with the contract settings:
-
-```bash
-VITE_SMARTASSEMBLY_ID=<SSU_ID>
-```
-
-These values should match those configured in `./packages/contracts/.env` to ensure the client accurately interfaces with the on-chain environment.
-
-- **`VITE_SMARTASSEMBLY_ID`**: The SSU ID, aligning with your deployment.
-
-### Step 6: 🧪 Running and Testing the Client
-Once the client is running, you can interact with the Extraction Protocol Depot through the browser interface. This UI supports live simulations of item purchases, token transactions, and in-game interactions within an immersive EVE Frontier UI framework.
+With the environment variables set correctly and the right blockchain gateway URLs in place, you’ll be able to toggle states, inspect game entities, and interact directly with the contracts deployed via your chosen environment.
