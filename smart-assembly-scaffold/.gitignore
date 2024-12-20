@@ -1,0 +1,20 @@
+node_modules
+
+# mud artifacts
+.mud
+
+# sqlite indexer data
+*.db
+*.db-journal
+
+# mud deployment artefacts 
+packages/contracts/worlds.json
+packages/contracts/src/codegen
+
+# foundry artefacts
+mock-data/cache/
+mock-data/out/
+mock-data/broadcast/
+mock-data/cache/
+
+mprocs.log

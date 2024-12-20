@@ -1,0 +1,52 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "dev:local": "wait-port localhost:8545 && vite",
+    "preview": "vite preview",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@latticexyz/common": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@latticexyz/config": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@latticexyz/explorer": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@latticexyz/protocol-parser": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@latticexyz/stash": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@latticexyz/store-sync": "2.2.15-entrykit-1c24e4739090d185171d9f8e4a257735e4710b70",
+    "@rainbow-me/rainbowkit": "^2.2.1",
+    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-query-devtools": "^5.62.7",
+    "@wagmi/core": "^2.16.0",
+    "autoprefixer": "^10.4.19",
+    "contracts": "workspace:*",
+    "fast-deep-equal": "^3.1.3",
+    "nodemon": "^3.1.7",
+    "postcss": "^8.4.39",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rxjs": "7.5.5",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss": "^3.4.5",
+    "viem": "2.21.54",
+    "wagmi": "^2.14.0"
+  },
+  "devDependencies": {
+    "@eveworld/contexts": "0.1.0",
+    "@eveworld/contracts": "0.1.0",
+    "@eveworld/types": "0.0.9",
+    "@eveworld/ui-components": "0.0.10",
+    "@eveworld/utils": "0.0.9",
+    "@types/react": "18.3.1",
+    "@types/react-dom": "18.2.7",
+    "@vitejs/plugin-react": "^3.1.0",
+    "eslint-plugin-react": "7.31.11",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "vite": "^4.2.1",
+    "wait-port": "^1.0.4"
+  }
+}
