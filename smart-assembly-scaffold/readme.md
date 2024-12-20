@@ -60,7 +60,7 @@ By connecting to these endpoints, the client UI can stream real-time updates ove
    cp ./packages/client/.envsample ./packages/client/.env
    ```
 2. Update the following environment variables in `./packages/client/.env`:
-   - **`VITE_SMARTASSEMBLY_ID`**: The `SSU_ID` obtained from your deployed smart assembly in-game.
+   - **`VITE_SMARTASSEMBLY_ID`**: The ID obtained from your deployed smart assembly in-game.
    - **`VITE_GATEWAY_HTTP`**: The HTTP endpoint of a deployed World API instance (e.g., Nova or Stillness).
    - **`VITE_GATEWAY_WS`**: The WebSocket endpoint corresponding to `VITE_GATEWAY_HTTP`, enabling real-time data streams.
 
