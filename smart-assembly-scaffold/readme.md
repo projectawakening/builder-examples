@@ -23,7 +23,6 @@ pnpm run dev
 This command will:
 
 - **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
-- **Run a Local Client UI**: Launches a local development server for the UI.
 - **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
 - **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
 
@@ -32,7 +31,17 @@ For this step, ensure you have the appropriate `.env` files configured.
 
 - A copy of required environment variables can be found in `./packages/client/.envsample`. Duplicate `.envsample` into `.env` and then adjust the values accordingly.
 
-### Step 2: 🏗️ Devnet/Production Deployment
+### Step 2: 🔭 Develop Against the World Explorer
+
+You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
+
+```
+http://localhost:13690/anvil/worlds/<worldAddress>/explore
+```
+
+With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
+
+### Step 3: 🏗️ Devnet/Production Deployment
 
 When the contracts are ready to be deployed beyond the local environment:
 
@@ -47,13 +56,13 @@ When the contracts are ready to be deployed beyond the local environment:
 
 - Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Garnet or other devnets, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
 
-### Step 3: 🌐 Client UI Environment Variables and Considerations
+### Step 4: 🌐 dApp Environment Variables and Considerations
 
-The Smart Assembly Scaffold’s client UI leverages a `<SmartObjectContext>` to provide read-only blockchain primitives, such as smart assembly info. These primitives require access to a deployed world instance and a corresponding World API service to function correctly. This typically means working against an environment like Nova or Stillness, where dedicated API HTTP and WebSocket endpoints are available.
+The Smart Assembly Scaffold’s client UI (dApp) leverages a `<SmartObjectContext>` to provide read-only blockchain primitives, such as smart assembly info. These primitives require access to a deployed world instance and a corresponding World API service to function correctly. This typically means working against an environment like Nova or Stillness, where dedicated API HTTP and WebSocket endpoints are available.
 
-By connecting to these endpoints, the client UI can stream real-time updates over WebSockets, enabling dynamic state changes and real-time feedback within your dApp. To fully realize this functionality, you’ll need properly configured environment variables that point to a running instance of the World API service.
+By connecting to these endpoints, the dApp can stream real-time updates over WebSockets, enabling dynamic state changes and real-time feedback within your dApp. To fully realize this functionality, you’ll need properly configured environment variables that point to a running instance of the World API service.
 
-### Step 4: 💻 Configuring the Client UI Environment Variables
+### Step 5: 💻 Configuring dApp Environment Variables
 
 1. Copy the `.envsample` file in `./packages/client/` to `.env`:
    ```bash
@@ -64,12 +73,14 @@ By connecting to these endpoints, the client UI can stream real-time updates ove
    - **`VITE_GATEWAY_HTTP`**: The HTTP endpoint of a deployed World API instance (e.g., Nova or Stillness).
    - **`VITE_GATEWAY_WS`**: The WebSocket endpoint corresponding to `VITE_GATEWAY_HTTP`, enabling real-time data streams.
 
-With these variables set, the client UI can use Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
+With these variables set, you can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Garnet chain to fully interact with the deployed contracts.
+
+The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 
 ---
 
-## 🖥️ Client UI Overview
+## 🖥️ dApp Overview
 
-The client UI leverages MUD tooling (`@latticexyz`) and Eveworld tooling (`@eveworld`) to integrate with EVE Frontier’s in-game systems. The UI dynamically updates as on-chain data changes, providing an immersive and real-time experience.
+The dApp leverages MUD tooling (`@latticexyz`) and Eveworld tooling (`@eveworld`) to integrate with EVE Frontier’s in-game systems. The UI dynamically updates as on-chain data changes, providing an immersive and real-time experience.
 
 With the environment variables set correctly and the right blockchain gateway URLs in place, you’ll be able to toggle states, inspect game entities, and interact directly with the contracts deployed via your chosen environment.
