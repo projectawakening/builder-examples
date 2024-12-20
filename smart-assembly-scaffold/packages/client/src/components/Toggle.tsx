@@ -9,41 +9,41 @@ import { EveButton } from "@eveworld/ui-components";
 import { useNotification, useSmartObject } from "@eveworld/contexts";
 
 const Toggle = React.memo(function Toggle() {
-	const { smartAssembly } = useSmartObject();
-	const { worldContract } = useWorldContract();
-	const { notify } = useNotification();
+  const { smartAssembly } = useSmartObject();
+  const { worldContract } = useWorldContract();
+  const { notify } = useNotification();
 
-	const toggleValue = useRecord({
-		stash,
-		table: mudConfig.namespaces.example.tables.ToggleTable,
-		key: {
-			smartObjectId: BigInt(smartAssembly?.id || 0),
-		},
-	});
+  const toggleValue = useRecord({
+    stash,
+    table: mudConfig.namespaces.example.tables.ToggleTable,
+    key: {
+      smartObjectId: BigInt(smartAssembly?.id || 0),
+    },
+  });
 
-	const handleToggle = async () => {
-		const txHash = await setToggle({
-			worldContract,
-			smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
-			currentValue: toggleValue?.isSet,
-		});
-		if (txHash) {
-			notify({ type: Severity.Success, txHash });
-		} else {
-			notify({
-				type: Severity.Error,
-				message: "Transaction failed to execute",
-			});
-		}
-	};
+  const handleToggle = async () => {
+    const txHash = await setToggle({
+      worldContract,
+      smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
+      currentValue: toggleValue?.isSet,
+    });
+    if (txHash) {
+      notify({ type: Severity.Success, txHash });
+    } else {
+      notify({
+        type: Severity.Error,
+        message: "Transaction failed to execute",
+      });
+    }
+  };
 
-	return (
-		<EveButton typeClass="primary" onClick={() => handleToggle()}>
-			{toggleValue !== undefined
-				? `currently set to: ${toggleValue.isSet}`
-				: "Click here to set toggle"}
-		</EveButton>
-	);
+  return (
+    <EveButton typeClass="primary" onClick={() => handleToggle()}>
+      {toggleValue !== undefined
+        ? `currently set to: ${toggleValue.isSet}`
+        : "Click here to set toggle"}
+    </EveButton>
+  );
 });
 
 export default React.memo(Toggle);
