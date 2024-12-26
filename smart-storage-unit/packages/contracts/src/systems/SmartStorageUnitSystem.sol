@@ -29,6 +29,9 @@ import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@ev
 import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
 import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
+import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+
+import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
  * This contract implements item trade as a feature to the existing inventoryIn logic
