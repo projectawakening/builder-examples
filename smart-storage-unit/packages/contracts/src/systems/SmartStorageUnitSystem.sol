@@ -42,6 +42,15 @@ contract SmartStorageUnitSystem is System {
   error InvalidRatio(string message);
 
   /**
+   * @dev Only owner modifer
+   */
+  modifier onlyOwner(uint256 smartObjectId) {
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
+    require(_msgSender() == ssuOwner, "Only owner can call this function");
+    _;
+  }
+
+  /**
    * @dev Define what goes in and out and set the exchange ratio for a item trade
    * @param smartObjectId The smart object id of the item trade
    * @param inventoryItemIdIn The inventory item id of the item that goes in
@@ -56,7 +65,7 @@ contract SmartStorageUnitSystem is System {
     uint256 inventoryItemIdOut,
     uint64 ratioIn,
     uint64 ratioOut
-  ) public {
+  ) public onlyOwner(smartObjectId) {
     require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");    
     
     //Check for overflow issues

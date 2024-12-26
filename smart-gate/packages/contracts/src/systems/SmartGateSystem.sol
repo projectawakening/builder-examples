@@ -14,7 +14,16 @@ import { GateAccess } from "../codegen/tables/GateAccess.sol";
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
-contract SmartGateSystem is System {
+contract SmartGateSystem is System {  
+  /**
+   * @dev Only owner modifer
+   */
+  modifier onlyOwner(uint256 smartObjectId) {
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
+    require(_msgSender() == ssuOwner, "Only owner can call this function");
+    _;
+  }
+
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
     //Get the allowed corp
     uint256 allowedCorp = GateAccess.get(sourceGateId);
@@ -30,7 +39,7 @@ contract SmartGateSystem is System {
     }    
   }
 
-  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
+  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public onlyOwner(sourceGateId) {
     GateAccess.set(sourceGateId, corpID);
   }
 }
