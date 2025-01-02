@@ -1,17 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import mudConfig from "contracts/mud.config";
 import { stash } from "../mud/stash";
 import { useRecord } from "../mud/useRecord";
-import { useWorldContract } from "../mud/useWorldContract";
-import { Severity } from "@eveworld/types";
-import setAllowedCorp from "./systemCalls/handleSetAllowedCorp";
 import { EveButton, EveInput } from "@eveworld/ui-components";
-import { useNotification, useSmartObject } from "@eveworld/contexts";
+import { useSmartObject } from "@eveworld/contexts";
 
 const AllowedAccess = React.memo(function AllowedAccess() {
   const { smartAssembly, smartCharacter } = useSmartObject();
-  const { worldContract } = useWorldContract();
-  const { notify } = useNotification();
 
   const allowedCorpValue = useRecord({
     stash,
@@ -21,29 +16,19 @@ const AllowedAccess = React.memo(function AllowedAccess() {
     },
   });
 
-  console.log("TWO")
-  console.log(smartCharacter)
-
-  if(smartCharacter){
-    if(smartCharacter.corpId == allowedCorpValue.corp.toString()){
-      return (
-        <>   
-          <h1>Access allowed ✅</h1>
-        </>
-      );
-    } else{
-      return (
-        <>   
-          <h1>Access not allowed ❌</h1>
-        </>
-      );
-    }
+  if(smartCharacter && smartCharacter.corpId == allowedCorpValue.corp.toString()){
+    return (
+      <center>   
+        <h1>Gate Access permited ✅</h1>
+      </center>
+    );
   }
     
   return (
-    <>   
-      <h1>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</h1>
-    </>
+    <center>   
+      <h1>Gate Access not premited ❌</h1>
+      <h3>(Not in allowed corporation)</h3>
+    </center>
   );
 });
 

@@ -9,7 +9,6 @@ import {
   SmartAssemblyInfo,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
-import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import AllowedCorp from "./AllowedCorp";
 import AllowedAccess from "./AllowedAccess";
 
@@ -32,14 +31,17 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
-      <div>EVE Frontier Smart Gate Allow List</div>
+      <div>{smartAssembly?.name} Smart Gate Allow List</div>
       <div className="grid grid-cols-2">
         <div>
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
       </div>
 
+      <br />
       <AllowedAccess />
+
+      <br />
       <AllowedCorp />
     </div>
   );

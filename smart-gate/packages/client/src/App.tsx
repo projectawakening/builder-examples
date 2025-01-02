@@ -15,8 +15,6 @@ export const App = () => {
   const { chain } = useAccount();
   const { notification } = useNotification();
 
-  console.log(smartCharacter)
-
   return (
     <>
       <EveAlert

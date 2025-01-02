@@ -13,6 +13,7 @@ const AllowedCorp = React.memo(function AllowedCorp() {
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
 
+  const [ adminAccess, setAdminAccess ] = useState<boolean>(false);
   const [ allowedCorpInput, setAllowedCorpInput ] = useState<string>();
 
   const allowedCorpValue = useRecord({
@@ -26,6 +27,18 @@ const AllowedCorp = React.memo(function AllowedCorp() {
   useEffect(() => {
     setAllowedCorpInput(allowedCorpValue.corp.toString())
   }, [allowedCorpValue])
+
+  useEffect(() => {
+    if(smartCharacter != null){
+      var assemblies = smartCharacter.smartAssemblies.filter(assembly => assembly.id == smartAssembly.id)
+
+      if(assemblies.length != 0){
+        setAdminAccess(true);
+      } else{
+        setAdminAccess(false);
+      }
+    }
+  }, [smartCharacter])
 
   const handleAllowedCorpInput = (val) => {
     setAllowedCorpInput(val)
@@ -47,20 +60,33 @@ const AllowedCorp = React.memo(function AllowedCorp() {
     }
   };
 
+  if(adminAccess == false){
+    return (
+      <>        
+        <h1>Admin Settings</h1>
+        <center>   
+          <h1>Admin Access not permited ❌<br />(You are not the owner)</h1>
+        </center>
+      </>
+    )
+  }
+
   return (
     <>    
-    <EveInput
-      inputType="string"
-      defaultValue={allowedCorpValue.corp.toString()}
-      onChange={(str) => handleAllowedCorpInput(str)}
-      fieldName="Allowed Corp ID"
-    />
+      <h1>Admin Settings</h1>
+      <EveInput
+        inputType="string"
+        defaultValue={allowedCorpValue.corp.toString()}
+        onChange={(str) => handleAllowedCorpInput(str)}
+        fieldName="Allowed Corp ID"
+      />
 
-    <EveButton typeClass="primary" onClick={() => handleToggle()}>
-      Set Allowed Corp ID
-    </EveButton>
+      <EveButton typeClass="primary" onClick={() => handleToggle()} disabled={allowedCorpValue.corp.toString()==allowedCorpInput}>
+        Set Allowed Corp ID
+      </EveButton>
 
-    <h1>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</h1>
+      <h1>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</h1>
+      <h1>YOUR CORP ID: {smartCharacter.corpId.toString()}</h1>
     </>
   );
 });
