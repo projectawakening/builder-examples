@@ -32,9 +32,6 @@ contract ConfigureSmartGate is Script {
 
     ResourceId systemId = Utils.smartGateSystemId();
 
-    //This function can only be called by the owner of the smart turret
-    smartGate.configureSmartGate(smartGateId, systemId);
-
     //Get the allowed corp
     uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
 

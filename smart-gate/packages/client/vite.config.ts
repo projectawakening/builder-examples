@@ -1,10 +1,12 @@
+import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import svgr from "vite-plugin-svgr";
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgr()],
   server: {
-    port: 3000,
+    port: parseInt(process.env.VITE_PORT) || 3000,
     fs: {
       strict: false,
     },
@@ -13,5 +15,19 @@ export default defineConfig({
     target: "es2022",
     minify: true,
     sourcemap: true,
+    rollupOptions: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onLog(level, log: any, handler) {
+        if (
+          log.cause &&
+          log.cause.message === `Can't resolve original location of error.`
+        ) {
+          return;
+        }
+        handler(level, log);
+      },
+    },
   },
+  base: "./",
+  resolve: {},
 });
