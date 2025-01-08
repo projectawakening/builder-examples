@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "test",
+  namespace: "example",
   tables: {
     RatioConfig: {
       schema: {
@@ -12,6 +12,13 @@ export default defineWorld({
         ratioOut: "uint64",
       },
       key: ["smartObjectId", "itemIn"],
+    },
+    DAppConfig: {
+      schema: {
+        smartObjectId: "uint256",
+        promotedItem: "uint256"
+      },
+      key: ["smartObjectId"]
     }
   },
 });

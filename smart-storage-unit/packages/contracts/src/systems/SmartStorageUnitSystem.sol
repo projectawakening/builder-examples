@@ -27,6 +27,7 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
+import { DAppConfig } from "../codegen/tables/DAppConfig.sol";
 import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 /**
@@ -72,6 +73,31 @@ contract SmartStorageUnitSystem is System {
     }
 
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
+  }  
+  
+  /**
+   * @dev Set what item you want to promote on the DApp
+   * @param smartObjectId The smart object id of the item trade
+   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   */
+  function setPromotedItemAndRatio(
+    uint256 smartObjectId,
+    uint256 inventoryItemIdIn,
+    uint256 inventoryItemIdOut,
+    uint64 ratioIn,
+    uint64 ratioOut
+  ) public {
+    //make sure the inventory item in item exists
+    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
+
+    if (entityInRecord.recordExists == false) {
+      revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
+    }
+
+    //Set the DAppConfig MUD Table
+    DAppConfig.set(smartObjectId, inventoryItemIdIn);
+
+    setRatio(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
   }
 
   /**
@@ -111,6 +137,23 @@ contract SmartStorageUnitSystem is System {
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+  }
+
+  function readOutput(
+    uint64 inputAmount,
+    uint256 smartObjectId, 
+    uint256 inventoryItemIdIn
+  ) public view returns (uint64 outputAmount, uint64 remainingInput) {
+    RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
+    
+    console.log(smartObjectId);
+
+    require(inputAmount != 0, "Input amount cannot be 0");
+    require(smartObjectId == 40749554736756066408855590582640287390294047875978477354182502817254345156985, "SSU ID is incorrect, it is ");
+    require(ratioConfigData.ratioIn != 0, "Ratio in cannot be 0");
+    require(ratioConfigData.ratioOut != 0, "Ratio out cannot be 0");
+
+    return calculateOutput(ratioConfigData.ratioIn, ratioConfigData.ratioOut, inputAmount);
   }
 
   /**

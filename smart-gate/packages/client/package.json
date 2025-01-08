@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "dev": ". ./.env && vite",
     "dev:local": "wait-port localhost:8545 && vite",
     "preview": "vite preview",
     "test": "tsc --noEmit"

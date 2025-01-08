@@ -31,17 +31,18 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
+      
       <div>{smartAssembly?.name} Smart Gate Allow List</div>
       <div className="grid grid-cols-2">
         <div>
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
       </div>
-
+      
       <br />
       <AllowedAccess />
-
-      <br />
+      
+      <br /><br />
       <AllowedCorp />
     </div>
   );

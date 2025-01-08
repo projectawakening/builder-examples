@@ -26,7 +26,7 @@ const AllowedAccess = React.memo(function AllowedAccess() {
     
   return (
     <center>   
-      <h1>Gate Access not premited ❌</h1>
+      <h1>Gate Access not permited ❌</h1>
       <h3>(Not in allowed corporation)</h3>
     </center>
   );
