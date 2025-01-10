@@ -30,6 +30,9 @@ import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol"
 import { DAppConfig } from "../codegen/tables/DAppConfig.sol";
 import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
+import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+
+import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
  * This contract implements item trade as a feature to the existing inventoryIn logic
@@ -41,6 +44,15 @@ contract SmartStorageUnitSystem is System {
   using SmartDeployableUtils for bytes14;
 
   error InvalidRatio(string message);
+
+  /**
+   * @dev Only owner modifer
+   */
+  modifier onlyOwner(uint256 smartObjectId) {
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
+    require(_msgSender() == ssuOwner, "Only owner can call this function");
+    _;
+  }
 
   /**
    * @dev Define what goes in and out and set the exchange ratio for a item trade
@@ -57,7 +69,7 @@ contract SmartStorageUnitSystem is System {
     uint256 inventoryItemIdOut,
     uint64 ratioIn,
     uint64 ratioOut
-  ) public {
+  ) public onlyOwner(smartObjectId) {
     require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");    
     
     //Check for overflow issues
