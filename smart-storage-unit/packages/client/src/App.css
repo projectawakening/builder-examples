@@ -6,15 +6,15 @@
 
 @keyframes appear{
     0%{
-        opacity:0%;
+        opacity: 0%;
     }
     100%{
-        opacity:100%;
+        opacity: 100%;
     }
 }
 
 .item-image, .item-name-container{
-    opacity:0%;
+    opacity: 0%;
     
     animation:appear 2s forwards;
     animation-timing-function: ease-in-out;
@@ -23,20 +23,20 @@
 }
 
 .item-image{
-    width:90px;
-    height:90px;
+    width: 90px;
+    height: 90px;
     border-radius: 20px;
     animation-delay: 2s;
 }
 
 .item-name-container{
-    position:relative;
+    position: relative;
     animation-delay: 3s;
 }
 
 .item-name-container h1{
     position:absolute;
-    top:50%;    
+    top: 50%;    
     left: 50%;
     width: 150px;
     transform: translate(-50%, -50%);
@@ -45,20 +45,20 @@
 @keyframes colorchange{
     0%{
         fill: hsla(26, 85%, 58%, 1);
-        padding-left:0px;
+        padding-left: 0px;
     }
     50%{
-        fill:red;
-        padding-left:20px;
+        fill: red;
+        padding-left: 20px;
     }
     100%{
-        fill:hsla(26, 85%, 58%, 1);
-        padding-left:0px;
+        fill: hsla(26, 85%, 58%, 1);
+        padding-left: 0px;
     }
 }
 
 .item-arrow-2, .item-arrow-1{
-    animation:colorchange 3s;
+    animation: colorchange 3s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-play-state: running;
@@ -71,21 +71,18 @@
 }
 
 .Eve-Numerical-Input-input div input{
-    padding-left:20px!important;
+    padding-left: 20px!important;
 }
 
 #edit-RatioIn{
-    padding-right:20px!important;
+    padding-right: 20px!important;
 }
 
 input[type='range']{
     accent-color:hsla(26, 85%, 58%, 1);
 }
 
-.item-grid{
-    padding:5px;
-}
-
-.item-inline h1{
-    padding-left:10px;
+.item-grid{    
+    padding: 5px;
+    padding-left: 10px;
 }

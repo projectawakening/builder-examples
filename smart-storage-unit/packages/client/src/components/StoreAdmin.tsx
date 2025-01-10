@@ -160,7 +160,7 @@ const StoreAdmin = React.memo(
     }
   };
 
-  if(adminAccess != false){
+  if(adminAccess == false){
     return (
       <>        
         <h1>Admin Settings</h1>

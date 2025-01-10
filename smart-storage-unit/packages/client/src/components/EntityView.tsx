@@ -39,7 +39,7 @@ export default function EntityView() {
 
   //Cache all item type information for use within the DApp
   const CacheTypes = async () => {
-    const response = await fetch(`https://cors-anywhere.herokuapp.com/https://blockchain-gateway-stillness.live.tech.evefrontier.com/types`)
+    const response = await fetch(`https://blockchain-gateway-stillness.live.tech.evefrontier.com/types`)
       
     if(!response.ok) {
       throw response;
@@ -58,16 +58,18 @@ export default function EntityView() {
     //Get the DApp Config. This is used to see what item in should be promoted on the DApp
     let dAppConfig = useRecord({
       stash,
-      table: mudConfig.namespaces.example.tables.DAppConfig,    
+      table: mudConfig.namespaces.example2.tables.DAppConfig,    
       key: {
         smartObjectId: BigInt(smartAssembly?.id || 0),
       },
     });
 
+    if(dAppConfig == null) return;
+
     //Get the SSU Config, using the promoted input item ID
     let foundSSUConfig = useRecord({
       stash,
-      table: mudConfig.namespaces.example.tables.RatioConfig,    
+      table: mudConfig.namespaces.example2.tables.RatioConfig,    
       key: {
         smartObjectId: BigInt(smartAssembly?.id || 0),
         itemIn: BigInt(dAppConfig.promotedItem)
@@ -93,7 +95,7 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">      
-      <div>{smartAssembly?.name} SSU Store</div>
+      <div>{smartAssembly.name ? smartAssembly.name: "SSU Store"}</div>
       <div className="grid grid-cols-2">
         <div>
           <div>{smartAssembly?.description || "No description set"}</div>

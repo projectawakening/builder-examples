@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "example",
+  namespace: "example2",
   tables: {
     RatioConfig: {
       schema: {

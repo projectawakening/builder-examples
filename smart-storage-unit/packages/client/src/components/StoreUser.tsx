@@ -4,6 +4,10 @@ import { useNotification, useSmartObject } from "@eveworld/contexts";
 import { Severity } from "@eveworld/types";
 import { useWorldContract } from "../mud/useWorldContract";
 
+import {
+  findOwnerByAddress,
+} from "@eveworld/utils";
+
 //System Calls
 import execute from "./systemCalls/handleExecute";
 import calculateOutput from "./systemCalls/handleCalculateOutput";
@@ -42,7 +46,29 @@ const StoreUser = React.memo(
   const [ itemOutTypeID, setItemOutTypeID ] = useState<number>(0);
 
   useEffect(() => {
+    setSelectedItemsIn(itemsIn)
+  }, [itemsIn])
+
+  useEffect(() => {
     GetTypes();
+    
+    if(smartCharacter == null) return;
+
+    
+    let inventory = smartAssembly.inventory;
+    console.log(inventory.ephemeralInventoryList);
+    
+    let playerInventory = inventory.ephemeralInventoryList.find((x) =>
+      findOwnerByAddress(x.ownerId, smartCharacter.address),
+    );
+
+    var playerItems = playerInventory.ephemeralInventoryItems.filter((item:any) => item.itemId.toString() == ssuConfig.itemIn.toString()); 
+        
+    if(playerItems.length == 0){
+      return;
+    }
+
+    setItemsIn(playerItems[0].quantity);
   }, [smartAssembly])
 
   const FindTypeFromSmartID = async (smartItemID:string) => {
@@ -224,7 +250,7 @@ const StoreUser = React.memo(
         </div>
       </center>     
 
-      <input type="range" id="item-scroll" name="items" min="1" max={itemsIn.toString()} defaultValue={itemsIn.toString()} onChange={(val) => handleSetWantedItemInput(val)} />
+      <input type="range" id="item-scroll" name="items" min="0" max={itemsIn} value={selectedItemsIn} onChange={(val) => handleSetWantedItemInput(val)} />
       
       <EveButton typeClass="primary" onClick={() => handleExecute()} disabled={!canTrade}>
         Trade Items {canTrade == false && '(Not Enough Items In)'}

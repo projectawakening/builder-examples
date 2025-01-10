@@ -146,10 +146,7 @@ contract SmartStorageUnitSystem is System {
   ) public view returns (uint64 outputAmount, uint64 remainingInput) {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
     
-    console.log(smartObjectId);
-
     require(inputAmount != 0, "Input amount cannot be 0");
-    require(smartObjectId == 40749554736756066408855590582640287390294047875978477354182502817254345156985, "SSU ID is incorrect, it is ");
     require(ratioConfigData.ratioIn != 0, "Ratio in cannot be 0");
     require(ratioConfigData.ratioOut != 0, "Ratio out cannot be 0");
 

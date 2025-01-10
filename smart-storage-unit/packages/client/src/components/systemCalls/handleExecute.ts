@@ -11,10 +11,7 @@ const execute = async ({
 }): Promise<string | undefined> => {
   let txHash;
 
-  console.log(currentConfig.smartObjectId.toString())
-  console.log(quantity)
-
-  txHash = await worldContract.write.example__execute([currentConfig.smartObjectId.toString(), quantity, currentConfig.itemIn.toString()]);
+  txHash = await worldContract.write.example2__execute([currentConfig.smartObjectId.toString(), quantity, currentConfig.itemIn.toString()]);
 
   return txHash;
 };

@@ -57,17 +57,6 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        777000011,
-        player,
-        7777,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-
     if (CharactersByAddressTable.get(owner) == 0) {
       smartCharacter.createCharacter(
         777000022,
@@ -81,33 +70,6 @@ contract MockSsuData is Script {
 
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     createAnchorAndOnline(smartStorageUnitId, owner);
-
-    uint256 inventoryItemIn = vm.envUint("ITEM_IN_ID");
-    uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
-
-    //Deposit some mock items to inventory and ephemeral
-    InventoryItem[] memory items = new InventoryItem[](1);
-    items[0] = InventoryItem({
-      inventoryItemId: inventoryItemOut,
-      owner: owner,
-      itemId: 0,
-      typeId: 23,
-      volume: 10,
-      quantity: 15
-    });
-
-    smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
-
-    InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
-    ephemeralItems[0] = InventoryItem({
-      inventoryItemId: inventoryItemIn,
-      owner: player,
-      itemId: 0,
-      typeId: 23,
-      volume: 10,
-      quantity: 15
-    });
-    smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
 
     vm.stopBroadcast();
   }
