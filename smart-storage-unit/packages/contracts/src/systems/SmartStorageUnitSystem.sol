@@ -111,7 +111,7 @@ contract SmartStorageUnitSystem is System {
     uint64 calculatedInput = quantity-quantityInputItemLeftOver;
 
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
-    require(quantityOutputItem > 0, "Calculated input quantity cannot be 0");
+    require(calculatedInput > 0, "Calculated input quantity cannot be 0");
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
 
