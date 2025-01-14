@@ -35,14 +35,14 @@ fi
 
 SED_CMD="sed"
 if [[ $OSTYPE == 'darwin'* ]]; then
-    SED_OPTS="-i ''"
+    SED_OPTS=(-i '')
 else
-    SED_OPTS="-i"
+    SED_OPTS=(-i)
 fi
 
-$SED_CMD $SED_OPTS "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$world_address #${SERVER} World Address/" "$ENV_FILE"
-$SED_CMD $SED_OPTS "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Garnet Chain ID/" "$ENV_FILE"
-$SED_CMD $SED_OPTS "s|^RPC_URL=.*|RPC_URL=\"${RPC_URL}\" #${SERVER} RPC URL|" "$ENV_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$world_address #${SERVER} World Address/" "$ENV_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Garnet Chain ID/" "$ENV_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s|^RPC_URL=.*|RPC_URL=\"${RPC_URL}\" #${SERVER} RPC URL|" "$ENV_FILE"
 
 printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}WORLD_ADDRESS${RESET} in ${YELLOW}.env${RESET} to ${YELLOW}${SERVER}${RESET} ${YELLOW}[$world_address]${RESET} \n\n"
 printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}RPC_URL${RESET} in ${YELLOW}.env${RESET} to ${YELLOW}${SERVER}${RESET} ${YELLOW}[$RPC_URL]${RESET}\n\n"

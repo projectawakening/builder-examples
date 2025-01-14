@@ -30,6 +30,8 @@ function validate_input(){
         fi
     done
 
+    INPUT=$(echo "$INPUT" | xargs)
+
     echo $INPUT
 }
 
@@ -37,12 +39,12 @@ NAMESPACE=$(validate_input "Namespace" "2" "14")
 
 SED_CMD="sed"
 if [[ $OSTYPE == 'darwin'* ]]; then
-    SED_OPTS="-i ''"
+    SED_OPTS=(-i '')
 else
-    SED_OPTS="-i"
+    SED_OPTS=(-i)
 fi
 
-$SED_CMD $SED_OPTS "s/^bytes14 constant DEPLOYMENT_NAMESPACE.*/bytes14 constant DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
-$SED_CMD $SED_OPTS "s/^  namespace.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE.*/bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^[[:space:]]*namespace:.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
 
 printf "\n${GREEN}[COMPLETED]${RESET} Set ${YELLOW}DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n\n"

@@ -9,7 +9,7 @@ You can use [Deployment and Testing in Local](#Local) to test the example on you
 
 ### Additional Information
 
-For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
+For additional information on the Smart Turret you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
 
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world

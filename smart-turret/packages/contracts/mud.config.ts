@@ -1,7 +1,7 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "red_dragon_t",
+  namespace: "test",
   tables: {    
     TurretAllowlist: {
       schema: {

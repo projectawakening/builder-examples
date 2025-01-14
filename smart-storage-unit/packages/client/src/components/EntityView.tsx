@@ -58,7 +58,7 @@ export default function EntityView() {
     //Get the DApp Config. This is used to see what item in should be promoted on the DApp
     let dAppConfig = useRecord({
       stash,
-      table: mudConfig.namespaces.example2.tables.DAppConfig,    
+      table: mudConfig.namespaces.example.tables.DAppConfig,    
       key: {
         smartObjectId: BigInt(smartAssembly?.id || 0),
       },
@@ -69,7 +69,7 @@ export default function EntityView() {
     //Get the SSU Config, using the promoted input item ID
     let foundSSUConfig = useRecord({
       stash,
-      table: mudConfig.namespaces.example2.tables.RatioConfig,    
+      table: mudConfig.namespaces.example.tables.RatioConfig,    
       key: {
         smartObjectId: BigInt(smartAssembly?.id || 0),
         itemIn: BigInt(dAppConfig.promotedItem)
