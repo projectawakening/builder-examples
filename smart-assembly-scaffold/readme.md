@@ -22,19 +22,25 @@ When the contracts are ready to be deployed:
 cd packages/contracts
 ```
 
-1. Set the environment to Stillness with:
+2. Set the environment to Stillness with:
 
 ```bash
 pnpm env-stillness
 ```
 
-2. Set your config with:
+3. Set your namespace with:
+
+```bash
+pnpm set-namespace
+```
+
+4. Set your config with:
 
 ```bash
 pnpm config
 ```
 
-3. To deploy to Garnet:
+5. To deploy to Garnet:
 
 ```bash
 pnpm deploy:garnet
@@ -48,18 +54,7 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
 
 ### Step 3: 💻 Configuring dApp Environment Variables
 
-1. Copy the `.envsample` file in `./packages/client/` to `.env`:
-   
-```bash
-cp ./packages/client/.envsample ./packages/client/.env
-```
-
-2. Update the following environment variables in `./packages/client/.env`:
-- **`VITE_SMARTASSEMBLY_ID`**: The ID obtained from your deployed smart assembly in-game.
-- **`VITE_GATEWAY_HTTP`**: The HTTP endpoint of a deployed World API instance (e.g., Nova or Stillness).
-- **`VITE_GATEWAY_WS`**: The WebSocket endpoint corresponding to `VITE_GATEWAY_HTTP`, enabling real-time data streams.
-
-With these variables set, you can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Garnet chain to fully interact with the deployed contracts.
+The DApp environment variables were set in step 1, by running the **env-stillness** and **config** commands. 
 
 The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 

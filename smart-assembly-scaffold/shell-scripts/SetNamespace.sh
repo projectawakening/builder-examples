@@ -2,8 +2,10 @@
 ENV_FILE=".env"
 MUD_CONFIG_FILE="mud.config.ts"
 CONSTANTS_FILE="src/systems/constants.sol"
+CLIENT_ENTITY_VIEW_FILE="../client/src/components/EntityView.tsx"
 
 #Colours
+RED="\033[31m"
 GREEN="\033[32m"
 YELLOW="\033[33m"
 RESET="\033[0m"
@@ -30,8 +32,6 @@ function validate_input(){
         fi
     done
 
-    INPUT=$(echo "$INPUT" | xargs)
-
     echo $INPUT
 }
 
@@ -44,7 +44,11 @@ else
     SED_OPTS=(-i)
 fi
 
-$SED_CMD "${SED_OPTS[@]}" "s/^bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE.*/bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
-$SED_CMD "${SED_OPTS[@]}" "s/^[[:space:]]*namespace:.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^bytes14 constant DEPLOYMENT_NAMESPACE.*/bytes14 constant DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
+$SED_CMD "${SED_OPTS[@]}" "s/^  namespace.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
 
 printf "\n${GREEN}[COMPLETED]${RESET} Set ${YELLOW}DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n\n"
+
+$SED_CMD "${SED_OPTS[@]}" "s/namespaces\..*\.tables/namespaces.$NAMESPACE.tables/g" "$CLIENT_ENTITY_VIEW_FILE"
+
+printf "${GREEN}[COMPLETED]${RESET} Replaced ${YELLOW}Namespace References${RESET} in ${YELLOW}$CLIENT_ENTITY_VIEW_FILE${RESET} with the updated namespace \n\n"

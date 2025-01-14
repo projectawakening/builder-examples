@@ -162,7 +162,7 @@ pnpm configure-smart-gates
 
 You can alter the gate ID's and the allowed corp in the .env file as needed.
 
-### Troubleshooting
+### Contract Troubleshooting
 
 If you encounter any issues, refer to the troubleshooting tips below:
 
@@ -174,3 +174,31 @@ If you encounter any issues, refer to the troubleshooting tips below:
 
 ### Still having issues?
 If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.
+
+## Client
+
+This example comes with a simple DApp client. The client allows you to set the allowed corporation value for the smart assembly if you have permission to do so. 
+
+### Step 1: Configure + Deploy Contracts
+
+Ensure you have deployed the contracts prior to this step. The commands in the previous set will have also set the environment variables and namespace occurrences in this client. 
+
+### Step 2: Client
+
+You can then run the client by:
+
+1. Navigate to client:
+
+```bash
+cd ../packages/contracts
+```
+
+2. Start the client:
+
+```bash
+pnpm dev
+```
+
+3. Open the DApp:
+
+In a web explorer, open the DApp with: http://localhost:3000
