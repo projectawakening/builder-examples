@@ -43,7 +43,7 @@ contract SmartTurretSystem is System {
     TargetPriority[] memory priorityQueue,
     Turret memory turret,
     SmartTurretTarget memory turretTarget
-  ) public returns (TargetPriority[] memory updatedPriorityQueue) {
+  ) public view returns (TargetPriority[] memory updatedPriorityQueue) {
     //TODO: Implement the logic
     
     if(true){
@@ -67,7 +67,7 @@ contract SmartTurretSystem is System {
     Turret memory turret,
     SmartTurretTarget memory aggressor,
     SmartTurretTarget memory victim
-  ) public returns (TargetPriority[] memory updatedPriorityQueue) {
+  ) public view returns (TargetPriority[] memory updatedPriorityQueue) {
     //TODO: Implement the logic
     
     return priorityQueue;
