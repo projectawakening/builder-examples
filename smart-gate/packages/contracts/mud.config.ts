@@ -6,9 +6,20 @@ export default defineWorld({
     GateAccess: {
       schema: {
         smartObjectId: "uint256",
-        corp: "uint256"
+        accessListIds: "bytes32[]",
       },
-      key: ["smartObjectId"],
-    }
+      key: ["smartObjectId"], 
+    },
+
+    AccessLists: {
+      schema: {
+        accessListId: "bytes32",
+        isWhiteList: "bool", // false = blacklist
+        accessListName: "string",
+        CorpIds: "uint256[]",
+        CharIds: "uint256[]",
+      },
+      key: ["accessListId"],
+    },
   },
 });

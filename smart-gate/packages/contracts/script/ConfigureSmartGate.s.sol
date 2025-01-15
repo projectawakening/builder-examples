@@ -36,10 +36,10 @@ contract ConfigureSmartGate is Script {
     smartGate.configureSmartGate(smartGateId, systemId);
 
     //Get the allowed corp
-    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
+    //uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
 
     //Set the MUD table for the corp whitelist
-    GateAccess.set(smartGateId, corpID);
+    //GateAccess.set(smartGateId, corpID);
 
     vm.stopBroadcast();
   }

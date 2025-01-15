@@ -10,31 +10,54 @@ import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
 import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 import { GateAccess } from "../codegen/tables/GateAccess.sol";
+import { AccessLists, AccessListsData } from "../codegen/tables/AccessLists.sol";
 
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+//import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
 
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
+//import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
 contract SmartGateSystem is System {  
-  function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    //Get the allowed corp
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
-
-    //Get the character corp
-    uint256 characterCorp = CharactersTable.getCorpId(characterId);
-
-    //If the corp is the same, allow jumps
-    if(allowedCorp == characterCorp){
-      return true;
-    } else{
-      return false;
-    }    
+  function canJump(uint256 characterId, uint256 sourceGateId, uint256 /*_destinationGateId*/) public view returns (bool) {
+    console.log("canJump char id ", characterId);
+    return hasCharAccessToSmartObject(characterId, sourceGateId);
   }
 
-  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
-    GateAccess.set(sourceGateId, corpID);
+  //function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
+  //  GateAccess.set(sourceGateId, corpID);
+  //}
+
+  function hasCharAccessToSmartObject(uint256 characterId, uint256 smartObjectId) private view returns (bool) {
+    uint256 characterCorpId = CharactersTable.getCorpId(characterId);
+
+    bytes32[] memory accessListIds = GateAccess.get(smartObjectId);
+
+    for (uint256 i = 0; i < accessListIds.length; i++) {
+      AccessListsData memory accessListData = AccessLists.get(accessListIds[i]);
+      if (bytes(accessListData.accessListName).length == 0 || accessListData.isWhiteList) continue;
+
+      for (uint256 j = 0; j < accessListData.CorpIds.length; j++) {
+        if (accessListData.CorpIds[j] == characterCorpId) return false;
+      }
+      for (uint256 j = 0; j < accessListData.CharIds.length; j++) {
+        if (accessListData.CharIds[j] == characterId) return false;
+      }
+    }
+
+    for (uint256 i = 0; i < accessListIds.length; i++) {
+      AccessListsData memory accessListData = AccessLists.get(accessListIds[i]);
+      if (bytes(accessListData.accessListName).length == 0 || !accessListData.isWhiteList) continue;
+
+      for (uint256 j = 0; j < accessListData.CorpIds.length; j++) {
+        if (accessListData.CorpIds[j] == characterCorpId) return true;
+      }
+      for (uint256 j = 0; j < accessListData.CharIds.length; j++) {
+        if (accessListData.CharIds[j] == characterId) return true;
+      }
+    }
+    console.log("hasCharAccessToSmartObject: ",characterId , " auf keiner Liste gefunden access denied");
+    return false;
   }
 }
