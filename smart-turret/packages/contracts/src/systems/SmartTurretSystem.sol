@@ -25,6 +25,7 @@ import { Utils } from "./Utils.sol";
 import { AccessControl } from "@latticexyz/world/src/AccessControl.sol";
 
 import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
+
 /**
  * @dev This contract is an example for implementing logic to a smart turret
  */
@@ -34,12 +35,13 @@ contract SmartTurretSystem is System {
   using SmartCharacterUtils for bytes14;
 
   /**
-   * @dev a function to implement logic for smart turret based on proximity
-   * @param smartTurretId The smart turret id
-   * @param characterId is the owner of the smart turret
+   * @dev a function to implement logic for Smart Turret based on proximity
+   * @param smartTurretId The Smart Turret id
+   * @param characterId is the owner of the Smart Turret
    * @param priorityQueue is the queue of existing targets ordered by priority, index 0 being the lowest priority
    * @param turret is the turret data
-   * @param turretTarget is the player entering the zone
+   * @param turretTarget is the player in the zone
+   * This runs on a tick based cycle when the player is in proximity of the Smart Turret
    */
   function inProximity(
     uint256 smartTurretId,
@@ -49,7 +51,7 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
     uint256 allowedCorp = TurretAllowlist.get();
-    uint256 characterCorp = CharactersTable.getCorpId(characterId);
+    uint256 characterCorp = CharactersTable.getCorpId(turretTarget.characterId);
     
     if(characterCorp == allowedCorp){
       return priorityQueue;
@@ -76,6 +78,7 @@ contract SmartTurretSystem is System {
   function setAllowedCorp(uint256 corpID) public {
     ResourceId id = Utils.smartTurretSystemId();
 
+    //If the sender has access to the namespace / is the owner.
     bool hasAccess = AccessControl.hasAccess(id, _msgSender());
 
     require(hasAccess, "You do not have access to this function");
@@ -99,7 +102,7 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory aggressor,
     SmartTurretTarget memory victim
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //TODO: Implement the logic
+    //
     
     return priorityQueue;
   }

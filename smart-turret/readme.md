@@ -117,7 +117,7 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 
 ```bash
-#SMART TURRET ID (Only need to change if you are running on Devnet)
+#SMART TURRET ID (Only need to change if you are not using a Local World)
 SMART_TURRET_ID=
 ```
 
