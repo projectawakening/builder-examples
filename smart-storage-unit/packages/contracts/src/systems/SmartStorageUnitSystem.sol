@@ -106,19 +106,18 @@ contract SmartStorageUnitSystem is System {
       revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
     }
 
+    //Set the Ratio
+    setRatio(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
+
     //Set the DAppConfig MUD Table
     DAppConfig.set(smartObjectId, inventoryItemIdIn);
-
-    setRatio(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
   }
 
   /**
    * @notice Handle the interaction flow for item trade to exchange x:y items between two players
-   * @dev Ideally the ration can be configured in a seperate function and stored on-chain
-   * //TODO this function needs to be authorized by the builder to access inventory functions through RBAC
    * @param smartObjectId The smart object id of the smart storage unit
    * @param quantity The quantity of the item to be exchanged
-   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   * @param inventoryItemIdIn The inventory item id of the item that goes into the SSU
    */
   function execute(uint256 smartObjectId, uint64 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
@@ -137,15 +136,13 @@ contract SmartStorageUnitSystem is System {
     uint64 calculatedInput = quantity-quantityInputItemLeftOver;
 
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
-    require(calculatedInput > 0, "Calculated input quantity cannot be 0");
-
-    uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
+    require(calculatedInput > 0, "Calculated input quantity cannot be 0");   
 
     TransferItem[] memory inItems = new TransferItem[](1);
     inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
 
     TransferItem[] memory ephTransferItems = new TransferItem[](1);
-    ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
+    ephTransferItems[0] = TransferItem(ratioConfigData.itemOut, _msgSender(), quantityOutputItem);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
