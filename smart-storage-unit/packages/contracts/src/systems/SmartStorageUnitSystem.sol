@@ -98,7 +98,7 @@ contract SmartStorageUnitSystem is System {
     uint256 inventoryItemIdOut,
     uint64 ratioIn,
     uint64 ratioOut
-  ) public {
+  ) public onlyOwner(smartObjectId) {
     //make sure the inventory item in item exists
     EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
 
@@ -121,20 +121,23 @@ contract SmartStorageUnitSystem is System {
    */
   function execute(uint256 smartObjectId, uint64 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
+    
+    //Safety checks
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
     address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
 
-    // Make sure there are enough items
+    // Calculate the output from the trade and input items not needed
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
       ratioConfigData.ratioIn,
       ratioConfigData.ratioOut,
       quantity
-    );    
+    );
 
     uint64 calculatedInput = quantity-quantityInputItemLeftOver;
 
+    //Safety checks
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
     require(calculatedInput > 0, "Calculated input quantity cannot be 0");   
 
