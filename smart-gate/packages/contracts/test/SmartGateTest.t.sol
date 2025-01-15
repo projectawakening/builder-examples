@@ -64,9 +64,6 @@ contract SmartGateTest is MudTest {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 
-    //uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
-    //address player = vm.addr(playerPrivateKey);
-
     smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
@@ -88,7 +85,7 @@ contract SmartGateTest is MudTest {
     });
 
     sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    sourceGateId = vm.envUint("DESTINATION_GATE_ID");
+    destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(
@@ -121,6 +118,10 @@ contract SmartGateTest is MudTest {
     charIds[0] = vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY");
     charIds[1] = vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST");
 
+    bytes32[] memory accessListIds = new bytes32[](2);
+    accessListIds[0] = keccak256(abi.encodePacked(vm.envString("TEST_WHITELIST_NAME")));
+    accessListIds[1] = keccak256(abi.encodePacked(vm.envString("TEST_BLACKLIST_NAME")));
+
     // AccessListsData manuell initialisieren
     AccessListsData memory whiteListData = AccessListsData({
         isWhiteList: true,
@@ -130,12 +131,10 @@ contract SmartGateTest is MudTest {
     });
 
     AccessLists.set(keccak256(abi.encodePacked(vm.envString("TEST_WHITELIST_NAME"))), whiteListData);
-    AccessListsData memory dataToCheck = AccessLists.get(keccak256(abi.encodePacked(vm.envString("TEST_WHITELIST_NAME"))));
+    AccessListsData memory dataToCheck = AccessLists.get(accessListIds[0]);
 
     uint256[] memory charIdsToCheck = dataToCheck.CharIds;
-    console.log("HIER MUSS WAS PASSIEREN------------------------");
-    console.log("initializeTestAccessLists: CharId[0] ", charIdsToCheck[0]);
-    console.log("initializeTestAccessLists: CharId[0] ", charIdsToCheck[1]);
+
     // Test Blacklist
     // Zuerst die Arrays im Speicher definieren und initialisieren
     uint256[] memory corpIds2 = new uint256[](2);
@@ -154,8 +153,10 @@ contract SmartGateTest is MudTest {
         CharIds: charIds2
     });
 
-    
-    AccessLists.set(keccak256(abi.encodePacked(vm.envString("TEST_BLACKLIST_NAME"))), blackListData);
+    AccessLists.set(accessListIds[1], blackListData);
+    GateAccess.set(vm.envUint("SOURCE_GATE_ID"), accessListIds);
+
+    bytes32[] memory accessListIdsAusDerTabelle = GateAccess.get(vm.envUint("SOURCE_GATE_ID"));
   }
 
   function initializeTestPlayers() internal {

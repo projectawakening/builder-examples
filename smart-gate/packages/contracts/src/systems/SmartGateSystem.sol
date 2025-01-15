@@ -21,23 +21,16 @@ import { AccessLists, AccessListsData } from "../codegen/tables/AccessLists.sol"
  */
 contract SmartGateSystem is System {  
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 /*_destinationGateId*/) public view returns (bool) {
-    console.log("canJump char id ", characterId);
     return hasCharAccessToSmartObject(characterId, sourceGateId);
   }
 
-  //function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
-  //  GateAccess.set(sourceGateId, corpID);
-  //}
-
   function hasCharAccessToSmartObject(uint256 characterId, uint256 smartObjectId) private view returns (bool) {
     uint256 characterCorpId = CharactersTable.getCorpId(characterId);
-
     bytes32[] memory accessListIds = GateAccess.get(smartObjectId);
 
     for (uint256 i = 0; i < accessListIds.length; i++) {
       AccessListsData memory accessListData = AccessLists.get(accessListIds[i]);
       if (bytes(accessListData.accessListName).length == 0 || accessListData.isWhiteList) continue;
-
       for (uint256 j = 0; j < accessListData.CorpIds.length; j++) {
         if (accessListData.CorpIds[j] == characterCorpId) return false;
       }
@@ -49,7 +42,7 @@ contract SmartGateSystem is System {
     for (uint256 i = 0; i < accessListIds.length; i++) {
       AccessListsData memory accessListData = AccessLists.get(accessListIds[i]);
       if (bytes(accessListData.accessListName).length == 0 || !accessListData.isWhiteList) continue;
-
+      
       for (uint256 j = 0; j < accessListData.CorpIds.length; j++) {
         if (accessListData.CorpIds[j] == characterCorpId) return true;
       }
@@ -57,7 +50,7 @@ contract SmartGateSystem is System {
         if (accessListData.CharIds[j] == characterId) return true;
       }
     }
-    console.log("hasCharAccessToSmartObject: ",characterId , " auf keiner Liste gefunden access denied");
+
     return false;
   }
 }
