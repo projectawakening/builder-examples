@@ -12,9 +12,9 @@ import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTa
 import { GateAccess } from "../codegen/tables/GateAccess.sol";
 import { AccessLists, AccessListsData } from "../codegen/tables/AccessLists.sol";
 
-//import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
 
-//import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
+import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart gate
