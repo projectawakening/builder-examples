@@ -31,7 +31,8 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
 import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
-import { AccessLists, AccessListsData } from "../src/codegen/tables/AccessLists.sol";
+import { AccessListDefinitions, AccessListDefinitionsData } from "../src/codegen/tables/AccessListDefinitions.sol";
+import { AccessListEntries, AccessListEntriesData } from "../src/codegen/tables/AccessListEntries.sol";
 
 
 contract SmartGateTest is MudTest {
@@ -59,10 +60,8 @@ contract SmartGateTest is MudTest {
     
     world = IWorld(worldAddress);
 
-    bytes32 tableId = keccak256("tb:test:AccessLists");
-
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address admin = vm.addr(deployerPrivateKey);
+    address gateOwner = vm.addr(deployerPrivateKey);
 
     smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
@@ -87,10 +86,10 @@ contract SmartGateTest is MudTest {
     sourceGateId = vm.envUint("SOURCE_GATE_ID");
     destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    if (CharactersByAddressTable.get(admin) == 0) {
+    if (CharactersByAddressTable.get(gateOwner) == 0) {
       smartCharacter.createCharacter(
         55555,
-        admin,
+        gateOwner,
         44444,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "gateowner", dappURL: "noURL", description: "." }),
@@ -98,66 +97,92 @@ contract SmartGateTest is MudTest {
       );
     }
 
-    createAnchorAndOnline(sourceGateId, admin);
-    createAnchorAndOnline(destinationGateId, admin);    
+    createAnchorAndOnline(sourceGateId, gateOwner);
+    createAnchorAndOnline(destinationGateId, gateOwner);    
 
     initializeTestPlayers();
-    vm.startPrank(admin);
-    initializeTestAccessLists();
+    vm.startPrank(gateOwner);
+    initializeTestAccessLists(sourceGateId);
     vm.stopPrank();
   }
 
-  function initializeTestAccessLists() internal {
-    // TestWhitelist
-    // Zuerst die Arrays im Speicher definieren und initialisieren
-    uint256[] memory corpIds = new uint256[](2);
-    corpIds[0] = 1;
-    corpIds[1] = 2;
-
-    uint256[] memory charIds = new uint256[](2);
-    charIds[0] = vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY");
-    charIds[1] = vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST");
-
+  function initializeTestAccessLists(uint256 smartObjectId) internal {
     bytes32[] memory accessListIds = new bytes32[](2);
-    accessListIds[0] = keccak256(abi.encodePacked(vm.envString("TEST_WHITELIST_NAME")));
-    accessListIds[1] = keccak256(abi.encodePacked(vm.envString("TEST_BLACKLIST_NAME")));
 
-    // AccessListsData manuell initialisieren
-    AccessListsData memory whiteListData = AccessListsData({
-        isWhiteList: true,
-        accessListName: vm.envString("TEST_WHITELIST_NAME"),
-        CorpIds: corpIds,
-        CharIds: charIds
-    });
+    accessListIds[0] = createAccessList(vm.envString("TEST_BLACKLIST_NAME"), false);
+    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), accessListIds[0]);
+    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), accessListIds[0]);
 
-    AccessLists.set(keccak256(abi.encodePacked(vm.envString("TEST_WHITELIST_NAME"))), whiteListData);
-    AccessListsData memory dataToCheck = AccessLists.get(accessListIds[0]);
+    accessListIds[1] = createAccessList(vm.envString("TEST_WHITELIST_NAME"), true);
+    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"), accessListIds[1]);
+    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), accessListIds[1]);
 
-    uint256[] memory charIdsToCheck = dataToCheck.CharIds;
-
-    // Test Blacklist
-    // Zuerst die Arrays im Speicher definieren und initialisieren
-    uint256[] memory corpIds2 = new uint256[](2);
-    corpIds2[0] = 3;
-    corpIds2[1] = 4;
-
-    uint256[] memory charIds2 = new uint256[](2);
-    charIds2[0] = vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY");
-    charIds2[1] = vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST");
-
-    // AccessListsData manuell initialisieren
-    AccessListsData memory blackListData = AccessListsData({
-        isWhiteList: false,
-        accessListName: vm.envString("TEST_BLACKLIST_NAME"),
-        CorpIds: corpIds2,
-        CharIds: charIds2
-    });
-
-    AccessLists.set(accessListIds[1], blackListData);
-    GateAccess.set(vm.envUint("SOURCE_GATE_ID"), accessListIds);
-
-    bytes32[] memory accessListIdsAusDerTabelle = GateAccess.get(vm.envUint("SOURCE_GATE_ID"));
+    GateAccess.set(smartObjectId, accessListIds);
   }
+ 
+  /**
+   * @notice Creates a new AccessList entry in the MUD AccessListDefinitions table.
+   * @param accessListName A descriptive name (e.g., "MainWhitelist").
+   * @param isWhitelist    true for Whitelist, false for Blacklist.
+   * @return listId        The generated accessListId (bytes32).
+   *
+   * Example:
+   *   bytes32 newId = createAccessList("TestList", true);
+   */
+  function createAccessList(string memory accessListName, bool isWhitelist) public returns (bytes32 listId) {
+    // 1) Generate a bytes32 ID from the name
+    listId = keccak256(abi.encodePacked(accessListName));
+
+    // 2) Check if this Name already exists
+    AccessListDefinitionsData memory existing = AccessListDefinitions.get(listId);
+    if (keccak256(bytes(existing.accessListName)) == keccak256(bytes(accessListName))) {
+        revert("AccessList with this name already exists");
+    }
+
+    // 3) Create the data structure
+    AccessListDefinitionsData memory newList = AccessListDefinitionsData({
+      isWhitelist: isWhitelist,
+      createdBy: msg.sender,
+      accessListName: accessListName
+    });
+
+    // 4) Store the data in the MUD table
+    AccessListDefinitions.set(listId, newList);
+
+    return listId;
+  }
+
+/**
+ * @notice Adds a char (charId) to a specific access list (accessListId).
+ * Reverts if the list does not exist or if the char is already on the list.
+ *
+ * @param charId        The unique ID of the char to add
+ * @param accessListId  The bytes32 ID of the access list
+ */
+function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public {
+  // 1) Check if the specified access list exists
+  
+  AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
+  if (listDef.createdBy == address(0)) {
+    revert("Access List not found");
+  }
+
+  // 2) Verify that this char is not already on the list
+  AccessListEntriesData memory existing = AccessListEntries.get(accessListId, charId, 0);
+  if (existing.addedBy != address(0)) {
+    revert("Char already in list");
+  }
+
+  // 3) Create a new entry for the char, including the address of the user who added it
+  AccessListEntriesData memory newEntry = AccessListEntriesData({
+    addedBy:      msg.sender, // wallet address of the entry creator
+    timestamp:    0 // not used yet
+  });
+
+  // 4) Store the new entry in the MUD table
+  AccessListEntries.set(accessListId, charId, 0, newEntry);
+}
+
 
   function initializeTestPlayers() internal {
     address testPlayerCharWhitelistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED"));
@@ -207,86 +232,12 @@ contract SmartGateTest is MudTest {
     }
   }
 
-  //Test if the world exists
-  function testWorldExists() public {
-    uint256 codeSize;
-    address addr = worldAddress;
-    assembly {
-      codeSize := extcodesize(addr)
-    }
-    assertTrue(codeSize > 0);
-  }
-
-  function testPlayerOnCharWhitelistCanJump() public {    
-    //Test acccess
-    bool canJumpResult = abi.decode(
-      world.call(
-        systemId,
-        abi.encodeCall(
-          SmartGateSystem.canJump,
-          (vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"), sourceGateId, destinationGateId)
-        )
-      ),
-      (bool)
-    );
-
-    assertTrue(canJumpResult, "Player should have access");
-  }
-
-  function testPlayerOnCharBlacklistCanNotJump() public {    
-    //Test acccess
-    bool canJumpResult = abi.decode(
-      world.call(
-        systemId,
-        abi.encodeCall(
-          SmartGateSystem.canJump,
-          (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), sourceGateId, destinationGateId)
-        )
-      ),
-      (bool)
-    );
-
-    assertFalse(canJumpResult, "Player should not have access");
-  }
-
-  function testPlayerOnNoListCanNotJump() public {    
-    //Test acccess
-    bool canJumpResult = abi.decode(
-      world.call(
-        systemId,
-        abi.encodeCall(
-          SmartGateSystem.canJump,
-          (vm.envUint("TEST_PLAYER_CHAR_ID_NO_LIST"), sourceGateId, destinationGateId)
-        )
-      ),
-      (bool)
-    );
-
-    assertFalse(canJumpResult, "Player should not have access");
-  }
-
-  function testPlayerOnWhitelsitAndBlacklistCanNotJump() public {    
-    //Test acccess
-    bool canJumpResult = abi.decode(
-      world.call(
-        systemId,
-        abi.encodeCall(
-          SmartGateSystem.canJump,
-          (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), sourceGateId, destinationGateId)
-        )
-      ),
-      (bool)
-    );
-
-    assertFalse(canJumpResult, "Player should not have access");
-  }
-
-  function createAnchorAndOnline(uint256 anchoredSmartGateId, address admin) private {
+  function createAnchorAndOnline(uint256 anchoredSmartGateId, address gateOwner) private {
     //Create and anchor the smart gate and bring online
     smartGate.createAndAnchorSmartGate(
       anchoredSmartGateId,
       EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: admin, tokenURI: "test" }),
+      SmartObjectData({ owner: gateOwner, tokenURI: "test" }),
       WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
       1e18,             // fuelUnitVolume,
       1,                // fuelConsumptionPerMinute,
@@ -303,8 +254,84 @@ contract SmartGateTest is MudTest {
     smartDeployable.bringOnline(anchoredSmartGateId);
   }
 
+  /////////////////////////////////////////////////////
+  //////////////////// TESTS BEGIN ////////////////////
+  /////////////////////////////////////////////////////
+
+  function testWorldExists() public {
+    uint256 codeSize;
+    address addr = worldAddress;
+    assembly {
+      codeSize := extcodesize(addr)
+    }
+    assertTrue(codeSize > 0);
+  }
+
+  function testPlayerOnCharWhitelistCanJump() public {    
+    bool canJumpResult = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartGateSystem.canJump,
+          (vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"), sourceGateId, destinationGateId)
+        )
+      ),
+      (bool)
+    );
+
+    assertTrue(canJumpResult, "Player should have access");
+  }
+
+  function testPlayerOnCharBlacklistCanNotJump() public {    
+    bool canJumpResult = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartGateSystem.canJump,
+          (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), sourceGateId, destinationGateId)
+        )
+      ),
+      (bool)
+    );
+
+    assertFalse(canJumpResult, "Player should not have access");
+  }
+
+  function testPlayerOnNoListCanNotJump() public {    
+    bool canJumpResult = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartGateSystem.canJump,
+          (vm.envUint("TEST_PLAYER_CHAR_ID_NO_LIST"), sourceGateId, destinationGateId)
+        )
+      ),
+      (bool)
+    );
+
+    assertFalse(canJumpResult, "Player should not have access");
+  }
+
+  function testPlayerOnWhitelsitAndBlacklistCanNotJump() public {    
+    bool canJumpResult = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartGateSystem.canJump,
+          (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), sourceGateId, destinationGateId)
+        )
+      ),
+      (bool)
+    );
+
+    assertFalse(canJumpResult, "Player should not have access");
+  }
+
+  ////////////////////////////////////////////////////
+  /////////////////// TESTS END //////////////////////
+  ////////////////////////////////////////////////////
+
   function generateRandomAddressForTest(uint256 seed) private pure returns (address) {
     return address(uint160(uint256(keccak256(abi.encodePacked(seed)))));
-  }
-  
+  } 
 }
