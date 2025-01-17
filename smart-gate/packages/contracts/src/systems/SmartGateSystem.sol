@@ -9,13 +9,12 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
 import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
+import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
+
 import { GateAccess } from "../codegen/tables/GateAccess.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData  } from "../codegen/tables/AccessListEntries.sol";
-
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
-
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart gate
@@ -123,20 +122,18 @@ contract SmartGateSystem is System {
    */
   function addAccessListToGate(uint256 gateId, bytes32 accessListId) public  onlyOwner(gateId) {
     bytes32[] memory currentIds = GateAccess.get(gateId);
-
     bytes32[] memory newIds = new bytes32[](currentIds.length + 1);
 
     for (uint256 i = 0; i < currentIds.length; i++) {
       newIds[i] = currentIds[i];
     }
-
     newIds[currentIds.length] = accessListId;
 
     GateAccess.set(gateId, newIds);
   }
 
   /**
-   * @notice Removes a specific access list identifier from the access list of a given gate.
+   * @notice Removes a specific access list ID from the access lists list of a given gate.
    * @dev This function retrieves the current array of access list IDs associated with a gate,
    *      finds the specified `accessListId`, removes it, and then updates the MUD table entry.
    *      It uses the `onlyOwner(gateId)` modifier to ensure that only authorized entities
@@ -153,33 +150,32 @@ contract SmartGateSystem is System {
    *   removeAccessListFromGate(gateId, accessListId);
    */
   function removeAccessListFromGate(uint256 gateId, bytes32 accessListId) public onlyOwner(gateId) {
-      bytes32[] memory currentIds = GateAccess.get(gateId);
+    bytes32[] memory currentIds = GateAccess.get(gateId);
 
-      // Variable to hold the index of the accessListId to remove, stays -1 if list not found
-      int256 indexToRemove = -1;
+    // Variable to hold the index of the accessListId to remove, stays -1 if list not found
+    int256 indexToRemove = -1;
 
-      for (uint256 i = 0; i < currentIds.length; i++) {
-          if (currentIds[i] == accessListId) {
-              indexToRemove = int256(i);
-              break;
-          }
+    for (uint256 i = 0; i < currentIds.length; i++) {
+      if (currentIds[i] == accessListId) {
+        indexToRemove = int256(i);
+        break;
       }
+    }
 
-      // indexToRemove is -1 if list not found
-      require(indexToRemove >= 0, "AccessListId not found for this gate");
+    // indexToRemove is -1 if list not found
+    require(indexToRemove >= 0, "AccessListId not found for this gate");
 
-      bytes32[] memory newIds = new bytes32[](currentIds.length - 1);
+    bytes32[] memory newIds = new bytes32[](currentIds.length - 1);
 
-      uint256 newIndex = 0;
-      for (uint256 i = 0; i < currentIds.length; i++) {
-          // Skip the element at indexToRemove
-          if (i == uint256(indexToRemove)) {
-            continue;
-          }
-          newIds[newIndex] = currentIds[i];
-          newIndex++;
+    uint256 newIndex = 0;
+    for (uint256 i = 0; i < currentIds.length; i++) {
+      // Skip the element at indexToRemove
+      if (i == uint256(indexToRemove)) {
+        continue;
       }
-      GateAccess.set(gateId, newIds);
+      newIds[newIndex] = currentIds[i];
+      newIndex++;
+    }
+    GateAccess.set(gateId, newIds);
   }
 }
-

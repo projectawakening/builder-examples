@@ -34,7 +34,6 @@ import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../src/codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData } from "../src/codegen/tables/AccessListEntries.sol";
 
-
 contract SmartGateTest is MudTest {
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartGateLib for SmartGateLib.World;
@@ -164,36 +163,35 @@ contract SmartGateTest is MudTest {
     return listId;
   }
 
-/**
- * @notice Adds a char (charId) to a specific access list (accessListId).
- * Reverts if the list does not exist or if the char is already on the list.
- *
- * @param charId        The unique ID of the char to add
- * @param accessListId  The bytes32 ID of the access list
- */
-function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public {
-  // 1) Check if the specified access list exists
-  AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
-  if (listDef.createdBy == address(0)) {
-    revert("Access List not found");
+  /**
+   * @notice Adds a char (charId) to a specific access list (accessListId).
+   * Reverts if the list does not exist or if the char is already on the list.
+   *
+   * @param charId        The unique ID of the char to add
+   * @param accessListId  The bytes32 ID of the access list
+   */
+  function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public {
+    // 1) Check if the specified access list exists
+    AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
+    if (listDef.createdBy == address(0)) {
+      revert("Access List not found");
+    }
+
+    // 2) Verify that this char is not already on the list
+    AccessListEntriesData memory existing = AccessListEntries.get(accessListId, charId, 0);
+    if (existing.addedBy != address(0)) {
+      revert("Char already in list");
+    }
+
+    // 3) Create a new entry for the char, including the address of the user who added it
+    AccessListEntriesData memory newEntry = AccessListEntriesData({
+      addedBy:      msg.sender, // wallet address of the entry creator
+      timestamp:    0 // not used yet
+    });
+
+    // 4) Store the new entry in the MUD table
+    AccessListEntries.set(accessListId, charId, 0, newEntry);
   }
-
-  // 2) Verify that this char is not already on the list
-  AccessListEntriesData memory existing = AccessListEntries.get(accessListId, charId, 0);
-  if (existing.addedBy != address(0)) {
-    revert("Char already in list");
-  }
-
-  // 3) Create a new entry for the char, including the address of the user who added it
-  AccessListEntriesData memory newEntry = AccessListEntriesData({
-    addedBy:      msg.sender, // wallet address of the entry creator
-    timestamp:    0 // not used yet
-  });
-
-  // 4) Store the new entry in the MUD table
-  AccessListEntries.set(accessListId, charId, 0, newEntry);
-}
-
 
   function initializeTestPlayers() internal {
     address testPlayerCharWhitelistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED"));
@@ -330,7 +328,7 @@ function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public {
       }
     }
 
-    //assertTrue(isIdFoundPostAdd, "Add Access List to gate went wrong before remove could be tested");
+    assertTrue(isIdFoundPostAdd, "Add Access List to gate went wrong before remove could be tested");
 
     vm.startPrank(gateOwner);
     world.call(
