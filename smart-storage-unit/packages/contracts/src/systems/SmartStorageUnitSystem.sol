@@ -126,8 +126,6 @@ contract SmartStorageUnitSystem is System {
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
-
     // Calculate the output from the trade and input items not needed
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
       ratioConfigData.ratioIn,
@@ -140,6 +138,8 @@ contract SmartStorageUnitSystem is System {
     //Safety checks
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
     require(calculatedInput > 0, "Calculated input quantity cannot be 0");   
+    
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
 
     TransferItem[] memory inItems = new TransferItem[](1);
     inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
@@ -151,6 +151,12 @@ contract SmartStorageUnitSystem is System {
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
   }
 
+  /**
+   * @dev Read the output, utilizing calculateOutput
+   * @param inputAmount The quantity of items from the player
+   * @param smartObjectId The smart object id of the SSU to trade
+   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   */
   function readOutput(
     uint64 inputAmount,
     uint256 smartObjectId, 

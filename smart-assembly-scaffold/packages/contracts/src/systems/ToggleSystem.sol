@@ -8,11 +8,6 @@ import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
-
-import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 import { ToggleTable } from "../codegen/tables/ToggleTable.sol";

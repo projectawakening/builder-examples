@@ -34,8 +34,7 @@ contract SmartGateSystem is System {
    * @param characterId The character requesting to use the Smart Gate
    * @param sourceGateId is the Smart Gate the player is jumping from
    * @param destinationGateId is the Smart Gate the player is wanting to jump to
-   */
-   
+   */   
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
     //Get the allowed corp
     uint256 allowedCorp = GateAccess.get(sourceGateId);
