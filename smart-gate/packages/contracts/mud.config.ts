@@ -6,7 +6,7 @@ export default defineWorld({
       /**
        * Associates a gate (smartObjectId) with an array of access list identifiers.
        * Call GateAccess.get(gateId) to retrieve the array accessListIds (bytes32[])
-       *
+       * 
        * Example usage:
        * 
        *   bytes32[] memory accesListIdsForThisGate = GateAccess.get(gateId);
@@ -26,6 +26,7 @@ export default defineWorld({
        *   - accessListName(string): a descriptive name (e.g., "MainWhitelist")
        *   - isWhitelist(bool): indicates whether the list is a whitelist (true) or a blacklist (false)
        *   - createdBy: wallet address which created the access list
+       * 
        * Retrieve the data for a given listId with:
        *
        *   AccessListDefinitionsData memory listData = AccessListDefinitions.get(listId);

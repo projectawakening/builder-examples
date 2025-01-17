@@ -34,7 +34,7 @@ contract SmartGateSystem is System {
     return hasCharAccessToSmartObject(characterId, sourceGateId);
   }
 
-    /**
+  /**
    * @dev Checks whether a char (given by charId, corpId) has access to a specified smartObjectId (for example a smart gate).
    *
    * LOGIC:
@@ -68,7 +68,6 @@ contract SmartGateSystem is System {
         // char found on a blacklist => deny access
         return false;
       }
-
       // check corp
       AccessListEntriesData memory corpEntry = AccessListEntries.get(listIds[i], corpId, 1);
 
@@ -88,25 +87,99 @@ contract SmartGateSystem is System {
       }
   
       // check char
-      AccessListEntriesData memory charEntry =
-        AccessListEntries.get(listIds[i], charId, 0);
-
+      AccessListEntriesData memory charEntry = AccessListEntries.get(listIds[i], charId, 0);
       if (charEntry.addedBy != address(0)) {
         // char found on a whitelist => allow
         return true;
       }
-
       // check corp
       AccessListEntriesData memory corpEntry = AccessListEntries.get(listIds[i], corpId, 1);
 
       if (corpEntry.addedBy != address(0)) {
         // corp found on a whitelist => allow
         return true;
-      }    
+      }  
     }
-
     // 4) Default: if not on any blacklist or whitelist => no access
     return false;
+  }
+
+  /**
+   * @notice Adds a new access list ID to the access lists list of a specified gate.
+   * @dev This function retrieves the current array of access list IDs associated with a gate,
+   *      appends the new `accessListId` to this array, and then updates the MUD table entry.
+   *      It employs the `onlyOwner(gateId)` modifier to ensure that only authorized entities
+   *      can modify the gate's access list.
+   *
+   * @param gateId The unique identifier of the gate (smartObjectId) to which the access list entry will be added.
+   * @param accessListId The specific access list identifier (bytes32) to add to the gate's access list.
+   *
+   * Requirements:
+   * - The caller must satisfy the conditions specified by the `onlyOwner(gateId)` modifier,
+   *   meaning only the owner of the gate can invoke this function.
+   *
+   * Example usage:
+   *   addAccessListToGate(gateId, accessListId);
+   */
+  function addAccessListToGate(uint256 gateId, bytes32 accessListId) public  onlyOwner(gateId) {
+    bytes32[] memory currentIds = GateAccess.get(gateId);
+
+    bytes32[] memory newIds = new bytes32[](currentIds.length + 1);
+
+    for (uint256 i = 0; i < currentIds.length; i++) {
+      newIds[i] = currentIds[i];
+    }
+
+    newIds[currentIds.length] = accessListId;
+
+    GateAccess.set(gateId, newIds);
+  }
+
+  /**
+   * @notice Removes a specific access list identifier from the access list of a given gate.
+   * @dev This function retrieves the current array of access list IDs associated with a gate,
+   *      finds the specified `accessListId`, removes it, and then updates the MUD table entry.
+   *      It uses the `onlyOwner(gateId)` modifier to ensure that only authorized entities
+   *      can modify the gate's access list.
+   *
+   * @param gateId The unique identifier of the gate (smartObjectId) from which the access list entry is to be removed.
+   * @param accessListId The specific access list identifier (bytes32) to remove from the gate's access list.
+   *
+   * Requirements:
+   * - The specified `accessListId` must exist in the current access list for the given `gateId`.
+   * - The caller must satisfy the `onlyOwner(gateId)` modifier's requirements.
+   *
+   * Example usage:
+   *   removeAccessListFromGate(gateId, accessListId);
+   */
+  function removeAccessListFromGate(uint256 gateId, bytes32 accessListId) public onlyOwner(gateId) {
+      bytes32[] memory currentIds = GateAccess.get(gateId);
+
+      // Variable to hold the index of the accessListId to remove, stays -1 if list not found
+      int256 indexToRemove = -1;
+
+      for (uint256 i = 0; i < currentIds.length; i++) {
+          if (currentIds[i] == accessListId) {
+              indexToRemove = int256(i);
+              break;
+          }
+      }
+
+      // indexToRemove is -1 if list not found
+      require(indexToRemove >= 0, "AccessListId not found for this gate");
+
+      bytes32[] memory newIds = new bytes32[](currentIds.length - 1);
+
+      uint256 newIndex = 0;
+      for (uint256 i = 0; i < currentIds.length; i++) {
+          // Skip the element at indexToRemove
+          if (i == uint256(indexToRemove)) {
+            continue;
+          }
+          newIds[newIndex] = currentIds[i];
+          newIndex++;
+      }
+      GateAccess.set(gateId, newIds);
   }
 }
 
