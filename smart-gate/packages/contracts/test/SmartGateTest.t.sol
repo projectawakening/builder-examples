@@ -303,7 +303,7 @@ contract SmartGateTest is MudTest {
     assertTrue(isSetIdFoundNow, "Add List to gate went wrong");
   }
 
-  function testRemoveAccessListToGate() public {
+  function testRemoveAccessListFromGate() public {
     bytes32 accessListId = keccak256(bytes("Test_Access_List"));
 
     vm.startPrank(gateOwner);
