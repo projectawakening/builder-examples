@@ -16,25 +16,21 @@ import { GateAccess } from "../codegen/tables/GateAccess.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData  } from "../codegen/tables/AccessListEntries.sol";
 
-/**
- * @dev This contract is an example for implementing logic to a smart gate
- */
 contract SmartGateSystem is System {  
-  /**
-   * @dev Only owner modifer
-   */
   modifier onlyOwner(uint256 smartObjectId) {
     address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
     require(_msgSender() == ssuOwner, "Only owner can call this function");
     _;
   }  
 
-  function canJump(uint256 characterId, uint256 sourceGateId, uint256 /*_destinationGateId*/) public view returns (bool) {
+  function canJump(uint256 characterId, uint256 sourceGateId, uint256 _destinationGateId) public view returns (bool) {
     return hasCharAccessToSmartObject(characterId, sourceGateId);
   }
 
   /**
-   * @dev Checks whether a char (given by charId, corpId) has access to a specified smartObjectId (for example a smart gate).
+   * @notice Checks whether a char  has access to a smart object (for example a smart gate).
+   * @param charId Character ID
+   * @param smartObjectId Smart object ID
    *
    * LOGIC:
    *  1) Gather all AccessListIDs linked to smartObjectId.
@@ -110,8 +106,8 @@ contract SmartGateSystem is System {
    *      It employs the `onlyOwner(gateId)` modifier to ensure that only authorized entities
    *      can modify the gate's access list.
    *
-   * @param gateId The unique identifier of the gate (smartObjectId) to which the access list entry will be added.
-   * @param accessListId The specific access list identifier (bytes32) to add to the gate's access list.
+   * @param gateId The unique ID of the gate (smartObjectId) to which the access list entry will be added.
+   * @param accessListId The specific access list ID (bytes32) to add to the gate's access list.
    *
    * Requirements:
    * - The caller must satisfy the conditions specified by the `onlyOwner(gateId)` modifier,
