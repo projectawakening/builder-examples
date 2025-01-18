@@ -23,7 +23,7 @@ contract SmartGateSystem is System {
     _;
   }  
 
-  function canJump(uint256 characterId, uint256 sourceGateId, uint256 _destinationGateId) public view returns (bool) {
+  function canJump(uint256 characterId, uint256 sourceGateId, uint256 /*destinationGateId*/) public view returns (bool) {
     return hasCharAccessToSmartObject(characterId, sourceGateId);
   }
 
