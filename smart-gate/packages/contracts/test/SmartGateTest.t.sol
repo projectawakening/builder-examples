@@ -106,6 +106,76 @@ contract SmartGateTest is MudTest {
     vm.stopPrank();
   }
 
+  function createAnchorAndOnline(uint256 anchoredSmartGateId) private {
+    //Create and anchor the smart gate and bring online
+    smartGate.createAndAnchorSmartGate(
+      anchoredSmartGateId,
+      EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
+      SmartObjectData({ owner: gateOwner, tokenURI: "test" }),
+      WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
+      1e18,             // fuelUnitVolume,
+      1,                // fuelConsumptionPerMinute,
+      1000000 * 1e18,   // fuelMaxCapacity,
+      100010000 * 1e18  // maxDistance
+    );
+
+    // check global state and resume if needed
+    if (GlobalDeployableState.getIsPaused() == false) {
+      smartDeployable.globalResume();
+    }
+
+    smartDeployable.depositFuel(anchoredSmartGateId, 200010);
+    smartDeployable.bringOnline(anchoredSmartGateId);
+  }
+
+  function initializeTestPlayers() internal {
+    address testPlayerCharWhitelistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED"));
+    address testPlayerCharBlacklistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED")+51345);
+    address testPlayerCharNoList = generateRandomAddressForTest(vm.envUint("TEST_SEED")+198745524);
+    address testPlayerBlacklistAndWhitelist = generateRandomAddressForTest(vm.envUint("TEST_SEED")+134355555);
+
+    if (CharactersByAddressTable.get(testPlayerCharWhitelistOnly) == 0) {
+      smartCharacter.createCharacter(
+        vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"),
+        testPlayerCharWhitelistOnly,
+        4041,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "testPlayerCharWhitelistOnly", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+    if (CharactersByAddressTable.get(testPlayerCharBlacklistOnly) == 0) {
+      smartCharacter.createCharacter(
+        vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"),
+        testPlayerCharBlacklistOnly,
+        4041,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "testPlayerCharBlacklistOnly", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+    if (CharactersByAddressTable.get(testPlayerCharNoList) == 0) {
+      smartCharacter.createCharacter(
+        vm.envUint("TEST_PLAYER_CHAR_ID_NO_LIST"),
+        testPlayerCharNoList,
+        4041,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "testPlayerNoList", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+    if (CharactersByAddressTable.get(testPlayerBlacklistAndWhitelist) == 0) {
+      smartCharacter.createCharacter(
+        vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"),
+        testPlayerBlacklistAndWhitelist,
+        4041,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "testPlayerBlacklistAndWhitelist", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+  }
+
   function initializeTestAccessLists(uint256 smartObjectId) internal {
     bytes32 testBlacklistId = createAccessList(vm.envString("TEST_BLACKLIST_NAME"), false);
     addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), testBlacklistId);
@@ -191,76 +261,6 @@ contract SmartGateTest is MudTest {
 
     // 4) Store the new entry in the MUD table
     AccessListEntries.set(accessListId, charId, 0, newEntry);
-  }
-
-  function initializeTestPlayers() internal {
-    address testPlayerCharWhitelistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED"));
-    address testPlayerCharBlacklistOnly = generateRandomAddressForTest(vm.envUint("TEST_SEED")+51345);
-    address testPlayerCharNoList = generateRandomAddressForTest(vm.envUint("TEST_SEED")+198745524);
-    address testPlayerBlacklistAndWhitelist = generateRandomAddressForTest(vm.envUint("TEST_SEED")+134355555);
-
-    if (CharactersByAddressTable.get(testPlayerCharWhitelistOnly) == 0) {
-      smartCharacter.createCharacter(
-        vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"),
-        testPlayerCharWhitelistOnly,
-        4041,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "testPlayerCharWhitelistOnly", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-    if (CharactersByAddressTable.get(testPlayerCharBlacklistOnly) == 0) {
-      smartCharacter.createCharacter(
-        vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"),
-        testPlayerCharBlacklistOnly,
-        4041,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "testPlayerCharBlacklistOnly", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-    if (CharactersByAddressTable.get(testPlayerCharNoList) == 0) {
-      smartCharacter.createCharacter(
-        vm.envUint("TEST_PLAYER_CHAR_ID_NO_LIST"),
-        testPlayerCharNoList,
-        4041,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "testPlayerNoList", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-    if (CharactersByAddressTable.get(testPlayerBlacklistAndWhitelist) == 0) {
-      smartCharacter.createCharacter(
-        vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"),
-        testPlayerBlacklistAndWhitelist,
-        4041,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "testPlayerBlacklistAndWhitelist", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-  }
-
-  function createAnchorAndOnline(uint256 anchoredSmartGateId) private {
-    //Create and anchor the smart gate and bring online
-    smartGate.createAndAnchorSmartGate(
-      anchoredSmartGateId,
-      EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: gateOwner, tokenURI: "test" }),
-      WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
-      1e18,             // fuelUnitVolume,
-      1,                // fuelConsumptionPerMinute,
-      1000000 * 1e18,   // fuelMaxCapacity,
-      100010000 * 1e18  // maxDistance
-    );
-
-    // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused() == false) {
-      smartDeployable.globalResume();
-    }
-
-    smartDeployable.depositFuel(anchoredSmartGateId, 200010);
-    smartDeployable.bringOnline(anchoredSmartGateId);
   }
 
   /////////////////////////////////////////////////////
