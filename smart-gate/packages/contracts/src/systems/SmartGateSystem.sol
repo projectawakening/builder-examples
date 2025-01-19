@@ -12,17 +12,20 @@ import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTa
 import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
 import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 
-import { GateAccess, GateAccessData } from "../codegen/tables/GateAccess.sol";
+import { GateAccessLists, GateAccessListsData } from "../codegen/tables/GateAccessLists.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData  } from "../codegen/tables/AccessListEntries.sol";
+import { AccessListManager } from "../codegen/tables/AccessListManager.sol";
 
 contract SmartGateSystem is System {  
-
-  uint256 ownershipProofGateId = 6358981912015896955908446534304748195580309633851788354880944165111665942753;
-
   modifier onlyOwner(uint256 smartObjectId) {
     address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
     require(_msgSender() == ssuOwner, "Only owner can call this function");
+    _;
+  }  
+
+  modifier onlyAccessListManager() {
+    require(AccessListManager.get(_msgSender()), "Only access list managers can call this function");
     _;
   }  
 
@@ -48,7 +51,7 @@ contract SmartGateSystem is System {
     uint256 corpId = CharactersTable.getCorpId(charId);
 
     // 1) Get all access list IDs associated with this gate
-    bytes32[] memory listIds = GateAccess.getAccessListIds(smartObjectId);
+    bytes32[] memory listIds = GateAccessLists.getAccessListIds(smartObjectId);
 
     // 2) Check for blacklists first
     for (uint256 i = 0; i < listIds.length; i++) {
@@ -119,7 +122,7 @@ contract SmartGateSystem is System {
    *   addAccessListToGate(gateId, accessListId);
    */
   function addAccessListToGate(uint256 gateId, bytes32 accessListId) public onlyOwner(gateId) {
-    bytes32[] memory currentIds = GateAccess.getAccessListIds(gateId);
+    bytes32[] memory currentIds = GateAccessLists.getAccessListIds(gateId);
     bytes32[] memory newIds = new bytes32[](currentIds.length + 1);
 
     for (uint256 i = 0; i < currentIds.length; i++) {
@@ -127,12 +130,12 @@ contract SmartGateSystem is System {
     }
     newIds[currentIds.length] = accessListId;
 
-    GateAccessData memory gateAccessData = GateAccessData({
+    GateAccessListsData memory gateAccessData = GateAccessListsData({
       entryExists: true,
       accessListIds: newIds
 
     }); 
-    GateAccess.set(gateId, gateAccessData);
+    GateAccessLists.set(gateId, gateAccessData);
   }
 
   /**
@@ -153,7 +156,7 @@ contract SmartGateSystem is System {
    *   removeAccessListFromGate(gateId, accessListId);
    */
   function removeAccessListFromGate(uint256 gateId, bytes32 accessListId) public onlyOwner(gateId) {
-    bytes32[] memory currentIds = GateAccess.getAccessListIds(gateId);
+    bytes32[] memory currentIds = GateAccessLists.getAccessListIds(gateId);
 
     // Variable to hold the index of the accessListId to remove, stays -1 if list not found
     int256 indexToRemove = -1;
@@ -180,12 +183,12 @@ contract SmartGateSystem is System {
       newIndex++;
     }
     
-    GateAccessData memory gateAccessData = GateAccessData({
+    GateAccessListsData memory gateAccessData = GateAccessListsData({
       entryExists: true,
       accessListIds: newIds
 
     }); 
-    GateAccess.set(gateId, gateAccessData);
+    GateAccessLists.set(gateId, gateAccessData);
   }
    
   /**
@@ -197,7 +200,7 @@ contract SmartGateSystem is System {
    * Example:
    *   bytes32 newAccessListId = createAccessList("NewWhitelist", true);
    */
-  function createAccessList(string memory accessListName, bool isWhitelist) public onlyOwner(ownershipProofGateId) returns (bytes32 listId) {
+  function createAccessList(string memory accessListName, bool isWhitelist) public onlyAccessListManager() returns (bytes32 listId) {
     listId = keccak256(bytes(accessListName));
 
     AccessListDefinitionsData memory existing = AccessListDefinitions.get(listId);
@@ -218,10 +221,10 @@ contract SmartGateSystem is System {
   }
 
   /**
-   * @notice Removes an existing Access List entry from the MUD AccessListDefinitions table.
-   * @param listId The ID of the AccessList entry to be removed.
+   * @notice Deletes an existing Access List entry from the MUD AccessListDefinitions table.
+   * @param listId The ID of the AccessList entry to be deleted.
    */
-  function removeAccessList(bytes32 listId) public onlyOwner(ownershipProofGateId) {
+  function deleteAccessList(bytes32 listId) public onlyAccessListManager() {
       AccessListDefinitionsData memory existing = AccessListDefinitions.get(listId);
 
       if (!existing.entryExists) {
@@ -232,13 +235,12 @@ contract SmartGateSystem is System {
   }
 
   /**
-   * @notice Adds a char (charId) to a specific access list (accessListId).
-   * Reverts if the list does not exist or if the char is already on the list.
+   * @notice Adds a char to an access list.
    *
    * @param charId        The unique ID of the char to add
    * @param accessListId  The bytes32 ID of the access list
    */
-  function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public onlyOwner(ownershipProofGateId) {
+  function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public onlyAccessListManager() {
     // 1) Check if the specified access list exists
     AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
     if (!listDef.entryExists) {
@@ -269,7 +271,7 @@ contract SmartGateSystem is System {
    * @param charId        The unique ID of the char to remove
    * @param accessListId  The bytes32 ID of the access list
    */
-  function removeCharIdFromAccessList(uint256 charId, bytes32 accessListId) public onlyOwner(ownershipProofGateId) {
+  function removeCharIdFromAccessList(uint256 charId, bytes32 accessListId) public onlyAccessListManager() {
       // 1) Check if the specified access list exists
       AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
       if (!listDef.entryExists) {
@@ -286,5 +288,58 @@ contract SmartGateSystem is System {
       // Verwende eine deleteRecord-Funktion ähnlich der vorhergehenden deleteRecord, 
       // aber angepasst an die Struktur von AccessListEntries.
       AccessListEntries.deleteRecord(accessListId, charId, 0);
+  }
+
+  /**
+   * @notice Adds a corp to an access list.
+   *
+   * @param corpId        The unique ID of the corp to add
+   * @param accessListId  The bytes32 ID of the access list
+   */
+  function addCorpIdToAccessList(uint256 corpId, bytes32 accessListId) public onlyAccessListManager() {
+    // 1) Check if the specified access list exists
+    AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
+    if (!listDef.entryExists) {
+      revert("Access List not found");
+    }
+
+    // 2) Verify that this corp is not already on the list
+    AccessListEntriesData memory existing = AccessListEntries.get(accessListId, corpId, 0);
+    if (existing.entryExists) {
+      revert("Corp already in list");
+    }
+
+    // 3) Create a new entry for the corp, including the address of the user who added it
+    AccessListEntriesData memory newEntry = AccessListEntriesData({
+      addedBy:      msg.sender, // wallet address of the entry creator
+      timestamp:    1,
+      entryExists:  true
+    });
+
+    // 4) Store the new entry in the MUD table
+    AccessListEntries.set(accessListId, corpId, 0, newEntry);
+  }
+
+  /**
+   * @notice Removes a corp from an access list.
+   *
+   * @param corpId        The unique ID of the corp to remove
+   * @param accessListId  The bytes32 ID of the access list
+   */
+  function removeCorpIdFromAccessList(uint256 corpId, bytes32 accessListId) public onlyAccessListManager() {
+      // 1) Check if the access list exists
+      AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
+      if (!listDef.entryExists) {
+          revert("Access List not found");
+      }
+
+      // 2) Verify that this corp is actually on the list
+      AccessListEntriesData memory existing = AccessListEntries.get(accessListId, corpId, 1);
+      if (!existing.entryExists) {
+          revert("Corp not in list");
+      }
+
+      // 3) Remove the entry for the corp
+      AccessListEntries.deleteRecord(accessListId, corpId, 1);
   }
 }

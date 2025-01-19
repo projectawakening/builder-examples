@@ -30,10 +30,10 @@ import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/Global
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
-import { GateAccess, GateAccessData } from "../src/codegen/tables/GateAccess.sol";
+import { GateAccessLists, GateAccessListsData } from "../src/codegen/tables/GateAccessLists.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../src/codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData } from "../src/codegen/tables/AccessListEntries.sol";
-
+import { AccessListManager } from "../src/codegen/tables/AccessListManager.sol";
 contract SmartGateTest is MudTest {
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartGateLib for SmartGateLib.World;
@@ -178,6 +178,7 @@ contract SmartGateTest is MudTest {
 
   function initializeTestAccessLists(uint256 smartObjectId) internal {
     vm.startPrank(gateOwner);
+    AccessListManager.set(gateOwner, true);
 
     // Blacklist
     bytes memory blacklistResult = world.call(
@@ -273,7 +274,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccess = GateAccess.getAccessListIds(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccess = GateAccessLists.getAccessListIds(sourceGateId);
 
     bool isSetIdFoundNow = false;
 
@@ -301,7 +302,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccess = GateAccess.getAccessListIds(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccess = GateAccessLists.getAccessListIds(sourceGateId);
 
     bool isIdFoundPostAdd = false;
 
@@ -325,7 +326,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccessAfterRemoval = GateAccess.getAccessListIds(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccessAfterRemoval = GateAccessLists.getAccessListIds(sourceGateId);
 
     bool isRemovedIdStillThere = false;
 

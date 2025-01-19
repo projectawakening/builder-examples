@@ -3,39 +3,43 @@ pragma solidity >=0.8.0;
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
 import { Utils } from "../src/systems/Utils.sol";
+import { Utils as SmartGateUtils } from "@eveworld/world/src/modules/smart-gate/Utils.sol";
 import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLib.sol";
+import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-import { Utils as SmartGateUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
 
-contract CanJump is Script {
+contract AddCorpToAccessList is Script {
   using SmartGateUtils for bytes14;
   using SmartGateLib for SmartGateLib.World;
 
   SmartGateLib.World smartGate;
 
-  function run(address worldAddress, uint256 characterId) external {
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(playerPrivateKey);
+  function run(address worldAddress, uint256 corpId, bytes32 accessListId) external {
+    uint256 privateKey = vm.envUint("PRIVATE_KEY");
+    vm.startBroadcast(privateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
     smartGate = SmartGateLib.World({ iface: IBaseWorld(worldAddress), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
 
-    uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
+    ResourceId systemId = Utils.smartGateSystemId();
 
-    bool canPlayerJump = smartGate.canJump(characterId, sourceGateId, destinationGateId);
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.addCorpIdToAccessList,
+        (corpId, accessListId)
+      )
+    );
 
-    console.log("\nCharacter ID: ", characterId);
-    string memory responseText = canPlayerJump ? "JUMP SUCCESS" : "JUMP FAIL";
-    console.log(responseText);
+    console.log("Player with character ID ", corpId);
+    console.log("added to access list ID");
+    console.logBytes32(accessListId);
 
     vm.stopBroadcast();
   }

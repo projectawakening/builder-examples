@@ -25,7 +25,7 @@ import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/m
 import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
 import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
 
-contract MockData is Script {
+contract MockGates is Script {
   using SmartCharacterUtils for bytes14;
   using SmartDeployableUtils for bytes14;
   using SmartGateUtils for bytes14;
@@ -41,10 +41,8 @@ contract MockData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address admin = vm.addr(deployerPrivateKey);
+    address deployerAddress = vm.addr(deployerPrivateKey);
 
-    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
-    address player = vm.addr(playerPrivateKey);
 
     // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
@@ -63,37 +61,31 @@ contract MockData is Script {
 
     smartGate = SmartGateLib.World({ iface: IBaseWorld(worldAddress), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
 
-    //Get the allowed corp
-    //uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
+    if(CharactersByAddressTable.get(deployerAddress) != 0)
+    {
+      revert("World is not empty. Quit and relaunch mud console to reset world.");
+    }
 
-    //Create a smart character
-    if (CharactersByAddressTable.get(admin) == 0) {
+    //Create the smart character who deploys the gates
+    if (CharactersByAddressTable.get(deployerAddress) == 0) {
       smartCharacter.createCharacter(
         100,     //Character ID
-        admin,  // Character Address
-        101,  // Corp ID
+        deployerAddress,
+        100200,  // Corp ID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-    
-    //Create a smart character
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        200,     //Character ID
-        player,  // Character Address
-        201,     // Corp ID
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "Deployer Character", dappURL: "noURL", description: "." }),
         ""
       );
     }
 
-    anchorFuelAndOnline(sourceGateId, player);
-    anchorFuelAndOnline(destinationGateId, player);
+    anchorFuelAndOnline(sourceGateId, deployerAddress);
+    anchorFuelAndOnline(destinationGateId, deployerAddress);
 
     vm.stopBroadcast();
+
+    console.log("Created Smart Character with ID", 100);
+    console.log("Anchored, fueled and onlined source gate with ID", sourceGateId);
+    console.log("Anchored, fueled and onlined destination gate with ID", destinationGateId);
   }
 
   function anchorFuelAndOnline(uint256 smartObjectId, address player) public {

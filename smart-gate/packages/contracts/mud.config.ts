@@ -1,18 +1,18 @@
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-  namespace: "test",
+  namespace: "malibu_test2",
     tables: {
       /**
        * Associates a gate (smartObjectId) with an array of access list identifiers.
-       * Call GateAccess.get(gateId) to retrieve the array accessListIds (bytes32[])
+       * Call GateAccessLists.get(gateId) to retrieve the array accessListIds (bytes32[])
        * 
        * Example usage:
        * 
-       *   bytes32[] memory accesListIdsForThisGate = GateAccess.get(gateId);
+       *   bytes32[] memory accesListIdsForThisGate = GateAccessLists.get(gateId);
        *
        */
-      GateAccess: {
+      GateAccessLists: {
         schema: {
           smartObjectId: "uint256",
           entryExists: "bool",
@@ -73,6 +73,18 @@ export default defineWorld({
           entryExists: "bool"
         },
         key: ["accessListId", "entryId", "entryType"],
+      },
+
+      /**
+       * Access List Managers
+       *
+       */
+      AccessListManager: {
+        schema: {
+          characterAddress: "address",
+          entryExists: "bool",
+        },
+        key: ["characterAddress"],
       },
     },
 });
