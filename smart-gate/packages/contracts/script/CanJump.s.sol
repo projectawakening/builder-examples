@@ -18,7 +18,7 @@ contract CanJump is Script {
 
   SmartGateLib.World smartGate;
 
-  function run(address worldAddress) external {
+  function run(address worldAddress, uint256 characterId) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(playerPrivateKey);
@@ -31,11 +31,11 @@ contract CanJump is Script {
     uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
     uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    console.log("-------------------\nTESTING CORRECT CORP");
-    console.log("Can Jump:", smartGate.canJump(100, sourceGateId, destinationGateId));
+    bool canPlayerJump = smartGate.canJump(characterId, sourceGateId, destinationGateId);
 
-    console.log("-------------------\nTESTING INCORRECT CORP");
-    console.log("Can Jump:", smartGate.canJump(1234, sourceGateId, destinationGateId));
+    console.log("\nCharacter ID: ", characterId);
+    string memory responseText = canPlayerJump ? "JUMP SUCCESS" : "JUMP FAIL";
+    console.log(responseText);
 
     vm.stopBroadcast();
   }

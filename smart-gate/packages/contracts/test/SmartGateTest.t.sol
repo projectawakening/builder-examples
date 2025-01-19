@@ -30,7 +30,7 @@ import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/Global
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
-import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
+import { GateAccess, GateAccessData } from "../src/codegen/tables/GateAccess.sol";
 import { AccessListDefinitions, AccessListDefinitionsData } from "../src/codegen/tables/AccessListDefinitions.sol";
 import { AccessListEntries, AccessListEntriesData } from "../src/codegen/tables/AccessListEntries.sol";
 
@@ -53,6 +53,7 @@ contract SmartGateTest is MudTest {
   uint256 destinationGateId;
 
   address gateOwner;
+  uint256 ownershipProofGateId = 6358981912015896955908446534304748195580309633851788354880944165111665942753;
 
   //Setup for the tests
   function setUp() public override {
@@ -98,12 +99,11 @@ contract SmartGateTest is MudTest {
     }
 
     createAnchorAndOnline(sourceGateId);
-    createAnchorAndOnline(destinationGateId);    
+    createAnchorAndOnline(destinationGateId);
+    createAnchorAndOnline(ownershipProofGateId);
 
     initializeTestPlayers();
-    vm.startPrank(gateOwner);
     initializeTestAccessLists(sourceGateId);
-    vm.stopPrank();
   }
 
   function createAnchorAndOnline(uint256 anchoredSmartGateId) private {
@@ -177,10 +177,32 @@ contract SmartGateTest is MudTest {
   }
 
   function initializeTestAccessLists(uint256 smartObjectId) internal {
-    bytes32 testBlacklistId = createAccessList(vm.envString("TEST_BLACKLIST_NAME"), false);
-    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), testBlacklistId);
-    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), testBlacklistId);
-   
+    vm.startPrank(gateOwner);
+
+    // Blacklist
+    bytes memory blacklistResult = world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.createAccessList,
+        (vm.envString("TEST_BLACKLIST_NAME"), false)
+      )
+    );
+    bytes32 testBlacklistId = abi.decode(blacklistResult, (bytes32));
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.addCharIdToAccessList,
+        (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_ONLY"), testBlacklistId)
+      )
+    );
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.addCharIdToAccessList,
+        (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), testBlacklistId)
+      )
+    );
     world.call(
       systemId,
       abi.encodeCall(
@@ -188,10 +210,33 @@ contract SmartGateTest is MudTest {
         (smartObjectId, testBlacklistId)
       )
     );
-        
-    bytes32 testWhitelistId = createAccessList(vm.envString("TEST_WHITELIST_NAME"), true);
-    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"), testWhitelistId);
-    addCharIdToAccessList(vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), testWhitelistId);
+    
+    // Whitelist
+    bytes memory whitelistResult = world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.createAccessList,
+        (vm.envString("TEST_WHITELIST_NAME"), true)
+      )
+    );
+    bytes32 testWhitelistId = abi.decode(whitelistResult, (bytes32));
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.addCharIdToAccessList,
+        (vm.envUint("TEST_PLAYER_CHAR_ID_WHITELIST_ONLY"), testWhitelistId)
+      )
+    );
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartGateSystem.addCharIdToAccessList,
+        (vm.envUint("TEST_PLAYER_CHAR_ID_BLACKLIST_AND_WHITELIST"), testWhitelistId)
+      )
+    );
+
     world.call(
       systemId,
       abi.encodeCall(
@@ -199,68 +244,8 @@ contract SmartGateTest is MudTest {
         (smartObjectId, testWhitelistId)
       )
     );
-  }
- 
-  /**
-   * @notice Creates a new AccessList entry in the MUD AccessListDefinitions table.
-   * @param accessListName A descriptive name (e.g., "MainWhitelist").
-   * @param isWhitelist    true for Whitelist, false for Blacklist.
-   * @return listId        The generated accessListId (bytes32).
-   *
-   * Example:
-   *   bytes32 newAccessListId = createAccessList("NewWhitelist", true);
-   */
-  function createAccessList(string memory accessListName, bool isWhitelist) public returns (bytes32 listId) {
-    // 1) Generate a hash ID from the name
-    listId = keccak256(bytes(accessListName));
 
-    // 2) Check if this name already exists (id is always hashed name)
-    AccessListDefinitionsData memory existing = AccessListDefinitions.get(listId);
-    if (keccak256(bytes(existing.accessListName)) == listId) {
-        revert("AccessList with this name already exists");
-    }
-
-    // 3) Create the data structure
-    AccessListDefinitionsData memory newList = AccessListDefinitionsData({
-      isWhitelist: isWhitelist,
-      createdBy: msg.sender,
-      accessListName: accessListName
-    });
-
-    // 4) Store the data structure in the MUD table
-    AccessListDefinitions.set(listId, newList);
-
-    return listId;
-  }
-
-  /**
-   * @notice Adds a char (charId) to a specific access list (accessListId).
-   * Reverts if the list does not exist or if the char is already on the list.
-   *
-   * @param charId        The unique ID of the char to add
-   * @param accessListId  The bytes32 ID of the access list
-   */
-  function addCharIdToAccessList(uint256 charId, bytes32 accessListId) public {
-    // 1) Check if the specified access list exists
-    AccessListDefinitionsData memory listDef = AccessListDefinitions.get(accessListId);
-    if (listDef.createdBy == address(0)) {
-      revert("Access List not found");
-    }
-
-    // 2) Verify that this char is not already on the list
-    AccessListEntriesData memory existing = AccessListEntries.get(accessListId, charId, 0);
-    if (existing.addedBy != address(0)) {
-      revert("Char already in list");
-    }
-
-    // 3) Create a new entry for the char, including the address of the user who added it
-    AccessListEntriesData memory newEntry = AccessListEntriesData({
-      addedBy:      msg.sender, // wallet address of the entry creator
-      timestamp:    0 // not used yet
-    });
-
-    // 4) Store the new entry in the MUD table
-    AccessListEntries.set(accessListId, charId, 0, newEntry);
+    vm.stopPrank();
   }
 
   /////////////////////////////////////////////////////
@@ -288,7 +273,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccess = GateAccess.get(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccess = GateAccess.getAccessListIds(sourceGateId);
 
     bool isSetIdFoundNow = false;
 
@@ -316,7 +301,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccess = GateAccess.get(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccess = GateAccess.getAccessListIds(sourceGateId);
 
     bool isIdFoundPostAdd = false;
 
@@ -340,7 +325,7 @@ contract SmartGateTest is MudTest {
     );
     vm.stopPrank();
 
-    bytes32[] memory accessListIdsInGateAccessAfterRemoval = GateAccess.get(sourceGateId);
+    bytes32[] memory accessListIdsInGateAccessAfterRemoval = GateAccess.getAccessListIds(sourceGateId);
 
     bool isRemovedIdStillThere = false;
 

@@ -15,6 +15,7 @@ export default defineWorld({
       GateAccess: {
         schema: {
           smartObjectId: "uint256",
+          entryExists: "bool",
           accessListIds: "bytes32[]",
         },
         key: ["smartObjectId"],
@@ -39,7 +40,9 @@ export default defineWorld({
           accessListId: "bytes32",
           isWhitelist: "bool",
           createdBy: "address",
+          entryExists: "bool",
           accessListName: "string",
+          
         },
         key: ["accessListId"],
       },
@@ -67,6 +70,7 @@ export default defineWorld({
           entryType: "uint8", // 0 = Char, 1 = Corp
           addedBy: "address",
           timestamp: "uint256",
+          entryExists: "bool"
         },
         key: ["accessListId", "entryId", "entryType"],
       },

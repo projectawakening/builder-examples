@@ -18,7 +18,7 @@
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-smart-gates": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
+    "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address,uint256)\" $WORLD_ADDRESS",
     "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
     "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
