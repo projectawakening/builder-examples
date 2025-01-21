@@ -64,9 +64,9 @@ const AllowedCorp = React.memo(function AllowedCorp() {
     return (
       <>        
         <h1>Admin Settings</h1>
-        <center>   
+        <div className="center">    
           <h1>Admin Access not permited ❌<br />(You are not the owner)</h1>
-        </center>
+        </div>
       </>
     )
   }

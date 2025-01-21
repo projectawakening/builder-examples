@@ -6,3 +6,6 @@ smart-turret/mprocs.log
 smart-gate/mprocs.log
 smart-gate/packages/contracts/.env
 smart-gate/packages/contracts/.env
+smart-gate/packages/contracts/.env
+smart-turret/packages/contracts/.env
+smart-turret/packages/contracts/.env

@@ -10,27 +10,26 @@ RESET="\033[0m"
 
 function validate_input(){
     local INPUT=""
-    read -p "Please insert your $1: " INPUT
+    read -p $'\e[0mPlease type your \e[1;33m'"$1"$': \e[0m' INPUT
+
     local MIN_LENGTH="$2"
     local MAX_LENGTH="$3"
     while true 
     do
         if [[ -z "$INPUT" ]]; then
-            read -p "You did not input anything. Please insert your $1: " INPUT
+            read -p $'\e[38;5;202m[ERROR]\e[0m You did not enter anything. Please type your \e[1;33m'"$1"$': \e[0m' INPUT
         else
             if [[ ${#INPUT} -ge $MIN_LENGTH ]]; then
                 if [[ ${#INPUT} -le $MAX_LENGTH ]]; then
                     break;
                 else
-                    read -p "Inputted namespace was too long. Please insert your $1: " INPUT
+                    read -p $'\e[38;5;202m[ERROR]\e[0m \e[1;33m'"$1"$'\e[0m was too long. Please type your \e[1;33m'"$1"$': \e[0m' INPUT
                 fi
             else
-                read -p "Inputted namespace was not long enough. Please insert your $1: " INPUT
+                read -p $'\e[38;5;202m[ERROR]\e[0m \e[1;33m'"$1"$'\e[0m was too short. Please type your \e[1;33m'"$1"$': \e[0m' INPUT
             fi
         fi
     done
-
-    INPUT=$(echo "$INPUT" | xargs)
 
     echo $INPUT
 }

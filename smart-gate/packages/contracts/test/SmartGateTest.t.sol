@@ -146,7 +146,7 @@ contract SmartGateTest is MudTest {
 
   //Test can jump to the destination gate
   function testSourceCanJumpAllowed() public {    
-    //Test acccess
+    //Test access
     bool canJumpResult = abi.decode(
       world.call(
         systemId,

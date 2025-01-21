@@ -23,8 +23,8 @@
     "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
     "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
-    "set-config": "bash ../../shell-scripts/SetConfig.sh",
-    "set-key": "bash ../../shell-scripts/SetPrivateKey.sh"
+    "set-key": "bash ../../shell-scripts/SetPrivateKey.sh",
+    "set-config": "bash ../../shell-scripts/SetConfig.sh"
   },
   "dependencies": {
     "@latticexyz/cli": "2.2.14",

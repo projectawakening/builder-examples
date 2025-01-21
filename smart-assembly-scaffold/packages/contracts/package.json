@@ -21,7 +21,8 @@
     "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
     "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
-    "set-config": "bash ../../shell-scripts/Config.sh"
+    "set-config": "bash ../../shell-scripts/Config.sh",
+    "set-key": "bash ../../shell-scripts/SetPrivateKey.sh"
   },
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",
