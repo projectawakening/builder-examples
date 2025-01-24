@@ -50,25 +50,73 @@ contract SmartTurretSystem is System {
     Turret memory turret,
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
+    //Get the allowed corp ID singleton
     uint256 allowedCorp = TurretAllowlist.get();
+    //Get the corp ID of the player that is in proximity of the Smart Turret
     uint256 characterCorp = CharactersTable.getCorpId(turretTarget.characterId);
     
+    //Find if the player is already in the queue. 
+    //This might happen if the player joins the corp while in proximity.
+    bool foundInPriorityQueue = false;
+    for(uint i = 0; i < priorityQueue.length; i++){
+      if(priorityQueue[i].target.characterId == turretTarget.characterId){
+        foundInPriorityQueue = true;
+      }
+    }
+    
+    //Check if the player shouldn't be targeted
     if(characterCorp == allowedCorp){
-      return priorityQueue;
+      //If found, create a new array without the character
+      if(foundInPriorityQueue){        
+        //Create the smaller temporary array
+        TargetPriority[] memory tempArray = new TargetPriority[](priorityQueue.length - 1);
+
+        //Loop over the queue and only set if not the character
+        for(uint i = 0; i < priorityQueue.length; i++){
+          if(priorityQueue[i].target.characterId != turretTarget.characterId){
+            tempArray[i] = priorityQueue[i];
+          }
+        }
+
+        //Return the new array
+        return tempArray;
+      }
+        
+      //Return the unchanged array
+      return priorityQueue;      
     }
 
     //Prioritize ships with the lowest health. hPRatio is [0-100]
     uint256 calculatedWeight =  100 - turretTarget.hpRatio;
     TargetPriority memory newPriority = TargetPriority({ target: turretTarget, weight: calculatedWeight }); 
 
-    TargetPriority[] memory tempArray = new TargetPriority[](priorityQueue.length + 1);
+    //If already in the queue, update the weight
+    if(foundInPriorityQueue){
+      //Loop through to find the index of the target for the character
+      for(uint i = 0; i < priorityQueue.length; i++){
+        if(priorityQueue[i].target.characterId == turretTarget.characterId){
+          priorityQueue[i] = newPriority;
+        }
+      }
 
-    for(uint i = 0; i < priorityQueue.length; i++){
-      tempArray[i] = priorityQueue[i];
-    }
+      //Return the changed in-place queue
+      return priorityQueue;
+    //If not already in the queue, add to the queue
+    } else{
+      //Create the larger temporary array
+      TargetPriority[] memory tempArray = new TargetPriority[](priorityQueue.length + 1);
 
-    tempArray[priorityQueue.length] = newPriority;
-    return tempArray;
+      //Clone the priority queue to the temp array
+      for(uint i = 0; i < priorityQueue.length; i++){
+        tempArray[i] = priorityQueue[i];
+      }
+
+      //Set the new target to the end of the temp array
+      tempArray[priorityQueue.length] = newPriority;
+
+      //Return array to the Smart Turret
+      return tempArray;
+    }    
   }
 
   /**
@@ -81,6 +129,7 @@ contract SmartTurretSystem is System {
     //If the sender has access to the namespace / is the owner.
     bool hasAccess = AccessControl.hasAccess(id, _msgSender());
 
+    //Ensure the sender has access
     require(hasAccess, "You do not have access to this function");
     TurretAllowlist.set(corpID);
   }

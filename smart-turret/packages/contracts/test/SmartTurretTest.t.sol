@@ -32,6 +32,8 @@ import { Utils } from "../src/systems/Utils.sol";
 import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
 
+import { TurretAllowlist } from "../src/codegen/tables/TurretAllowlist.sol";
+
 contract SmartTurretTest is MudTest {
   using SmartDeployableLib for SmartDeployableLib.World;
   using SmartTurretLib for SmartTurretLib.World;
@@ -48,7 +50,8 @@ contract SmartTurretTest is MudTest {
   IWorld world;
 
   uint256 smartTurretId;
-  uint256 testCharacterId = 11111;
+  uint256 ownerCharacterId = 11111;
+  uint256 allowedCorpId;
 
   //Setup for the tests
   function setUp() public override {
@@ -61,7 +64,17 @@ contract SmartTurretTest is MudTest {
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
-    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
+    allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
+
+    vm.startPrank(admin);
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartTurretSystem.setAllowedCorp,
+        (allowedCorpId)
+      )
+    );
+    vm.stopPrank();
 
     smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
@@ -84,9 +97,9 @@ contract SmartTurretTest is MudTest {
 
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(
-        123,
-        admin,
-        200003,
+        ownerCharacterId,    //characterID
+        admin,               //characterAddress
+        allowedCorpId,       //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
         ""
@@ -94,9 +107,9 @@ contract SmartTurretTest is MudTest {
     }
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        456,
-        player,
-        200004,
+        456,    //characterID
+        player, //characterAddress
+        200004, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
         ""
@@ -117,8 +130,46 @@ contract SmartTurretTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
+  //Test setAllowedCorp
+  function testSetAllowedCorp() public {    
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(deployerPrivateKey);
+
+    vm.startPrank(admin);
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartTurretSystem.setAllowedCorp,
+        (200)
+      )
+    );
+
+    uint256 fetchedAllowedCorpID = TurretAllowlist.get();
+
+    assertEq(fetchedAllowedCorpID, 200, "Allowed Corp ID should be set to 200");
+  }
+
+  //Test setAllowedCorp to make sure that people without admin access to the namespace cannot set the allowed corporation ID
+  function testSetAllowedCorpNotAdmin() public {    
+    uint256 originalAllowedCorpID = TurretAllowlist.get();
+
+    vm.expectRevert();
+    world.call(
+      systemId,
+      abi.encodeCall(
+        SmartTurretSystem.setAllowedCorp,
+        (200)
+      )
+    );
+
+    uint256 fetchedAllowedCorpID = TurretAllowlist.get();
+
+    assertEq(fetchedAllowedCorpID, originalAllowedCorpID, "Allowed Corp ID should not have changed");
+  }
+
   //Test inProximity
-  function testInProximity() public {
+  function testInProximityInCorp() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
@@ -126,26 +177,26 @@ contract SmartTurretTest is MudTest {
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
-      characterId: testCharacterId,
+      characterId: ownerCharacterId,
       hpRatio: 100,
       shieldRatio: 100,
       armorRatio: 100
     });
-    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
 
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
     //Run inProximity
     TargetPriority[] memory returnTargetQueue = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
           SmartTurretSystem.inProximity,
-          (smartTurretId, testCharacterId, priorityQueue, turret, turretTarget)
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
         )
       ),
       (TargetPriority[])
     );
 
-    assertEq(returnTargetQueue.length, 1, "Target length should equal 1");
+    assertEq(returnTargetQueue.length, 0, "There should be no targets");
   }
 
   //Test aggression
@@ -185,7 +236,7 @@ contract SmartTurretTest is MudTest {
         systemId,
         abi.encodeCall(
           SmartTurretSystem.aggression,
-          (smartTurretId, testCharacterId, priorityQueue, turret, aggressor, victim)
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, aggressor, victim)
         )
       ),
       (TargetPriority[])

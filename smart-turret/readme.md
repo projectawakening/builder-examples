@@ -54,7 +54,7 @@ This will create the on-chain turret, fuel it, bring it online, and create a tes
 To set the Smart Turret, turret ID use:
 
 ```bash
-pnpm configure-smart-turret
+pnpm configure
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
@@ -77,6 +77,12 @@ cd smart-turret/packages/contracts
 Then install the Solidity dependencies for the contracts:
 ```bash
 pnpm install
+```
+
+Now, create a .env file from the .envsample file with:
+
+```bash
+cp .envsample .env
 ```
 
 Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_URL** value to point to Stillness using: 
@@ -125,7 +131,7 @@ SMART_TURRET_ID=
 To configure which Smart Turret the contract uses, run:
 
 ```bash
-pnpm configure-smart-turret
+pnpm configure
 ```
 
 You can alter the smart turret ID in the .env file as needed.
