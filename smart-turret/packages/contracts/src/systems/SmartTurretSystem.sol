@@ -131,6 +131,8 @@ contract SmartTurretSystem is System {
 
     //Ensure the sender has access
     require(hasAccess, "You do not have access to this function");
+
+    //Set the allowed corp ID in MUD
     TurretAllowlist.set(corpID);
   }
 
@@ -151,8 +153,6 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory aggressor,
     SmartTurretTarget memory victim
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //
-    
     return priorityQueue;
   }
 

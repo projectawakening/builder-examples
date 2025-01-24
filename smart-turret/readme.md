@@ -51,13 +51,13 @@ pnpm mock-data
 This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
-To set the Smart Turret, turret ID use:
+To set the smart turret ID, and allowed corporation ID use:
 
 ```bash
 pnpm configure
 ```
 
-You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
 To test the Smart Turret In Proximity functionality you can use the follow command:
@@ -125,6 +125,16 @@ For Stillness, the smart turret id is available once you have deployed an Smart 
 ```bash
 #SMART TURRET ID (Only need to change if you are not using a Local World)
 SMART_TURRET_ID=
+```
+
+You then need to set the allowed corp ID to your corporation ID. You can find this through:
+
+1. Search for your smart character by searching your name in https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters
+2. Use https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/CHARACTER_ADDRESS and replace **CHARACTER_ADDRESS** with the character address from the previous step
+3. Retrieve the corpId from the retrieved JSON
+
+```bash
+ALLOWED_CORP=
 ```
 
 ### Step 2: Configure Smart Turret
