@@ -21,6 +21,11 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
 
+import { Utils } from "./Utils.sol";
+import { AccessControl } from "@latticexyz/world/src/AccessControl.sol";
+
+import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
+
 /**
  * @dev This contract is an example for implementing logic to a smart turret
  */
@@ -30,12 +35,13 @@ contract SmartTurretSystem is System {
   using SmartCharacterUtils for bytes14;
 
   /**
-   * @dev a function to implement logic for smart turret based on proximity
-   * @param smartTurretId The smart turret id
-   * @param characterId is the owner of the smart turret
+   * @dev a function to implement logic for Smart Turret based on proximity
+   * @param smartTurretId The Smart Turret id
+   * @param characterId is the owner of the Smart Turret
    * @param priorityQueue is the queue of existing targets ordered by priority, index 0 being the lowest priority
    * @param turret is the turret data
-   * @param turretTarget is the target data
+   * @param turretTarget is the player in the zone
+   * This runs on a tick based cycle when the player is in proximity of the Smart Turret
    */
   function inProximity(
     uint256 smartTurretId,
@@ -44,11 +50,39 @@ contract SmartTurretSystem is System {
     Turret memory turret,
     SmartTurretTarget memory turretTarget
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //TODO: Implement the logic
+    uint256 allowedCorp = TurretAllowlist.get();
+    uint256 characterCorp = CharactersTable.getCorpId(turretTarget.characterId);
     
-    if(true){
+    if(characterCorp == allowedCorp){
       return priorityQueue;
     }
+
+    //Prioritize ships with the lowest health. hPRatio is [0-100]
+    uint256 calculatedWeight =  100 - turretTarget.hpRatio;
+    TargetPriority memory newPriority = TargetPriority({ target: turretTarget, weight: calculatedWeight }); 
+
+    TargetPriority[] memory tempArray = new TargetPriority[](priorityQueue.length + 1);
+
+    for(uint i = 0; i < priorityQueue.length; i++){
+      tempArray[i] = priorityQueue[i];
+    }
+
+    tempArray[priorityQueue.length] = newPriority;
+    return tempArray;
+  }
+
+  /**
+   * @dev a function to set the allowed corp which does not get targeted by the Smart Turret
+   * @param corpID is the allowed corporation
+   */
+  function setAllowedCorp(uint256 corpID) public {
+    ResourceId id = Utils.smartTurretSystemId();
+
+    //If the sender has access to the namespace / is the owner.
+    bool hasAccess = AccessControl.hasAccess(id, _msgSender());
+
+    require(hasAccess, "You do not have access to this function");
+    TurretAllowlist.set(corpID);
   }
 
   /**
@@ -68,7 +102,7 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory aggressor,
     SmartTurretTarget memory victim
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    //TODO: Implement the logic
+    //
     
     return priorityQueue;
   }

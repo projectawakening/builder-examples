@@ -61,6 +61,8 @@ contract SmartTurretTest is MudTest {
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
+    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
+
     smartDeployable = SmartDeployableLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
