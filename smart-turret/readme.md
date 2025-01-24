@@ -11,6 +11,14 @@ You can use [Deployment and Testing in Local](#Local) to test the example on you
 
 For additional information on the Smart Turret you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
 
+### Example Behavior Explanation
+
+This example alters the Smart Turret to have two specific behaviors:
+
+1. It does not shoot at anyone in the specified corporation.
+   
+2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. 
+
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
