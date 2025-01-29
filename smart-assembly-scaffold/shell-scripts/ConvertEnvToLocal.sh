@@ -10,8 +10,6 @@ RPC_URL="http://127.0.0.1:8545"
 
 SERVER="Local"
 
-CHAIN_ID="17069"
-
 
 #COLORS
 GREEN="\033[32m"

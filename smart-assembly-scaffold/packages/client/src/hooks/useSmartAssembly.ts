@@ -102,7 +102,15 @@ export function useSmartAssembly() {
    */
   useEffect(() => {
     const getOwner = async () => {
-      const worldAddress = await getWorldDeploy(import.meta.env.VITE_CHAIN_ID);
+      var chainID = import.meta.env.VITE_CHAIN_ID
+
+      //If this DApp is on your local anvil chain, set the owner as a default
+      if(chainID == 31337){
+        setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+        return;
+      } 
+
+      const worldAddress = await getWorldDeploy(chainID);       
 
       // sql query from the indexer.
       const response = await fetch("https://indexer.mud.garnetchain.com/q", {
@@ -114,20 +122,18 @@ export function useSmartAssembly() {
           {
             address: worldAddress.address,
             query: `SELECT tokenId, owner 
-						FROM erc721deploybl__Owners 
-						WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
+            FROM erc721deploybl__Owners 
+            WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
 
       const ownerApiResult = mapApiResult(response.result);
       setOwner(ownerApiResult.owner);
+      
     };
 
     getOwner();
-    // If on local and unable to query the sqlite indexer, you can manually set the owner
-    // instead of calling the above function
-    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
   }, [smartObjectId]);
 
   const smartCharacterByAddress = useRecord({

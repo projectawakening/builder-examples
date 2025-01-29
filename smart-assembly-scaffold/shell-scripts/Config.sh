@@ -93,4 +93,4 @@ if [ ! -f  $CLIENT_ENV_FILE ]; then
     printf "\n${GREEN}[COMPLETED]${RESET} Created $CLIENT_ENV_FILE from sample .env file as it did not exist \n\n"
 fi
 
-set_content "VITE_SMARTASSEMBLY_ID" $CHAIN_ID $CLIENT_ENV_FILE "Garnet Chain ID"
+set_content "VITE_SMARTASSEMBLY_ID" $SSU_ID $CLIENT_ENV_FILE "Smart Assembly ID"
