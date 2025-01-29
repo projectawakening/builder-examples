@@ -74,7 +74,7 @@ contract MockSsuData is Script {
         owner,
         8888,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -82,8 +82,8 @@ contract MockSsuData is Script {
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     createAnchorAndOnline(smartStorageUnitId, owner);
 
-    uint256 inventoryItemIn = vm.envUint("ITEM_IN_ID");
-    uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
+    uint256 inventoryItemIn = 100;
+    uint256 inventoryItemOut = 200;
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](1);

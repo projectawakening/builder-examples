@@ -102,7 +102,7 @@ contract ToggleTest is MudTest {
         player,
         200004,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -133,37 +133,6 @@ contract ToggleTest is MudTest {
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
   }  
 
-  /**
-   * @dev Check inventory values are correct.
-   * @param inventoryItemOutCount The number of items that are traded to the user in the inventory.
-   * @param inventoryItemInCount The number of items that are recieved from the user in the inventory.
-   * @param ephemeralItemOutCount The number of items that are traded to the SSU in the ephemeral inventory.
-   * @param ephemeralItemInCount The number of items that are recieved from the SSU in the ephemeral inventory.
-   */
-  function checkInventory(uint256 inventoryItemOutCount, uint256 inventoryItemInCount, uint256 ephemeralItemInCount, uint256 ephemeralItemOutCount) public {
-    //Inventory
-    InventoryItemTableData memory invItemOut = InventoryItemTable.get(smartStorageUnitId, inventoryItemOut);    
-    assertEq(invItemOut.quantity, inventoryItemOutCount, "Incorrect amount of items left in the inventory [Item Out]");
-    
-    InventoryItemTableData memory invItemIn = InventoryItemTable.get(smartStorageUnitId, inventoryItemIn);    
-    assertEq(invItemIn.quantity, inventoryItemInCount, "Incorrect amount of items into in the inventory [Item In]");
-
-    //Ephemeral
-    EphemeralInvItemTableData memory ephInvItemIn = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemIn, player);
-    assertEq(ephInvItemIn.quantity, ephemeralItemInCount, "Incorrect amount of items left in the ephemeral inventory [Item In]");
-
-    EphemeralInvItemTableData memory ephInvItemOut = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemOut, player);
-    assertEq(ephInvItemOut.quantity, ephemeralItemOutCount, "Incorrect amount of items put into the ephemeral inventory [Item Out]");
-  }
-
-  function displayInventory() public view {    
-    InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, inventoryItemOut);
-    console.log("[INVENTORY] Owner's Inventory [Item Out]: ", invItem.quantity);
-
-    EphemeralInvItemTableData memory ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, inventoryItemIn, player);
-    console.log("[EPHEMERAL] Other Player's Inventory [Item In]: ", ephInvItem.quantity);
-  }
-
   function testWorldExists() public {
     uint256 codeSize;
     address addr = worldAddress;
@@ -184,6 +153,19 @@ contract ToggleTest is MudTest {
 
     //Check has been set
     assertTrue(ToggleTable.getIsSet(smartStorageUnitId));
+  }
+
+  function testSetFalse() public {
+    //Set the ratio
+    world.call(
+      systemId,
+      abi.encodeCall(
+        ToggleSystem.setFalse, smartStorageUnitId
+      )
+    );
+
+    //Check has been set
+    assertFalse(ToggleTable.getIsSet(smartStorageUnitId));
   }
 
   function createAnchorAndOnline(uint256 smartStorageUnitIdToCreate, address ssuOwner) private {
