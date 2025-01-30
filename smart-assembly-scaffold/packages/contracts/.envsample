@@ -20,10 +20,10 @@ RPC_URL=http://127.0.0.1:8545 #Forked Anvil Local RPC URL
 CHAIN_ID=31337 #Local Chain ID
 WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
 
-#Devnet RPC
-# RPC_URL=https://garnet-rpc.dev.evefrontier.tech
+#Stillness RPC
+# RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
 # CHAIN_ID=17069
-# WORLD_ADDRESS=0x972bfea201646a87dc59f042ad91254628974f0d
+# WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
 
 #SMART STORAGE UNIT ID
 #Copy this info from the in-game Smart Storage Unit
