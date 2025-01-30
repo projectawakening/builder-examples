@@ -83,7 +83,6 @@ if [ ! -f  $ENV_FILE ]; then
 fi
 
 set_content "PRIVATE_KEY" $PRIVATE_KEY $ENV_FILE "Private Key"
-set_content "TEST_PRIVATE_KEY" $PRIVATE_KEY $ENV_FILE "Test Player Private Key"
 set_content "SSU_ID" $SSU_ID $ENV_FILE "Smart Storage Unit ID"
 
 printf "\n${YELLOW}[CLIENT]${RESET}\n"

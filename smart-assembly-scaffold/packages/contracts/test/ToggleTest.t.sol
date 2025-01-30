@@ -48,8 +48,8 @@ contract ToggleTest is MudTest {
   address player;
 
   uint256 smartStorageUnitId = uint256(17614304337475056394242299294383532840873792487945557467064313427436901763821);
-  uint256 inventoryItemIn;
-  uint256 inventoryItemOut;
+  uint256 inventoryItemIn = 100;
+  uint256 inventoryItemOut = 200;
   uint64 invItemQuantity = 100;
   uint64 ephItemQuantity = 100;
   uint64 inRatio = 15;
@@ -58,9 +58,6 @@ contract ToggleTest is MudTest {
   function setUp() public override {
     super.setUp();
     world = IWorld(worldAddress);
-
-    inventoryItemIn = vm.envUint("ITEM_IN_ID");
-    inventoryItemOut = vm.envUint("ITEM_OUT_ID");
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     owner = vm.addr(deployerPrivateKey);

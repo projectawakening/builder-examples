@@ -63,6 +63,5 @@ function set_content(){
 printf "\n"
 
 set_content "PRIVATE_KEY" $PRIVATE_KEY $ENV_FILE "Private Key"
-set_content "TEST_PLAYER_PRIVATE_KEY" $PRIVATE_KEY $ENV_FILE "Test Player Private Key"
 
 printf "\n"
