@@ -51,6 +51,7 @@ contract SmartTurretTest is MudTest {
 
   uint256 smartTurretId;
   uint256 ownerCharacterId = 11111;
+  uint256 playerCharacterId = 200;
   uint256 allowedCorpId;
 
   //Setup for the tests
@@ -107,7 +108,7 @@ contract SmartTurretTest is MudTest {
     }
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        456,    //characterID
+        playerCharacterId,    //characterID
         player, //characterAddress
         200004, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
@@ -168,7 +169,7 @@ contract SmartTurretTest is MudTest {
     assertEq(fetchedAllowedCorpID, originalAllowedCorpID, "Allowed Corp ID should not have changed");
   }
 
-  //Test inProximity
+  //Test inProximity with a player that should not be targeted
   function testInProximityInCorp() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
@@ -197,6 +198,120 @@ contract SmartTurretTest is MudTest {
     );
 
     assertEq(returnTargetQueue.length, 0, "There should be no targets");
+  }
+
+  //Test inProximity with a player that should not be targeted and is already in the queue
+  function testInProximityNotInCorp() public {
+    //Execute inProximity view function and see what is returns
+    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
+    
+    SmartTurretTarget memory turretTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: playerCharacterId,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    //Run inProximity
+    TargetPriority[] memory returnTargetQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.inProximity,
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(returnTargetQueue.length, 1, "There should be 1 target");
+  }
+
+  //Test inProximity with a player that should not be targeted and is already in the queue
+  function testInProximityNotInCorpNew() public {
+    //Execute inProximity view function and see what is returns
+    TargetPriority[] memory priorityQueue = new TargetPriority[](0);
+    Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
+    
+    SmartTurretTarget memory turretTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: playerCharacterId,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+
+    //Run inProximity
+    TargetPriority[] memory returnTargetQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.inProximity,
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(returnTargetQueue.length, 1, "There should be 1 target");
+  }
+
+  //Test inProximity with a player that should not be targeted and is already in the queue
+  function testInProximityNotInCorpWeight() public {
+    //Execute inProximity view function and see what is returns
+    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
+    
+    SmartTurretTarget memory turretTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: playerCharacterId,
+      hpRatio: 50,
+      shieldRatio: 50,
+      armorRatio: 50
+    });
+
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    //Run inProximity
+    TargetPriority[] memory returnTargetQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.inProximity,
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(returnTargetQueue.length, 1, "There should be 1 target");
+
+    assertEq(returnTargetQueue[0].weight, 150, "The target weight should be set to 150");
+  
+    //Second Test Max Health Values
+    turretTarget.hpRatio = 100;
+    turretTarget.shieldRatio = 100;
+    turretTarget.armorRatio = 100;
+    
+    TargetPriority[] memory returnTargetQueue2 = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.inProximity,
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(returnTargetQueue2.length, 1, "There should be 1 target");
+
+    assertEq(returnTargetQueue2[0].weight, 0, "The target weight should be set to 0");
   }
 
   //Test aggression

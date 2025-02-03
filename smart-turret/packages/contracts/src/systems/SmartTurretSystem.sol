@@ -61,6 +61,7 @@ contract SmartTurretSystem is System {
     for(uint i = 0; i < priorityQueue.length; i++){
       if(priorityQueue[i].target.characterId == turretTarget.characterId){
         foundInPriorityQueue = true;
+        break;
       }
     }
     
@@ -86,8 +87,12 @@ contract SmartTurretSystem is System {
       return priorityQueue;      
     }
 
-    //Prioritize ships with the lowest health. hPRatio is [0-100]
-    uint256 calculatedWeight =  100 - turretTarget.hpRatio;
+    //Prioritize ships with the lowest total health percentage. hPRatio, shieldRatio and armorRatio are between [0-100]
+    uint256 calculatedWeight =  300 - (turretTarget.hpRatio + 
+      turretTarget.shieldRatio + 
+      turretTarget.armorRatio
+    );
+
     TargetPriority memory newPriority = TargetPriority({ target: turretTarget, weight: calculatedWeight }); 
 
     //If already in the queue, update the weight

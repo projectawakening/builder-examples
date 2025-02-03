@@ -17,7 +17,7 @@ This example alters the Smart Turret to have two specific behaviors:
 
 1. It does not shoot at anyone in the specified corporation.
    
-2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. 
+2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.  
 
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world
