@@ -6,10 +6,11 @@ import { useWorldContract } from "../mud/useWorldContract";
 import { Severity } from "@eveworld/types";
 import setToggle from "./systemCalls/handleToggle";
 import { EveButton } from "@eveworld/ui-components";
-import { useNotification, useSmartObject } from "@eveworld/contexts";
+import { useNotification } from "@eveworld/contexts";
+import { useSmartAssembly } from "../hooks/useSmartAssembly";
 
 const Toggle = React.memo(function Toggle() {
-  const { smartAssembly } = useSmartObject();
+  const { smartAssembly } = useSmartAssembly();
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
 

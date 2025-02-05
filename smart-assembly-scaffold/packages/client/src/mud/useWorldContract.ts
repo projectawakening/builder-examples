@@ -56,8 +56,6 @@ export function useWorldContract():
     refetchOnWindowFocus: false,
   });
 
-  // console.log(client, sessionClient)
-
   return worldContract && waitForTransaction
     ? {
         worldContract,

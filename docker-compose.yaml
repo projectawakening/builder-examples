@@ -17,7 +17,7 @@ services:
 
   world-deployer:
     container_name: world-deployer
-    image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.17
+    image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.21
     platform: linux/amd64
     depends_on:
       foundry:

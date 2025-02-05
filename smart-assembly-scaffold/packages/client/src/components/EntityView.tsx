@@ -1,7 +1,3 @@
-import { useEffect } from "react";
-
-import { useSmartObject, useNotification } from "@eveworld/contexts";
-import { Severity } from "@eveworld/types";
 import {
   ErrorNotice,
   ErrorNoticeTypes,
@@ -11,21 +7,15 @@ import {
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
+import { useSmartCharacter } from "../hooks/useSmartCharacter";
+import { useSmartAssembly } from "../hooks/useSmartAssembly";
 
 export default function EntityView() {
-  const { smartAssembly, smartCharacter, loading } = useSmartObject();
-  const { notify, handleClose } = useNotification();
   const { chain } = useAccount();
+  const { smartCharacter } = useSmartCharacter();
+  const { smartAssembly } = useSmartAssembly();
 
-  useEffect(() => {
-    if (loading) {
-      notify({ type: Severity.Info, message: "Loading..." });
-    } else {
-      handleClose();
-    }
-  }, [loading]);
-
-  if ((!loading && !smartAssembly) || smartAssembly == null) {
+  if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
   }
 

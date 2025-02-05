@@ -1,0 +1,34 @@
+{
+	"namespace": {
+		"FRONTIER_WORLD_DEPLOYMENT": "eveworld",
+		"SMART_OBJECT_DEPLOYMENT": "eveworld",
+		"ACCESS_DEPLOYMENT": "eveworld",
+		"ENTITY_RECORD_DEPLOYMENT": "eveworld",
+		"STATIC_DATA_DEPLOYMENT": "eveworld",
+		"LOCATION_DEPLOYMENT_NAMESPACE": "eveworld",
+		"SMART_CHARACTER_DEPLOYMENT": "eveworld",
+		"EVE_ERC721_PUPPET_DEPLOYMENT": "eveworld",
+		"SMART_DEPLOYABLE_DEPLOYMENT": "eveworld",
+		"SMART_TURRET_DEPLOYMENT": "eveworld",
+		"SMART_GATE_DEPLOYMENT": "eveworld",
+		"KILL_MAIL_DEPLOYMENT": "eveworld"
+	},
+	"systemName": {
+		"ENTITY_SYSTEM": "EntitySystem",
+		"MODULE_SYSTEM": "ModuleSystem",
+		"HOOK_SYSTEM": "HookSystem",
+		"STATIC_DATA": "StaticDataSystem",
+		"ENTITY_RECORD": "EntityRecordSyst",
+		"LOCATION": "LocationSystem",
+		"SMART_CHARACTER": "SmartCharacterSy",
+		"SMART_DEPLOYABLE": "SmartDeployableS",
+		"SMART_STORAGE_UNIT": "SmartStorageUnit",
+		"INVENTORY": "InventorySystem",
+		"EPHEMERAL_INVENTORY": "EphemeralInvSyst",
+		"INVENTORY_INTERACT": "InventoryInterac",
+		"SMART_TURRET": "SmartTurretSyste",
+		"SMART_GATE": "SmartGateSystem",
+		"KILL_MAIL": "KillMailSystem",
+		"ACCESS": "AccessSystem"
+	}
+}
