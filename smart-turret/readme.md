@@ -19,6 +19,8 @@ This example alters the Smart Turret to have two specific behaviors:
    
 2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.  
 
+The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array.
+
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:

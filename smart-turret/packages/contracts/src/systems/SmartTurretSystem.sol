@@ -42,6 +42,7 @@ contract SmartTurretSystem is System {
    * @param turret is the turret data
    * @param turretTarget is the player in the zone
    * This runs on a tick based cycle when the player is in proximity of the Smart Turret
+   * The game receives the new priority queue, and select targets based on the reverse order of the new queue. Meaning the targets with the highest index will be picked first.
    */
   function inProximity(
     uint256 smartTurretId,
@@ -79,6 +80,9 @@ contract SmartTurretSystem is System {
           }
         }
 
+        //Sort the array
+        tempArray = bubbleSortTargetPriorityArray(tempArray);
+
         //Return the new array
         return tempArray;
       }
@@ -88,11 +92,9 @@ contract SmartTurretSystem is System {
     }
 
     //Prioritize ships with the lowest total health percentage. hPRatio, shieldRatio and armorRatio are between [0-100]
-    uint256 calculatedWeight =  300 - (turretTarget.hpRatio + 
-      turretTarget.shieldRatio + 
-      turretTarget.armorRatio
-    );
+    uint256 calculatedWeight = calculateWeight(turretTarget);
 
+    //Weight is not currently used in-game as the game uses the position of elements in the array, however we set it for the bubble sort algorithm to use
     TargetPriority memory newPriority = TargetPriority({ target: turretTarget, weight: calculatedWeight }); 
 
     //If already in the queue, update the weight
@@ -102,7 +104,10 @@ contract SmartTurretSystem is System {
         if(priorityQueue[i].target.characterId == turretTarget.characterId){
           priorityQueue[i] = newPriority;
         }
-      }
+      }      
+
+      //Sort the array
+      priorityQueue = bubbleSortTargetPriorityArray(priorityQueue);
 
       //Return the changed in-place queue
       return priorityQueue;
@@ -117,11 +122,59 @@ contract SmartTurretSystem is System {
       }
 
       //Set the new target to the end of the temp array
-      tempArray[priorityQueue.length] = newPriority;
+      tempArray[priorityQueue.length] = newPriority;      
+
+      //Sort the array
+      TargetPriority[] memory sortedArray = bubbleSortTargetPriorityArray(tempArray);
 
       //Return array to the Smart Turret
-      return tempArray;
+      return sortedArray;
     }    
+  }
+
+  /**
+   * @dev a function to sort the priority queue by weight, using the bubble sort algorithm
+   * @param priorityQueue is the queue to sort
+   */
+  function bubbleSortTargetPriorityArray(TargetPriority[] memory priorityQueue) public returns (TargetPriority[] memory sortedPriorityQueue) {
+    uint256 length = priorityQueue.length;
+
+    //Doesn't need sorting if the queue only has 1 or 0 entries
+    if(length < 2) return priorityQueue;
+
+    bool swapped;
+    //Loop until the bubble sort algorithm stops sorting
+    do{
+      //Reset the swapped value
+      swapped = false;
+      //Loop to the second last element, as it will sort for the next element
+      for (uint256 i = 0; i < length - 1; i++){
+        //Check if a swap needs to happen
+        if(priorityQueue[i].weight > priorityQueue[i + 1].weight){
+          //Swap the values in the array
+          (priorityQueue[i], priorityQueue[i+1]) = (priorityQueue[i + 1], priorityQueue[i]);
+          //Do another loop
+          swapped = true;
+        }
+      }
+    }
+    while (swapped);
+
+    return priorityQueue;
+  }
+
+  /**
+   * @dev a function to calculate the weight of the target
+   * @param target is the target
+   * This calculates weight so that the higher the weight, the higher the priority. As the targets are prioritized and the game selects the targets in reverse order they are returned
+   */
+  function calculateWeight(SmartTurretTarget memory target) public returns (uint256 weight){
+    weight = 300 - (target.hpRatio + 
+      target.shieldRatio + 
+      target.armorRatio
+    );
+
+    return weight;
   }
 
   /**

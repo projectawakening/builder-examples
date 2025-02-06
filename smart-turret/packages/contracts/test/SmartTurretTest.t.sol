@@ -6,6 +6,9 @@ import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 
+import { console } from "forge-std/console.sol";
+    
+
 import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
@@ -51,7 +54,12 @@ contract SmartTurretTest is MudTest {
 
   uint256 smartTurretId;
   uint256 ownerCharacterId = 11111;
-  uint256 playerCharacterId = 200;
+
+  uint256 playerCharacterId = 100;
+
+  uint256 player2CharacterId = 200;
+  uint256 player3CharacterId = 300;
+  
   uint256 allowedCorpId;
 
   //Setup for the tests
@@ -64,6 +72,10 @@ contract SmartTurretTest is MudTest {
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
+
+    //Create a second and third player for testing. The address is randomly generated
+    address player2 = address(0x280Efa9b3A0c1608119fB01f2Df0AFCcA1c7EA3d);
+    address player3 = address(0xd628d44B1ca0B1240152B282F4f88bDE93347aac);
 
     allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
 
@@ -113,6 +125,26 @@ contract SmartTurretTest is MudTest {
         200004, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
         EntityRecordOffchainTableData({ name: "harryporter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+    if (CharactersByAddressTable.get(player2) == 0) {
+      smartCharacter.createCharacter(
+        player2CharacterId,    //characterID
+        player2, //characterAddress
+        200008, //corpID
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter2", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+    if (CharactersByAddressTable.get(player3) == 0) {
+      smartCharacter.createCharacter(
+        player3CharacterId,    //characterID
+        player3, //characterAddress
+        200008, //corpID
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "harryporter3", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -175,6 +207,7 @@ contract SmartTurretTest is MudTest {
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
     
+    //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
@@ -206,6 +239,7 @@ contract SmartTurretTest is MudTest {
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
     
+    //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
@@ -237,6 +271,7 @@ contract SmartTurretTest is MudTest {
     TargetPriority[] memory priorityQueue = new TargetPriority[](0);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
     
+    //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
@@ -262,11 +297,12 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test inProximity with a player that should not be targeted and is already in the queue
-  function testInProximityNotInCorpWeight() public {
+  function testInProximityNotInCorpPriority() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
     
+    //Total Weight: 150
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
@@ -275,30 +311,40 @@ contract SmartTurretTest is MudTest {
       shieldRatio: 50,
       armorRatio: 50
     });
+    
+    //Total Weight: 200
+    SmartTurretTarget memory turretTarget2 = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: player2CharacterId,
+      hpRatio: 50,
+      shieldRatio: 0,
+      armorRatio: 50
+    });
 
-    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 150 });
     //Run inProximity
     TargetPriority[] memory returnTargetQueue = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
           SmartTurretSystem.inProximity,
-          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget)
+          (smartTurretId, ownerCharacterId, priorityQueue, turret, turretTarget2)
         )
       ),
       (TargetPriority[])
     );
-
-    assertEq(returnTargetQueue.length, 1, "There should be 1 target");
-
-    assertEq(returnTargetQueue[0].weight, 150, "The target weight should be set to 150");
-  
-    //Second Test Max Health Values
-    turretTarget.hpRatio = 100;
-    turretTarget.shieldRatio = 100;
-    turretTarget.armorRatio = 100;
     
-    TargetPriority[] memory returnTargetQueue2 = abi.decode(
+    assertEq(returnTargetQueue.length, 2, "There should be 2 targets");
+
+    assertEq(returnTargetQueue[0].target.characterId, playerCharacterId, "The first target should be turretTarget2, as it has the lowest total health. Test 1");
+    assertEq(returnTargetQueue[0].weight, 150, "The first target should be with 100 weight, as it has the lowest total health. Test 1");
+    
+
+    //Test with the lowest health being originally second
+    priorityQueue[0] = TargetPriority({ target: turretTarget2, weight: 100 });
+    //Run inProximity
+    returnTargetQueue = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
@@ -309,9 +355,85 @@ contract SmartTurretTest is MudTest {
       (TargetPriority[])
     );
 
-    assertEq(returnTargetQueue2.length, 1, "There should be 1 target");
+    assertEq(returnTargetQueue.length, 2, "There should be 2 targets");
 
-    assertEq(returnTargetQueue2[0].weight, 0, "The target weight should be set to 0");
+    assertEq(returnTargetQueue[0].target.characterId, player2CharacterId, "The first target should be turretTarget2, as it has the lowest total health. Test 2");
+  }
+
+  function testBubbleSortAlgorithm() public {    
+    //Total Weight: 150
+    SmartTurretTarget memory turretTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: playerCharacterId,
+      hpRatio: 50,
+      shieldRatio: 50,
+      armorRatio: 50
+    });
+    
+    //Total Weight: 200
+    SmartTurretTarget memory turretTarget2 = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: player2CharacterId,
+      hpRatio: 50,
+      shieldRatio: 0,
+      armorRatio: 50
+    });
+    
+    //Total Weight: 0
+    SmartTurretTarget memory turretTarget3 = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: player3CharacterId,
+      hpRatio: 100,
+      shieldRatio: 100,
+      armorRatio: 100
+    });
+
+    TargetPriority[] memory priorityQueue = new TargetPriority[](3);
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 150 });
+    priorityQueue[1] = TargetPriority({ target: turretTarget3, weight: 0 });
+    priorityQueue[2] = TargetPriority({ target: turretTarget2, weight: 200 });
+
+    TargetPriority[] memory outputQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.bubbleSortTargetPriorityArray,
+          (priorityQueue)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(outputQueue[0].target.characterId, player3CharacterId, "The first target should be turretTarget2, as it has the lowest weight");
+    assertEq(outputQueue[0].weight, 0, "The first target weight should be 100, as it is the lowest");
+
+    assertEq(outputQueue[1].target.characterId, playerCharacterId, "The second target should be turretTarget, as it has the lowest weight");
+    assertEq(outputQueue[1].weight, 150, "The first target weight should be 100, as it is the lowest");
+
+    assertEq(outputQueue[2].target.characterId, player2CharacterId, "The second target should be turretTarget3, as it has the highest weight");
+    assertEq(outputQueue[2].weight, 200, "The first target weight should be 100, as it is the lowest");
+
+    priorityQueue = new TargetPriority[](2);
+    
+    priorityQueue[1] = TargetPriority({ target: turretTarget, weight: 150 });
+    priorityQueue[0] = TargetPriority({ target: turretTarget2, weight: 100 });
+
+    outputQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.bubbleSortTargetPriorityArray,
+          (priorityQueue)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(outputQueue[0].target.characterId, player2CharacterId, "The first target should be turretTarget2, as it has the lowest weight");
+    assertEq(outputQueue[0].weight, 100, "The first target weight should be 100, as it is the lowest");
   }
 
   //Test aggression
