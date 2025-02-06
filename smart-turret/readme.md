@@ -89,12 +89,6 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Now, create a .env file from the .envsample file with:
-
-```bash
-cp .envsample .env
-```
-
 Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_URL** value to point to Stillness using: 
 
 ```bash
