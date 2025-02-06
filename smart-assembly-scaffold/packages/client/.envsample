@@ -13,18 +13,5 @@
 #
 # Add the .env file to your .gitignore to prevent accidental commits.
 
-VITE_CHAIN_ID=17069
-
-VITE_SMARTASSEMBLY_ID=23563565629941518662089712946553773054394767785169002865278787679356860010098
-
-# NEBULA
-VITE_GATEWAY_HTTP="https://blockchain-gateway-nebula.test.tech.evefrontier.com"
-VITE_GATEWAY_WS="wss://blockchain-gateway-nebula.test.tech.evefrontier.com"
-
-# STILLNESS
-# VITE_GATEWAY_HTTP="https://blockchain-gateway-stillness.live.tech.evefrontier.com"
-# VITE_GATEWAY_WS="wss://blockchain-gateway-stillness.live.tech.evefrontier.com"
-
-# # LOCAL
-# VITE_GATEWAY_HTTP="http://localhost:8080"
-# VITE_GATEWAY_WS="ws://localhost:8080"
+VITE_CHAIN_ID=31337
+VITE_SMARTASSEMBLY_ID=235635656299415186620897129465537730543947677851690028652787876793568600100

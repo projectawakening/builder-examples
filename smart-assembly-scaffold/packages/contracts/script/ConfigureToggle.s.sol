@@ -10,7 +10,7 @@ import { Utils } from "../src/systems/Utils.sol";
 import { ToggleSystem } from "../src/systems/ToggleSystem.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 
-contract ConfigureItemTrade is Script {
+contract ConfigureToggle is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 ownerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -24,7 +24,6 @@ contract ConfigureItemTrade is Script {
 
     ResourceId systemId = Utils.toggleSystemId();
 
-    //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
     world.call(
       systemId,
       abi.encodeCall(ToggleSystem.setTrue, smartStorageUnitId)

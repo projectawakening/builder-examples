@@ -11,7 +11,7 @@ export function Explorer() {
 
   useEffect(() => {
     const getWorldAddress = async () => {
-      const { address: worldAddress } = await getWorldDeploy(chain?.id ?? 1);
+      const { address: worldAddress } = await getWorldDeploy(chain?.id ?? 31337);
       setWorldAddress(worldAddress);
     };
 
