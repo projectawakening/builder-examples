@@ -68,12 +68,10 @@ if [ ! -f  $ENV_FILE ]; then
     printf "\n${GREEN}[COMPLETED]${RESET} Created $ENV_FILE from sample .env file as it did not exist \n\n"
 fi
 
-set_content "bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE" $NAMESPACE $ENV_FILE "Your Namespace"
+$SED_CMD $SED_OPTS "s/^bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE.*/bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
+
+printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}SMART_TURRET_DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n"
 
 $SED_CMD "${SED_OPTS[@]}" "s/^[[:space:]]*namespace:.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
 
-printf "\n${GREEN}[COMPLETED]${RESET} Set ${YELLOW}DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n\n"
-
-$SED_CMD "${SED_OPTS[@]}" "s/namespaces\..*\.tables/namespaces.$NAMESPACE.tables/g" "$CLIENT_ENTITY_VIEW_FILE"
-
-printf "${GREEN}[COMPLETED]${RESET} Replaced ${YELLOW}Namespace References${RESET} in ${YELLOW}$CLIENT_ENTITY_VIEW_FILE${RESET} with the updated namespace \n\n"
+printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n"

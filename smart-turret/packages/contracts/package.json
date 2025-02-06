@@ -19,7 +19,7 @@
     "configure": ". ./.env && pnpm forge script ./script/ConfigureSmartTurret.s.sol:ConfigureSmartTurret --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/ExecuteInProximity.s.sol:ExecuteInProximity --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
     "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
-    "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
+    "env-nebula": "bash ../../shell-scripts/ConvertEnvToServer.sh nebula",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
     "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
     "set-key": "bash ../../shell-scripts/SetPrivateKey.sh",

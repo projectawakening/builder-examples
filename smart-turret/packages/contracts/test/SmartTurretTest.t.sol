@@ -114,7 +114,7 @@ contract SmartTurretTest is MudTest {
         admin,               //characterAddress
         allowedCorpId,       //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "admin", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -124,7 +124,7 @@ contract SmartTurretTest is MudTest {
         player, //characterAddress
         200004, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "testPlayer", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -134,7 +134,7 @@ contract SmartTurretTest is MudTest {
         player2, //characterAddress
         200008, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harryporter2", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "testPlayer2", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -144,7 +144,7 @@ contract SmartTurretTest is MudTest {
         player3, //characterAddress
         200008, //corpID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harryporter3", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "testPlayer3", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -334,7 +334,7 @@ contract SmartTurretTest is MudTest {
       ),
       (TargetPriority[])
     );
-    
+
     assertEq(returnTargetQueue.length, 2, "There should be 2 targets");
 
     assertEq(returnTargetQueue[0].target.characterId, playerCharacterId, "The first target should be turretTarget2, as it has the lowest total health. Test 1");

@@ -1,5 +1,6 @@
 ENV_FILE="./.env"
-CLIENT_ENV_FILE="../client/.env"
+ENV_SAMPLE_FILE="./.envsample"
+
 WORLD_ADDRESS="0x8a791620dd6260079bf849dc5567adc3f2fdc318"
 CHAIN_ID="31337"
 RPC_URL="http://127.0.0.1:8545"
@@ -55,7 +56,10 @@ function set_content(){
     local FILE="$3"
     local COMMENT="$4"
 
-    $SED_CMD "${SED_OPTS[@]}" "s/^${SEARCH}=.*/${SEARCH}=${CONTENT} #${COMMENT}/" "$FILE"
+    # Escape special characters in CONTENT
+    local ESCAPED_CONTENT=$(echo "$CONTENT" | sed 's/[\/&]/\\&/g')
+
+    $SED_CMD "${SED_OPTS[@]}" "s/^${SEARCH}=.*/${SEARCH}=${ESCAPED_CONTENT} #${COMMENT}/" "$FILE"
 
     printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}${SEARCH}${RESET} in ${YELLOW}${FILE}${RESET}\n"
 }

@@ -109,12 +109,12 @@ Use this command and then input your new namespace to change it:
 pnpm set-namespace
 ```
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+Now set the private key. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
 
 ![Private Key](../readme-imgs/private-key.png)
 
 ```bash
-PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+pnpm set-key
 ```
 
 Then deploy the contract using:
@@ -128,33 +128,32 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
-
-For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
+Next, set the environment variables using the below command.
 
 ```bash
-#SMART TURRET ID (Only need to change if you are not using a Local World)
-SMART_TURRET_ID=
+pnpm set-config
 ```
+
+Use the below steps for getting the values to input into the set-config tool
+
+For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 
 You then need to set the allowed corp ID to your corporation ID. You can find this through:
 
 1. Search for your smart character by searching your name in https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters
+   
 2. Use https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/CHARACTER_ADDRESS and replace **CHARACTER_ADDRESS** with the character address from the previous step
+   
 3. Retrieve the corpId from the retrieved JSON
 
-```bash
-ALLOWED_CORP=
-```
-
 ### Step 2: Configure Smart Turret
-To configure which Smart Turret the contract uses, run:
+To configure which Smart Turret the contract uses and the allowed corporation, run:
 
 ```bash
 pnpm configure
 ```
 
-You can alter the smart turret ID in the .env file as needed.
+You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
 
