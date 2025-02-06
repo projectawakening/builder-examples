@@ -19,7 +19,7 @@ This example alters the Smart Turret to have two specific behaviors:
    
 2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.  
 
-The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array.
+The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array. Currently the weight value is not used in-game, however is used by the sorting function.
 
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world
