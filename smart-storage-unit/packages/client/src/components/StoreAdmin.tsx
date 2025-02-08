@@ -146,7 +146,9 @@ const StoreAdmin = React.memo(
 
     const txHash = await setRatio({worldContract, 
       inputRatio: itemsIn, 
-      outputRatio: itemsOut
+      outputRatio: itemsOut,
+      itemIDIn: ssuConfig.itemIn.toString(),
+      itemIDOut: ssuConfig.itemOut.toString()
     });
 
     try{
@@ -163,27 +165,27 @@ const StoreAdmin = React.memo(
   if(adminAccess == false){
     return (
       <>        
-        <h1>Admin Settings</h1>
-        <center>   
-          <h1>Admin Access not permited ❌<br />(You are not the owner)</h1>
-        </center>
+        <div>Admin Settings</div>
+        <div className="text-center">   
+          Admin Access not permited ❌<br />(You are not the owner)
+        </div>
       </>
     )
   }
 
   if(ssuConfig == null){
     return (
-      <>
-        <h1>LOADING</h1>
-      </>
+      <div>
+        LOADING
+      </div>
     )
   }
 
   return (
     <>    
-      <h1>Admin Settings (Only you can see this)</h1>
+      <div>Admin Settings (Only you can see this)</div>
       
-      <h1>Ratio</h1>
+      <div>Ratio</div>
       <div className="grid grid-cols-2">
         <EveInput
           inputType="numerical"
@@ -203,7 +205,7 @@ const StoreAdmin = React.memo(
         Set Ratio
       </EveButton>
 
-      <h1>Items</h1>
+      <div>Items</div>
       <EveInput
           inputType="string"
           placeholder={"Item Name"}

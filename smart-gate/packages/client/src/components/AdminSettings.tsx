@@ -8,7 +8,7 @@ import setAllowedCorp from "./systemCalls/handleSetAllowedCorp";
 import { EveButton, EveInput } from "@eveworld/ui-components";
 import { useNotification, useSmartObject } from "@eveworld/contexts";
 
-const AllowedCorp = React.memo(function AllowedCorp() {
+const AdminSettings = React.memo(function AllowedCorp() {
   const { smartAssembly, smartCharacter } = useSmartObject();
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
@@ -63,9 +63,9 @@ const AllowedCorp = React.memo(function AllowedCorp() {
   if(adminAccess == false){
     return (
       <>        
-        <h1>Admin Settings</h1>
-        <div className="center">    
-          <h1>Admin Access not permited ❌<br />(You are not the owner)</h1>
+        <div>Admin Settings</div>
+        <div className="text-center">    
+          Admin Access not permitted ❌<br />(You are not the owner)
         </div>
       </>
     )
@@ -73,7 +73,7 @@ const AllowedCorp = React.memo(function AllowedCorp() {
 
   return (
     <>    
-      <h1>Admin Settings</h1>
+      <div>Admin Settings</div>
       <EveInput
         inputType="string"
         defaultValue={allowedCorpValue.corp.toString()}
@@ -85,10 +85,10 @@ const AllowedCorp = React.memo(function AllowedCorp() {
         Set Allowed Corp ID
       </EveButton>
 
-      <h1>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</h1>
-      <h1>YOUR CORP ID: {smartCharacter.corpId.toString()}</h1>
+      <div>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</div>
+      <div>YOUR CORP ID: {smartCharacter.corpId.toString()}</div>
     </>
   );
 });
 
-export default React.memo(AllowedCorp);
+export default React.memo(AdminSettings);

@@ -20,7 +20,7 @@
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "can-jump": ". ./.env && pnpm forge script ./script/CanJump.s.sol:CanJump --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
     "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
-    "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
+    "env-nebula": "bash ../../shell-scripts/ConvertEnvToServer.sh nebula",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
     "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
     "set-key": "bash ../../shell-scripts/SetPrivateKey.sh",

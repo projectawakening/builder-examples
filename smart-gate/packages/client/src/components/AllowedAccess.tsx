@@ -18,16 +18,16 @@ const AllowedAccess = React.memo(function AllowedAccess() {
 
   if(smartCharacter && smartCharacter.corpId == allowedCorpValue.corp.toString()){
     return (
-      <div className="center">    
-        <h1>Gate Access permited ✅</h1>
+      <div className="text-center">    
+        Gate Access permited ✅
       </div>
     );
   }
     
   return (
-    <div className="center">    
-      <h1>Gate Access not permited ❌</h1>
-      <h3>(Not in allowed corporation)</h3>
+    <div className="text-center">    
+      Gate Access not permited ❌<br/>
+      (Not in allowed corporation)
     </div>
   );
 });

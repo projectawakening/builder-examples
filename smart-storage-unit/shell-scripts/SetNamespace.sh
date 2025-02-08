@@ -1,5 +1,10 @@
 #Files
-ENV_FILE=".env"
+ENV_FILE="./.env"
+ENV_SAMPLE_FILE="./.envsample"
+
+CLIENT_ENV_FILE="../client/.env"
+CLIENT_ENV_SAMPLE_FILE="../client/.envsample"
+
 MUD_CONFIG_FILE="mud.config.ts"
 CONSTANTS_FILE="src/systems/constants.sol"
 CLIENT_ENTITY_VIEW_FILE="../client/src/components/EntityView.tsx"
@@ -44,7 +49,29 @@ else
     SED_OPTS=(-i)
 fi
 
-$SED_CMD "${SED_OPTS[@]}" "s/^bytes14 constant DEPLOYMENT_NAMESPACE.*/bytes14 constant DEPLOYMENT_NAMESPACE = \"$NAMESPACE\";/" "$CONSTANTS_FILE"
+function set_content(){
+    local SEARCH="$1"
+    local CONTENT="$2"
+    local FILE="$3"
+    local COMMENT="$4"
+
+    if [[ "$CONTENT" == *"://"* ]]; then
+        CONTENT="\"$CONTENT\""
+    fi
+
+    $SED_CMD "${SED_OPTS[@]}" "s|^${SEARCH}=.*|${SEARCH}=${CONTENT} #${COMMENT}|" "$FILE"
+
+    printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}${SEARCH}${RESET} in ${YELLOW}${FILE}${RESET}\n"
+}
+
+printf "\n"
+
+if [ ! -f  $ENV_FILE ]; then
+    cp $ENV_SAMPLE_FILE $ENV_FILE
+fi
+
+set_content "bytes14 constant DEPLOYMENT_NAMESPACE" $NAMESPACE $ENV_FILE "Your Namespace"
+
 $SED_CMD "${SED_OPTS[@]}" "s/^[[:space:]]*namespace:.*/  namespace: \"$NAMESPACE\",/" "$MUD_CONFIG_FILE"
 
 printf "\n${GREEN}[COMPLETED]${RESET} Set ${YELLOW}DEPLOYMENT_NAMESPACE${RESET} in ${YELLOW}$CONSTANTS_FILE${RESET} and ${YELLOW}namespace${RESET} in ${YELLOW}$MUD_CONFIG_FILE${RESET} \n\n"

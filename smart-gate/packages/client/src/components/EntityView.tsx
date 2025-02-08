@@ -9,8 +9,9 @@ import {
   SmartAssemblyInfo,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
-import AllowedCorp from "./AllowedCorp";
+
 import AllowedAccess from "./AllowedAccess";
+import AdminSettings from "./AdminSettings";
 
 export default function EntityView() {
   const { smartAssembly, smartCharacter, loading } = useSmartObject();
@@ -30,9 +31,9 @@ export default function EntityView() {
   }
 
   return (
-    <div className="grid gap-4 grid-cols-1 mobile:px-5">
-      
+    <div className="grid gap-4 grid-cols-1 mobile:px-5">      
       <div>{smartAssembly?.name} Smart Gate Allow List</div>
+      
       <div className="grid grid-cols-2">
         <div>
           <div>{smartAssembly?.description || "No description set"}</div>
@@ -43,7 +44,7 @@ export default function EntityView() {
       <AllowedAccess />
       
       <br /><br />
-      <AllowedCorp />
+      <AdminSettings />
     </div>
   );
 }

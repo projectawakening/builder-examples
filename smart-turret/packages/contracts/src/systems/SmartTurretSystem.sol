@@ -26,6 +26,8 @@ import { AccessControl } from "@latticexyz/world/src/AccessControl.sol";
 
 import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
 
+import { KillMailTable } from "@eveworld/world/src/codegen/tables/KillMailTable.sol";
+
 /**
  * @dev This contract is an example for implementing logic to a smart turret
  */

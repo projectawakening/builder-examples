@@ -19,7 +19,7 @@ const ItemSearchResult = React.memo(
       <div className="grid grid-cols-2 item-grid">
         <div className="item-preview">
           <div className="item-inline">
-            <h1>{item.name}</h1>
+            <div>{item.name}</div>
           </div>
         </div>
         <EveButton typeClass="primary" onClick={selectFunction} disabled={false}>

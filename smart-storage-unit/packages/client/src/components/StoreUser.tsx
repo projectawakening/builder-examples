@@ -34,9 +34,9 @@ const StoreUser = React.memo(
   const { notify } = useNotification();
 
   const [ canTrade, setCanTrade ] = useState<boolean>(false);
-  const [ itemsIn, setItemsIn ] = useState<number>(10);
-  const [ calculatedItemsIn, setCalculatedItemsIn ] = useState<number>(10);
-  const [ selectedItemsIn, setSelectedItemsIn ] = useState<number>(10);
+  const [ itemsIn, setItemsIn ] = useState<number>(0);
+  const [ calculatedItemsIn, setCalculatedItemsIn ] = useState<number>(0);
+  const [ selectedItemsIn, setSelectedItemsIn ] = useState<number>(0);
   const [ calculatedItemsOut, setCalculatedItemsOut ] = useState<number>(0);
 
   const [ itemInMetadata, setItemInMetadata ] = useState<ItemMetadata>("");
@@ -52,19 +52,26 @@ const StoreUser = React.memo(
   useEffect(() => {
     GetTypes();
     
-    if(smartCharacter == null) return;
+    if(smartCharacter == null){        
+      setItemsIn(0);
+      return;
+    }
 
-    
     let inventory = smartAssembly.inventory;
-    console.log(inventory.ephemeralInventoryList);
     
     let playerInventory = inventory.ephemeralInventoryList.find((x) =>
       findOwnerByAddress(x.ownerId, smartCharacter.address),
     );
 
+    if(playerInventory == null){      
+      setItemsIn(0);
+      return;
+    }
+
     var playerItems = playerInventory.ephemeralInventoryItems.filter((item:any) => item.itemId.toString() == ssuConfig.itemIn.toString()); 
         
     if(playerItems.length == 0){
+      setItemsIn(0);
       return;
     }
 
@@ -92,8 +99,8 @@ const StoreUser = React.memo(
   const getOutput = async () => {
     const txHash = await calculateOutput({
       worldContract,
-      smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
       inputAmount: selectedItemsIn,
+      itemID: ssuConfig.itemIn.toString()
     });
     if (txHash) {
       return txHash;
@@ -200,27 +207,27 @@ const StoreUser = React.memo(
     
   return (
     <>
-      <center>   
+      <div className="justify-center">   
         <div className="grid grid-cols-3">
-          <h1>
+          <div className="flex items-center justify-center">
             <img className={"item-image"} src={itemInMetadata != "" ? itemInMetadata.image: "https://mainnet-game-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"}></img>
-          </h1>
-          <h1></h1>
-          <h1>
+          </div>
+          <div></div>
+          <div className="flex items-center justify-center">
             <img className={"item-image"} src={itemOutMetadata != "" ? itemOutMetadata.image: "https://mainnet-game-ipfs-gateway.nursery.reitnorf.com/ipfs/QmcQzTvz9Z4koU8pvBJL94HxHtLoPoB9wDnuRE278AdbmA"}></img>
-          </h1>
+          </div>
         </div>
 
         <br />
         
         <div className="grid grid-cols-3">
           <div className="item-name-container">
-            <h1>
+            <div className="flex items-center justify-center">
               {itemInMetadata.name}
-            </h1>
+            </div>
           </div>
           
-          <h1>
+          <div className="flex items-center justify-center">
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_1_7)">
                 <path className={"item-arrow-2"} d="M26.6941 34.9447L39.6387 22.0002L26.6941 9.05566L22.805 12.9448L31.8605 22.0002L22.805 31.0557L26.6941 34.9447Z" fill="white"/>
@@ -232,23 +239,23 @@ const StoreUser = React.memo(
                 </clipPath>
               </defs>
             </svg>
-          </h1>
+          </div>
         
           <div className="item-name-container">
-            <h1>
+            <div className="flex items-center justify-center">
               {itemOutMetadata.name}
-            </h1>
+            </div>
           </div>
         </div>
 
         <br />
 
         <div className="grid grid-cols-3">
-          <h1>Items in: {calculatedItemsIn}</h1>
-          <h1></h1>
-          <h1>Items out: {calculatedItemsOut}</h1>
+          <div className="flex items-center justify-center">Items in: {calculatedItemsIn}</div>
+          <div></div>
+          <div className="flex items-center justify-center">Items out: {calculatedItemsOut}</div>
         </div>
-      </center>     
+      </div>     
 
       <input type="range" id="item-scroll" name="items" min="0" max={itemsIn} value={selectedItemsIn} onChange={(val) => handleSetWantedItemInput(val)} />
       

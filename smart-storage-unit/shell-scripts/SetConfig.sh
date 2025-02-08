@@ -1,5 +1,9 @@
 ENV_FILE="./.env"
+ENV_SAMPLE_FILE="./.envsample"
+
 CLIENT_ENV_FILE="../client/.env"
+CLIENT_ENV_SAMPLE_FILE="../client/.envsample"
+
 WORLD_ADDRESS="0x8a791620dd6260079bf849dc5567adc3f2fdc318"
 CHAIN_ID="31337"
 RPC_URL="http://127.0.0.1:8545"
@@ -64,9 +68,19 @@ function set_content(){
 
 printf "\n"
 
+if [ ! -f  $ENV_FILE ]; then
+    cp $ENV_SAMPLE_FILE $ENV_FILE
+fi
+
 set_content "SSU_ID" $SSU_ID $ENV_FILE "SSU"
 set_content "ITEM_IN_ID" $ITEM_IN_ID $ENV_FILE "The item that is given to the SSU"
 set_content "IN_RATIO" $IN_RATIO $ENV_FILE "The item that is given to the SSU from players"
 set_content "OUT_RATIO" $OUT_RATIO $ENV_FILE "The item that is given to players from the SSU"
+
+if [ ! -f  $CLIENT_ENV_FILE ]; then
+    cp $CLIENT_ENV_SAMPLE_FILE $CLIENT_ENV_FILE
+fi
+
+set_content "VITE_SMARTASSEMBLY_ID" $SSU_ID $CLIENT_ENV_FILE "SSU"
 
 printf "\n"

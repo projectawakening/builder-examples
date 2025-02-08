@@ -19,7 +19,7 @@ RPC_URL=$(echo "$response" | grep -o '"default":{[^}]*}' | grep -o '"http":"[^"]
 
 CHAIN_ID="17069"
 
-# If the API call didn't work - use a known world address for Stillness or Nova
+# If the API call didn't work - use a known world address for Stillness or Nebula
 if [[ -z "$world_address" ]]; then
     if [[ $SERVER = "stillness" ]]; then
         world_address="0x7fe660995b0c59b6975d5d59973e2668af6bb9c5"
@@ -28,7 +28,7 @@ if [[ -z "$world_address" ]]; then
     fi    
 fi
 
-# If the API call didn't work - use a known RPC URL for Stillness or Nova
+# If the API call didn't work - use a known RPC URL for Stillness or Nebula
 if [[ -z "$RPC_URL" ]]; then
     RPC_URL="https://garnet-rpc.dev.evefrontier.tech"
 fi
