@@ -41,20 +41,43 @@ http://localhost:13690/anvil/worlds/<worldAddress>/explore
 
 With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
 
-### Step 3: 🏗️ Devnet/Production Deployment
+### Step 3: 🏗️ Garnet/Production Deployment
 
 When the contracts are ready to be deployed beyond the local environment:
 
-1. Obtain the appropriate World address from the relevant configuration (e.g. Stillness, Nova).
-2. To deploy to Garnet:
+1. Navigate to the contracts directory with:
 
-   ```bash
-   pnpm deploy:garnet --worldAddress <worldAddress>
-   ```
+```bash
+cd packages/contracts
+```
+
+2. Change the environment to Stillness with:
+
+```bash
+pnpm env-stillness
+```
+
+3. Set your private key with:
+
+```bash
+pnpm set-key
+```
+
+4. Set your namespace with:
+
+```bash
+pnpm set-namespace
+```
+
+5. Deploy to Stillness with:
+
+```bash
+pnpm deploy:garnet
+```
 
 **Environment Variables**:
 
-- Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Garnet or other devnets, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
+- Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Garnet, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
 
 ### Step 4: 🌐 dApp Environment Variables and Considerations
 

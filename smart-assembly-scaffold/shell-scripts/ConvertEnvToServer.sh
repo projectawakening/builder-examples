@@ -1,8 +1,8 @@
 ENV_FILE="./.env"
 ENV_SAMPLE_FILE="./.envsample"
 
-ENV_CLIENT_FILE="./.env"
-ENV_CLIENT_SAMPLE_FILE=""
+ENV_CLIENT_FILE="../client/.env"
+ENV_CLIENT_SAMPLE_FILE="../client/.envsample"
 
 SERVER=$1
 

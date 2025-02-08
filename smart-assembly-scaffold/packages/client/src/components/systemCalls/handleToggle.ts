@@ -10,9 +10,10 @@ const setToggle = async ({
   let txHash;
 
   if (!currentValue) {
-    txHash = await worldContract.write.example__setTrue([smartObjectId]);
+    txHash = await worldContract.write.eveworld__bringOnline([smartObjectId]);
   } else {
-    txHash = await worldContract.write.example__setFalse([smartObjectId]);
+    console.log("OFFLINE")
+    txHash = await worldContract.write.eveworld__bringOffline([smartObjectId]);
   }
 
   return txHash;

@@ -1,8 +1,8 @@
 ENV_FILE="./.env"
 ENV_SAMPLE_FILE="./.envsample"
 
-ENV_CLIENT_FILE="./.env"
-ENV_CLIENT_SAMPLE_FILE=""
+ENV_CLIENT_FILE="../client/.env"
+ENV_CLIENT_SAMPLE_FILE="../client/.envsample"
 
 WORLD_ADDRESS="0x8a791620dd6260079bf849dc5567adc3f2fdc318"
 CHAIN_ID="31337"
