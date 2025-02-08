@@ -33,7 +33,7 @@ nvm install 18
 #### Installing PNPM
 Install PNPM version 8, which is used as a more efficient version of NPM with:
 ```bash
-npm install -g pnpm@latest-8
+npm install -g pnpm
 ```
 
 ### Step 0.1: Installing Foundry + Forge
