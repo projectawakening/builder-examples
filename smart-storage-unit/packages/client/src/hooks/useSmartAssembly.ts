@@ -113,9 +113,7 @@ export function useSmartAssembly() {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT tokenId, owner 
-						FROM erc721deploybl__Owners 
-						WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
+            query: `SELECT "tokenId", "owner" FROM "Owners" WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
@@ -124,11 +122,14 @@ export function useSmartAssembly() {
       setOwner(ownerApiResult.owner);
     };
 
-    getOwner();
+    //getOwner();
     // If on local and unable to query the sqlite indexer, you can manually set the owner
     // instead of calling the above function
-    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+    console.log("SET OWNER")
+    setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
   }, [smartObjectId]);
+
+  console.log(smartObjectId)
 
   const smartCharacterByAddress = useRecord({
     stash,

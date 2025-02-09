@@ -19,23 +19,24 @@ import SSUConfigData from "./dataTypes";
 import StoreUser from "./StoreUser";
 import StoreAdmin from "./StoreAdmin";
 
+import { useSmartCharacter } from "../hooks/useSmartCharacter";
+import { useSmartAssembly } from "../hooks/useSmartAssembly";
+
 export default function EntityView() {
-  const { smartAssembly, smartCharacter, loading } = useSmartObject();
+  console.log("THE START")
+
+  //const { smartAssembly, smartCharacter, loading } = useSmartObject();
+
+  const { smartCharacter } = useSmartCharacter();
+  const { smartAssembly } = useSmartAssembly();
+  console.log(smartAssembly)
+
   const { notify, handleClose } = useNotification();
   const { chain } = useAccount();
 
   const [ ssuConfig, setSSUConfig ] = useState<SSUConfigData>(null);
 
   const [ typesCache, setTypesCache ] = useState<any>();  
-
-  //Loading runtime
-  useEffect(() => {
-    if (loading) {
-      notify({ type: Severity.Info, message: "Loading..." });
-    } else {
-      handleClose();
-    }
-  }, [loading]);  
 
   //Cache all item type information for use within the DApp
   const CacheTypes = async () => {
@@ -64,17 +65,17 @@ export default function EntityView() {
       },
     });
 
-    if(dAppConfig == null) return;
-
     //Get the SSU Config, using the promoted input item ID
     let foundSSUConfig = useRecord({
       stash,
       table: mudConfig.namespaces.example.tables.RatioConfig,    
       key: {
         smartObjectId: BigInt(smartAssembly?.id || 0),
-        itemIn: BigInt(dAppConfig.promotedItem)
+        itemIn: BigInt(dAppConfig?.promotedItem || 0)
       },
     });
+    
+    if(ssuConfig != null) return;
 
     if(foundSSUConfig != null && foundSSUConfig != ssuConfig){
       setSSUConfig(foundSSUConfig)
@@ -84,7 +85,7 @@ export default function EntityView() {
   //Fetch the config
   setup();
 
-  if ((!loading && !smartAssembly) || smartAssembly == null) {
+  if ((!smartAssembly) || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
   }
 

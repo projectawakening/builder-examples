@@ -33,11 +33,10 @@ contract ConfigureRatio is Script {
     console.log("itemOut", itemOut);
 
     ResourceId systemId = Utils.smartStorageUnitSystemId();
-
-    //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
+    
     world.call(
       systemId,
-      abi.encodeCall(SmartStorageUnitSystem.setRatio, (smartStorageUnitId, itemIn, itemOut, inRatio, outRatio))
+      abi.encodeCall(SmartStorageUnitSystem.setPromotedItemAndRatio, (smartStorageUnitId, itemIn, itemOut, inRatio, outRatio))
     );
 
     vm.stopBroadcast();

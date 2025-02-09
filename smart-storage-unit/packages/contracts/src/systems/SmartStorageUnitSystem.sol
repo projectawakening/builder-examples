@@ -27,6 +27,7 @@ import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
 import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
+import { DAppConfig } from "../codegen/tables/DAppConfig.sol";
 import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
 import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
@@ -84,45 +85,90 @@ contract SmartStorageUnitSystem is System {
     }
 
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
+  }  
+  
+  /**
+   * @dev Set what item you want to promote on the DApp
+   * @param smartObjectId The smart object id of the item trade
+   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   */
+  function setPromotedItemAndRatio(
+    uint256 smartObjectId,
+    uint256 inventoryItemIdIn,
+    uint256 inventoryItemIdOut,
+    uint64 ratioIn,
+    uint64 ratioOut
+  ) public onlyOwner(smartObjectId) {
+    //make sure the inventory item in item exists
+    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
+
+    if (entityInRecord.recordExists == false) {
+      revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
+    }
+
+    //Set the Ratio
+    setRatio(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
+
+    //Set the DAppConfig MUD Table
+    DAppConfig.set(smartObjectId, inventoryItemIdIn);
   }
 
   /**
    * @notice Handle the interaction flow for item trade to exchange x:y items between two players
-   * @dev Ideally the ration can be configured in a seperate function and stored on-chain
-   * //TODO this function needs to be authorized by the builder to access inventory functions through RBAC
    * @param smartObjectId The smart object id of the smart storage unit
    * @param quantity The quantity of the item to be exchanged
-   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   * @param inventoryItemIdIn The inventory item id of the item that goes into the SSU
    */
   function execute(uint256 smartObjectId, uint64 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
+    
+    //Safety checks
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
-
-    // Make sure there are enough items
+    // Calculate the output from the trade and input items not needed
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
       ratioConfigData.ratioIn,
       ratioConfigData.ratioOut,
       quantity
-    );    
+    );
 
     uint64 calculatedInput = quantity-quantityInputItemLeftOver;
 
+    //Safety checks
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
-    require(calculatedInput > 0, "Calculated input quantity cannot be 0");
-
-    uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
+    require(calculatedInput > 0, "Calculated input quantity cannot be 0");   
+    
+    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
 
     TransferItem[] memory inItems = new TransferItem[](1);
     inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
 
     TransferItem[] memory ephTransferItems = new TransferItem[](1);
-    ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
+    ephTransferItems[0] = TransferItem(ratioConfigData.itemOut, _msgSender(), quantityOutputItem);
 
     _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
     _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+  }
+
+  /**
+   * @dev Read the output, utilizing calculateOutput
+   * @param inputAmount The quantity of items from the player
+   * @param smartObjectId The smart object id of the SSU to trade
+   * @param inventoryItemIdIn The inventory item id of the item that goes in
+   */
+  function readOutput(
+    uint64 inputAmount,
+    uint256 smartObjectId, 
+    uint256 inventoryItemIdIn
+  ) public view returns (uint64 outputAmount, uint64 remainingInput) {
+    RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
+    
+    require(inputAmount != 0, "Input amount cannot be 0");
+    require(ratioConfigData.ratioIn != 0, "Ratio in cannot be 0");
+    require(ratioConfigData.ratioOut != 0, "Ratio out cannot be 0");
+
+    return calculateOutput(ratioConfigData.ratioIn, ratioConfigData.ratioOut, inputAmount);
   }
 
   /**

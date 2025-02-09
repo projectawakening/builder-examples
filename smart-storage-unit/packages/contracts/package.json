@@ -7,7 +7,7 @@
     "build": "mud build",
     "clean": "forge clean && rimraf src/codegen",
     "deploy:local": ". ./.env && pnpm run build && mud deploy --profile=local --worldAddress ${WORLD_ADDRESS:-$1}",
-    "deploy:garnet": ". ./.env && pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
+    "deploy:garnet": ". ./.env && echo \"DEPLOYING TO: ${WORLD_ADDRESS:-$1}\" pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:redstone": ". ./.env && pnpm run build && mud deploy --profile=redstone --worldAddress ${WORLD_ADDRESS:-$1}",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
@@ -18,29 +18,32 @@
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-ratio": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
+    "read": ". ./.env && echo \"WORLD ADDRESS: $WORLD_ADDRESS\n\" && pnpm forge script ./script/ReadOutput.s.sol:ReadOutput --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
+    
     "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
     "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
     "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
-    "set-namespace": "bash ../../shell-scripts/SetNamespace.sh"
+    "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
+    "set-key": "bash ../../shell-scripts/SetPrivateKey.sh",
+    "set-config": "bash ../../shell-scripts/SetConfig.sh"
   },
   "dependencies": {
-    "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.17",
     "@latticexyz/cli": "2.2.14",
-    "@latticexyz/explorer": "2.2.14",
     "@latticexyz/schema-type": "2.2.14",
     "@latticexyz/store": "2.2.14",
+    "@latticexyz/store-indexer": "2.2.14",
+    "@latticexyz/explorer": "2.2.14",
     "@latticexyz/world": "2.2.14",
     "@latticexyz/world-modules": "2.2.14",
-    "i": "^0.3.7",
-    "npm": "^10.8.0"
+    "@eveworld/common-constants": "0.0.13",
+    "@eveworld/world": "0.0.17"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
     "ds-test": "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0",
     "forge-std": "https://github.com/foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1",
-    "prettier": "^2.6.2",
-    "prettier-plugin-solidity": "1.1.3",
+    "prettier": "3.2.5",
+    "prettier-plugin-solidity": "1.3.1",
     "solhint": "^3.3.7",
     "solhint-config-mud": "2.2.9",
     "solhint-plugin-mud": "2.2.9"
