@@ -12,6 +12,8 @@ import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLi
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
 
+import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
+
 contract ConfigureSmartGate is Script {
   using SmartGateUtils for bytes14;
   using SmartGateLib for SmartGateLib.World;
@@ -31,15 +33,14 @@ contract ConfigureSmartGate is Script {
     uint256 smartGateId = vm.envUint("SOURCE_GATE_ID");
 
     ResourceId systemId = Utils.smartGateSystemId();
-
-    //This function can only be called by the owner of the smart turret
-    smartGate.configureSmartGate(smartGateId, systemId);
-
     //Get the allowed corp
-    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
-
+    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");    
+    
     //Set the MUD table for the corp whitelist
-    GateAccess.set(smartGateId, corpID);
+    world.call(
+      systemId,
+      abi.encodeCall(SmartGateSystem.setAllowedCorp, (smartGateId, corpID))
+    );
 
     vm.stopBroadcast();
   }
