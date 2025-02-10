@@ -301,15 +301,15 @@ export default defineWorld({
     /**
      * Used to store the inventory details of a in-game smart storage unit
      */
-    // InventoryTable: {
-    //   schema: {
-    //     smartObjectId: "uint256",
-    //     capacity: "uint256",
-    //     usedCapacity: "uint256",
-    //     items: "uint256[]",
-    //   },
-    //   key: ["smartObjectId"],
-    // },
+    InventoryTable: {
+      schema: {
+        smartObjectId: "uint256",
+        capacity: "uint256",
+        usedCapacity: "uint256",
+        items: "uint256[]",
+      },
+      key: ["smartObjectId"],
+    },
     /**
      * Used to store the inventory items of a in-game smart storage unit
      */

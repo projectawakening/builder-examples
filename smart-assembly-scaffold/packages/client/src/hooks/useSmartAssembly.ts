@@ -222,7 +222,7 @@ export function useSmartAssembly() {
       stash,
       table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
       key: {        
-        "smartObjectId":smartObjectId,
+        "smartObjectId": smartObjectId,
         "inventoryItemId": itemID
       },
     });
