@@ -124,10 +124,10 @@ export function useSmartAssembly() {
       setOwner(ownerApiResult.owner);
     };
 
-    getOwner();
+    // getOwner();
     // If on local and unable to query the sqlite indexer, you can manually set the owner
     // instead of calling the above function
-    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+    setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
   }, [smartObjectId]);
 
   const smartCharacterByAddress = useRecord({
@@ -209,19 +209,33 @@ export function useSmartAssembly() {
     },
   });
 
-  // SMART STORAGE UNIT VALUES //
-  // Commented out for now until this table is fixed in the Garnet indexer db
-  // const smartStorageUnitInv = useRecord({
-  //   stash,
-  //   table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
-  //   key: {
-  //     smartObjectId,
-  //   },
-  // });
-  const smartStorageUnitInv = {
-    capacity: BigInt(0),
-    usedCapacity: BigInt(0),
-  };
+  const smartStorageUnitInv = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
+    key: {
+      smartObjectId,
+    },
+  });  
+
+  const storageItems = smartStorageUnitInv.items.map((itemID: BigInt) => {    
+    let fetchedItem = useRecord({
+      stash,
+      table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
+      key: {        
+        "smartObjectId":smartObjectId,
+        "inventoryItemId": itemID
+      },
+    });
+
+    if(fetchedItem == null) return null;
+
+    return {
+      "typeID": itemID,
+      "smartObjectId": fetchedItem.inventoryItemId,
+      "quantity": fetchedItem.quantity,
+      "lastUpdated": fetchedItem.stateUpdate
+    }
+  }).filter(Boolean)
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
@@ -232,7 +246,7 @@ export function useSmartAssembly() {
           inventory: {
             storageCapacity: smartStorageUnitInv?.capacity || BigInt(0),
             usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-            storageItems: [],
+            storageItems: storageItems,
             ephemeralInventoryList: [],
           },
         };
@@ -257,6 +271,8 @@ export function useSmartAssembly() {
         };
         break;
     }
+
+  console.log(smartAssembly)
 
   return { smartAssemblyBase, smartAssembly };
 }

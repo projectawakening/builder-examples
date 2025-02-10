@@ -86,7 +86,7 @@ contract MockSsuData is Script {
     uint256 inventoryItemOut = vm.envUint("ITEM_OUT_ID");
 
     //Deposit some mock items to inventory and ephemeral
-    InventoryItem[] memory items = new InventoryItem[](1);
+    InventoryItem[] memory items = new InventoryItem[](2);
     items[0] = InventoryItem({
       inventoryItemId: inventoryItemOut,
       owner: owner,
@@ -94,6 +94,14 @@ contract MockSsuData is Script {
       typeId: 23,
       volume: 10,
       quantity: 15
+    });
+    items[1] = InventoryItem({
+      inventoryItemId: 100,
+      owner: owner,
+      itemId: 100,
+      typeId: 23,
+      volume: 10,
+      quantity: 30
     });
 
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
