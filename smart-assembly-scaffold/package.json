@@ -12,10 +12,10 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.2.14",
-    "@latticexyz/common": "2.2.14",
-    "@latticexyz/explorer": "2.2.14",
-    "@latticexyz/store-indexer": "2.2.14",
+    "@latticexyz/cli": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
+    "@latticexyz/common": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
+    "@latticexyz/explorer": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
+    "@latticexyz/store-indexer": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@types/debug": "4.1.7",
     "mprocs": "^0.7.1",
     "shx": "^0.3.4",

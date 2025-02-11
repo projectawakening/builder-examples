@@ -209,19 +209,13 @@ export function useSmartAssembly() {
     },
   });
 
-  // SMART STORAGE UNIT VALUES //
-  // Commented out for now until this table is fixed in the Garnet indexer db
-  // const smartStorageUnitInv = useRecord({
-  //   stash,
-  //   table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
-  //   key: {
-  //     smartObjectId,
-  //   },
-  // });
-  const smartStorageUnitInv = {
-    capacity: BigInt(0),
-    usedCapacity: BigInt(0),
-  };
+  const smartStorageUnitInv = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
+    key: {
+      smartObjectId,
+    },
+  });
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
