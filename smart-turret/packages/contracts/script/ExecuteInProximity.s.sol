@@ -18,6 +18,9 @@ import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-
 import { SmartTurretConfigTable } from "@eveworld/world/src/codegen/tables/SmartTurretConfigTable.sol";
 import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
 
+import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
+import { TurretAllowlist } from "../src/codegen/tables/TurretAllowlist.sol";
+
 contract ExecuteInProximity is Script {
   using SmartTurretUtils for bytes14;
   using SmartTurretLib for SmartTurretLib.World;
@@ -40,42 +43,46 @@ contract ExecuteInProximity is Script {
     });
 
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
+    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
 
-    console.log("SMART TURRET DEPLOYABLE STATE:");
-    console.log(uint8(DeployableState.getCurrentState(smartTurretId)));
+    console.log("Corp ID of character 123:", CharactersTable.getCorpId(123));
+    console.log("Corp ID of character 77777:", CharactersTable.getCorpId(77777));
 
-    console.log("SMART TURRET RESOURCE EXISTS:");
-    console.logBool(ResourceIds.getExists(SmartTurretConfigTable.get(smartTurretId)));
+    uint256 allowedCorp = TurretAllowlist.get();
 
-    console.log("CHARACTERS FROM CORP [11112]:");
-    console.log(CharactersTable.getCorpId(11112));
-    console.log("CHARACTERS FROM CORP [11111]:");
-    console.log(CharactersTable.getCorpId(11111));
+    console.log("\n");
+    console.log("ALLOWED CORP FROM MUD: ", allowedCorp);
+    console.log("\n");
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
-    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    TargetPriority[] memory inputQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
 
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
-      characterId: 11112,
+      characterId: 123,
       hpRatio: 100,
       shieldRatio: 100,
       armorRatio: 100
     });
-    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
 
-    TargetPriority[] memory returnTargetQueue = smartTurret.inProximity(
-      smartTurretId,
-      11111,
-      priorityQueue,
-      turret,
-      turretTarget
+    inputQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
+    
+    TargetPriority[] memory outputTargetQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          SmartTurretSystem.inProximity,
+          (smartTurretId, 11111, inputQueue, turret, turretTarget)
+        )
+      ),
+      (TargetPriority[])
     );
 
-    console.log(returnTargetQueue.length); //2
+    console.log("Input Target Queue Length: ", inputQueue.length); //1
+    console.log("Output Target Queue Length: ", outputTargetQueue.length); //1
 
     vm.stopBroadcast();
   }

@@ -1,4 +1,5 @@
-ENV_FILE=".env"
+ENV_FILE="./.env"
+ENV_SAMPLE_FILE="./.envsample"
 
 SERVER=$1
 
@@ -7,13 +8,15 @@ GREEN="\033[32m"
 YELLOW="\033[33m"
 RESET="\033[0m"
 
-API_URL="https://blockchain-gateway-$SERVER.nursery.reitnorf.com/config"
+API_URL="blockchain-gateway-$SERVER.test.tech.evefrontier.com"
 
 if [[ $SERVER = "stillness" ]]; then
-    API_URL="https://blockchain-gateway-$SERVER.live.tech.evefrontier.com/config"
+    API_URL="blockchain-gateway-$SERVER.live.tech.evefrontier.com"
 fi
 
-response=$(curl -s -H "Accept: application/json" "$API_URL")
+API_URL="https://${API_URL}"
+
+response=$(curl -s -H "Accept: application/json" "$API_URL/config")
 world_address=$(echo "$response" | grep -o '"world":{[^}]*}' | grep -o '"address":"[^"]*"' | sed 's/"address":"//;s/"//')
 RPC_URL=$(echo "$response" | grep -o '"default":{[^}]*}' | grep -o '"http":"[^"]*"' | sed 's/"http":"//;s/"//')
 
@@ -35,14 +38,31 @@ fi
 
 SED_CMD="sed"
 if [[ $OSTYPE == 'darwin'* ]]; then
-    SED_OPTS="-i ''"
+    SED_OPTS=(-i '')
 else
-    SED_OPTS="-i"
+    SED_OPTS=(-i)
 fi
 
-$SED_CMD $SED_OPTS "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$world_address #${SERVER} World Address/" "$ENV_FILE"
-$SED_CMD $SED_OPTS "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Garnet Chain ID/" "$ENV_FILE"
-$SED_CMD $SED_OPTS "s|^RPC_URL=.*|RPC_URL=\"${RPC_URL}\" #${SERVER} RPC URL|" "$ENV_FILE"
+function set_content(){
+    local SEARCH="$1"
+    local CONTENT="$2"
+    local FILE="$3"
+    local COMMENT="$4"
 
-printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}WORLD_ADDRESS${RESET} in ${YELLOW}.env${RESET} to ${YELLOW}${SERVER}${RESET} ${YELLOW}[$world_address]${RESET} \n\n"
-printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}RPC_URL${RESET} in ${YELLOW}.env${RESET} to ${YELLOW}${SERVER}${RESET} ${YELLOW}[$RPC_URL]${RESET}\n\n"
+    if [[ "$CONTENT" == *"://"* ]]; then
+        CONTENT="\"$CONTENT\""
+    fi
+
+    $SED_CMD "${SED_OPTS[@]}" "s|^${SEARCH}=.*|${SEARCH}=${CONTENT} #${COMMENT}|" "$FILE"
+
+    printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}${SEARCH}${RESET} in ${YELLOW}${FILE}${RESET}\n"
+}
+
+if [ ! -f  $ENV_FILE ]; then
+    cp $ENV_SAMPLE_FILE $ENV_FILE
+    printf "\n${GREEN}[COMPLETED]${RESET} Created $ENV_FILE from sample .env file as it did not exist \n\n"
+fi
+
+set_content "WORLD_ADDRESS" $world_address $ENV_FILE "$SERVER World Address"
+set_content "CHAIN_ID" $CHAIN_ID $ENV_FILE "Garnet Chain ID"
+set_content "RPC_URL" $RPC_URL $ENV_FILE "$SERVER RPC URL"
