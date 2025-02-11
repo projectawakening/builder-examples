@@ -124,10 +124,10 @@ export function useSmartAssembly() {
       setOwner(ownerApiResult.owner);
     };
 
-    // getOwner();
+    getOwner();
     // If on local and unable to query the sqlite indexer, you can manually set the owner
     // instead of calling the above function
-    setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
   }, [smartObjectId]);
 
   const smartCharacterByAddress = useRecord({
@@ -217,7 +217,7 @@ export function useSmartAssembly() {
     },
   });  
 
-  const storageItems = smartStorageUnitInv.items.map((itemID: BigInt) => {    
+  const storageItems = smartStorageUnitInv?.items.map((itemID: BigInt) => {    
     let fetchedItem = useRecord({
       stash,
       table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
@@ -231,7 +231,7 @@ export function useSmartAssembly() {
 
     return {
       "typeID": itemID,
-      "smartObjectId": fetchedItem.inventoryItemId,
+      "smartObjectId": fetchedItem.smartObjectId,
       "quantity": fetchedItem.quantity,
       "lastUpdated": fetchedItem.stateUpdate
     }

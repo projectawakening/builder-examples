@@ -7,13 +7,16 @@ import {
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
+
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
+import { useEphemeralInventory } from "../hooks/useEphemeralInventory";
 
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
   const { smartAssembly } = useSmartAssembly();
+  const { ephemeralInventories } = useEphemeralInventory();
 
   if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
