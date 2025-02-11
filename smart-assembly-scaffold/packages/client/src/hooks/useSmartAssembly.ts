@@ -217,7 +217,9 @@ export function useSmartAssembly() {
     },
   });  
 
-  const storageItems = smartStorageUnitInv?.items.map((itemID: BigInt) => {    
+  const isSSU = smartAssemblyType?.smartAssemblyType == 0
+
+  const storageItems = isSSU ? smartStorageUnitInv?.items.map((itemID: BigInt) => {    
     let fetchedItem = useRecord({
       stash,
       table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
@@ -235,7 +237,7 @@ export function useSmartAssembly() {
       "quantity": fetchedItem.quantity,
       "lastUpdated": fetchedItem.stateUpdate
     }
-  }).filter(Boolean)
+  }).filter(Boolean) : [];
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
@@ -271,8 +273,6 @@ export function useSmartAssembly() {
         };
         break;
     }
-
-  console.log(smartAssembly)
 
   return { smartAssemblyBase, smartAssembly };
 }

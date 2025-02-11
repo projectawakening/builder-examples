@@ -3,41 +3,26 @@ import { useRecords } from "../mud/useRecords";
 
 import { stash } from "../mud/stash";
 import worldMudConfig from "contracts/eveworld/mud.config";
-import {
-  SmartAssemblies,
-  SmartAssembly,
-  SmartAssemblyType,
-  State,
-} from "@eveworld/types";
-import { useEffect, useState } from "react";
-import { getWorldDeploy } from "../mud/getWorldDeploy";
-import { mapApiResult } from "../utils/mapApiResult";
-import { getAddress } from "viem";
 
 /**
  * `useEphemeralInventory` hook
  *
- * This hook is designed to fetch and construct a `SmartAssembly` object based on a given `smartObjectId`.
- * The hook retrieves various properties of the assembly by querying multiple MUD tables, such as:
- * - Basic information (state, type, fuel, location).
- * - Ownership details (owner ID and name).
- * - Assembly-specific details (Smart Storage Unit, Smart Turret, Smart Gate).
+ * This hook is designed to fetch the ephemeral inventories of a smart assembly from MUD tables based on a given `smartObjectId`.
  *
- * The resulting `smartAssembly` object is tailored based on the assembly type.
- *
- * @returns {Object} `smartAssembly` - The constructed SmartAssembly object, or `undefined` if the data is incomplete.
+ * @returns {Object} `ephemeralInventories` - The ephemeral inventories of the smart assembly.
  */
 
 type ephemeralInventoryRecord = {
   ephemeralInvOwner: string;
   items: BigInt[];
-  smartObjectId: BigInt;
   usedCapacity: BigInt;
 }
 
-export function useEphemeralInventory() {
-  // Retrieve the Smart Assembly ID from environment variables
-  const smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+export function useEphemeralInventory(smartObjectId = 0n) {
+  if(smartObjectId == 0n){
+    // Retrieve the Smart Assembly ID from environment variables
+    smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+  }
 
   const ephemeralInventoryRecords = useRecords({
     stash,
