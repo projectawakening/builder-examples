@@ -9,8 +9,7 @@ import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
 
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
-import { useSmartAssembly } from "../hooks/useSmartAssembly";
-import { useEphemeralInventory } from "../hooks/useEphemeralInventory";
+import { useSmartAssembly, useEphemeralInventory } from "../hooks/useSmartAssembly";
 
 export default function EntityView() {
   const { chain } = useAccount();
