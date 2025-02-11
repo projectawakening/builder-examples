@@ -6,10 +6,15 @@ import { useWorldContract } from "../mud/useWorldContract";
 import { Severity } from "@eveworld/types";
 import setAllowedCorp from "./systemCalls/handleSetAllowedCorp";
 import { EveButton, EveInput } from "@eveworld/ui-components";
-import { useNotification, useSmartObject } from "@eveworld/contexts";
+import { useNotification } from "@eveworld/contexts";
+
+import { useSmartCharacter } from "../hooks/useSmartCharacter";
+import { useSmartAssembly } from "../hooks/useSmartAssembly";
 
 const AdminSettings = React.memo(function AllowedCorp() {
-  const { smartAssembly, smartCharacter } = useSmartObject();
+  const { smartCharacter } = useSmartCharacter();
+  const { smartAssembly } = useSmartAssembly();
+
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
 
@@ -25,19 +30,19 @@ const AdminSettings = React.memo(function AllowedCorp() {
   });
 
   useEffect(() => {
-    setAllowedCorpInput(allowedCorpValue.corp.toString())
+    if(allowedCorpValue == null) return;
+    
+    setAllowedCorpInput(allowedCorpValue?.corp.toString())
   }, [allowedCorpValue])
 
-  useEffect(() => {
-    if(smartCharacter != null){
-      var assemblies = smartCharacter.smartAssemblies.filter(assembly => assembly.id == smartAssembly.id)
+  useEffect(() => {    
+    if(smartCharacter == null || smartAssembly == null) return;
 
-      if(assemblies.length != 0){
-        setAdminAccess(true);
-      } else{
-        setAdminAccess(false);
-      }
-    }
+    if(smartCharacter.address == smartAssembly.ownerId){
+      setAdminAccess(true);
+    } else{
+      setAdminAccess(false);
+    }    
   }, [smartCharacter])
 
   const handleAllowedCorpInput = (val) => {
@@ -60,7 +65,7 @@ const AdminSettings = React.memo(function AllowedCorp() {
     }
   };
 
-  if(adminAccess == false){
+  if(!adminAccess){
     return (
       <>        
         <div>Admin Settings</div>

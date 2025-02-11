@@ -7,7 +7,6 @@ import { Address } from "viem";
 import { wagmiConfig } from "./wagmiConfig";
 import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { NotificationProvider } from "@eveworld/contexts";
-import SmartObjectWalletProvider from "./SmartObjectWalletProvider";
 
 const queryClient = new QueryClient();
 
@@ -34,9 +33,7 @@ export function Providers({ worldDeploy, children }: Props) {
             startBlock={worldDeploy.blockNumber ?? undefined}
             stash={stash}
           >
-            <NotificationProvider>
-              <SmartObjectWalletProvider>{children}</SmartObjectWalletProvider>
-            </NotificationProvider>
+            <NotificationProvider>{children}</NotificationProvider>
           </StashSyncProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
