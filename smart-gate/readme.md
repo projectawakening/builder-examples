@@ -157,7 +157,7 @@ ALLOWED_CORP_ID=3434306
 To configure which smart gates will be used, run:
 
 ```bash
-pnpm configure-smart-gates
+pnpm configure
 ```
 
 You can alter the gate ID's and the allowed corp in the .env file as needed.
