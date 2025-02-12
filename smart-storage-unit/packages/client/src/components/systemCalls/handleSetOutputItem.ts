@@ -11,7 +11,7 @@ const setOutputItem = async ({
 }): Promise<string | undefined> => {
   let txHash;
 
-  txHash = await worldContract.write.example2__setRatio([currentConfig.smartObjectId, currentConfig.itemIn, outputItem, currentConfig.ratioIn, currentConfig.ratioOut]);
+  txHash = await worldContract.write.example__setRatio([currentConfig.smartObjectId, currentConfig.itemIn, outputItem, currentConfig.ratioIn, currentConfig.ratioOut]);
 
   return txHash;
 };

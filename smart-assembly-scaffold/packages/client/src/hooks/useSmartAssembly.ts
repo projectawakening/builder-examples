@@ -1,4 +1,5 @@
 import { useRecord } from "../mud/useRecord";
+import { useRecords } from "../mud/useRecords";
 import { stash } from "../mud/stash";
 import worldMudConfig from "contracts/eveworld/mud.config";
 import {
@@ -209,19 +210,35 @@ export function useSmartAssembly() {
     },
   });
 
-  // SMART STORAGE UNIT VALUES //
-  // Commented out for now until this table is fixed in the Garnet indexer db
-  // const smartStorageUnitInv = useRecord({
-  //   stash,
-  //   table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
-  //   key: {
-  //     smartObjectId,
-  //   },
-  // });
-  const smartStorageUnitInv = {
-    capacity: BigInt(0),
-    usedCapacity: BigInt(0),
-  };
+  const smartStorageUnitInv = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
+    key: {
+      smartObjectId,
+    },
+  });  
+
+  const isSSU = smartAssemblyType?.smartAssemblyType == 0
+
+  const storageItems = isSSU ? smartStorageUnitInv?.items.map((itemID: BigInt) => {    
+    let fetchedItem = useRecord({
+      stash,
+      table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
+      key: {        
+        "smartObjectId": smartObjectId,
+        "inventoryItemId": itemID
+      },
+    });
+
+    if(fetchedItem == null) return null;
+
+    return {
+      "typeID": itemID,
+      "smartObjectId": fetchedItem.smartObjectId,
+      "quantity": fetchedItem.quantity,
+      "lastUpdated": fetchedItem.stateUpdate
+    }
+  }).filter(Boolean) : [];
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
@@ -232,7 +249,7 @@ export function useSmartAssembly() {
           inventory: {
             storageCapacity: smartStorageUnitInv?.capacity || BigInt(0),
             usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-            storageItems: [],
+            storageItems: storageItems,
             ephemeralInventoryList: [],
           },
         };
@@ -259,4 +276,64 @@ export function useSmartAssembly() {
     }
 
   return { smartAssemblyBase, smartAssembly };
+}
+
+
+/**
+ * `useEphemeralInventory` hook
+ *
+ * This hook is designed to fetch the ephemeral inventories of a smart assembly from MUD tables based on a given `smartObjectId`.
+ *
+ * @returns {Object} `ephemeralInventories` - The ephemeral inventories of the smart assembly.
+ */
+
+type ephemeralInventoryRecord = {
+  ephemeralInvOwner: string;
+  items: BigInt[];
+  usedCapacity: BigInt;
+}
+
+export function useEphemeralInventory(smartObjectId = 0n) {
+  if(smartObjectId == 0n){
+    // Retrieve the Smart Assembly ID from environment variables
+    smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+  }
+
+  const ephemeralInventoryRecords = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvTable
+  });  
+
+  const ephemeralInventories = ephemeralInventoryRecords?.map((record: ephemeralInventoryRecord) => {
+    const items = record.items.map((itemID: BigInt) => {      
+      let itemRecord = useRecord({
+        stash,
+        table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvItemTable,
+        key: {
+          "smartObjectId": smartObjectId,
+          "inventoryItemId": itemID,
+          "ephemeralInvOwner": record.ephemeralInvOwner
+        }
+      });  
+
+      if(itemRecord == null) return null;
+
+      return {
+        "typeID": itemID,
+        "smartObjectId": itemRecord.smartObjectId,
+        "quantity": itemRecord.quantity,
+        "lastUpdated": itemRecord.stateUpdate
+      }
+    }).filter(Boolean)
+
+    if(items == null) return null;
+
+    return {
+      "ephemeralInvOwner": record.ephemeralInvOwner,
+      "items": items,
+      "usedCapacity": record.usedCapacity
+    }
+  })
+
+  return { ephemeralInventories };
 }

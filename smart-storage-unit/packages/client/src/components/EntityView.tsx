@@ -84,7 +84,6 @@ export default function EntityView() {
 
   //Fetch the config
   setup();
-
   if ((!smartAssembly) || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
   }

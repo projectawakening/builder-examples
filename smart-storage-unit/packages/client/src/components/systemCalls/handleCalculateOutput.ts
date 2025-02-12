@@ -10,7 +10,7 @@ const calculateOutput = async ({
   let txHash;
 
   let ssuID = import.meta.env.VITE_SMARTASSEMBLY_ID;
-  txHash = await worldContract.read.example2__readOutput([inputAmount, ssuID, itemID]);
+  txHash = await worldContract.read.example__readOutput([inputAmount, ssuID, itemID]);
 
   return txHash;
 };

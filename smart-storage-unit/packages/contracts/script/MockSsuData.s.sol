@@ -98,7 +98,7 @@ contract MockSsuData is Script {
 
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
 
-    InventoryItem[] memory ephemeralItems = new InventoryItem[](1);
+    InventoryItem[] memory ephemeralItems = new InventoryItem[](2);
     ephemeralItems[0] = InventoryItem({
       inventoryItemId: inventoryItemIn,
       owner: player,
@@ -106,6 +106,15 @@ contract MockSsuData is Script {
       typeId: 23,
       volume: 10,
       quantity: 15
+    });
+    
+    ephemeralItems[1] = InventoryItem({
+      inventoryItemId: inventoryItemOut,
+      owner: player,
+      itemId: 0,
+      typeId: 230,
+      volume: 10,
+      quantity: 10
     });
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
 

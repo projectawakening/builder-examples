@@ -15,6 +15,9 @@ import SSUConfigData from "./dataTypes";
 //Custom Components
 import ItemSearchResult from "./ItemSearchResult";
 
+import { useSmartCharacter } from "../hooks/useSmartCharacter";
+import { useSmartAssembly, useEphemeralInventory } from "../hooks/useSmartAssembly";
+
 //Item Data Interface for search
 interface ItemMetadata{
   name: string,
@@ -30,7 +33,8 @@ const StoreAdmin = React.memo(
     ssuConfig: SSUConfigData,
     typesCache: any
   }) => {
-  const { smartAssembly, smartCharacter } = useSmartObject();
+  const { smartCharacter } = useSmartCharacter();
+  const { smartAssembly } = useSmartAssembly();
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
 
@@ -48,15 +52,14 @@ const StoreAdmin = React.memo(
 
   //Check if the user owns the smart assembly used with the DApp
   useEffect(() => {
-    if(smartCharacter != null){
-      var assemblies = smartCharacter.smartAssemblies.filter((assembly:any) => assembly.id == smartAssembly.id)
+    if(smartCharacter == null || smartAssembly == null) return;      
 
-      if(assemblies.length != 0){
-        setAdminAccess(true);
-      } else{
-        setAdminAccess(false);
-      }
+    if(smartAssembly.ownerId == smartCharacter.address){
+      setAdminAccess(true);
+    } else{
+      setAdminAccess(false);
     }
+    
   }, [smartCharacter])
 
   //Set the input item

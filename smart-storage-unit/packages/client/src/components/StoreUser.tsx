@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef } from "react";
 import { EveButton } from "@eveworld/ui-components";
 import { useNotification, useSmartObject } from "@eveworld/contexts";
 import { Severity } from "@eveworld/types";
@@ -15,6 +15,9 @@ import calculateOutput from "./systemCalls/handleCalculateOutput";
 //Data Types
 import SSUConfigData from "./dataTypes";
 
+import { useSmartCharacter } from "../hooks/useSmartCharacter";
+import { useSmartAssembly, useEphemeralInventory } from "../hooks/useSmartAssembly";
+
 //Item Data Interface for displaying
 interface ItemMetadata{
   name: string,
@@ -29,14 +32,19 @@ const StoreUser = React.memo(
     ssuConfig: SSUConfigData,
     typesCache: any
   }) => {
-  const { smartAssembly, smartCharacter } = useSmartObject();
+  const { smartCharacter } = useSmartCharacter();
+  const { smartAssembly } = useSmartAssembly();
+  const { ephemeralInventories } = useEphemeralInventory();
+
   const { worldContract } = useWorldContract();
   const { notify } = useNotification();
 
   const [ canTrade, setCanTrade ] = useState<boolean>(false);
   const [ itemsIn, setItemsIn ] = useState<number>(0);
   const [ calculatedItemsIn, setCalculatedItemsIn ] = useState<number>(0);
-  const [ selectedItemsIn, setSelectedItemsIn ] = useState<number>(0);
+  const selectedItemsIn = useRef<number>(15);
+  const [ selectedItemsIn2, setSelectedItemsIn2 ] = useState<number>(0);
+  const [ selectedItemsIn3, setSelectedItemsIn3 ] = useState<number>(0);
   const [ calculatedItemsOut, setCalculatedItemsOut ] = useState<number>(0);
 
   const [ itemInMetadata, setItemInMetadata ] = useState<ItemMetadata>("");
@@ -46,43 +54,45 @@ const StoreUser = React.memo(
   const [ itemOutTypeID, setItemOutTypeID ] = useState<number>(0);
 
   useEffect(() => {
-    setSelectedItemsIn(itemsIn)
+    if(itemsIn != selectedItemsIn) selectedItemsIn.current = itemsIn
   }, [itemsIn])
 
   useEffect(() => {
     GetTypes();
     
-    if(smartCharacter == null){        
-      setItemsIn(0);
+    if(smartCharacter == null || ephemeralInventories == null || ephemeralInventories.length == 0){        
+      if(itemsIn != 0) setItemsIn(0);
       return;
     }
 
-    let inventory = smartAssembly.inventory;
-    
-    let playerInventory = inventory.ephemeralInventoryList.find((x) =>
-      findOwnerByAddress(x.ownerId, smartCharacter.address),
+    let playerInventory = ephemeralInventories.find((x) =>
+      x.ephemeralInvOwner == smartCharacter.address,
     );
 
     if(playerInventory == null){      
-      setItemsIn(0);
+      if(itemsIn != 0) setItemsIn(0);
       return;
     }
 
-    var playerItems = playerInventory.ephemeralInventoryItems.filter((item:any) => item.itemId.toString() == ssuConfig.itemIn.toString()); 
+    var playerItems = playerInventory.items.filter((item:any) => item.typeID.toString() == ssuConfig.itemIn.toString()); 
         
     if(playerItems.length == 0){
-      setItemsIn(0);
+      if(itemsIn != 0) setItemsIn(0);
       return;
     }
 
-    setItemsIn(playerItems[0].quantity);
-  }, [smartAssembly])
+    if(itemsIn != Number(playerItems[0].quantity)){      
+      setItemsIn(Number(playerItems[0].quantity));
+    }
+  }, [smartCharacter])
 
   const FindTypeFromSmartID = async (smartItemID:string) => {
     if(typesCache == null) return;
     for(var key in typesCache){
       if(typesCache[key].smartItemId == smartItemID) return key;
     }
+
+    return ""
   }
 
   //Get the input and output item type ID's
@@ -99,7 +109,7 @@ const StoreUser = React.memo(
   const getOutput = async () => {
     const txHash = await calculateOutput({
       worldContract,
-      inputAmount: selectedItemsIn,
+      inputAmount: selectedItemsIn.current,
       itemID: ssuConfig.itemIn.toString()
     });
     if (txHash) {
@@ -110,29 +120,34 @@ const StoreUser = React.memo(
   };
 
   const asyncGetOutput = async () => {
+    console.log("GET")
+    if(itemsIn == 0 || selectedItemsIn.current == 0) return;
+
     var results = await getOutput();
 
+    console.log("selectedItemsIn.current type:", selectedItemsIn.current);
     if(results == null) return;
 
     var calcOut = Number(results[0]);
-    var calcIn = selectedItemsIn - Number(results[1])
 
-    setCalculatedItemsOut(calcOut);
-    setCalculatedItemsIn(calcIn)
+    var calcIn = selectedItemsIn.current - Number(results[1])
 
-    if(calcOut == 0){
+    if(calcOut != calculatedItemsOut) setCalculatedItemsOut(calcOut);
+    if(calcIn != calculatedItemsIn) setCalculatedItemsIn(calcIn)
+
+    if(calcOut == 0 && canTrade != false){
       setCanTrade(false);
-    } else{
+    } else if (calcOut != 0 && canTrade != true){
       setCanTrade(true);
     }
   }
 
   //Get the calculated output / items given when changes happen and on a interval
   useEffect(() => {
-    if(worldContract != null){
+    if (worldContract != null) {
       asyncGetOutput();
     }
-  }, [worldContract, itemsIn, smartAssembly, selectedItemsIn])
+  }, [smartAssembly])
 
   //Get a image of a item
   const getItemImage = async(id:string) => {
@@ -202,7 +217,10 @@ const StoreUser = React.memo(
 
   //Slider for items in
   const handleSetWantedItemInput = (val:any) => {
-    setSelectedItemsIn(val.target.value);
+    if(Number(val.target.value) != selectedItemsIn2){
+      console.log(val.target.value)
+      selectedItemsIn.current = Number(val.target.value);
+    }
   }
     
   return (
@@ -257,7 +275,7 @@ const StoreUser = React.memo(
         </div>
       </div>     
 
-      <input type="range" id="item-scroll" name="items" min="0" max={itemsIn} value={selectedItemsIn} onChange={(val) => handleSetWantedItemInput(val)} />
+      <input type="range" id="item-scroll" name="items" min="0" max={itemsIn} value={selectedItemsIn.current} onChange={(val) => handleSetWantedItemInput(val)} />
       
       <EveButton typeClass="primary" onClick={() => handleExecute()} disabled={!canTrade}>
         Trade Items {canTrade == false && '(Not Enough Items In)'}

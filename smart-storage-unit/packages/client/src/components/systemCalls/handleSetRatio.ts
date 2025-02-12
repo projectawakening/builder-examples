@@ -14,7 +14,7 @@ const setRatio = async ({
   let txHash;
 
   let ssuID = import.meta.env.VITE_SMARTASSEMBLY_ID;
-  txHash = await worldContract.write.example2__setRatio([ssuID, itemIDIn, itemIDOut, inputRatio, outputRatio]);
+  txHash = await worldContract.write.example__setRatio([ssuID, itemIDIn, itemIDOut, inputRatio, outputRatio]);
   
   return txHash;
 };
