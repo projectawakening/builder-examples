@@ -1,9 +1,18 @@
-# This .env file is for demonstration purposes only.
+# .envsample
+# ----------------------------------------
+# This file serves as a template for environment variables.
+# DO NOT commit changes made to this file.
 #
-# This should usually be excluded via .gitignore and the env vars attached to
-# your deployment environment, but we're including this here for ease of local
-# development. Please do not commit changes to this file!
+# To use local environment variables:
+# 1. Duplicate this file.
+# 2. Rename the duplicate to .env.
+# 3. Update the .env file with your local environment settings.
 #
+# Example:
+# cp .envsample .env
+#
+# Add the .env file to your .gitignore to prevent accidental commits.
+
 # Enable debug logs for MUD CLI
 DEBUG=mud:*
 #
@@ -18,6 +27,10 @@ CHAIN_ID=31337 #Local Chain ID
 # SMART TURRET CONFIG
 # Copy the ID from the in-game smart turret
 SMART_TURRET_ID=9640513001323359261895106592991319872122110296371423549860904054745193604808
+
+# ALLOWED CORP
+# What corp won't be targeted by the turret
+ALLOWED_CORP_ID=1000
 
 # TESTING CONFIG
 # This is the private key for tests / testing related scripts.

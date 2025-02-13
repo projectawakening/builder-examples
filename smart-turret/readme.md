@@ -9,7 +9,17 @@ You can use [Deployment and Testing in Local](#Local) to test the example on you
 
 ### Additional Information
 
-For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
+For additional information on the Smart Turret you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
+
+### Example Behavior Explanation
+
+This example alters the Smart Turret to have two specific behaviors:
+
+1. It does not shoot at anyone in the specified corporation.
+   
+2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.  
+
+The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array. Currently the weight value is not used in-game, however is used by the sorting function.
 
 ## Deployment and Testing in Local<a id='Local'></a>
 ### Step 0: Deploy the example contracts to the existing world
@@ -51,13 +61,13 @@ pnpm mock-data
 This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
-To set the Smart Turret, turret ID use:
+To set the smart turret ID, and allowed corporation ID use:
 
 ```bash
-pnpm configure-smart-turret
+pnpm configure
 ```
 
-You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
 To test the Smart Turret In Proximity functionality you can use the follow command:
@@ -93,12 +103,12 @@ Use this command and then input your new namespace to change it:
 pnpm set-namespace
 ```
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+Now set the private key. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
 
 ![Private Key](../readme-imgs/private-key.png)
 
 ```bash
-PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+pnpm set-key
 ```
 
 Then deploy the contract using:
@@ -112,23 +122,32 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Setup the environment variables 
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
+Next, set the environment variables using the below command.
+
+```bash
+pnpm set-config
+```
+
+Use the below steps for getting the values to input into the set-config tool
 
 For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
 
-```bash
-#SMART TURRET ID (Only need to change if you are running on Devnet)
-SMART_TURRET_ID=
-```
+You then need to set the allowed corp ID to your corporation ID. You can find this through:
+
+1. Search for your smart character by searching your name in https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters
+   
+2. Use https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/CHARACTER_ADDRESS and replace **CHARACTER_ADDRESS** with the character address from the previous step
+   
+3. Retrieve the corpId from the retrieved JSON
 
 ### Step 2: Configure Smart Turret
-To configure which Smart Turret the contract uses, run:
+To configure which Smart Turret the contract uses and the allowed corporation, run:
 
 ```bash
-pnpm configure-smart-turret
+pnpm configure
 ```
 
-You can alter the smart turret ID in the .env file as needed.
+You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
 

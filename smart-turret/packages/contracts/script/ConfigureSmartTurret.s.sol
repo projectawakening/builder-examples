@@ -11,6 +11,8 @@ import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-tur
 import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
 import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
+import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
+
 contract ConfigureSmartTurret is Script {
   using SmartTurretUtils for bytes14;
   using SmartTurretLib for SmartTurretLib.World;
@@ -31,11 +33,17 @@ contract ConfigureSmartTurret is Script {
     });
 
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
+    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
 
     ResourceId systemId = Utils.smartTurretSystemId();
-
+    
     // This function can only be called by the owner of the smart turret
     smartTurret.configureSmartTurret(smartTurretId, systemId);
+    
+    world.call(
+      systemId,
+      abi.encodeCall(SmartTurretSystem.setAllowedCorp, (allowedCorpId))
+    );
 
     vm.stopBroadcast();
   }
