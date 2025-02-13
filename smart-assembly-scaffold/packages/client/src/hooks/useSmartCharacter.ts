@@ -114,9 +114,7 @@ export function useSmartCharacter() {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT "tokenId", "owner" 
-            FROM erc721deploybl__Owners 
-            WHERE "owner" = '0x4dceeda75539034504cbb6263cf957de64538d42';`,
+            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "owner" = '0x4dceeda75539034504cbb6263cf957de64538d42';`,
           },
         ]),
       }).then((res) => res.json());

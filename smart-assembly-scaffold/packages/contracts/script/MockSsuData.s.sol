@@ -57,24 +57,24 @@ contract MockSsuData is Script {
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
     });
 
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        777000011,
-        player,
-        7777,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-
     if (CharactersByAddressTable.get(owner) == 0) {
       smartCharacter.createCharacter(
         777000022,
         owner,
         8888,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "adminCharacter", dappURL: "noURL", description: "." }),
+        ""
+      );
+    }
+
+    if (CharactersByAddressTable.get(player) == 0) {
+      smartCharacter.createCharacter(
+        777000011,
+        player,
+        7777,
+        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
+        EntityRecordOffchainTableData({ name: "playerCharacter", dappURL: "noURL", description: "." }),
         ""
       );
     }
