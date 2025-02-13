@@ -4,29 +4,16 @@ import { useAccount } from "wagmi";
 import "./App.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { ConnectWallet, EveAlert, EveLayout } from "@eveworld/ui-components";
-import { useNotification } from "@eveworld/contexts";
+import { EveAlert, EveLayout } from "@eveworld/ui-components";
+import { useNotification, useSmartObject } from "@eveworld/contexts";
 import EntityView from "./components/EntityView";
 import { Explorer } from "./Explorer";
-import { useSmartCharacter } from "./hooks/useSmartCharacter";
-import { useEffect } from "react";
-import { Severity } from "@eveworld/types";
 
 export const App = () => {
   const { isLive, message, percentage } = useSyncProgress();
-  const { smartCharacter } = useSmartCharacter();
-  const { chain, address, isConnected } = useAccount();
-  const { notification, notify, handleClose } = useNotification();
-
-  useEffect(() => {
-    if (!isLive) {
-      notify({ type: Severity.Info, message: "Loading..." });
-    } else {
-      handleClose();
-    }
-  }, [handleClose, isLive, notify]);
-
-  if (!address || !isConnected) return <ConnectWallet />;
+  const { smartCharacter } = useSmartObject();
+  const { chain } = useAccount();
+  const { notification } = useNotification();
 
   return (
     <>

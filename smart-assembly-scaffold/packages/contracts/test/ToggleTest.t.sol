@@ -92,7 +92,7 @@ contract ToggleTest is MudTest {
         owner,
         200003,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "adminCharacter", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -102,7 +102,7 @@ contract ToggleTest is MudTest {
         player,
         200004,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "playerCharacter", dappURL: "noURL", description: "." }),
         ""
       );
     }

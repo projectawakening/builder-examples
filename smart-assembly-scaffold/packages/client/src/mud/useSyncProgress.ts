@@ -11,7 +11,6 @@ export function useSyncProgress() {
     key: {},
     defaultValue: initialProgress,
   });
-
   return useMemo(
     () => ({
       ...progress,

@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 /** @internal */
 export const StashSyncContext = createContext<{
   sync?: SyncToStashResult;
-
 } | null>(null);
 
 export type Props = {
