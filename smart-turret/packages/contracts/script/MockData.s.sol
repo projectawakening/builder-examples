@@ -60,16 +60,28 @@ contract MockData is Script {
     smartTurret = SmartTurretLib.World({
       iface: IBaseWorld(worldAddress),
       namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    });    
 
-    //Create a smart character
+    uint256 allowedCorpID = vm.envUint("ALLOWED_CORP_ID");
+
+    //Create a smart character that is in the corporation
+    if (CharactersByAddressTable.get(admin) == 0) {
+      smartCharacter.createCharacter(
+        123,           //characterID
+        admin,         //characterAddress
+        allowedCorpID, //corpID
+        EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
+        EntityRecordOffchainTableData({ name: "admin", dappURL: "noURL", description: "." }),
+        "tokenCid"
+      );
+    }
     if (CharactersByAddressTable.get(player) == 0) {
       smartCharacter.createCharacter(
-        77777,
-        player,
-        100,
+        77777,   //characterID
+        player,  //characterAddress
+        100,     //corpID
         EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "testPlayer", dappURL: "noURL", description: "." }),
         "tokenCid"
       );
     }

@@ -64,7 +64,7 @@ This will create the on-chain SSU, fuel it and bring it online.
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm configure-ratio
+pnpm configure
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
@@ -185,7 +185,7 @@ OUT_RATIO=2
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm configure-ratio
+pnpm configure
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.

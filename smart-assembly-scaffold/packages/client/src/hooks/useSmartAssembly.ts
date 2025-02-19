@@ -216,29 +216,33 @@ export function useSmartAssembly() {
     key: {
       smartObjectId,
     },
-  });  
+  });
 
-  const isSSU = smartAssemblyType?.smartAssemblyType == 0
+  const isSSU = smartAssemblyType?.smartAssemblyType == 0;
 
-  const storageItems = isSSU ? smartStorageUnitInv?.items.map((itemID: BigInt) => {    
-    let fetchedItem = useRecord({
-      stash,
-      table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
-      key: {        
-        "smartObjectId": smartObjectId,
-        "inventoryItemId": itemID
-      },
-    });
+  const storageItems = isSSU
+    ? smartStorageUnitInv?.items
+        .map((itemID: BigInt) => {
+          let fetchedItem = useRecord({
+            stash,
+            table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
+            key: {
+              smartObjectId: smartObjectId,
+              inventoryItemId: itemID,
+            },
+          });
 
-    if(fetchedItem == null) return null;
+          if (fetchedItem == null) return null;
 
-    return {
-      "typeID": itemID,
-      "smartObjectId": fetchedItem.smartObjectId,
-      "quantity": fetchedItem.quantity,
-      "lastUpdated": fetchedItem.stateUpdate
-    }
-  }).filter(Boolean) : [];
+          return {
+            typeID: itemID,
+            smartObjectId: fetchedItem.smartObjectId,
+            quantity: fetchedItem.quantity,
+            lastUpdated: fetchedItem.stateUpdate,
+          };
+        })
+        .filter(Boolean)
+    : [];
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
@@ -278,7 +282,6 @@ export function useSmartAssembly() {
   return { smartAssemblyBase, smartAssembly };
 }
 
-
 /**
  * `useEphemeralInventory` hook
  *
@@ -291,10 +294,10 @@ type ephemeralInventoryRecord = {
   ephemeralInvOwner: string;
   items: BigInt[];
   usedCapacity: BigInt;
-}
+};
 
 export function useEphemeralInventory(smartObjectId = 0n) {
-  if(smartObjectId == 0n){
+  if (smartObjectId == 0n) {
     // Retrieve the Smart Assembly ID from environment variables
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
   }
