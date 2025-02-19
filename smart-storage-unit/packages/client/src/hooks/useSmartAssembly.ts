@@ -302,8 +302,6 @@ export function useEphemeralInventory(smartObjectId = 0n) {
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
   }
 
-  console.log("GET DATA ::")
-
   const ephemeralInventoryRecords = useRecords({
     stash,
     table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvTable

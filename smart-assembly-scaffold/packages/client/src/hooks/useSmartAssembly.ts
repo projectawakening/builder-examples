@@ -298,12 +298,7 @@ export function useEphemeralInventory(smartObjectId = 0n) {
     // Retrieve the Smart Assembly ID from environment variables
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
   }
-
-  const ephemeralInventoryRecords = useRecords({
-    stash,
-    table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvTable
-  });  
-
+  /*
   const ephemeralInventories = ephemeralInventoryRecords?.map((record: ephemeralInventoryRecord) => {
     const items = record.items.map((itemID: BigInt) => {      
       let itemRecord = useRecord({
@@ -334,6 +329,9 @@ export function useEphemeralInventory(smartObjectId = 0n) {
       "usedCapacity": record.usedCapacity
     }
   })
+    */
+
+  var ephemeralInventories = null;
 
   return { ephemeralInventories };
 }

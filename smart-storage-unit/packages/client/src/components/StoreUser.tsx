@@ -42,9 +42,7 @@ const StoreUser = React.memo(
   const [ canTrade, setCanTrade ] = useState<boolean>(false);
   const [ itemsIn, setItemsIn ] = useState<number>(0);
   const [ calculatedItemsIn, setCalculatedItemsIn ] = useState<number>(0);
-  const selectedItemsIn = useRef<number>(15);
-  const [ selectedItemsIn2, setSelectedItemsIn2 ] = useState<number>(0);
-  const [ selectedItemsIn3, setSelectedItemsIn3 ] = useState<number>(0);
+  const selectedItemsIn = useRef<number>(0);
   const [ calculatedItemsOut, setCalculatedItemsOut ] = useState<number>(0);
 
   const [ itemInMetadata, setItemInMetadata ] = useState<ItemMetadata>("");
@@ -53,9 +51,11 @@ const StoreUser = React.memo(
   const [ itemInTypeID, setItemInTypeID ] = useState<number>(0);
   const [ itemOutTypeID, setItemOutTypeID ] = useState<number>(0);
 
+  
   useEffect(() => {
     if(itemsIn != selectedItemsIn) selectedItemsIn.current = itemsIn
   }, [itemsIn])
+  
 
   useEffect(() => {
     GetTypes();
@@ -70,7 +70,7 @@ const StoreUser = React.memo(
     );
 
     if(playerInventory == null){      
-      if(itemsIn != 0) setItemsIn(0);
+      if(itemsIn !== 0) setItemsIn(0);
       return;
     }
 
@@ -81,10 +81,11 @@ const StoreUser = React.memo(
       return;
     }
 
-    if(itemsIn != Number(playerItems[0].quantity)){      
-      setItemsIn(Number(playerItems[0].quantity));
+    const newItemsIn = Number(playerItems[0].quantity);
+    if (itemsIn != newItemsIn) {
+      setItemsIn(newItemsIn);
     }
-  }, [smartCharacter])
+  }, [ephemeralInventories, itemsIn])
 
   const FindTypeFromSmartID = async (smartItemID:string) => {
     if(typesCache == null) return;
@@ -120,12 +121,10 @@ const StoreUser = React.memo(
   };
 
   const asyncGetOutput = async () => {
-    console.log("GET")
     if(itemsIn == 0 || selectedItemsIn.current == 0) return;
 
     var results = await getOutput();
 
-    console.log("selectedItemsIn.current type:", selectedItemsIn.current);
     if(results == null) return;
 
     var calcOut = Number(results[0]);
@@ -144,9 +143,7 @@ const StoreUser = React.memo(
 
   //Get the calculated output / items given when changes happen and on a interval
   useEffect(() => {
-    if (worldContract != null) {
-      asyncGetOutput();
-    }
+    if (worldContract) asyncGetOutput();
   }, [smartAssembly])
 
   //Get a image of a item
@@ -217,8 +214,7 @@ const StoreUser = React.memo(
 
   //Slider for items in
   const handleSetWantedItemInput = (val:any) => {
-    if(Number(val.target.value) != selectedItemsIn2){
-      console.log(val.target.value)
+    if(Number(val.target.value) != selectedItemsIn){
       selectedItemsIn.current = Number(val.target.value);
     }
   }
