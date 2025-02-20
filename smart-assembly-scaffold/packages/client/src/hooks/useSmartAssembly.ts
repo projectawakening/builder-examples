@@ -1,8 +1,9 @@
 import { useRecord } from "../mud/useRecord";
 import { useRecords } from "../mud/useRecords";
-import { stash } from "../mud/stash";
+import { localWorld, stash } from "../mud/stash";
 import worldMudConfig from "contracts/eveworld/mud.config";
 import {
+  InventoryItem,
   SmartAssemblies,
   SmartAssembly,
   SmartAssemblyType,
@@ -12,6 +13,8 @@ import { useEffect, useState } from "react";
 import { getWorldDeploy } from "../mud/getWorldDeploy";
 import { mapApiResult } from "../utils/mapApiResult";
 import { getAddress } from "viem";
+import { createSetStorageSystem } from "../systems/createSetStorageSystem";
+import { createSetEphStorageSystem } from "../systems/createSetEphStorageSystem";
 
 /**
  * `useSmartAssembly` hook
@@ -116,7 +119,7 @@ export function useSmartAssembly() {
             address: worldAddress.address,
             query: `SELECT tokenId, owner 
 						FROM erc721deploybl__Owners 
-						WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
+						WHERE tokenId = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
@@ -128,7 +131,7 @@ export function useSmartAssembly() {
     getOwner();
     // If on local and unable to query the sqlite indexer, you can manually set the owner
     // instead of calling the above function
-    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
   }, [smartObjectId]);
 
   const smartCharacterByAddress = useRecord({
@@ -210,6 +213,7 @@ export function useSmartAssembly() {
     },
   });
 
+  // SMART STORAGE UNIT VALUES //
   const smartStorageUnitInv = useRecord({
     stash,
     table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
@@ -218,31 +222,32 @@ export function useSmartAssembly() {
     },
   });
 
-  const isSSU = smartAssemblyType?.smartAssemblyType == 0;
+  const invItemTable = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
+  });
 
-  const storageItems = isSSU
-    ? smartStorageUnitInv?.items
-        .map((itemID: BigInt) => {
-          let fetchedItem = useRecord({
-            stash,
-            table: worldMudConfig.namespaces.eveworld.tables.InventoryItemTable,
-            key: {
-              smartObjectId: smartObjectId,
-              inventoryItemId: itemID,
-            },
-          });
+  if (smartStorageUnitInv?.items && smartStorageUnitInv?.items?.length > 0) {
+    createSetStorageSystem(smartStorageUnitInv, invItemTable);
+  }
 
-          if (fetchedItem == null) return null;
+  const ephemeralInventoryList = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvTable,
+  });
 
-          return {
-            typeID: itemID,
-            smartObjectId: fetchedItem.smartObjectId,
-            quantity: fetchedItem.quantity,
-            lastUpdated: fetchedItem.stateUpdate,
-          };
-        })
-        .filter(Boolean)
-    : [];
+  const ephInvItemTable = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvItemTable,
+  });
+
+  if (ephemeralInventoryList) {
+    createSetEphStorageSystem(
+      smartObjectId,
+      ephemeralInventoryList,
+      ephInvItemTable
+    );
+  }
 
   if (smartAssemblyBase)
     switch (smartAssemblyType?.smartAssemblyType) {
@@ -253,7 +258,7 @@ export function useSmartAssembly() {
           inventory: {
             storageCapacity: smartStorageUnitInv?.capacity || BigInt(0),
             usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-            storageItems: storageItems,
+            storageItems: [],
             ephemeralInventoryList: [],
           },
         };
@@ -280,61 +285,4 @@ export function useSmartAssembly() {
     }
 
   return { smartAssemblyBase, smartAssembly };
-}
-
-/**
- * `useEphemeralInventory` hook
- *
- * This hook is designed to fetch the ephemeral inventories of a smart assembly from MUD tables based on a given `smartObjectId`.
- *
- * @returns {Object} `ephemeralInventories` - The ephemeral inventories of the smart assembly.
- */
-
-type ephemeralInventoryRecord = {
-  ephemeralInvOwner: string;
-  items: BigInt[];
-  usedCapacity: BigInt;
-};
-
-export function useEphemeralInventory(smartObjectId = 0n) {
-  if (smartObjectId == 0n) {
-    // Retrieve the Smart Assembly ID from environment variables
-    smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
-  }
-  /*
-  const ephemeralInventories = ephemeralInventoryRecords?.map((record: ephemeralInventoryRecord) => {
-    const items = record.items.map((itemID: BigInt) => {      
-      let itemRecord = useRecord({
-        stash,
-        table: worldMudConfig.namespaces.eveworld.tables.EphemeralInvItemTable,
-        key: {
-          "smartObjectId": smartObjectId,
-          "inventoryItemId": itemID,
-          "ephemeralInvOwner": record.ephemeralInvOwner
-        }
-      });  
-
-      if(itemRecord == null) return null;
-
-      return {
-        "typeID": itemID,
-        "smartObjectId": itemRecord.smartObjectId,
-        "quantity": itemRecord.quantity,
-        "lastUpdated": itemRecord.stateUpdate
-      }
-    }).filter(Boolean)
-
-    if(items == null) return null;
-
-    return {
-      "ephemeralInvOwner": record.ephemeralInvOwner,
-      "items": items,
-      "usedCapacity": record.usedCapacity
-    }
-  })
-    */
-
-  var ephemeralInventories = null;
-
-  return { ephemeralInventories };
 }

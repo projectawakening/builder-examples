@@ -9,6 +9,7 @@ import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
+import Storage from "./Storage";
 
 export default function EntityView() {
   const { chain } = useAccount();
@@ -53,6 +54,8 @@ export default function EntityView() {
           chainName={chain?.name || ""}
         />
       </div>
+
+      <Storage />
     </div>
   );
 }

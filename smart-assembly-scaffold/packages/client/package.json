@@ -23,6 +23,7 @@
     "@latticexyz/protocol-parser": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@latticexyz/stash": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@latticexyz/store-sync": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
+    "@latticexyz/world": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@rainbow-me/rainbowkit": "^2.2.1",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-devtools": "^5.62.7",
