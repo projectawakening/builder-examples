@@ -17,17 +17,17 @@ fi
 API_URL="https://${API_URL}"
 
 response=$(curl -s -H "Accept: application/json" "$API_URL/config")
-world_address=$(echo "$response" | grep -o '"world":{[^}]*}' | grep -o '"address":"[^"]*"' | sed 's/"address":"//;s/"//')
+WORLD_ADDRESS=$(echo "$response" | grep -o '"world":{[^}]*}' | grep -o '"address":"[^"]*"' | sed 's/"address":"//;s/"//')
 RPC_URL=$(echo "$response" | grep -o '"default":{[^}]*}' | grep -o '"http":"[^"]*"' | sed 's/"http":"//;s/"//')
 
 CHAIN_ID="17069"
 
 # If the API call didn't work - use a known world address for Stillness or Nova
-if [[ -z "$world_address" ]]; then
+if [[ -z "$WORLD_ADDRESS" ]]; then
     if [[ $SERVER = "stillness" ]]; then
-        world_address="0x7fe660995b0c59b6975d5d59973e2668af6bb9c5"
+        WORLD_ADDRESS="0x7fe660995b0c59b6975d5d59973e2668af6bb9c5"
     else
-        world_address="0x972bfea201646a87dc59f042ad91254628974f0d"
+        WORLD_ADDRESS="0x972bfea201646a87dc59f042ad91254628974f0d"
     fi    
 fi
 
@@ -63,6 +63,6 @@ if [ ! -f  $ENV_FILE ]; then
     printf "\n${GREEN}[COMPLETED]${RESET} Created $ENV_FILE from sample .env file as it did not exist \n\n"
 fi
 
-set_content "WORLD_ADDRESS" $world_address $ENV_FILE "$SERVER World Address"
+set_content "WORLD_ADDRESS" $WORLD_ADDRESS $ENV_FILE "$SERVER World Address"
 set_content "CHAIN_ID" $CHAIN_ID $ENV_FILE "Garnet Chain ID"
 set_content "RPC_URL" $RPC_URL $ENV_FILE "$SERVER RPC URL"

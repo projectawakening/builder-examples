@@ -28,6 +28,11 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
+Then, copy the .envsample file to a .env file with:
+```bash
+cp packages/contracts/.envsample packages/contracts/.env
+```
+
 This will deploy the contracts to a forked version of your local world for testing.
 ```bash
 pnpm dev
@@ -90,7 +95,17 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, convert the [.env](./packages/contracts/.env) **WORLD_ADDRESS** and **RPC_URL** value to point to Stillness using: 
+Then, if you haven't already copy the .envsample file to a .env file with:
+```bash
+cp .envsample .env
+```
+
+Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
+- WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
+- RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
+- CHAIN_ID=17069
+
+You can also automatically point to Stillness with the most up-to-date values using: 
 
 ```bash
 pnpm env-stillness
@@ -98,7 +113,29 @@ pnpm env-stillness
 
 Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the Item Seller or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
 
-Use this command and then input your new namespace to change it:
+First, edit **packages/contracts/mud.config.ts** to include your new namespace
+
+```ts
+import { defineWorld } from "@latticexyz/world";
+
+export default defineWorld({
+    namespace: "test",
+    tables: {
+        ...
+```
+
+Then, edit **packages/contracts/src/systems/constants.sol** to replace the DEPLOYMENT_NAMESPACE with your namespace:
+
+```solidity
+pragma solidity >=0.8.21;
+
+// make sure this matches mud.config.ts namespace
+bytes14 constant DEPLOYMENT_NAMESPACE = "test";
+
+bytes16 constant SYSTEM_NAME = "SmartStorageUnit";
+```
+
+You can also use the below command and then input your new namespace to change it automatically:
 
 ```bash
 pnpm set-namespace
@@ -110,6 +147,12 @@ Now replace the private key in the [.env](./packages/contracts/.env) file. Get y
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+You can also use the below command and then input your private key to change it:
+
+```bash
+pnpm set-key
 ```
 
 Then deploy the contract using:
