@@ -37,7 +37,9 @@ function validate_input(){
     echo $INPUT
 }
 
-TURRET_ID=$(validate_input "Turret ID" "2" "80")
+SOURCE_GATE_ID=$(validate_input "Source Gate ID" "10" "80")
+DESTINATION_GATE_ID=$(validate_input "Destination Gate ID" "10" "80")
+
 ALLOWED_CORP_ID=$(validate_input "Allowed Corp ID" "2" "30")
 
 SED_CMD="sed"
@@ -67,7 +69,8 @@ if [ ! -f  $ENV_FILE ]; then
     printf "\n${GREEN}[COMPLETED]${RESET} Created $ENV_FILE from sample .env file as it did not exist \n\n"
 fi
 
-set_content "SMART_TURRET_ID" $TURRET_ID $ENV_FILE "Smart Turret to use"
+set_content "SOURCE_GATE_ID" $SOURCE_GATE_ID $ENV_FILE ""
+set_content "DESTINATION_GATE_ID" $DESTINATION_GATE_ID $ENV_FILE ""
 set_content "ALLOWED_CORP_ID" $ALLOWED_CORP_ID $ENV_FILE "The corporation that is safe from the turret"
 
 printf "\n"

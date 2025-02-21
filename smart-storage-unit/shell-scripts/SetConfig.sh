@@ -37,8 +37,11 @@ function validate_input(){
     echo $INPUT
 }
 
-TURRET_ID=$(validate_input "Turret ID" "2" "80")
-ALLOWED_CORP_ID=$(validate_input "Allowed Corp ID" "2" "30")
+SSU_ID=$(validate_input "Turret ID" "2" "80")
+ITEM_IN_ID=$(validate_input "Item In ID" "10" "80")
+ITEM_OUT_ID=$(validate_input "Item Out ID" "10" "80")
+IN_RATIO=$(validate_input "Items In Ratio" "1" "30")
+OUT_RATIO=$(validate_input "Items Out Ratio" "1" "30")
 
 SED_CMD="sed"
 if [[ $OSTYPE == 'darwin'* ]]; then
@@ -67,7 +70,10 @@ if [ ! -f  $ENV_FILE ]; then
     printf "\n${GREEN}[COMPLETED]${RESET} Created $ENV_FILE from sample .env file as it did not exist \n\n"
 fi
 
-set_content "SMART_TURRET_ID" $TURRET_ID $ENV_FILE "Smart Turret to use"
-set_content "ALLOWED_CORP_ID" $ALLOWED_CORP_ID $ENV_FILE "The corporation that is safe from the turret"
+set_content "SSU_ID" $SSU_ID $ENV_FILE "Smart Storage Unit to use"
+set_content "ITEM_IN_ID" $ITEM_IN_ID $ENV_FILE "Item that is bought"
+set_content "ITEM_OUT_ID" $ITEM_IN_ID $ENV_FILE "Item that is sold"
+set_content "IN_RATIO" $IN_RATIO $ENV_FILE "Ratio of items bought"
+set_content "OUT_RATIO" $OUT_RATIO $ENV_FILE "Ratio of items sold"
 
 printf "\n"

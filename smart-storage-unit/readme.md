@@ -81,7 +81,6 @@ To test the SSU, execute the following command:
 pnpm execute
 ```
 
-
 ## Deployment to Stillness<a id='Stillness'></a>
 ### Step 0: Deploy the example contracts to Stillness
 Move to the example directory with:
@@ -111,7 +110,7 @@ You can also automatically point to Stillness with the most up-to-date values us
 pnpm env-stillness
 ```
 
-Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the Item Seller or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the example or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace
 
@@ -183,18 +182,17 @@ Right click your Smart Storage Unit, and open the DApp window and copy the smart
 ![alt text](../readme-imgs/ssu-id.png)
 
 ```bash
-#DONT NEED TO CHANGE IF YOUR RUNNING LOCALLY
 SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
 ```
 
 To get the Item ID's you can use https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and then search for the item name.
 
-You can use the "smartItemId" as the Item ID below.
+You can use the "smartItemId" as the Item ID.
 
 ```json
 "83839": {
         "name": "Salt",
-        "description": "Computational Salt is a crystalline substance primarily used in exotronic computing. It is one of the products of Crude Matter industry. The larger the crystal, the more massive models for computation it can contain, but we are still talking about microscopic sizes invisible to the naked human eye.",
+        "description": "Computational Salt is a ...",
         "smartItemId": "70505200487489129491533272716910408603753256595363780714882065332876101173161",
         "attributes": [
             {
@@ -222,6 +220,12 @@ You can alter this ratio how you want, but be careful not to accidentally give a
 IN_RATIO=1
 #OUT Ratio
 OUT_RATIO=2
+```
+
+You can also set these values automatically using the below command:
+
+```bash
+pnpm set-config
 ```
 
 ### Step 2: Configure SSU
