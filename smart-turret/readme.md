@@ -49,6 +49,11 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
+Then, copy the .envsample file to a .env file with:
+```bash
+cp packages/contracts/.envsample packages/contracts/.env
+```
+
 This will deploy the contracts to a forked version of your local world for testing.
 ```bash
 pnpm dev
