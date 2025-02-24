@@ -3,8 +3,8 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Deployment and Testing in Local Environment](#Local)
-3. [Deployment To The Game (Stillness)](#Stillness)
+2. [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment)
+3. [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness)
 4. [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -14,7 +14,7 @@ Ensure you have setup your tools through the main [README](../README.md) before 
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
-You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
 
 ### Additional Information
 
@@ -30,7 +30,7 @@ This example alters the Smart Turret to have two specific behaviors:
 
 The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array. Currently the weight value is not used in-game, however is used by the sorting function.
 
-## Deployment and Testing in Local Environment<a id='Local'></a>
+## Deployment and Testing in Local Environment</a>
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
 ### Step 0: Deploy the example contracts to the existing world
@@ -92,7 +92,7 @@ To test the Smart Turret In Proximity functionality you can use the follow comma
 pnpm execute
 ```
 
-## Deployment To The Game (Stillness)<a id='Stillness'></a>
+## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
 ### Step 0: Deploy the example contracts to Stillness

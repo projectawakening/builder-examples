@@ -4,7 +4,7 @@
 
 1. [Introduction](#introduction)
 2. [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment)
-3. [Deployment To The Game (Stillness)](#Stillness)
+3. [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness)
 4. [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -14,13 +14,13 @@ Ensure you have setup your tools through the main [README](../README.md) before 
 
 A Smart Storage Unit can be configured to automatically to trade items between the owner and other players. Exchange quantity are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
 
-You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
 
 ### Additional Information
 
 For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
-## Deployment and Testing in Local Environment<a id='Local'></a>
+## Deployment and Testing in Local Environment</a>
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
 ### Step 0: Deploy the example contracts to the existing world
@@ -91,7 +91,7 @@ To test the SSU, execute the following command:
 pnpm execute
 ```
 
-## Deployment to The Game (Stillness)<a id='Stillness'></a>
+## Deployment to The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
 ### Step 0: Deploy the example contracts to Stillness
