@@ -14,7 +14,7 @@ Ensure you have setup your tools through the main [README](../README.md) before 
 
 A Smart Storage Unit can be configured to automatically to trade items between the owner and other players. Exchange quantity are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
 
-You can use [Deployment and Testing in Local](#Local) to test the example locally on your computer and [Deployment to Stillness](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
 
 ### Additional Information
 

@@ -16,7 +16,7 @@ The Smart Gate allows players to create player made transport gates, connecting 
 
 This example shows how to create a Smart Gate that only allows members of a specific corporation to use the Smart Gate.
 
-You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Stillness](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
 
 ### Additional Information
 

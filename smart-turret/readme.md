@@ -14,7 +14,7 @@ Ensure you have setup your tools through the main [README](../README.md) before 
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
-You can use [Deployment and Testing in Local](#Local) to test the example on your computer and [Deployment to Stillness](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
 
 ### Additional Information
 
