@@ -38,7 +38,7 @@ This will deploy the contracts to a forked version of your local world for testi
 pnpm dev
 ```
 
-### Step 1: Setup the environment variables 
+### Step 1: Setup the environment variables (Optional)
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
@@ -46,13 +46,12 @@ A ratio with the in being 1 and out being 2 means that for every item a player p
 You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ```bash
-#IN Ratio
-IN_RATIO=1
-#OUT Ratio
-OUT_RATIO=2
+#RATIOS
+IN_RATIO=5
+OUT_RATIO=1
 ```
 
-### Step 2: Mock data for the existing world **(Local Development Only)**
+### Step 2: Mock data for the existing world
 Click on the "shell" process and then click on the main terminal window. 
 
 To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
@@ -157,7 +156,7 @@ pnpm set-key
 Then deploy the contract using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm deploy:garnet
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 

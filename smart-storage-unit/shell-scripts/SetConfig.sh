@@ -37,7 +37,7 @@ function validate_input(){
     echo $INPUT
 }
 
-SSU_ID=$(validate_input "Turret ID" "2" "80")
+SSU_ID=$(validate_input "Smart Storage Unit ID" "10" "80")
 ITEM_IN_ID=$(validate_input "Item In ID" "10" "80")
 ITEM_OUT_ID=$(validate_input "Item Out ID" "10" "80")
 IN_RATIO=$(validate_input "Items In Ratio" "1" "30")

@@ -147,7 +147,7 @@ pnpm set-key
 Then deploy the contract using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm deploy:garnet
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Turret contract. 

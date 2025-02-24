@@ -149,6 +149,8 @@ contract SmartGateTest is MudTest {
     uint256 allowedCorp = GateAccess.get(sourceGateId);
 
     assertEq(allowedCorp, 200, "Allowed corp should now be 200");
+
+    vm.stopPrank();
   }
 
   function testSetAllowedCorpNotAdmin() public {

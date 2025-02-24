@@ -1,9 +1,18 @@
-# This .env file is for demonstration purposes only.
+# .envsample
+# ----------------------------------------
+# This file serves as a template for environment variables.
+# DO NOT commit changes made to this file.
 #
-# This should usually be excluded via .gitignore and the env vars attached to
-# your deployment environment, but we're including this here for ease of local
-# development. Please do not commit changes to this file!
+# To use local environment variables:
+# 1. Duplicate this file.
+# 2. Rename the duplicate to .env.
+# 3. Update the .env file with your local environment settings.
 #
+# Example:
+# cp .envsample .env
+#
+# Add the .env file to your .gitignore to prevent accidental commits.
+
 # Enable debug logs for MUD CLI
 DEBUG=mud:*
 #
