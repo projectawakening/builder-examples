@@ -1,7 +1,16 @@
 # Smart Turret Example
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Deployment and Testing in Local Environment](#Local)
+3. [Deployment To The Game (Stillness)](#Stillness)
+4. [Troubleshooting](#troubleshooting)
+
 ## Introduction
 This guide will walk you through the process of building contracts for the smart turret, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
+
+Ensure you have setup your tools through the main [README](../README.md) before starting.
 
 This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
 
@@ -21,7 +30,9 @@ This example alters the Smart Turret to have two specific behaviors:
 
 The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array. Currently the weight value is not used in-game, however is used by the sorting function.
 
-## Deployment and Testing in Local<a id='Local'></a>
+## Deployment and Testing in Local Environment<a id='Local'></a>
+To deploy the example to your local world hosted on Docker, follow the below steps.
+
 ### Step 0: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
@@ -76,7 +87,9 @@ To test the Smart Turret In Proximity functionality you can use the follow comma
 pnpm execute
 ```
 
-## Deployment to Stillness<a id='Stillness'></a>
+## Deployment To The Game (Stillness)<a id='Stillness'></a>
+To deploy the example to the game server which is named Stillness, follow the below steps.
+
 ### Step 0: Deploy the example contracts to Stillness
 Move to the example directory with:
 

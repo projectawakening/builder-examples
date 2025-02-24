@@ -1,7 +1,16 @@
 # Smart Gate Example
 
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Deployment and Testing in Local Environment](#Local)
+3. [Deployment To The Game (Stillness)](#Stillness)
+4. [Troubleshooting](#troubleshooting)
+
 ## Introduction
 This guide will walk you through the process of building contracts for a Smart Gate, deploying them into an existing world running, and testing their functionality by executing scripts.
+
+Ensure you have setup your tools through the main [README](../README.md) before starting.
 
 The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
 
@@ -13,7 +22,9 @@ You can use [Deployment and Testing in Local](#Local) to test the example on you
 
 For additional information on the Smart Gate you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartGate](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
 
-## Deployment and Testing in Local<a id='Local'></a>
+## Deployment and Testing in Local Environment<a id='Local'></a>
+To deploy the example to your local world hosted on Docker, follow the below steps.
+
 ### Step 0: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
@@ -77,7 +88,9 @@ To test the smart gate and check the canJump, use the following command:
 pnpm execute
 ```
 
-## Deployment to Stillness<a id='Stillness'></a>
+## Deployment To The Game (Stillness)<a id='Stillness'></a>
+To deploy the example to the game server which is named Stillness, follow the below steps.
+
 ### Step 0: Deploy the example contracts to Stillness
 Move to the example directory with:
 
