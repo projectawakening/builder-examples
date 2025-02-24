@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "mud build",
-    "clean": "forge clean && rm -rf src/codegen",
+    "clean": "forge clean && rm -rf src/**/codegen",
     "deploy:local": ". ./.env && pnpm run build && mud deploy --profile=local --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:garnet": ". ./.env && pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:redstone": ". ./.env && pnpm run build && mud deploy --profile=redstone --worldAddress ${WORLD_ADDRESS:-$1}",
