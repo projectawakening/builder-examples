@@ -3,8 +3,8 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Deployment and Testing in Local Environment](#Local)
-3. [Deployment To The Game (Stillness)](#Stillness)
+2. [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment)
+3. [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness)
 4. [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -16,13 +16,13 @@ The Smart Gate allows players to create player made transport gates, connecting 
 
 This example shows how to create a Smart Gate that only allows members of a specific corporation to use the Smart Gate.
 
-You can use [Deployment and Testing in Local Environment](#Local) to test the example on your computer and [Deployment To The Game (Stillness)](#Stillness) to deploy it to the game.
+You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
 
 ### Additional Information
 
 For additional information on the Smart Gate you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartGate](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
 
-## Deployment and Testing in Local Environment<a id='Local'></a>
+## Deployment and Testing in Local Environment</a>
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
 ### Step 0: Deploy the example contracts to the existing world
@@ -93,7 +93,7 @@ To test the smart gate and check the canJump, use the following command:
 pnpm execute
 ```
 
-## Deployment To The Game (Stillness)<a id='Stillness'></a>
+## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
 ### Step 0: Deploy the example contracts to Stillness
