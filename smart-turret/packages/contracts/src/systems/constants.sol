@@ -2,6 +2,6 @@
 pragma solidity >=0.8.21;
 
 // make sure this matches mud.config.ts namespace
-bytes14 constant SMART_TURRET_DEPLOYMENT_NAMESPACE = "test";
+bytes14 constant DEPLOYMENT_NAMESPACE = "test";
 
-bytes16 constant SMART_TURRET_SYSTEM_NAME = "SmartTurretSyste";
+bytes16 constant SYSTEM_NAME = "SmartTurretSyste";
