@@ -181,7 +181,9 @@ pnpm set-namespace
 
 Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
 
-![Private Key](../readme-imgs/private-key.png)
+<center>
+<img src="../readme-imgs/private-key.png" alt="Private Key" width="600">
+</center>
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -203,7 +205,10 @@ pnpm deploy:garnet
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-![alt text](../readme-imgs/deploy.png)
+
+<center>
+<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
+</center>
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
@@ -228,7 +233,9 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 
 2. Copy the smart storage unit id.
 
-    ![alt text](../readme-imgs/ssu-id.png)
+<center>
+<img src="../readme-imgs/ssu-id.png" alt="SSU ID" width="600">
+</center>
 
 3. Set the SSU_ID in the .env file.
 
