@@ -10,15 +10,15 @@
 ## Introduction
 This guide will walk you through the process of building contracts for a Smart Storage Unit, deploying them into an existing world running, and testing their functionality by executing scripts.
 
-Ensure you have setup your tools through the main [README](../README.md) before starting.
+A Smart Storage Unit can be configured to trade items between the owner and other players. The amount traded is set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
 
-A Smart Storage Unit can be configured to automatically to trade items between the owner and other players. Exchange quantity are set by providing a ratio of items. For example with a ratio of 1:2 you can exchange, 1 ore for 2 mining crystals.
+Before starting make sure you've installed all required tools from the main [README](../README.md)
 
-You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
+You can test everything locally first using the [Local Environment Guide](#deployment-and-testing-in-local-environment), and when ready, deploy to the live game using the [Deployment Guide](#deployment-to-the-game-stillness).
 
 ### Additional Information
 
-For additional information on the Smart Storage Unit you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
+For additional details on the Smart Storage Unit, see our [Documentation](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
 ## Deployment and Testing in Local Environment</a>
 To deploy the example to your local world hosted on Docker, follow the below steps.
@@ -57,7 +57,6 @@ A ratio with the in being 1 and out being 2 means that for every item a player p
 You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ```bash
-#RATIOS
 IN_RATIO=5
 OUT_RATIO=1
 ```
