@@ -1,4 +1,15 @@
-![alt text](readme-imgs/evefrontier.png)
+<div align="center">
+  <img src="readme-imgs/evefrontier.png" alt="EVE Frontier" width="800"/>
+  
+  # EVE Frontier Building Guide
+  
+  🚀 Build, Deploy, and Explore Smart Assemblies on EVE Frontier
+  
+  [![Documentation](https://img.shields.io/badge/docs-evefrontier-blue)](https://docs.evefrontier.com/)
+  [![Discord](https://img.shields.io/badge/join-discord-7289DA)](https://discord.gg/evefrontier)
+  [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+</div>
+
 
 ## Welcome to EVE Frontier Building!
 Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
@@ -110,21 +121,32 @@ It looks like this
 ![alt text](readme-imgs/explorer.png)
 
 
-![alt text](readme-imgs/explorer-view.png)
-
-You can interact in the inteact tab and explore the values in the explore tab
+You can view the state of MUD tables by using the explore tab
 
 ![alt text](readme-imgs/query.png)
 
+You can interact with smart contract functions with the interact tab
+
+![alt text](readme-imgs/explorer-view.png)
+
 ## Example Projects
-### [Smart Storage Unit](./smart-storage-unit/readme.md)
-Create a vending machine that trades items between the owner and players.
 
-### [Smart Turret](./smart-turret/readme.md)
-Configure and deploy a Smart Turret contract that filters corporation members and prioritizes attacking enemies with the lowest health.
-
-### [Smart Gate](./smart-gate/readme.md)
-Configure a smart gate that controls access based on corporation membership.
+<table>
+  <tr>
+    <td align="center">
+      <h3><a href="./smart-storage-unit/readme.md">📦 Smart Storage Unit</a></h3>
+      Create a SSU vending machine for item trading
+    </td>
+    <td align="center">
+      <h3><a href="./smart-turret/readme.md">🎯 Smart Turret</a></h3>
+      Intelligent Smart Turret with custom strategy
+    </td>
+    <td align="center">
+      <h3><a href="./smart-gate/readme.md">🚪 Smart Gate</a></h3>
+      Control access to a Smart Gate based on corporation membership
+    </td>
+  </tr>
+</table>
 
 ## Need Help? 
 
