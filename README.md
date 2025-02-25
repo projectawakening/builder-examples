@@ -33,8 +33,7 @@ git --version
 #### Installing Node Version Manager
 Install NVM and Node version 18 by using this command:
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash nvm install 18
-source ~/.bashrc  # Restart your shell or run this command
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash && nvm install 18
 ```
 
 #### Installing PNPM
