@@ -1,9 +1,9 @@
 <div align="center">
   <img src="readme-imgs/evefrontier.png" alt="EVE Frontier" width="800"/>
   
-  # EVE Frontier Building Guide
+  # EVE Frontier Builder Examples
   
-  🚀 Build, Deploy, and Explore Smart Assemblies on EVE Frontier
+  🚀 Learn to build in EVE Frontier with examples and guides.
   
   [![Documentation](https://img.shields.io/badge/docs-evefrontier-blue)](https://docs.evefrontier.com/)
   [![Discord](https://img.shields.io/badge/join-discord-7289DA)](https://discord.gg/evefrontier)
@@ -131,7 +131,7 @@ You can interact with smart contract functions with the interact tab
 
 ## Example Projects
 
-<table>
+<table style="border: none">
   <tr>
     <td align="center">
       <h3><a href="./smart-storage-unit/readme.md">📦 Smart Storage Unit</a></h3>
