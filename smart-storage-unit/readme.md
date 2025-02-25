@@ -23,45 +23,50 @@ For additional details on the Smart Storage Unit, see our [Documentation](https:
 ## Deployment and Testing in Local Environment</a>
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
-### Step 0: Deploy the example contracts to the existing world
-First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
+### Step 1: Deploy the example contracts to the existing world
+First, copy the World Contract Address from the Docker logs obtained in the previous step:
 
 ![alt text](../readme-imgs/docker-deployment.png)
 
-Move to the example directory with:
+Then, run the following commands:
+
+1. Navigate to the example directory:
+    ```bash
+    cd smart-storage-unit
+    ```
+
+2. Install the Solidity dependencies for the contracts:
+    ```bash
+    pnpm install
+    ```
+
+3. Create your environment file:
+    ```bash
+    cp packages/contracts/.envsample packages/contracts/.env
+    ```
+
+4. Deploy to your local test environment
+    ```bash
+    pnpm dev
+    ```
+
+    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+
+### Step 2: Setup the environment variables (Optional)
+Next, update your [.env](./packages/contracts/.env) file with the trade ratio:
 
 ```bash
-cd smart-storage-unit
+IN_RATIO=1
+OUT_RATIO=2
 ```
 
-Then install the Solidity dependencies for the contracts:
-```bash
-pnpm install
-```
+> **Trading Ratio Example:**  
+> With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
+> 
+> ⚠️ **Warning:** Choose your ratios carefully to avoid accidentally depleting your item supply!
 
-Then, copy the .envsample file to a .env file with:
-```bash
-cp packages/contracts/.envsample packages/contracts/.env
-```
 
-This will deploy the contracts to a forked version of your local world for testing.
-```bash
-pnpm dev
-```
-
-### Step 1: Setup the environment variables (Optional)
-Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
-
-A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
-
-You can alter this ratio how you want, but be careful not to accidentally give away your whole supply of items with the wrong ratio.
-
-```bash
-IN_RATIO=5
-OUT_RATIO=1
-```
-
-### Step 2: Mock data for the existing world
+### Step 3: Mock data for the existing world
 Click on the "shell" process and then click on the main terminal window. 
 
 To generate mock data for testing the Vending Machine logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
@@ -74,7 +79,7 @@ pnpm mock-data
 
 This will create the on-chain SSU, fuel it and bring it online.
 
-### Step 3: Configure SSU
+### Step 4: Configure SSU
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
@@ -83,7 +88,7 @@ pnpm configure
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
 
-### Step 4: Test The SSU (Optional)
+### Step 5: Test The SSU (Optional)
 To test the SSU, execute the following command:
 
 ```bash
@@ -93,7 +98,7 @@ pnpm execute
 ## Deployment to The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
-### Step 0: Deploy the example contracts to Stillness
+### Step 1: Deploy the example contracts to Stillness
 Move to the example directory with:
 
 ```bash
@@ -175,7 +180,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ![alt text](../readme-imgs/deploy.png)
 
-### Step 1: Setup the environment variables 
+### Step 2: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
 Now set the test player private key. This will be used for the execute script, and so set it to the private key of the player account that you want to trade with. You can also skip this variable for now if you want.
@@ -239,7 +244,7 @@ You can also set these values automatically using the below command:
 pnpm set-config
 ```
 
-### Step 2: Configure SSU
+### Step 3: Configure SSU
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
@@ -248,7 +253,7 @@ pnpm configure
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
 
-### Step 3: Execute the trade
+### Step 4: Execute the trade
 To trade items, make sure the items are in the inventories and then you need to run:
 
 ```bash

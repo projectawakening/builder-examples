@@ -10,7 +10,6 @@
   [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 </div>
 
-
 ## Welcome to EVE Frontier Building!
 Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
 
@@ -72,6 +71,7 @@ Make sure you have the **Docker** installed on your system: [Installation Guide]
 
 ### Deploying world contracts into a local node.
 We have provided a docker compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command:
+
 ```bash
 docker compose up -d
 ```
@@ -83,10 +83,9 @@ Monitor the progress of the world deployment with:
 docker compose logs -f world-deployer
 ```
 
-The deployment progress and relevant addresses will be displayed during the process. Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
+Once deployment is complete, you should see an output similar to the one below. Make sure to copy the world contract address and save it for future reference.
 
 ![alt text](readme-imgs/docker-deployment.png)
-
 
 ### Retrieving world ABIs (Optional)
 You can also retrieve the world abis and save them to the root directory from the deployment by running:
@@ -104,22 +103,22 @@ cd smart-storage-unit
 cat readme.md
 ```
 
-### Bonus TIP
-**Run the local indexer, explore, interact and observe the state changes using world explorer**
+### Bonus Tip
 
-From any of the example root folder run the below command to run a local world explorer to see all the state changes
+<details>
+<summary><b>Run the local indexer, explore, interact and observe the state changes using world explorer</b></summary>
 
-```sh
-builder-examples/smart-storage-unit/
+From any of the example root folder for example (builder-examples/smart-storage-unit/) run the below command to run a local world explorer to see all changes in realtime:
+
+```bash
 pnpm explorer <worldAddress>
 ```
 
 eg: `pnpm explorer 0x8a791620dd6260079bf849dc5567adc3f2fdc318`
 
-It looks like this 
+The command should then output something like this:
 
 ![alt text](readme-imgs/explorer.png)
-
 
 You can view the state of MUD tables by using the explore tab
 
@@ -128,31 +127,25 @@ You can view the state of MUD tables by using the explore tab
 You can interact with smart contract functions with the interact tab
 
 ![alt text](readme-imgs/explorer-view.png)
+</details>
+
 
 ## Example Projects
 
-<table style="border: none">
-  <tr>
-    <td align="center">
-      <h3><a href="./smart-storage-unit/readme.md">📦 Smart Storage Unit</a></h3>
-      Create a SSU vending machine for item trading
-    </td>
-    <td align="center">
-      <h3><a href="./smart-turret/readme.md">🎯 Smart Turret</a></h3>
-      Intelligent Smart Turret with custom strategy
-    </td>
-    <td align="center">
-      <h3><a href="./smart-gate/readme.md">🚪 Smart Gate</a></h3>
-      Control access to a Smart Gate based on corporation membership
-    </td>
-  </tr>
-</table>
+### [📦 Smart Storage Unit](./smart-storage-unit/readme.md)
+Create a SSU vending machine for item trading
+
+### [🎯 Smart Turret](./smart-turret/readme.md)
+Configure a Smart Turret with a custom strategy
+
+### [🚪 Smart Gate](./smart-gate/readme.md)
+Control access to a Smart Gate based on corporation membership
 
 ## Need Help? 
 
-- Visit [Documentation](https://docs.evefrontier.com/)
-- Check [Smart Assemblies Guide](https://docs.evefrontier.com/SmartAssemblies)
-- Join our [Discord Community](https://discord.gg/evefrontier)
+[![Documentation](https://img.shields.io/badge/📚_Documentation-Visit_Docs-blue)](https://docs.evefrontier.com/)
+[![Smart Assemblies](https://img.shields.io/badge/🔧_Smart_Assemblies-Read_Guide-orange)](https://docs.evefrontier.com/SmartAssemblies)
+[![Community](https://img.shields.io/badge/💬_Discord-Join_Community-7289DA)](https://discord.gg/evefrontier)
 
 ## License
 
