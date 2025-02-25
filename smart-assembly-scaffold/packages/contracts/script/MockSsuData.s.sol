@@ -82,8 +82,8 @@ contract MockSsuData is Script {
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     createAnchorAndOnline(smartStorageUnitId, owner);
 
-    uint256 inventoryItemIn = 100;
-    uint256 inventoryItemOut = 200;
+    uint256 inventoryItemIn = vm.envUint("ITEM_IN");
+    uint256 inventoryItemOut = vm.envUint("ITEM_OUT");
 
     //Deposit some mock items to inventory and ephemeral
     InventoryItem[] memory items = new InventoryItem[](1);
