@@ -1,4 +1,10 @@
-# Smart Storage Unit Example
+<div align="center">
+
+# 📦 Smart Storage Unit Example
+
+> Build a vending machine for trading items using an SSU
+
+</div>
 
 ## Table of Contents
 
@@ -9,9 +15,8 @@
 5. [Troubleshooting](#troubleshooting)
 
 ## Introduction
-This guide will walk you through the process of building contracts for a Smart Storage Unit, deploying them into an existing world running, and testing their functionality by executing scripts.
 
-A Smart Storage Unit can be configured to trade items between the owner and other players. The amount traded is set by providing a ratio of items.
+This example will show you how to deploy and configure smart contracts for a [Smart Storage Unit](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit) that will trade items between the owner and other players. The amount traded is set by providing a ratio of items.
 
 Before starting make sure you've installed all required tools from the main [README](../README.md)
 
@@ -25,7 +30,7 @@ For additional details on the Smart Storage Unit, see our [Documentation](https:
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
 ### Step 1: Deploy the example contracts to the existing world
-First, copy the World Contract Address from the Docker logs obtained in the previous step:
+First, copy the World Contract Address from the Docker logs obtained in the previous steps:
 
 ![alt text](../readme-imgs/docker-deployment.png)
 
@@ -125,7 +130,7 @@ cp .envsample .env
 
 ### Step 2: Configure the Example to use Stillness
 
-Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
+Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
 WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
@@ -133,7 +138,7 @@ RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
 CHAIN_ID=17069
 ```
 
-You can also automatically point to Stillness with the most up-to-date values using: 
+You can also automatically point to Stillness with current values using: 
 
 ```bash
 pnpm env-stillness
@@ -154,7 +159,7 @@ Change the namespace from test to your own custom namespace.
 
 > 💡 **Tip** Consider using your username or coporation name as your namespace.
 
-First, edit **packages/contracts/mud.config.ts** to include your new namespace
+First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
 ```ts
 import { defineWorld } from "@latticexyz/world";
@@ -179,11 +184,15 @@ pnpm set-namespace
 
 ### Step 4: Configure the Private Key
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+Import your game wallet recovery phrase into EVE Wallet to get your private key:
 
 <div align="center">
 <img src="../readme-imgs/private-key.png" alt="Private Key" width="600">
 </div>
+
+<br />
+
+Then, set the `PRIVATE_KEY` in your .env file:
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -215,9 +224,9 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-#### 1. Player Test Account
+#### 1. Player Test Account (Optional)
 
-Now set the test player private key. This will be used for the execute script, and so set it to the private key of the player account that you want to trade with. You can also skip this variable for now if you want.
+Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the account you want to test trades with which will be used by the execute script:
 
 ```bash
 TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -270,7 +279,7 @@ ITEM_OUT_ID=11260302507776077078326463618950221722673323042193285069749633108205
 
 #### 4. Ratios
 
-A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
+A ratio of 1:2 means the Smart Storage Unit will give players 2 items for every 1 item they deposit.
 
 ```bash
 #Item Bought
@@ -309,11 +318,13 @@ pnpm execute
 
 If you encounter any issues, refer to the troubleshooting tips below:
 
-1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
+1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file to ensure you are deploying contracts to the correct world.
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
+
+4. **The Trade is not Working**: Ensure the `ITEM_IN_ID` and `ITEM_OUT_ID` are correctly set in the `contracts/.env` file.
 
 ## Need Help? 
 
