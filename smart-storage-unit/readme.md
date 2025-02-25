@@ -57,7 +57,9 @@ Then, run the following commands:
 Next, update your [.env](./packages/contracts/.env) file with the trade ratio:
 
 ```bash
+#Item Bought
 IN_RATIO=1
+#Item Sold  
 OUT_RATIO=2
 ```
 
@@ -124,9 +126,12 @@ cp .envsample .env
 ### Step 2: Configure the Example to use Stillness
 
 Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
-- WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
-- RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
-- CHAIN_ID=17069
+
+```bash copy
+WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
+RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
+CHAIN_ID=17069
+```
 
 You can also automatically point to Stillness with the most up-to-date values using: 
 
@@ -136,7 +141,18 @@ pnpm env-stillness
 
 ### Step 3: Configure the Namespace
 
-Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the example or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+A namespace is a unique identifier for deploying your smart contracts. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace.
+
+**Namespace Rules:**
+- ✅ Use letters (a-z, A-Z)
+- ✅ Use numbers (0-9)
+- ✅ Use underscores (_)
+- ❌ No special characters
+- ❌ No spaces
+
+Change the namespace from test to your own custom namespace. 
+
+> 💡 **Tip** Consider using your username or coporation name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace
 
@@ -144,20 +160,15 @@ First, edit **packages/contracts/mud.config.ts** to include your new namespace
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-    namespace: "test",
+    namespace: "new_namespace",
     tables: {
         ...
 ```
 
-Then, edit **packages/contracts/src/systems/constants.sol** to replace the DEPLOYMENT_NAMESPACE with your namespace:
+Then, edit **packages/contracts/src/systems/constants.sol**:
 
 ```solidity
-pragma solidity >=0.8.21;
-
-// make sure this matches mud.config.ts namespace
-bytes14 constant DEPLOYMENT_NAMESPACE = "test";
-
-bytes16 constant SYSTEM_NAME = "SmartStorageUnit";
+bytes14 constant DEPLOYMENT_NAMESPACE = "new_namespace";
 ```
 
 You can also use the below command and then input your new namespace to change it automatically:
@@ -184,13 +195,13 @@ pnpm set-key
 
 ### Step 5: Deploy the Contract
 
-Then deploy the contract using:
+Then deploy the SSU contracts using:
 
 ```bash
 pnpm deploy:garnet
 ```
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
+Once the deployment is successful, you'll see a screen similar to the one below.
 
 ![alt text](../readme-imgs/deploy.png)
 
@@ -244,9 +255,9 @@ You can use the "smartItemId" as the Item ID.
 Configure the Item ID's in the .env file.
 
 ```bash
-#ITEM IN : SALT
+#Item Bought
 ITEM_IN_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
-#ITEM OUT : LENS
+#Item Sold
 ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 ```
 
@@ -255,9 +266,9 @@ ITEM_OUT_ID=11260302507776077078326463618950221722673323042193285069749633108205
 A ratio with the in being 1 and out being 2 means that for every item a player puts into the deployable, they get two items from it. 
 
 ```bash
-#IN Ratio
+#Item Bought
 IN_RATIO=1
-#OUT Ratio
+#Item Sold
 OUT_RATIO=2
 ```
 
