@@ -234,7 +234,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 2. Copy the smart storage unit id.
 
 <div align="center">
-<img src="../readme-imgs/ssu-id.png" alt="SSU ID" width="600">
+<img src="../readme-imgs/ssu-id.png" alt="SSU ID" width="800">
 </div>
 
 3. Set the SSU_ID in the .env file.
