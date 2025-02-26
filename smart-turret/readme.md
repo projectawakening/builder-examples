@@ -107,11 +107,11 @@ pnpm execute
 ## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
-### Step 1: Deploy the example contracts to Stillness
+### Step 1: Setup your Environment
 Move to the example directory with:
 
 ```bash
-cd smart-turret/packages/contracts
+cd smart-storage-unit/packages/contracts
 ```
 
 Then install the Solidity dependencies for the contracts:
@@ -119,39 +119,57 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
-- WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
-- RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
-- CHAIN_ID=17069
+Then, if you haven't already copy the .envsample file to a .env file with:
+```bash
+cp .envsample .env
+```
 
-You can also automatically point to Stillness with the most up-to-date values using: 
+### Step 2: Configure the Example to use Stillness
+
+Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
+
+```bash copy
+WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
+RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
+CHAIN_ID=17069
+```
+
+You can also automatically point to Stillness with current values using: 
 
 ```bash
 pnpm env-stillness
 ```
 
-Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the example or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+### Step 3: Configure the Namespace
 
-First, edit **packages/contracts/mud.config.ts** to include your new namespace
+A namespace is a unique identifier for deploying your smart contracts. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace.
+
+**Namespace Rules:**
+- ✅ Use letters (a-z, A-Z)
+- ✅ Use numbers (0-9)
+- ✅ Use underscores (_)
+- ❌ No special characters
+- ❌ No spaces
+
+Change the namespace from test to your own custom namespace. 
+
+> 💡 **Tip** Consider using your username or coporation name as your namespace.
+
+First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
 ```ts
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-    namespace: "test",
+    namespace: "new_namespace",
     tables: {
         ...
 ```
 
-Then, edit **packages/contracts/src/systems/constants.sol** to replace the DEPLOYMENT_NAMESPACE with your namespace:
+Then, edit **packages/contracts/src/systems/constants.sol**:
 
 ```solidity
-pragma solidity >=0.8.21;
-
-// make sure this matches mud.config.ts namespace
-bytes14 constant DEPLOYMENT_NAMESPACE = "test";
-
-bytes16 constant SYSTEM_NAME = "SmartTurretSyste";
+bytes14 constant DEPLOYMENT_NAMESPACE = "new_namespace";
 ```
 
 You can also use the below command and then input your new namespace to change it automatically:
@@ -160,9 +178,17 @@ You can also use the below command and then input your new namespace to change i
 pnpm set-namespace
 ```
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+### Step 4: Configure the Private Key
 
-![Private Key](../readme-imgs/private-key.png)
+Import your game wallet recovery phrase into EVE Wallet to get your private key:
+
+<div align="center">
+<img src="../readme-imgs/private-key.png" alt="Private Key" width="600">
+</div>
+
+<br />
+
+Then, set the `PRIVATE_KEY` in your .env file:
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -174,64 +200,73 @@ You can also use the below command and then input your private key to change it:
 pnpm set-key
 ```
 
-Then deploy the contract using:
+### Step 5: Deploy the Contract
+
+Then deploy the SSU contracts using:
 
 ```bash
 pnpm deploy:garnet
 ```
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Turret contract. 
+Once the deployment is successful, you'll see a screen similar to the one below.
 
-![alt text](../readme-imgs/deploy.png)
+<div align="center">
+<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
+</div>
+
+## Configuring and Testing the Game Contracts (Stillness)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
+#### 1. Smart Turret ID (Turret ID)
 
-Right click your Smart Turret, open the DApp window and copy the Smart Turret id.
+For Stillness, the Smart Turret ID is available once you have deployed an Smart Turret in the game.
 
-![alt text](../readme-imgs/ssu-id.png)
+1. Right click your Smart Turret and press Interact
 
-```bash
-SMART_TURRET_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
-```
+2. Copy the smart turret id.
 
-Now set the allowed corp ID variable. You can retrieve the Corp ID by:
+<div align="center">
+<img src="../readme-imgs/turret-id.png" alt="Turret ID" width="800">
+</div>
+
+3. Set the SMART_TURRET_ID in the [.env](./packages/contracts/.env) file.
+
+    ```bash
+    SMART_TURRET_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
+    ```
+
+#### 2. Allowed Corp ID
+
+Now set the ALLOWED_CORP_ID variable.
+
 1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
-2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
-3. Use the **"corpId"** value which should be in:
-```json
-{
-    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
-    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
-    "corpId": "98000002",
-    "name": "CCP Red Dragon",
-    ...
-```
 
-```bash
-# Copy this information from your Smart Character corp ID
-ALLOWED_CORP_ID=3434306
-```
+2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+
+3. Use the **"corpId"** value which should be in:
+    ```json
+    {
+        "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+        "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+        "corpId": "98000002",
+        "name": "CCP Red Dragon",
+        ...
+    ```
+
+4. Set the ALLOWED_CORP_ID variable in the [.env](./packages/contracts/.env) file.
+
+    ```bash
+    ALLOWED_CORP_ID=98000002
+    ```
+    
 
 You can also set these values automatically using the below command:
 
 ```bash
 pnpm set-config
 ```
-
-Use the below steps for getting the values to input into the set-config tool
-
-For Stillness, the smart turret id is available once you have deployed an Smart Turret in the game. Right click your Smart Turret, click Interact and open the dapp window and copy the smart turret id.
-
-You then need to set the allowed corp ID to your corporation ID. You can find this through:
-
-1. Search for your smart character by searching your name in https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters
-   
-2. Use https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/CHARACTER_ADDRESS and replace **CHARACTER_ADDRESS** with the character address from the previous step
-   
-3. Retrieve the corpId from the retrieved JSON
 
 ### Step 2: Configure Smart Turret
 To configure which Smart Turret the contract uses and the allowed corporation, run:
@@ -240,7 +275,7 @@ To configure which Smart Turret the contract uses and the allowed corporation, r
 pnpm configure
 ```
 
-You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
+> You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
 

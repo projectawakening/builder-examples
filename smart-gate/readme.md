@@ -261,6 +261,12 @@ Now set the ALLOWED_CORP_ID variable.
     ALLOWED_CORP_ID=98000002
     ```
 
+You can also set these values automatically using the below command:
+
+```bash
+pnpm set-config
+```
+
 ### Step 2: Configure Smart Gate
 To configure which smart gates will be used, run:
 
