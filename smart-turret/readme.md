@@ -1,24 +1,30 @@
-# Smart Turret Example
+<div align="center">
+
+# 🎯 Smart Turret Example
+
+> Configure a [Smart Turret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret) with a custom strategy
+
+</div>
 
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment)
 3. [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness)
-4. [Troubleshooting](#troubleshooting)
+4. [Configuring and Testing the Game Contracts (Stillness)](#configuring-and-testing-the-game-contracts-stillness)
+5. [Troubleshooting](#troubleshooting)
 
 ## Introduction
-This guide will walk you through the process of building contracts for the smart turret, deploying them into an existing world running in Docker, and testing their functionality by executing scripts.
 
-Ensure you have setup your tools through the main [README](../README.md) before starting.
+This example will show you how to deploy and configure smart contracts for a [Smart Turret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret) with a custom strategy [Custom Strategy](#example-behavior-explanation)
 
-This example shows how to interact with the Smart Turret smart assembly and how to create contracts for it. The Smart Turret allows you to defend an area and can be configured to determine which ships to shoot and the priority to shoot them.
+Before starting make sure you've installed all required tools from the main [README](../README.md)
 
-You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
+You can test everything locally first using the [Local Environment Guide](#deployment-and-testing-in-local-environment), and when ready, deploy to the live game using the [Deployment Guide](#deployment-to-the-game-stillness).
 
 ### Additional Information
 
-For additional information on the Smart Turret you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartTurret](https://docs.evefrontier.com/SmartAssemblies/SmartTurret)
+For additional details on the Smart Turret, see our [Documentation](https://docs.evefrontier.com/SmartAssemblies/SmartTurret).
 
 ### Example Behavior Explanation
 
@@ -26,55 +32,61 @@ This example alters the Smart Turret to have two specific behaviors:
 
 1. It does not shoot at anyone in the specified corporation.
    
-2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.  
+2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example. 
 
-The game calls the inProximity function, and gets the received target array. It then picks it targets in reverse order. Meaning, it will pick the target at the end of the array. Currently the weight value is not used in-game, however is used by the sorting function.
+> 🔧 **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
 
-## Deployment and Testing in Local Environment</a>
+## Deployment and Testing in Local Environment
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
-### Step 0: Deploy the example contracts to the existing world
+### Step 1: Deploy the example contracts to the existing world
 First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
 
 ![alt text](../readme-imgs/docker-deployment.png)
 
-Move to the example directory with:
+Then, run the following commands:
 
-```bash
-cd smart-turret
-```
+1. Navigate to the example directory:
+    ```bash
+    cd smart-storage-unit
+    ```
 
-Then install the Solidity dependencies for the contracts:
-```bash
-pnpm install
-```
+2. Install the Solidity dependencies for the contracts:
+    ```bash
+    pnpm install
+    ```
 
-Then, copy the .envsample file to a .env file with:
-```bash
-cp packages/contracts/.envsample packages/contracts/.env
-```
+3. Create your environment file:
+    ```bash
+    cp packages/contracts/.envsample packages/contracts/.env
+    ```
 
-This will deploy the contracts to a forked version of your local world for testing.
-```bash
-pnpm dev
-```
+4. Deploy to your local test environment
+    ```bash
+    pnpm dev
+    ```
+
+    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
-![](../readme-imgs/deploy.png)
+![alt text](../readme-imgs/deploy.png)
 
 ### Step 1: Mock data for the existing world **(Local Development Only)**
-Click on the "shell" process and then click on the main terminal window. 
 
-To generate mock data for testing the Smart Turret logic on the local world, you can click on the shell process as seen in the image below, click in the terminal and then run:
+Generate the test data by:
 
-![Processes Image](../readme-imgs/processes.png)
+1. Select the "shell" process and then click on the main terminal window. 
 
-```bash
-pnpm mock-data
-```
+    ![Processes Image](../readme-imgs/processes.png)
 
-This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
+2. To generate mock data for testing the Smart Turret logic on the local world, run the following command. This generates and deploys the smart turret deployable and items.
+
+    ```bash
+    pnpm mock-data
+    ```
+
+> This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
 To set the smart turret ID, and allowed corporation ID use:
@@ -83,10 +95,10 @@ To set the smart turret ID, and allowed corporation ID use:
 pnpm configure
 ```
 
-You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
+> You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
-To test the Smart Turret In Proximity functionality you can use the follow command:
+To test the custom Smart Turret functionality you can use the follow command:
 
 ```bash
 pnpm execute
@@ -95,7 +107,7 @@ pnpm execute
 ## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
-### Step 0: Deploy the example contracts to Stillness
+### Step 1: Deploy the example contracts to Stillness
 Move to the example directory with:
 
 ```bash
@@ -240,5 +252,9 @@ If you encounter any issues, refer to the troubleshooting tips below:
 
 3. **Turret ID Mismatch (Devnet)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
 
-### Still having issues?
-If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.
+## Need Help? 
+
+If you are still having issues, then visit the Documentation or join the Discord Community for support.
+
+[![Documentation](https://img.shields.io/badge/📚_Documentation-Visit_Docs-blue)](https://docs.evefrontier.com/)
+[![Community](https://img.shields.io/badge/💬_Discord-Join_Community-7289DA)](https://discord.gg/evefrontier)

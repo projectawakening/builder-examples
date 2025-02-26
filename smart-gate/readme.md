@@ -1,3 +1,11 @@
+<div align="center">
+
+# 🚪 Smart Gate Example
+
+> Build a [**Smart Gate**](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific corporation to use it
+
+</div>
+
 # Smart Gate Example
 
 ## Table of Contents
@@ -8,95 +16,93 @@
 4. [Troubleshooting](#troubleshooting)
 
 ## Introduction
-This guide will walk you through the process of building contracts for a Smart Gate, deploying them into an existing world running, and testing their functionality by executing scripts.
 
-Ensure you have setup your tools through the main [README](../README.md) before starting.
+This example will show you how to deploy and configure contracts for a [Smart Gate](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific corporation to use it.
 
-The Smart Gate allows players to create player made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
+Before starting make sure you've installed all required tools from the main [README](../README.md)
 
-This example shows how to create a Smart Gate that only allows members of a specific corporation to use the Smart Gate.
+The Smart Gate allows players to create player-made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
 
-You can use [Deployment and Testing in Local Environment](#deployment-and-testing-in-local-environment) to test the example on your computer and [Deployment To The Game (Stillness)](#deployment-to-the-game-stillness) to deploy it to the game.
+You can test everything locally first using the [Local Environment Guide](#deployment-and-testing-in-local-environment), and when ready, deploy to the live game using the [Deployment Guide](#deployment-to-the-game-stillness).
 
 ### Additional Information
 
-For additional information on the Smart Gate you can visit: [https://docs.evefrontier.com/SmartAssemblies/SmartGate](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
+For additional details on the Smart Gate, see our [Documentation](https://docs.evefrontier.com/SmartAssemblies/SmartGate).
 
-## Deployment and Testing in Local Environment</a>
+## Deployment and Testing in Local Environment
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
-### Step 0: Deploy the example contracts to the existing world
-First, copy the World Contract Address from the Docker logs obtained in the previous step, then run the following commands:
+### Step 1: Deploy the example contracts to the existing world
+First, copy the World Contract Address from the Docker logs obtained in the previous steps:
 
 ![alt text](../readme-imgs/docker-deployment.png)
 
-Move to the example directory with:
+Then, run the following commands:
 
-```bash
-cd smart-gate
-```
+1. Navigate to the example directory:
+    ```bash
+    cd smart-gate
+    ```
 
-Then install the Solidity dependencies for the contracts:
-```bash
-pnpm install
-```
+2. Install the Solidity dependencies for the contracts:
+    ```bash
+    pnpm install
+    ```
 
-Then, copy the .envsample file to a .env file with:
-```bash
-cp packages/contracts/.envsample packages/contracts/.env
-```
+3. Create your environment file:
+    ```bash
+    cp packages/contracts/.envsample packages/contracts/.env
+    ```
 
-This will deploy the contracts to a forked version of your local world for testing.
-```bash
-pnpm dev
-```
+4. Deploy to your local test environment
+    ```bash
+    pnpm dev
+    ```
 
-Once deployment is successful, you'll see a screen similar to the one below. This process creates a forked version of the local world and deploys the Smart Turret contracts.
+    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
 
-![alt text](../readme-imgs/deploy.png)
+### Step 2: Mock data for the existing world
+Generate the test data by:
 
-The forked local world means that any changes that happen when running pnpm dev are reverted when closing it, allowing you to quickly reset and try something different.
+1. Select the "shell" process and then click on the main terminal window. 
 
-### Step 1: Mock data for the existing world **(Local Development Only)**
-Click on the "shell" process and then click on the main terminal window. 
+    ![Processes Image](../readme-imgs/processes.png)
 
-To generate mock data for testing the Smart Gate logic on the local world, run the following command:
+2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
 
-![Processes Image](../readme-imgs/processes.png)
+    ```bash
+    pnpm mock-data
+    ```
 
-```bash
-pnpm mock-data
-```
+> This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
 
-This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
-
-### Step 2: Configure Smart Gate
-To configure which smart gates will be used, run:
+### Step 3: Configure Smart Gate
+To configure which smart gates will be used and the allowed corp ID, run:
 
 ```bash
 pnpm configure-smart-gate
 ```
 
-You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+> You can adjust the values for the SMART_GATE_ID and ALLOWED_CORP_ID in the .env file as needed, though they are optional.
 
-### Step 3: Link Gates
-To use the smart gates, you need to link them together to create a connection. To link the source and destination gates use:
+### Step 4: Link Gates
+To use the smart gates, you need to link them together to create a connection. To link the source and destination gates through a script use:
 
 ```bash copy
 pnpm link-gates
 ```
 
-### Step 4: Test The Smart Gate (Optional)
+### Step 5: Test The Smart Gate (Optional)
 To test the smart gate and check the canJump, use the following command:
 
 ```bash
 pnpm execute
 ```
 
-## Deployment To The Game (Stillness)</a>
+## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
-### Step 0: Deploy the example contracts to Stillness
+### Step 1: Setup your Environment
 Move to the example directory with:
 
 ```bash
@@ -113,39 +119,52 @@ Then, if you haven't already copy the .envsample file to a .env file with:
 cp .envsample .env
 ```
 
-Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
-- WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
-- RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
-- CHAIN_ID=17069
+### Step 2: Configure the Example to use Stillness
 
-You can also automatically point to Stillness with the most up-to-date values using: 
+Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
+
+```bash copy
+WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
+RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
+CHAIN_ID=17069
+```
+
+You can also automatically point to Stillness with current values using: 
 
 ```bash
 pnpm env-stillness
 ```
 
-Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the example or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+### Step 3: Configure the Namespace
 
-First, edit **packages/contracts/mud.config.ts** to include your new namespace
+A namespace is a unique identifier for deploying your smart contracts. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace.
+
+**Namespace Rules:**
+- ✅ Use letters (a-z, A-Z)
+- ✅ Use numbers (0-9)
+- ✅ Use underscores (_)
+- ❌ No special characters
+- ❌ No spaces
+
+Change the namespace from test to your own custom namespace. 
+
+> 💡 **Tip** Consider using your username or coporation name as your namespace.
+
+First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
 ```ts
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-    namespace: "test",
+    namespace: "new_namespace",
     tables: {
         ...
 ```
 
-Then, edit **packages/contracts/src/systems/constants.sol** to replace the DEPLOYMENT_NAMESPACE with your namespace:
+Then, edit **packages/contracts/src/systems/constants.sol**:
 
 ```solidity
-pragma solidity >=0.8.21;
-
-// make sure this matches mud.config.ts namespace
-bytes14 constant DEPLOYMENT_NAMESPACE = "test";
-
-bytes16 constant SYSTEM_NAME = "SmartStorageUnit";
+bytes14 constant DEPLOYMENT_NAMESPACE = "new_namespace";
 ```
 
 You can also use the below command and then input your new namespace to change it automatically:
@@ -154,9 +173,17 @@ You can also use the below command and then input your new namespace to change i
 pnpm set-namespace
 ```
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+### Step 4: Configure the Private Key
 
-![Private Key](../readme-imgs/private-key.png)
+Import your game wallet recovery phrase into EVE Wallet to get your private key:
+
+<div align="center">
+<img src="../readme-imgs/private-key.png" alt="Private Key" width="600">
+</div>
+
+<br />
+
+Then, set the `PRIVATE_KEY` in your .env file:
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -168,44 +195,71 @@ You can also use the below command and then input your private key to change it:
 pnpm set-key
 ```
 
-Then deploy the contract using:
+### Step 5: Deploy the Contract
+
+Then deploy the SSU contracts using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm deploy:garnet
 ```
 
-Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Gate contracts. 
+Once the deployment is successful, you'll see a screen similar to the one below.
 
-![alt text](../readme-imgs/deploy.png)
+
+<div align="center">
+<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
+</div>
+
+## Configuring and Testing the Game Contracts (Stillness)
 
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
+#### 1. Smart Gate ID's
+
 For Stillness, the smart gate id is available once you have deployed an Smart Gate in the game. Right click your Smart Gate, click Interact and open the dapp window and copy the smart gate id.
 
-```bash
-SOURCE_GATE_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
+For Stillness, the Smart Gate ID is available once you have deployed an Smart Gate in the game.
 
-DESTINATION_GATE_ID=67387866010353549996346280963079126762450299713900890730943797543376801696007
-```
+1. Right click your Source Smart Gate and press Interact
 
-Now set the allowed corp ID variable. You can retrieve the Corp ID by:
+2. Copy the smart gate id.
+
+<div align="center">
+<img src="../readme-imgs/ssu-id.png" alt="SSU ID" width="800">
+</div>
+
+3. Set the SOURCE_GATE_ID in the [.env](./packages/contracts/.env) file.
+
+    ```bash
+    SOURCE_GATE_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
+    ```
+
+4. Repeat the above steps for the DESTINATION_GATE_ID value.
+
+#### 2. Allowed Corp ID
+
+Now set the ALLOWED_CORP_ID variable.
+
 1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
-2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
-3. Use the **"corpId"** value which should be in:
-```json
-{
-    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
-    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
-    "corpId": "98000002",
-    "name": "CCP Red Dragon",
-    ...
-```
 
-```bash
-# Copy this information from your Smart Character corp ID
-ALLOWED_CORP_ID=3434306
-```
+2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+
+3. Use the **"corpId"** value which should be in:
+    ```json
+    {
+        "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+        "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+        "corpId": "98000002",
+        "name": "CCP Red Dragon",
+        ...
+    ```
+
+4. Set the ALLOWED_CORP_ID variable in the [.env](./packages/contracts/.env) file.
+
+    ```bash
+    ALLOWED_CORP_ID=98000002
+    ```
 
 ### Step 2: Configure Smart Gate
 To configure which smart gates will be used, run:
@@ -214,7 +268,7 @@ To configure which smart gates will be used, run:
 pnpm configure
 ```
 
-You can alter the gate ID's and the allowed corp in the .env file as needed.
+> You can alter the gate ID's and the allowed corp in the .env file as needed.
 
 ### Troubleshooting
 
@@ -224,7 +278,11 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.  
+3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.
 
-### Still having issues?
-If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.
+## Need Help? 
+
+If you are still having issues, then visit the Documentation or join the Discord Community for support.
+
+[![Documentation](https://img.shields.io/badge/📚_Documentation-Visit_Docs-blue)](https://docs.evefrontier.com/)
+[![Community](https://img.shields.io/badge/💬_Discord-Join_Community-7289DA)](https://discord.gg/evefrontier)

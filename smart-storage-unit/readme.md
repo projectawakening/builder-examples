@@ -2,7 +2,7 @@
 
 # 📦 Smart Storage Unit Example
 
-> Build a vending machine for trading items using an SSU
+> Build a vending machine for trading items using a [**Smart Storage Unit**](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit)
 
 </div>
 
@@ -26,7 +26,7 @@ You can test everything locally first using the [Local Environment Guide](#deplo
 
 For additional details on the Smart Storage Unit, see our [Documentation](https://docs.evefrontier.com/SmartAssemblies/SmartStorageUnit).
 
-## Deployment and Testing in Local Environment</a>
+## Deployment and Testing in Local Environment
 To deploy the example to your local world hosted on Docker, follow the below steps.
 
 ### Step 1: Deploy the example contracts to the existing world
@@ -58,6 +58,10 @@ Then, run the following commands:
 
     > **Note:** This will deploy the contracts to a forked version of your local world for testing.
 
+Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
+
+![alt text](../readme-imgs/deploy.png)
+
 ### Step 2: Setup the environment variables (Optional)
 Next, update your [.env](./packages/contracts/.env) file with the trade ratio:
 
@@ -74,7 +78,7 @@ OUT_RATIO=2
 > ⚠️ **Warning:** Choose your ratios carefully to avoid accidentally depleting your item supply!
 
 
-### Step 3: Mock data for the existing world
+### Step 3: Mock data for the existing world **(Local Development Only)**
 
 Generate the test data by:
 
@@ -246,7 +250,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 <img src="../readme-imgs/ssu-id.png" alt="SSU ID" width="800">
 </div>
 
-3. Set the SSU_ID in the .env file.
+3. Set the SSU_ID in the [.env](./packages/contracts/.env) file.
 
     ```bash
     SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
@@ -306,6 +310,8 @@ pnpm configure
 ```
 
 > You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed.
+
+> ⚠️ **Warning:** Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
 
 ### Step 3: Execute the trade
 To trade items, make sure the items are in the inventories and then you need to run:
