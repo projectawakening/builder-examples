@@ -227,7 +227,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-#### 1. Player Test Account (Optional)
+#### Step 1.1: Player Test Account (Optional)
 
 Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the account you want to test trades with which will be used by the execute script:
 
@@ -237,7 +237,7 @@ TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d
 
 > ⚠️ Note: This is only for testing, and an example not requiring this is on it's way.
 
-#### 2. Smart Storage Unit ID (SSU ID)
+#### Step 1.2: Smart Storage Unit ID (SSU ID)
 
 For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have deployed an SSU in the game.
 
@@ -255,7 +255,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
     SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
     ```
 
-#### 3. Item ID's
+#### Step 1.3: Item ID's
 
 To retrieve the Item ID's you can use https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and then search for the item name.
 
@@ -280,7 +280,7 @@ ITEM_IN_ID=705052004874891294915332727169104086037532565953637807148820653328761
 ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 ```
 
-#### 4. Ratios
+#### Step 1.4: Ratios
 
 A ratio of 1:2 means the Smart Storage Unit will give players 2 items for every 1 item they deposit.
 

@@ -41,9 +41,15 @@ git --version
 ```
 
 #### Installing Node Version Manager
-Install NVM and Node version 18 by using this command:
+Install NVM using this command:
 ```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash && nvm install 18
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash && source ~/.bashrc
+```
+
+#### Installing Node
+Install Node version 18 by using this command:
+```bash
+nvm install 18
 ```
 
 #### Installing PNPM
@@ -55,7 +61,7 @@ npm install -g pnpm
 ### Installing Foundry + Forge
 Install foundry and restart the shell with:
 ```bash
-curl -L https://foundry.paradigm.xyz | bash && source /root/.bashrc
+curl -L https://foundry.paradigm.xyz | bash && source ~/.bashrc
 ```
 
 Run the below command to install forge, cast, anvil and chisel:
@@ -67,14 +73,15 @@ foundryup
 This guide will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
 
 ### Prerequisites
-Make sure you have the **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
+Ensure you have **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
 ### Deploying world contracts into a local node.
-We have provided a docker compose file which bundles the running of the local node and deploying the world chain contracts to simulate the existing world. Run that with the command:
+We have provided a docker compose file which bundles the running of the local node/world and deploying the world chain contracts to simulate the existing world. Run that with the command:
 
 ```bash
 docker compose up -d
 ```
+
 ![alt text](readme-imgs/docker-success.png)
 
 Monitor the progress of the world deployment with:
@@ -96,7 +103,9 @@ docker compose cp world-deployer:/monorepo/abis .
 
 ### Step 3: Start Building!
 
-Now that your local tools and development environment is set up, you're ready to start building! To begin, simply navigate to the desired example directory (or use the links below) then follow the instructions outlined in its README file. For more information on Smart Assemblies you can visit [this page](https://docs.evefrontier.com/SmartAssemblies) on the documentation.
+Now that your local tools and development environment is set up, you're ready to start building! 
+
+To begin, navigate to the desired example directory then follow the instructions outlined in its README file. For more information on Smart Assemblies you can visit the [Smart Assemblies Documentation](https://docs.evefrontier.com/SmartAssemblies).
 
 ```bash
 cd smart-storage-unit

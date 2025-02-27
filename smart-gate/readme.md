@@ -64,11 +64,11 @@ Then, run the following commands:
 ### Step 2: Mock data for the existing world
 Generate the test data by:
 
-1. Select the "shell" process and then click on the main terminal window. 
+#### Step 2.1. Select the "shell" process and then click on the main terminal window. 
 
     ![Processes Image](../readme-imgs/processes.png)
 
-2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
+#### Step 2.2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
 
     ```bash
     pnpm mock-data
@@ -215,7 +215,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-#### 1. Smart Gate ID's
+#### Step 1.1: Smart Gate ID's
 
 For Stillness, the smart gate id is available once you have deployed an Smart Gate in the game. Right click your Smart Gate, click Interact and open the dapp window and copy the smart gate id.
 
@@ -237,7 +237,7 @@ For Stillness, the Smart Gate ID is available once you have deployed an Smart Ga
 
 4. Repeat the above steps for the DESTINATION_GATE_ID value.
 
-#### 2. Allowed Corp ID
+#### Step 1.2: Allowed Corp ID
 
 Now set the ALLOWED_CORP_ID variable.
 

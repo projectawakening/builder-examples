@@ -70,7 +70,9 @@ Then, run the following commands:
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
-![alt text](../readme-imgs/deploy.png)
+<div align="center">
+<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
+</div>
 
 ### Step 1: Mock data for the existing world **(Local Development Only)**
 
@@ -219,7 +221,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 ### Step 1: Setup the environment variables 
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
-#### 1. Smart Turret ID (Turret ID)
+#### Step 1.1: Smart Turret ID (Turret ID)
 
 For Stillness, the Smart Turret ID is available once you have deployed an Smart Turret in the game.
 
@@ -231,15 +233,15 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
 <img src="../readme-imgs/turret-id.png" alt="Turret ID" width="800">
 </div>
 
-3. Set the SMART_TURRET_ID in the [.env](./packages/contracts/.env) file.
+3. Set the `SMART_TURRET_ID` in the [.env](./packages/contracts/.env) file.
 
     ```bash
     SMART_TURRET_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
     ```
 
-#### 2. Allowed Corp ID
+#### Step 1.2: Allowed Corp ID
 
-Now set the ALLOWED_CORP_ID variable.
+Now set the `ALLOWED_CORP_ID` variable.
 
 1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
 
@@ -255,7 +257,7 @@ Now set the ALLOWED_CORP_ID variable.
         ...
     ```
 
-4. Set the ALLOWED_CORP_ID variable in the [.env](./packages/contracts/.env) file.
+4. Set the `ALLOWED_CORP_ID` variable in the [.env](./packages/contracts/.env) file.
 
     ```bash
     ALLOWED_CORP_ID=98000002
