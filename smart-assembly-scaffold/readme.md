@@ -1,4 +1,10 @@
+<div align="center">
+
 # 🏗️ Smart Assembly Scaffold
+
+> A template for creating DApps for EVE Frontier
+
+</div>
 
 ## Table of Contents
 
@@ -38,6 +44,8 @@ This command will:
 - **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
 - **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
 
+You can then open the website through: http://localhost:3000
+
 **Environment Variables**:  
 For this step, ensure you have the appropriate `.env` files configured.
 
@@ -47,11 +55,36 @@ For this step, ensure you have the appropriate `.env` files configured.
 
 You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
 
-```
-http://localhost:13690/anvil/worlds/<worldAddress>/explore
-```
+http://localhost:13690/anvil/worlds/0x8a791620dd6260079bf849dc5567adc3f2fdc318/explore
 
 With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
+
+### Step 3: 🛠️ Setup your Local MetaMask Wallet
+
+The local environment uses MetaMask as the wallet as it allows for private key import.
+
+1. Install MetaMask through: https://metamask.io/download/
+2. Open the extension and create a new wallet:
+
+![MetaMask Import](../readme-imgs/metamask/2.png)
+
+3. Select the account dropdown in the top center:
+
+![MetaMask Import](../readme-imgs/metamask/3.png)
+
+4. Select `Add account or hardware wallet`:
+
+![MetaMask Import](../readme-imgs/metamask/4.png)
+
+5. Select `Import account`:
+
+![MetaMask Import](../readme-imgs/metamask/5.png)
+
+6. Import the default private key `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`:
+
+![Metamask Import](../readme-imgs/metamask/6.png)
+
+You should now see the account in your wallet, and be able to use it to interact with the local environment.
 
 ## 🛠️ Development & Deployment Steps for the Game (Stillness)
 
@@ -65,14 +98,22 @@ Navigate to the contracts directory with:
 cd packages/contracts
 ```
 
+Then, if you haven't already copy the .envsample file to a .env file with:
+```bash
+cp .envsample .env
+```
+
 #### Environment
 
-Next, set the following values in the [.env](./packages/contracts/.env) file to point the contracts to use Stillness:
-- WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
-- RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
-- CHAIN_ID=17069
+Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
-You can also automatically point to Stillness with the most up-to-date values using: 
+```bash copy
+WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
+RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
+CHAIN_ID=17069
+```
+
+You can also automatically point to Stillness with current values using: 
 
 ```bash
 pnpm env-stillness
@@ -82,9 +123,15 @@ pnpm env-stillness
 
 #### Private Key
 
-Now replace the private key in the [.env](./packages/contracts/.env) file. Get your recovery phrase from the game wallet, import into EVE Wallet and then retrieve the private key as visible in the image below.
+Import your game wallet recovery phrase into EVE Wallet to get your private key:
 
-![Private Key](../readme-imgs/private-key.png)
+<div align="center">
+<img src="../readme-imgs/private-key.png" alt="Private Key" width="600">
+</div>
+
+<br />
+
+Then, set the `PRIVATE_KEY` in your .env file:
 
 ```bash
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -100,28 +147,35 @@ pnpm set-key
 
 #### Namespace
 
-Change the namespace from test to your own custom namespace. This will be the namespace that you use for future development with the example or other smart contracts. For example, you could use your username as the namespace. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace. Namespaces can only contain a-z, A-Z, 0-9 and _.
+A namespace is a unique identifier for deploying your smart contracts. Once you deploy to a namespace, it will set you as the owner and only you will be able to deploy smart contracts within the namespace.
 
-First, edit **packages/contracts/mud.config.ts** to include your new namespace
+**Namespace Rules:**
+- ✅ Use letters (a-z, A-Z)
+- ✅ Use numbers (0-9)
+- ✅ Use underscores (_)
+- ✅ Under Max Length (Max 14 characters)
+- ❌ No special characters
+- ❌ No spaces
+
+Change the namespace from `exampleName` to your own custom namespace. 
+
+> 💡 **Tip** Consider using your username or coporation name as your namespace.
+
+First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
 ```ts
 import { defineWorld } from "@latticexyz/world";
 
 export default defineWorld({
-    namespace: "test",
+    namespace: "new_namespace",
     tables: {
         ...
 ```
 
-Then, edit **packages/contracts/src/systems/constants.sol** to replace the DEPLOYMENT_NAMESPACE with your namespace:
+Then, edit **packages/contracts/src/systems/constants.sol**:
 
 ```solidity
-pragma solidity >=0.8.21;
-
-// make sure this matches mud.config.ts namespace
-bytes14 constant DEPLOYMENT_NAMESPACE = "test";
-
-bytes16 constant SYSTEM_NAME = "SmartStorageUnit";
+bytes14 constant DEPLOYMENT_NAMESPACE = "new_namespace";
 ```
 
 You can also use the below command and then input your new namespace to change it automatically:
@@ -152,17 +206,82 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
 
 ### Step 3: 💻 Configuring dApp Environment Variables
 
-1. Copy the `.envsample` file in `./packages/client/` to `.env` if you haven't already:
+1. Navigate to the client directory with:
 
    ```bash
-   cp ./packages/client/.envsample ./packages/client/.env
+   cd packages/client
    ```
 
-2. Update the following environment variables in `./packages/client/.env`:
+2. Copy the `.envsample` file in `./packages/client/` to `.env` if you haven't already:
+
+   ```bash
+   cp .envsample .env
+   ```
+
+3. Update the following environment variables in `./packages/client/.env`:
    - **`VITE_SMARTASSEMBLY_ID`**: The ID obtained from your deployed smart assembly in-game.
    - **`VITE_CHAIN_ID`**: The chain ID that the World uses, which for Stillness is **17069**.
 
-With these variables set, you can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Garnet chain to fully interact with the deployed contracts.
+### Step 4: Updating Namespace Client References
+
+> 💡 **Tip** If you have already used the command `pnpm set-namespace` in the contracts step then you can skip this step.
+
+To update the namespace client references, you need to search and replace the namespace in the client code. You can do this through:
+
+1. In your IDE, for example Visual Studio Code, press Ctrl+Shift+H and search for `exampleNamesp`.
+
+2. Include `smart-assembly-scaffold/packages/client/src` in the search.
+
+3. Set it to replace all occurrences with your new namespace.
+
+4. Press Ctrl+Alt+Enter to replace in files.
+
+---
+
+<details>
+<summary><b>You can also replace each entry manually by:</b></summary>
+
+#### Step 4.1: [smart-assembly-scaffold/packages/client/src/components/Toggle.tsx](smart-assembly-scaffold/packages/client/src/components/Toggle.tsx)
+
+Line 19:
+
+```tsx
+table: mudConfig.namespaces.YOUR_NAMESPACE.tables.ToggleTable,
+```
+
+#### Step 4.2: [smart-assembly-scaffold/packages/client/src/components/systemCalls/handleToggle.ts](smart-assembly-scaffold/packages/client/src/components/systemCalls/handleToggle.ts)
+
+Line 13:
+
+```ts
+txHash = await worldContract.write.YOUR_NAMESPACE__setTrue([smartObjectId]);
+```
+
+Line 15:
+
+```ts
+txHash = await worldContract.write.YOUR_NAMESPACE__setFalse([smartObjectId]);
+```
+
+</details>
+
+---
+
+You can also use the below command to automatically update the namespace client references:
+
+```bash
+pnpm set-namespace
+```
+
+### Step 5: 💡 Running the dApp
+
+To run the dApp, navigate to the client directory and run:
+
+```bash
+pnpm dev
+```
+
+You can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Garnet chain to fully interact with the deployed contracts.
 
 ---
 
