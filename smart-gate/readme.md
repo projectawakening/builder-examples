@@ -124,9 +124,9 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x7fe660995b0c59b6975d5d59973e2668af6bb9c5
-RPC_URL=https://garnet-rpc.live.tech.evefrontier.com
-CHAIN_ID=17069
+WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
+RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+CHAIN_ID=695569
 ```
 
 You can also automatically point to Stillness with current values using: 
@@ -148,7 +148,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or coporation name as your namespace.
+> 💡 **Tip** Consider using your username or corporation name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
