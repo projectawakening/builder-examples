@@ -30,36 +30,7 @@ The Smart Assembly Scaffold provides a minimal example to toggle the state of an
 
 ## 🛠️ Development & Deployment Steps in Local Environment
 
-### Step 1: 🏗️ Deploy Anvil, Contracts, and World Explorer
-
-From the project’s root directory, run:
-
-```bash
-pnpm run dev
-```
-
-This command will:
-
-- **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
-- **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
-- **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
-
-You can then open the website through: http://localhost:3000
-
-**Environment Variables**:  
-For this step, ensure you have the appropriate `.env` files configured.
-
-- A copy of required environment variables can be found in `./packages/client/.envsample`. Duplicate `.envsample` into `.env` and then adjust the values accordingly.
-
-### Step 2: 🔭 Develop Against the World Explorer
-
-You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
-
-http://localhost:13690/anvil/worlds/0x8a791620dd6260079bf849dc5567adc3f2fdc318/explore
-
-With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
-
-### Step 3: 🛠️ Setup your Local MetaMask Wallet
+### Step 1: 🛠️ Setup your Local MetaMask Wallet
 
 The local environment uses MetaMask as the wallet as it allows for private key import.
 
@@ -85,6 +56,42 @@ The local environment uses MetaMask as the wallet as it allows for private key i
 ![Metamask Import](../readme-imgs/metamask/6.png)
 
 You should now see the account in your wallet, and be able to use it to interact with the local environment.
+
+### Step 2: 🏗️ Deploy Anvil, Contracts, and World Explorer
+
+Navigate to the project’s root directory with:
+
+```bash
+cd smart-assembly-scaffold
+```
+
+Install the dependencies with:
+
+```bash
+pnpm install
+```
+
+From the project’s root directory, run:
+
+```bash
+pnpm run dev
+```
+
+This command will:
+
+- **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
+- **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
+- **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
+
+You can then open the DApp through: http://localhost:3000
+
+### Step 3: 🔭 Develop Against the World Explorer
+
+You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
+
+http://localhost:13690/anvil/worlds/0x8a791620dd6260079bf849dc5567adc3f2fdc318/explore
+
+With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
 
 ## 🛠️ Development & Deployment Steps for the Game (Stillness)
 
