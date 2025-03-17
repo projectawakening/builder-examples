@@ -49,7 +49,7 @@ When the contracts are ready to be deployed beyond the local environment:
 2. To deploy to Pyrope:
 
    ```bash
-   pnpm deploy:pyrope --worldAddress <worldAddress>
+   pnpm deploy:pyrope
    ```
 
 **Environment Variables**:
