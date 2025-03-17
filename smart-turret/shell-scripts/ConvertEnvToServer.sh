@@ -33,7 +33,7 @@ fi
 
 # If the API call didn't work - use a known RPC URL for Stillness or Nova
 if [[ -z "$RPC_URL" ]]; then
-    RPC_URL="https://garnet-rpc.dev.evefrontier.tech"
+    RPC_URL="https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com"
 fi
 
 SED_CMD="sed"
@@ -64,5 +64,5 @@ if [ ! -f  $ENV_FILE ]; then
 fi
 
 set_content "WORLD_ADDRESS" $world_address $ENV_FILE "$SERVER World Address"
-set_content "CHAIN_ID" $CHAIN_ID $ENV_FILE "Garnet Chain ID"
+set_content "CHAIN_ID" $CHAIN_ID $ENV_FILE "Pyrope Chain ID"
 set_content "RPC_URL" $RPC_URL $ENV_FILE "$SERVER RPC URL"

@@ -46,15 +46,15 @@ With the World Explorer, you can interactively view tables, query on-chain data,
 When the contracts are ready to be deployed beyond the local environment:
 
 1. Obtain the appropriate World address from the relevant configuration (e.g. Stillness, Nova).
-2. To deploy to Garnet:
+2. To deploy to Pyrope:
 
    ```bash
-   pnpm deploy:garnet --worldAddress <worldAddress>
+   pnpm deploy:pyrope --worldAddress <worldAddress>
    ```
 
 **Environment Variables**:
 
-- Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Garnet or other devnets, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
+- Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Pyrope or other devnets, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
 
 ### Step 4: 🌐 dApp Environment Variables and Considerations
 
@@ -73,7 +73,7 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
    - **`VITE_GATEWAY_HTTP`**: The HTTP endpoint of a deployed World API instance (e.g., Nova or Stillness).
    - **`VITE_GATEWAY_WS`**: The WebSocket endpoint corresponding to `VITE_GATEWAY_HTTP`, enabling real-time data streams.
 
-With these variables set, you can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Garnet chain to fully interact with the deployed contracts.
+With these variables set, you can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Pyrope chain to fully interact with the deployed contracts.
 
 The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 
