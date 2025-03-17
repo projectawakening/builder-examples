@@ -17,7 +17,7 @@ response=$(curl -s -H "Accept: application/json" "$API_URL")
 world_address=$(echo "$response" | grep -o '"world":{[^}]*}' | grep -o '"address":"[^"]*"' | sed 's/"address":"//;s/"//')
 RPC_URL=$(echo "$response" | grep -o '"default":{[^}]*}' | grep -o '"http":"[^"]*"' | sed 's/"http":"//;s/"//')
 
-CHAIN_ID="17069"
+CHAIN_ID="695569"
 
 # If the API call didn't work - use a known world address for Stillness or Nova
 if [[ -z "$world_address" ]]; then

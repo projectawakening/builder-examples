@@ -115,7 +115,7 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 Then deploy the contract using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm run deploy:pyrope
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
