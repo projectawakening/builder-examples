@@ -8,6 +8,7 @@
     "clean": "forge clean && rimraf src/codegen",
     "deploy:local": ". ./.env && pnpm run build && mud deploy --profile=local --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:pyrope": ". ./.env && pnpm run build && mud deploy --profile=pyrope --worldAddress ${WORLD_ADDRESS:-$1}",
+    "deploy:garnet": ". ./.env && pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:redstone": ". ./.env && pnpm run build && mud deploy --profile=redstone --worldAddress ${WORLD_ADDRESS:-$1}",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
