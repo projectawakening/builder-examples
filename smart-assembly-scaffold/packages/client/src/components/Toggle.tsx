@@ -16,7 +16,7 @@ const Toggle = React.memo(function Toggle() {
 
   const toggleValue = useRecord({
     stash,
-    table: mudConfig.namespaces.example.tables.ToggleTable,
+    table: mudConfig.namespaces.exampleName.tables.ToggleTable,
     key: {
       smartObjectId: BigInt(smartAssembly?.id || 0),
     },

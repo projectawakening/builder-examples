@@ -74,7 +74,7 @@ contract MockSsuData is Script {
         owner,
         8888,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
         ""
       );
     }

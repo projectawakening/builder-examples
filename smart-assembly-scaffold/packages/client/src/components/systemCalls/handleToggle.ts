@@ -10,9 +10,9 @@ const setToggle = async ({
   let txHash;
 
   if (!currentValue) {
-    txHash = await worldContract.write.example__setTrue([smartObjectId]);
+    txHash = await worldContract.write.exampleName__setTrue([smartObjectId]);
   } else {
-    txHash = await worldContract.write.example__setFalse([smartObjectId]);
+    txHash = await worldContract.write.exampleName__setFalse([smartObjectId]);
   }
 
   return txHash;

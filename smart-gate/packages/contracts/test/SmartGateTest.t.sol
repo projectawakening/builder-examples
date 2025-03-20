@@ -106,7 +106,7 @@ contract SmartGateTest is MudTest {
         player,
         4041,
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "harrypotter", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
         ""
       );
     }
