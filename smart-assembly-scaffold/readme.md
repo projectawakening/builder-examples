@@ -198,7 +198,7 @@ pnpm set-namespace
 Deploy to Stillness with:
 
 ```bash
-pnpm deploy:garnet
+pnpm deploy:pyrope
 ```
 
 **Environment Variables**:

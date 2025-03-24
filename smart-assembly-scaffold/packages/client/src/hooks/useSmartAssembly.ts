@@ -114,7 +114,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
       const worldAddress = await getWorldDeploy(chainID);       
       // sql query from the indexer.
-      const response = await fetch("https://indexer.mud.garnetchain.com/q", {
+      const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
