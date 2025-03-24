@@ -92,7 +92,9 @@ export function useSmartCharacter() {
 
   //Get an array of ID's for owned smart assemblies
   useEffect(() => {
-    const getOwnedAssemblies = async () => {      
+    const getOwnedAssemblies = async () => {     
+      if(address == null || address == "") return;
+
       var chainID = import.meta.env.VITE_CHAIN_ID
       var ownedArray : BigInt[] = [] 
 
@@ -104,11 +106,30 @@ export function useSmartCharacter() {
         return;
       } 
 
+      const worldAddress = await getWorldDeploy(chainID);      
+
+      const response = await fetch("https://indexer.mud.pyropechain.com/q", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          {
+            address: worldAddress.address,
+            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "owner" = '${address}';`,
+          },
+        ]),
+      }).then((res) => res.json());
+
+      for(var i = 1; i < response.result[0].length; i++){
+        ownedArray.push(response.result[0][i][0]);
+      }
+
       setOwnedSmartAssemblies(ownedArray)
     }
 
     getOwnedAssemblies();
-  }, [])
+  }, [address])
 
   /**
    * Fetch the character ID associated with the user's wallet address.
