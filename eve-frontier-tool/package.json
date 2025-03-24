@@ -1,0 +1,29 @@
+{
+  "name": "eve-frontier-builder-tools",
+  "version": "0.0.1",
+  "description": "Helper CLI Tool for building in EVE Frontier",
+  "main": "cli.js",
+  "type": "module",
+  "bin": {
+    "eve-frontier": "./cli.js"
+  },
+  "scripts": {},
+  "keywords": [
+    "eve-frontier",
+    "builder",
+    "tools",
+    "cli",
+    "smart-gate",
+    "smart-turret",
+    "smart-storage-unit",
+    "ccp"
+  ],
+  "author": "CCP Red Dragon",
+  "license": "ISC",
+  "homepage": "https://github.com/CCP-Red-Dragon/eve-frontier-builder-tools",
+  "dependencies": {
+    "@inquirer/prompts": "^7.4.0",
+    "axios": "^1.8.3",
+    "chalk": "^5.4.1"
+  }
+}
