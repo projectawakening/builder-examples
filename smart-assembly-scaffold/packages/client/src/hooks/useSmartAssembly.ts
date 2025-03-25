@@ -25,11 +25,13 @@ import { getAddress } from "viem";
  *
  * @returns {Object} `smartAssembly` - The constructed SmartAssembly object, or `undefined` if the data is incomplete.
  */
-export function useSmartAssembly() {
+export function useSmartAssembly(smartObjectId = 0n) {
   const [owner, setOwner] = useState<`0x${string}` | undefined>();
 
-  // Retrieve the Smart Assembly ID from environment variables
-  const smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+  // Retrieve the Smart Assembly ID from environment variables if it's not already passed
+  if (smartObjectId == 0n){
+    smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
+  }
 
   // Basic smart assembly information
   const smartDeployableStateView = useRecord({
@@ -102,8 +104,15 @@ export function useSmartAssembly() {
    */
   useEffect(() => {
     const getOwner = async () => {
-      const worldAddress = await getWorldDeploy(import.meta.env.VITE_CHAIN_ID);
+      var chainID = import.meta.env.VITE_CHAIN_ID
 
+      //If this DApp is on your local anvil chain, set the owner as a default
+      if(chainID == 31337){
+        setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+        return;
+      } 
+
+      const worldAddress = await getWorldDeploy(chainID);       
       // sql query from the indexer.
       const response = await fetch("https://indexer.mud.garnetchain.com/q", {
         method: "POST",
@@ -113,21 +122,16 @@ export function useSmartAssembly() {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT tokenId, owner 
-						FROM erc721deploybl__Owners 
-						WHERE erc721deploybl__Owners.tokenId = ${smartObjectId};`,
+            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "tokenId" = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
-
+      
       const ownerApiResult = mapApiResult(response.result);
-      setOwner(ownerApiResult.owner);
+      setOwner(ownerApiResult.owner);     
     };
 
     getOwner();
-    // If on local and unable to query the sqlite indexer, you can manually set the owner
-    // instead of calling the above function
-    // setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
   }, [smartObjectId]);
 
   const smartCharacterByAddress = useRecord({

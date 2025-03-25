@@ -24,6 +24,7 @@ contract ConfigureToggle is Script {
 
     ResourceId systemId = Utils.toggleSystemId();
 
+    //This will set the SSU to True in the Toggle MUD Table
     world.call(
       systemId,
       abi.encodeCall(ToggleSystem.setTrue, smartStorageUnitId)
