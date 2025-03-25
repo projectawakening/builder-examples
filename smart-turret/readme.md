@@ -207,7 +207,7 @@ pnpm set-key
 Then deploy the SSU contracts using:
 
 ```bash
-pnpm deploy:garnet
+pnpm run deploy:pyrope
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below.

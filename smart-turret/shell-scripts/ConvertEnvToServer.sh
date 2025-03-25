@@ -33,7 +33,7 @@ fi
 
 # If the API call didn't work - use a known RPC URL for Stillness or Nebula
 if [[ -z "$RPC_URL" ]]; then
-    RPC_URL="https://pyrope-external-rpc.live.tech.evefrontier.com"
+    RPC_URL="https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com"
 fi
 
 SED_CMD="sed"

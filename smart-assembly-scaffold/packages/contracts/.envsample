@@ -20,10 +20,10 @@ RPC_URL=http://127.0.0.1:8545 #Forked Anvil Local RPC URL
 CHAIN_ID=31337 #Local Chain ID
 WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
 
-#Devnet RPC
-# RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+#Stillness RPC
+# RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 # CHAIN_ID=695569
-# WORLD_ADDRESS=0x972bfea201646a87dc59f042ad91254628974f0d
+# WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
 
 #SMART STORAGE UNIT ID
 #Copy this info from the in-game Smart Storage Unit
