@@ -93,7 +93,7 @@ export function useSmartCharacter() {
   //Get an array of ID's for owned smart assemblies
   useEffect(() => {
     const getOwnedAssemblies = async () => {     
-      if(address == null || address == "") return;
+      if(!address) return;
 
       var chainID = import.meta.env.VITE_CHAIN_ID
       var ownedArray : BigInt[] = [] 
