@@ -29,7 +29,7 @@ const AllowedAccess = React.memo(function AllowedAccess() {
     },
   });
 
-  if(smartCharacter && allowedCorpValue && characterRecord.corpId == allowedCorpValue.corp.toString()){
+  if(smartCharacter && allowedCorpValue && characterRecord?.corpId == allowedCorpValue.corp.toString()){
     return (
       <div className="text-center">    
         Gate Access permited ✅

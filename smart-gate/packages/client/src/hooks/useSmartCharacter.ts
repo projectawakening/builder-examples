@@ -25,6 +25,11 @@ import { getWorldDeploy } from "../mud/getWorldDeploy";
  *   based on your needs.
  */
 
+// Extend the original SmartCharacter interface
+type ExtendedSmartCharacter = SmartCharacter & {
+  corpId: number;
+}
+
 export function useSmartCharacter() {
   const { address } = useAccount();
 
@@ -158,21 +163,31 @@ export function useSmartCharacter() {
     },
   });
 
+  
+  const characterRecord = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.eveworld.tables.CharactersTable,
+    key: {
+      characterId: smartCharacterByAddress?.characterId || BigInt(0),
+    },
+  });
+
   /**
    * Step 3: Construct the `SmartCharacter` object.
    * - This object consolidates all fetched data and adds placeholder values for balances.
    *
    * @type {SmartCharacter}
    */
-  const smartCharacter: SmartCharacter = {
+  const smartCharacter: ExtendedSmartCharacter = {
     address: smartCharacterByAddress?.characterAddress || address || "0x",
     id: smartCharacterByAddress?.characterId.toString() || "",
     name: smartCharacterRecord?.name || "",
+    corpId: characterRecord?.corpId,
     isSmartCharacter: smartCharacterRecord != undefined,
-    eveBalanceWei: eveBalanceWei,
-    gasBalanceWei: GASBalanceWei,
-    image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
-    smartAssemblies: ownedSmartAssemblies, // Placeholder for smart assemblies owned by this character
+    eveBalanceWei: 0, // TODO: Query EVE token balance for the wallet address.
+    gasBalanceWei: 0, // TODO: Query gas token balance for the wallet address.
+    image: "",
+    smartAssemblies: [], // Placeholder for smart assemblies owned by this character
   };
 
   return { smartCharacter };

@@ -23,6 +23,7 @@ contract ConfigureSmartGate is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
     uint256 privateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(privateKey);
     vm.startBroadcast(privateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
@@ -30,11 +31,11 @@ contract ConfigureSmartGate is Script {
 
     smartGate = SmartGateLib.World({ iface: IBaseWorld(worldAddress), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
 
-    uint256 smartGateId = vm.envUint("SOURCE_GATE_ID");
+    uint256 smartGateId = 34818344039668088032259299209624217066809194721387714788472158182502870248994;
 
     ResourceId systemId = Utils.smartGateSystemId();
     //Get the allowed corp
-    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");    
+    uint256 corpID = 3434301;
     
     //Set the MUD table for the corp whitelist
     world.call(

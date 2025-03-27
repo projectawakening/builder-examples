@@ -49,11 +49,13 @@ const AdminSettings = React.memo(function AllowedCorp() {
     setAllowedCorpInput(val)
   }
 
+  console.log(smartCharacter)
+
   const handleToggle = async () => {
     const txHash = await setAllowedCorp({
       worldContract,
       smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
-      corpID: Number(allowedCorpInput),
+      corpID: allowedCorpInput,
     });
     if (txHash) {
       notify({ type: Severity.Success, txHash });
@@ -81,17 +83,17 @@ const AdminSettings = React.memo(function AllowedCorp() {
       <div>Admin Settings</div>
       <EveInput
         inputType="string"
-        defaultValue={allowedCorpValue.corp.toString()}
+        defaultValue={allowedCorpValue?.corp.toString()}
         onChange={(str) => handleAllowedCorpInput(str)}
         fieldName="Allowed Corp ID"
       />
 
-      <EveButton typeClass="primary" onClick={() => handleToggle()} disabled={allowedCorpValue.corp.toString()==allowedCorpInput}>
+      <EveButton typeClass="primary" onClick={() => handleToggle()} disabled={allowedCorpValue?.corp.toString()==allowedCorpInput}>
         Set Allowed Corp ID
       </EveButton>
 
-      <div>ALLOWED CORP ID: {allowedCorpValue.corp.toString()}</div>
-      <div>YOUR CORP ID: {smartCharacter.corpId.toString()}</div>
+      <div>ALLOWED CORP ID: {allowedCorpValue?.corp.toString()}</div>
+      <div>YOUR CORP ID: {smartCharacter?.corpId?.toString()}</div>
     </>
   );
 });
