@@ -27,8 +27,12 @@ fs_permissions = [{ access = "read", path = "./"}]
 # Local Anvil Instance
 eth_rpc_url = "http://127.0.0.1:8546"
 
-[profile.garnet]
+[profile.pyrope]
 # Public Testnet
+eth_rpc_url = "https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com"
+
+[profile.garnet]
+# Public Garnet Testnet
 eth_rpc_url = "https://rpc.garnetchain.com"
 
 [profile.redstone]

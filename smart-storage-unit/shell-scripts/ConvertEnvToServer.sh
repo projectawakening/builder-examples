@@ -17,7 +17,7 @@ response=$(curl -s -H "Accept: application/json" "$API_URL")
 world_address=$(echo "$response" | grep -o '"world":{[^}]*}' | grep -o '"address":"[^"]*"' | sed 's/"address":"//;s/"//')
 RPC_URL=$(echo "$response" | grep -o '"default":{[^}]*}' | grep -o '"http":"[^"]*"' | sed 's/"http":"//;s/"//')
 
-CHAIN_ID="17069"
+CHAIN_ID="695569"
 
 # If the API call didn't work - use a known world address for Stillness or Nova
 if [[ -z "$world_address" ]]; then
@@ -30,7 +30,7 @@ fi
 
 # If the API call didn't work - use a known RPC URL for Stillness or Nova
 if [[ -z "$RPC_URL" ]]; then
-    RPC_URL="https://garnet-rpc.dev.evefrontier.tech"
+    RPC_URL="https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com"
 fi
 
 SED_CMD="sed"
@@ -41,7 +41,7 @@ else
 fi
 
 $SED_CMD $SED_OPTS "s/^WORLD_ADDRESS=.*/WORLD_ADDRESS=$world_address #${SERVER} World Address/" "$ENV_FILE"
-$SED_CMD $SED_OPTS "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Garnet Chain ID/" "$ENV_FILE"
+$SED_CMD $SED_OPTS "s/^CHAIN_ID=.*/CHAIN_ID=$CHAIN_ID #Pyrope Chain ID/" "$ENV_FILE"
 $SED_CMD $SED_OPTS "s|^RPC_URL=.*|RPC_URL=\"${RPC_URL}\" #${SERVER} RPC URL|" "$ENV_FILE"
 
 printf "${GREEN}[COMPLETED]${RESET} Set ${YELLOW}WORLD_ADDRESS${RESET} in ${YELLOW}.env${RESET} to ${YELLOW}${SERVER}${RESET} ${YELLOW}[$world_address]${RESET} \n\n"

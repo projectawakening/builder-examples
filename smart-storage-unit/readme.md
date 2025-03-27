@@ -64,7 +64,7 @@ This will create the on-chain SSU, fuel it and bring it online.
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm configure-ratio
+pnpm configure
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
@@ -115,7 +115,7 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 Then deploy the contract using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm run deploy:pyrope
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the SSU contract. 
@@ -185,7 +185,7 @@ OUT_RATIO=2
 To configure which items should be traded and the ratio's to trade for run:
 
 ```bash
-pnpm configure-ratio
+pnpm configure
 ```
 
 You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.

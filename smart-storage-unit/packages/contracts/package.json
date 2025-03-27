@@ -7,6 +7,7 @@
     "build": "mud build",
     "clean": "forge clean && rimraf src/codegen",
     "deploy:local": ". ./.env && pnpm run build && mud deploy --profile=local --worldAddress ${WORLD_ADDRESS:-$1}",
+    "deploy:pyrope": ". ./.env && pnpm run build && mud deploy --profile=pyrope --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:garnet": ". ./.env && pnpm run build && mud deploy --profile=garnet --worldAddress ${WORLD_ADDRESS:-$1}",
     "deploy:redstone": ". ./.env && pnpm run build && mud deploy --profile=redstone --worldAddress ${WORLD_ADDRESS:-$1}",
     "dev": "pnpm mud dev-contracts",
@@ -16,7 +17,7 @@
     "test:deploy": "tsc --noEmit && mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "configure-ratio": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "configure": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
     "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
     "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
@@ -42,7 +43,6 @@
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "1.1.3",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.2.9",
-    "solhint-plugin-mud": "2.2.9"
+    "solhint-config-mud": "2.2.9"
   }
 }

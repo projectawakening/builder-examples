@@ -50,7 +50,7 @@
   },
   "engines": {
     "node": "^18",
-    "pnpm": "^8 || ^9"
+    "pnpm": ">=9.15.0"
   },
   "//pnpm": {
     "overrides": {

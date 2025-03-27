@@ -1,4 +1,4 @@
-out/
+out/*
 cache/
 node_modules/
 bindings/

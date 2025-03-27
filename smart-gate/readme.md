@@ -115,7 +115,7 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 Then deploy the contract using:
 
 ```bash
-pnpm run deploy:garnet
+pnpm run deploy:pyrope
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below. This process deploys the Smart Gate contracts. 
@@ -157,7 +157,7 @@ ALLOWED_CORP_ID=3434306
 To configure which smart gates will be used, run:
 
 ```bash
-pnpm configure-smart-gates
+pnpm configure
 ```
 
 You can alter the gate ID's and the allowed corp in the .env file as needed.
