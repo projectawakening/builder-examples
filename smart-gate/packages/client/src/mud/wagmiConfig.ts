@@ -1,7 +1,7 @@
 import { http, webSocket } from "viem";
 import { anvil } from "viem/chains";
 import { getDefaultConfig, Wallet } from "@rainbow-me/rainbowkit";
-import { garnet, redstone } from "@latticexyz/common/chains";
+import { garnet, redstone, pyrope } from "@latticexyz/common/chains";
 import {
   coinbaseWallet,
   injectedWallet,
@@ -14,6 +14,7 @@ import {
 
 const transports = {
   [anvil.id]: webSocket(),
+  [pyrope.id]: http(),
   [garnet.id]: http(),
   [redstone.id]: http(),
 } as const;
@@ -122,6 +123,18 @@ export const wagmiConfig = getDefaultConfig({
       },
       iconUrl:
         "https://pbs.twimg.com/profile_images/1724553277147131904/cdma6E3g_400x400.jpg",
+    },    
+    {
+      ...pyrope,
+      blockExplorers: {
+        ...pyrope.blockExplorers,
+        worldsExplorer: {
+          name: "MUD Worlds Explorer",
+          url: "https://explorer.mud.dev/pyrope/worlds",
+        },
+      },
+      iconUrl:
+        "https://explorer.pyropechain.com/assets/configs/network_icon.svg",
     },
     {
       ...garnet,
@@ -149,6 +162,7 @@ export const wagmiConfig = getDefaultConfig({
   transports,
   pollingInterval: {
     [anvil.id]: 2000,
+    [pyrope.id]: 2000,
     [garnet.id]: 2000,
     [redstone.id]: 2000,
   },

@@ -70,10 +70,10 @@ contract MockData is Script {
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(
         100,     //Character ID
-        admin,  // Character Address
+        admin,   // Character Address
         corpID,  // Corp ID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "adminCharacter", dappURL: "noURL", description: "." }),
         ""
       );
     }
@@ -85,7 +85,7 @@ contract MockData is Script {
         player,  // Character Address
         200,     // Corp ID
         CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
+        EntityRecordOffchainTableData({ name: "playerCharacter", dappURL: "noURL", description: "." }),
         ""
       );
     }
