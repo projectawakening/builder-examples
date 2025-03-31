@@ -18,11 +18,11 @@
     "test": ". ./.env && forge test --fork-url $RPC_URL",
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure": ". ./.env && pnpm forge script ./script/ConfigureRatio.s.sol:ConfigureRatio --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",,
+    "execute": ". ./.env && pnpm forge script ./script/Execute.s.sol:Execute --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
     "env-stillness": "eve-frontier stillness",
     "env-local": "eve-frontier local",
     "set-namespace": "eve-frontier namespace",
-    "set-config": "eve-frontier gate-config",
+    "set-config": "eve-frontier ssu-config",
     "set-key": "eve-frontier private-key"
   },
   "dependencies": {
@@ -35,7 +35,8 @@
     "@latticexyz/world": "2.2.14",
     "@latticexyz/world-modules": "2.2.14",
     "i": "^0.3.7",
-    "npm": "^10.8.0"
+    "npm": "^10.8.0",
+    "eve-frontier": "file:../../../frontier-building-tool"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
