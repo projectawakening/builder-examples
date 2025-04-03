@@ -15,12 +15,12 @@ export async function execute() {
     {
       path: contractsPath + '.env',
       pattern: /^TURRET_ID=.*/m,
-      replacement: `TURRET_ID=${turretId};`
+      replacement: `TURRET_ID=${turretId}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^ALLOWED_CORP_ID=.*/m,
-      replacement: `ALLOWED_CORP_ID=${allowedCorpId};`
+      replacement: `ALLOWED_CORP_ID=${allowedCorpId}`
     }   
   ];
 

@@ -23,22 +23,22 @@ export async function execute() {
     {
       path: contractsPath + '.env',
       pattern: /^ITEM_ID=.*/m,
-      replacement: `ITEM_ID=${itemId};`
+      replacement: `ITEM_ID=${itemId}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^ITEM_OUT_ID=.*/m,
-      replacement: `ITEM_OUT_ID=${itemOutId};`
+      replacement: `ITEM_OUT_ID=${itemOutId}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^IN_RATIO=.*/m,
-      replacement: `IN_RATIO=${inRatio};`
+      replacement: `IN_RATIO=${inRatio}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^OUT_RATIO=.*/m,
-      replacement: `OUT_RATIO=${outRatio};`
+      replacement: `OUT_RATIO=${outRatio}`
     }
   ];
 

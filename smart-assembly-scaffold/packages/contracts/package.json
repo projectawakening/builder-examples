@@ -18,12 +18,11 @@
     "test": ". ./.env && forge test --fork-url $RPC_URL",
     "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure-toggle": ". ./.env && pnpm forge script ./script/ConfigureToggle.s.sol:ConfigureToggle --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
-    "env-stillness": "bash ../../shell-scripts/ConvertEnvToServer.sh stillness",
-    "env-nova": "bash ../../shell-scripts/ConvertEnvToServer.sh nova",
-    "env-local": "bash ../../shell-scripts/ConvertEnvToLocal.sh",
-    "set-namespace": "bash ../../shell-scripts/SetNamespace.sh",
-    "set-config": "bash ../../shell-scripts/Config.sh",
-    "set-key": "bash ../../shell-scripts/SetPrivateKey.sh"
+    "env-stillness": "eve-frontier stillness",
+    "env-local": "eve-frontier local",
+    "set-namespace": "eve-frontier namespace",
+    "set-config": "eve-frontier assembly-scaffold-config",
+    "set-key": "eve-frontier private-key"
   },
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",
@@ -35,7 +34,8 @@
     "@latticexyz/world": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@latticexyz/world-modules": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "i": "^0.3.7",
-    "npm": "^10.8.0"
+    "npm": "^10.8.0",
+    "eve-frontier": "file:../../../frontier-building-tool"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",

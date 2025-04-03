@@ -16,17 +16,17 @@ export async function execute() {
     {
       path: contractsPath + '.env',
       pattern: /^SOURCE_GATE_ID=.*/m,
-      replacement: `SOURCE_GATE_ID=${sourceGateId};`
+      replacement: `SOURCE_GATE_ID=${sourceGateId}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^DESTINATION_GATE_ID=.*/m,
-      replacement: `DESTINATION_GATE_ID=${destinationGateId};`
+      replacement: `DESTINATION_GATE_ID=${destinationGateId}`
     },
     {
       path: contractsPath + '.env',
       pattern: /^ALLOWED_CORP_ID=.*/m,
-      replacement: `ALLOWED_CORP_ID=${allowedCorpId};`
+      replacement: `ALLOWED_CORP_ID=${allowedCorpId}`
     }   
   ];
 
