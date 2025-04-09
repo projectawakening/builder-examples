@@ -62,12 +62,12 @@ export function useSmartCharacter() {
 
       setGASBalanceWei(GASBalance)
 
-      let EVETokenAddress = "0x4b6deF4Ac5Ad63D53BF127e27B6EDe14661B2343" 
-
       //If it's local, don't get the EVE Token Balance as it's not currently supported
       if(chainID == 31337) {
         return
-      }
+      }      
+
+      let EVETokenAddress = import.meta.env.VITE_EVE_TOKEN_ADDRESS
 
       //Get the erc20 ABI
       const contract = getContract({
@@ -92,7 +92,9 @@ export function useSmartCharacter() {
 
   //Get an array of ID's for owned smart assemblies
   useEffect(() => {
-    const getOwnedAssemblies = async () => {      
+    const getOwnedAssemblies = async () => {     
+      if(!address) return;
+
       var chainID = import.meta.env.VITE_CHAIN_ID
       var ownedArray : BigInt[] = [] 
 
@@ -106,7 +108,7 @@ export function useSmartCharacter() {
 
       const worldAddress = await getWorldDeploy(chainID);      
 
-      const response = await fetch("https://indexer.mud.garnetchain.com/q", {
+      const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +116,7 @@ export function useSmartCharacter() {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "owner" = '0x4dceeda75539034504cbb6263cf957de64538d42';`,
+            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "owner" = '${address}';`,
           },
         ]),
       }).then((res) => res.json());
@@ -127,7 +129,7 @@ export function useSmartCharacter() {
     }
 
     getOwnedAssemblies();
-  }, [])
+  }, [address])
 
   /**
    * Fetch the character ID associated with the user's wallet address.
