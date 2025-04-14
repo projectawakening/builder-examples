@@ -14,6 +14,9 @@ importers:
       '@pcd/pod':
         specifier: ^0.5.0
         version: 0.5.0
+      '@pcd/proto-pod-gpc-artifacts':
+        specifier: 0.13.0
+        version: 0.13.0
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
@@ -215,6 +218,9 @@ packages:
 
   '@pcd/pod@0.5.0':
     resolution: {integrity: sha512-Zm8G6BXXjFtSBooYi4cHWAe44US3NjdsPtKmv1Zpcl0EejxYG0wU6GrUpnhSwJfjEpGm35Wes9BUT7wHThGnGg==}
+
+  '@pcd/proto-pod-gpc-artifacts@0.13.0':
+    resolution: {integrity: sha512-SFKV8gmFCyZ6WIOcJPXCdx4I1gNavIw+5u7TFU8L6/DqtUPWZ1/SubyAChb7aTetfwNgJTyid/VL9fEkJYSThA==}
 
   '@pcd/semaphore-identity-v3-wrapper@0.1.0':
     resolution: {integrity: sha512-NlLT6Pu+ua0agmPO2bulQiF5vaNv1XbGwSyrTEH/eONq1I0LL5Yd2qdPpZbUnnCUE+Wa6yi4jUqB6i6vh8kv8g==}
@@ -720,6 +726,8 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+
+  '@pcd/proto-pod-gpc-artifacts@0.13.0': {}
 
   '@pcd/semaphore-identity-v3-wrapper@0.1.0':
     dependencies:

@@ -31,28 +31,24 @@ const signingKey = "AAECAwQFBgcICQABAgMEBQYHCAkAAQIDBAUGBwgJAAE";
 //Create the POD
 const myPOD = POD.sign(myEntries, signingKey);
 
-let artifactURL = gpcArtifactDownloadURL(
-    "jsdelivr",
-    "prod",
-    undefined
-)
+//Import the GPC Artifacts
+const GPC_ARTIFACTS_PATH = "./node_modules/@pcd/proto-pod-gpc-artifacts";
 
-artifactURL = "./gpc/artefact/";
-
+//Create the Proof Config
 const proofConfig: GPCProofConfig = {
     pods: {
         badge: {
-        entries: {
-            name: { isRevealed: true },
-            holder: { isRevealed: true },
-            issued_data: {
-            isRevealed: false,
-            inRange: {
-                min: 0n,
-                max: BigInt(new Date("2026-01-01T00:00:00.000Z").getTime())
+            entries: {
+                name: { isRevealed: true },
+                holder: { isRevealed: true },
+                issued_data: {
+                    isRevealed: false,
+                    inRange: {
+                        min: 0n,
+                        max: BigInt(new Date("2026-01-01T00:00:00.000Z").getTime())
+                    }
+                }
             }
-            }
-        }
         }
     }
 };
@@ -67,7 +63,7 @@ async function ProveAndVerify(){
     const { proof, boundConfig, revealedClaims } = await gpcProve(
         proofConfig,
         proofInputs,
-        artifactURL
+        GPC_ARTIFACTS_PATH
     );
 
     const proofMessage = JSON.stringify({
