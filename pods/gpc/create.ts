@@ -31,6 +31,10 @@ const signingKey = "AAECAwQFBgcICQABAgMEBQYHCAkAAQIDBAUGBwgJAAE";
 //Create the POD
 const myPOD = POD.sign(myEntries, signingKey);
 
+//Output Signer Public Key
+console.log("\nSigner Public Key")
+console.log(myPOD.signerPublicKey + "\n")
+
 //Import the GPC Artifacts
 const GPC_ARTIFACTS_PATH = "./node_modules/@pcd/proto-pod-gpc-artifacts";
 
