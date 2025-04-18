@@ -88,7 +88,7 @@ contract SmartGateTest is MudTest {
     //Get the allowed corp
     corpID = vm.envUint("ALLOWED_CORP_ID");
     sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    sourceGateId = vm.envUint("DESTINATION_GATE_ID");
+    destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
     if (CharactersByAddressTable.get(admin) == 0) {
       smartCharacter.createCharacter(

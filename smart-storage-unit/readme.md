@@ -232,7 +232,7 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the account you want to test trades with which will be used by the execute script:
 
 ```bash
-TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+TEST_PLAYER_PRIVATE_KEY=0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
 ```
 
 > ⚠️ Note: This is only for testing, and an example not requiring this is on it's way.
