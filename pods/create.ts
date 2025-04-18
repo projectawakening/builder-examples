@@ -1,28 +1,32 @@
 //Import Packages
-import { POD, PODEntries, JSONPOD, PODValue, podValueFromJSON } from "@pcd/pod";
+import { POD, PODEntries, JSONPOD, PODValue, podValueFromJSON, deriveSignerPublicKey } from "@pcd/pod";
 
 //POD Data
 const myEntries: PODEntries = {
-    name: {
+    level: {
+        type: "int",
+        value: 4n
+    },
+    holder_smart_character_address: {
         type: "string",
-        value: "Fleet Fight #23 Badge"
+        value: "0x6d11ac8f376b6284a7e5d62a340f71869b3063ae"
     },
-    holder: {
-        type: "eddsa_pubkey",
-        value: "ZnU07tyAUiWW2mmY3/z4aa3WxrctfSc0ch23752z6xM"
-    },
-    issued_data: {
+    issued_date: {
         type: "date",
-        value: new Date("2024-04-10T00:00:00.000Z")
+        value: new Date("2025-04-10T00:00:00.000Z")
     },
-    pod_type: { type: "string", value: "corpName.badge" },
+    expiry_date: {
+        type: "date",
+        value: new Date("2026-04-10T00:00:00.000Z")
+    },
+    pod_type: { type: "string", value: "corpName.access_badge" },
 };
 
 //Your PRIVATE signing key
-const signingKey = "AAECAwQFBgcICQABAgMEBQYHCAkAAQIDBAUGBwgJAAE";
+const privateSigningKey = "2851153af6e862439ff91253684f85a6357ec7a3edcec4324de1eb7db4431ea5";
 
 //Create the POD
-const myPOD = POD.sign(myEntries, signingKey);
+const myPOD = POD.sign(myEntries, privateSigningKey);
 
 //Check if the POD is invalid
 if (!myPOD.verifySignature()) {
@@ -39,5 +43,6 @@ console.log("\nStringified\n")
 console.log(serializedPOD)
 
 //Output Signer Public Key
+const publicSigningKey = deriveSignerPublicKey(privateSigningKey);
 console.log("\nSigner Public Key\n")
-console.log(myPOD.signerPublicKey)
+console.log(publicSigningKey)

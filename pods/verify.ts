@@ -2,7 +2,7 @@
 import { POD, PODEntries, JSONPOD, PODValue, podValueFromJSON } from "@pcd/pod";
 
 //Fetch the POD String
-const serializedPOD = '{"entries":{"holder":{"eddsa_pubkey":"ZnU07tyAUiWW2mmY3/z4aa3WxrctfSc0ch23752z6xM"},"issued_data":{"date":"2024-04-10T00:00:00.000Z"},"name":"Fleet Fight #23 Badge","pod_type":"corpName.badge"},"signature":"ajsu8cI/OQxLr0P3LJj6mHi5AkQsZXzgyjXCWjkn+4LFWlg5XwH9hQdI8IEOu7+4HkcY4ZKbsdau3mQWnUb6Aw","signerPublicKey":"xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4"}'
+const serializedPOD = '{"entries":{"expiry_date":{"date":"2026-04-10T00:00:00.000Z"},"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae","issued_date":{"date":"2025-04-10T00:00:00.000Z"},"level":4,"pod_type":"corpName.access_badge"},"signature":"IQkqxOjjxbiJNHd2mfxOmLEFsWFluw+ZL93MnRGcXJoZWLdUc5Y9p/qgZ/gL72250U6XBVZnEIahn2M3leuBAg","signerPublicKey":"xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4"}'
 
 //Create the POD from the String
 const receivedPOD: POD = POD.fromJSON(JSON.parse(serializedPOD));
@@ -23,6 +23,6 @@ if(receivedPOD.signerPublicKey != officialPublicKey){
 console.log("Verified Official Signer")
 
 //Get a value from the POD
-const name = receivedPOD.content.getValue("name");
+const level = receivedPOD.content.getValue("level");
 
-console.log("Name:", name?.value)
+console.log("Level:", level?.value)

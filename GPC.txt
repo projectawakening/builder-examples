@@ -1,0 +1,12 @@
+## General Purpose Circuits (GPC)
+
+GPC (General Purpose Circuits) is a technology by [0xPARC](https://0xparc.org/) for the POD (Proof-Carrying Data) standard.
+
+**Background: Zero-Knowledge Proof Circuits**
+In zero-knowledge proofs (ZKPs), a "circuit" is essentially a specialized program. It encodes the specific rules and computations that a piece of secret data must satisfy. A prover uses the circuit to generate a proof that they possess data meeting these rules, without revealing the actual data itself.
+
+**Problem:** Traditionally, creating these custom ZK proof circuits for every new set of rules is difficult and time-consuming.
+
+**GPC Solution:** GPC allows generating many different proofs using *configurable*, pre-existing circuits, avoiding the need to build new ones from scratch. This makes working with proofs faster and more flexible.
+
+**Efficiency:** Generating proofs costs resources, especially with larger circuits. The GPC compiler automatically chooses the smallest suitable circuit from a family to balance proof requirements and efficiency.
