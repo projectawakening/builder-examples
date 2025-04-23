@@ -1,7 +1,7 @@
 //Import the GPC Packages
 import {
     GPCProofConfig, gpcVerify,
-    boundConfigFromJSON, revealedClaimsFromJSON ,
+    boundConfigFromJSON, revealedClaimsFromJSON,
     GPCBoundConfig
 } from "@pcd/gpc";
 
@@ -11,9 +11,9 @@ const GPC_ARTIFACTS_PATH = "./node_modules/@pcd/proto-pod-gpc-artifacts";
 //Import the Proof Config
 const expectedProofConfig: GPCProofConfig = {
     pods: {
-        badge: {
+        security_badge: {
             entries: {
-                level: { 
+                security_level: { 
                     isRevealed: false,
                     inRange: {
                         min: 3n,
@@ -42,10 +42,10 @@ const expectedProofConfig: GPCProofConfig = {
 };
 
 //Import the Proof Data
-const podStringified = '{"proof":{"pi_a":["1625511905414346867203831556182100487351474796860000531656907947697909189372","19439539238149718270735659927453691996938581370593789286293390410225789761184","1"],"pi_b":[["967949427602219503009661301720924435744926518961999266620375170977628268868","6958917644171950452090860434134184390653414206129615173255426640976687776310"],["12877758429843164412514696187526264533831674474355810594993640699554847477426","16550300249829529009697193970741645195131530902628580246102572129853268664551"],["1","0"]],"pi_c":["3404751921196184359742147465334007603599542867456186061964601622157504061723","4807397883507985424495584158178595912956863775459109557141386827887201647366","1"],"protocol":"groth16","curve":"bn128"},"boundConfig":{"circuitIdentifier":"proto-pod-gpc_1o-12e-5md-4nv-0ei-1x5l-0x0t-0ov3-1ov4","pods":{"badge":{"entries":{"expiry_date":{"isRevealed":false,"inRange":{"min":1746835200000,"max":1902009600000}},"holder_smart_character_address":{"isRevealed":true},"issued_date":{"isRevealed":false,"inRange":{"min":0,"max":1746835200000}},"level":{"isRevealed":false,"inRange":{"min":3,"max":10}},"pod_type":{"isRevealed":true}}}}},"revealedClaims":{"pods":{"badge":{"entries":{"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae","pod_type":"corpName.access_badge"},"signerPublicKey":"xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4"}}}}'
+const proofMessage = '{"proof":{"pi_a":["18382096760714031908670127575213136578083295521215433334251317660564033378720","21030477399437073370476149069090721170053337449725832469428119547769133404031","1"],"pi_b":[["3441945812976152446306624803438621070022957041244859610613891371824225138447","13484259047285811435888513023900289692797242279920846387677844428076348775051"],["5980242761206523890540011436691111069270009222756334744394997945384381875367","15263548166808880668931526071918599213486304986568041225530763198080863123460"],["1","0"]],"pi_c":["19436657118428907159797452603147484224001485778247802421550746896397384983856","3196080941424733966474612046643629155603406339625206953551307106366932306579","1"],"protocol":"groth16","curve":"bn128"},"boundConfig":{"circuitIdentifier":"proto-pod-gpc_1o-12e-5md-4nv-0ei-1x5l-0x0t-0ov3-1ov4","pods":{"security_badge":{"entries":{"expiry_date":{"isRevealed":false,"inRange":{"min":1746835200000,"max":1902009600000}},"holder_smart_character_address":{"isRevealed":true},"issued_date":{"isRevealed":false,"inRange":{"min":0,"max":1746835200000}},"pod_type":{"isRevealed":true},"security_level":{"isRevealed":false,"inRange":{"min":3,"max":10}}}}}},"revealedClaims":{"pods":{"security_badge":{"entries":{"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae","pod_type":"corpName.security_badge"},"signerPublicKey":"3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw"}}}}'
 
 //Parse the Proof Data to JSON
-const receivedFromProver = JSON.parse(podStringified);
+const receivedFromProver = JSON.parse(proofMessage);
 
 //Get the Proof, Bound Config, and Revealed Claims
 const proof = receivedFromProver.proof;
@@ -68,13 +68,29 @@ async function VerifyProof(){
     );
 
     //Print the result
-    console.log("Is Valid,", isValid)
+    if(!isValid){
+        throw new Error("Proof is invalid");   
+    }
 
-    const officialPublicKey = "xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4"
+    console.log("Proof is valid");
 
-    if(revealedClaims.pods.badge.signerPublicKey != officialPublicKey){
+    const officialPublicKey = "3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw"
+
+    if(revealedClaims.pods.security_badge.signerPublicKey != officialPublicKey){
         throw new Error("Not the official signer");
     }
+
+    const badgeEntries = revealedClaims.pods.security_badge.entries;
+
+    const officialPodType = "corpName.security_badge"
+
+    if(badgeEntries.pod_type.value !== officialPodType){
+        throw new Error("Not the right type of POD");
+    }
+
+    console.log("Correct POD Type")
+		
+    console.log("Verfied security badge for character", badgeEntries.holder_smart_character_address.value);
 
     //Exit the program
     process.exit(0);

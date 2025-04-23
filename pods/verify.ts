@@ -22,7 +22,17 @@ if(receivedPOD.signerPublicKey != officialPublicKey){
 
 console.log("Verified Official Signer")
 
+const officialPodType = "corpName.security_badge"
+
+const podType = receivedPOD.content.getValue("pod_type")?.value;
+
+if(podType != officialPodType){
+    throw new Error("Not the official pod type");
+}
+
+console.log("Verified Official Pod Type")
+
 //Get a value from the POD
-const level = receivedPOD.content.getValue("level");
+const level = receivedPOD.content.getValue("security_level");
 
 console.log("Level:", level?.value)

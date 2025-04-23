@@ -1,7 +1,7 @@
 {
   "name": "pods-example",
   "version": "0.0.1",
-  "description": "Example of how to create and verify PODs",
+  "description": "Example of how to create and verify PODs and ZK Proofs",
   "main": "index.js",
   "scripts": {
     "create": "pnpm tsx create.tsx",

@@ -10,7 +10,7 @@ import {
 
 //POD Data
 const myEntries: PODEntries = {
-    level: {
+    security_level: {
         type: "int",
         value: 4n
     },
@@ -26,19 +26,19 @@ const myEntries: PODEntries = {
         type: "date",
         value: new Date("2026-04-10T00:00:00.000Z")
     },
-    pod_type: { type: "string", value: "corpName.access_badge" },
+    pod_type: { type: "string", value: "corpName.security_badge" },
 };
 
 //Your PRIVATE signing key
-const privateSigningKey = "AAECAwQFBgcICQABAgMEBQYHCAkAAQIDBAUGBwgJAAE";
+const privateSigningKey = "2851153af6e862439ff91253684f85a6357ec7a3edcec4324de1eb7db4431ea5";
 
 //Create the POD
 const myPOD = POD.sign(myEntries, privateSigningKey);
 
 //Output Signer Public Key
 const publicSigningKey = deriveSignerPublicKey(privateSigningKey);
-console.log("\nSigner Public Key\n")
-console.log(publicSigningKey)
+console.log("\nSigner Public Key")
+console.log(publicSigningKey + "\n")
 
 //Import the GPC Artifacts
 const GPC_ARTIFACTS_PATH = "./node_modules/@pcd/proto-pod-gpc-artifacts";
@@ -46,9 +46,9 @@ const GPC_ARTIFACTS_PATH = "./node_modules/@pcd/proto-pod-gpc-artifacts";
 //Create the Proof Config
 const proofConfig: GPCProofConfig = {
     pods: {
-        badge: {
+        security_badge: {
             entries: {
-                level: { 
+                security_level: { 
                     isRevealed: false,
                     inRange: {
                         min: 3n,
@@ -78,24 +78,27 @@ const proofConfig: GPCProofConfig = {
 
 const proofInputs = {
     pods: {
-        badge: myPOD
+        security_badge: myPOD
     }
 }
 
-async function ProveAndVerify(){
+async function CreateProof(){
+    //Create the proof
     const { proof, boundConfig, revealedClaims } = await gpcProve(
         proofConfig,
         proofInputs,
         GPC_ARTIFACTS_PATH
     );
 
+    //Convert proof information to JSON
     const proofMessage = JSON.stringify({
         proof: proof,
         boundConfig: boundConfigToJSON(boundConfig),
         revealedClaims: revealedClaimsToJSON(revealedClaims)
     });
 
+    //Output the proof
     console.log(proofMessage)
 }
 
-ProveAndVerify()
+CreateProof()

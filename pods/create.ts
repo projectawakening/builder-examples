@@ -3,7 +3,7 @@ import { POD, PODEntries, JSONPOD, PODValue, podValueFromJSON, deriveSignerPubli
 
 //POD Data
 const myEntries: PODEntries = {
-    level: {
+    security_level: {
         type: "int",
         value: 4n
     },
@@ -19,19 +19,19 @@ const myEntries: PODEntries = {
         type: "date",
         value: new Date("2026-04-10T00:00:00.000Z")
     },
-    pod_type: { type: "string", value: "corpName.access_badge" },
+    pod_type: { type: "string", value: "corpName.security_badge" },
 };
 
 //Your PRIVATE signing key
 const privateSigningKey = "2851153af6e862439ff91253684f85a6357ec7a3edcec4324de1eb7db4431ea5";
 
+//Output Signer Public Key
+const publicSigningKey = deriveSignerPublicKey(privateSigningKey);
+console.log("\nSigner Public Key")
+console.log(publicSigningKey + "\n")
+
 //Create the POD
 const myPOD = POD.sign(myEntries, privateSigningKey);
-
-//Check if the POD is invalid
-if (!myPOD.verifySignature()) {
-    throw new Error("Bad POD!");
-}
 
 //Convert POD to JSON then String
 const jsonPOD: JSONPOD = myPOD.toJSON();
@@ -41,8 +41,3 @@ const serializedPOD: string = JSON.stringify(jsonPOD);
 console.log(jsonPOD)
 console.log("\nStringified\n")
 console.log(serializedPOD)
-
-//Output Signer Public Key
-const publicSigningKey = deriveSignerPublicKey(privateSigningKey);
-console.log("\nSigner Public Key\n")
-console.log(publicSigningKey)
