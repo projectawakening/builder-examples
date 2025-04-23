@@ -1,14 +1,17 @@
 {
   "name": "pods-example",
+  "private": true,
   "version": "0.0.1",
   "description": "Example of how to create and verify PODs and ZK Proofs",
   "main": "index.js",
   "scripts": {
     "create": "pnpm tsx create.tsx",
-    "verify": "pnpm tsx verify.tsx"
+    "verify": "pnpm tsx verify.tsx",
+    "zkCreate": "pnpm tsx zkCreate.tsx",
+    "zkVerify": "pnpm tsx zkVerify.tsx",
+    "keyGen": "node privateKeyGen.js"
   },
   "author": "CCP Red Dragon",
-  "license": "ISC",
   "dependencies": {
     "@pcd/gpc": "^0.4.0",
     "@pcd/pod": "^0.5.0",
