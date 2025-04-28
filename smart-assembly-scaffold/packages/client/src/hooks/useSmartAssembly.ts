@@ -52,7 +52,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyLocation = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.LocationTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.Location,
     key: {
       smartObjectId,
     },
@@ -60,24 +60,23 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyEntityOffchainRecord = useRecord({
     stash,
-    table:
-      worldMudConfig.namespaces.evefrontier.tables.EntityRecordOffchainTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordMetadata,
     key: {
-      entityId: smartObjectId,
+      smartObjectId,
     },
   });
 
   const smartAssemblyEntityRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecord,
     key: {
-      entityId: smartObjectId,
+      smartObjectId,
     },
   });
 
   const smartAssemblyFuelBalance = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.DeployableFuelBalance,
+    table: worldMudConfig.namespaces.evefrontier.tables.Fuel,
     key: {
       smartObjectId,
     },
@@ -137,19 +136,17 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartCharacterByAddress = useRecord({
     stash,
-    table:
-      worldMudConfig.namespaces.evefrontier.tables.CharactersByAddressTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.CharactersByAccount,
     key: {
-      characterAddress: owner ? getAddress(owner as `0x${string}`) : "0x",
+      account: owner ? getAddress(owner as `0x${string}`) : "0x",
     },
   });
 
   const smartCharacterRecord = useRecord({
     stash,
-    table:
-      worldMudConfig.namespaces.evefrontier.tables.EntityRecordOffchainTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordMetadata,
     key: {
-      entityId: smartCharacterByAddress?.characterId || BigInt(0),
+      smartObjectId: smartCharacterByAddress?.smartObjectId || BigInt(0),
     },
   });
 
@@ -164,36 +161,37 @@ export function useSmartAssembly(smartObjectId = 0n) {
     smartAssemblyBase = {
       id: smartDeployableStateView?.smartObjectId.toString() || "",
       itemId: Number(smartAssemblyEntityRecord?.itemId) || 0,
-      ownerId: owner,
-      ownerName: smartCharacterRecord?.name || "",
+      owner: {
+        address: owner as `0x${string}`,
+        id: smartCharacterRecord?.smartObjectId.toString() || "",
+        name: smartCharacterRecord?.name || "",
+      },
       chainId: import.meta.env.VITE_CHAIN_ID,
       name: smartAssemblyEntityOffchainRecord?.name || "",
       description: smartAssemblyEntityOffchainRecord?.description || "",
-      dappUrl: smartAssemblyEntityOffchainRecord?.dappURL || "",
+      dappURL: smartAssemblyEntityOffchainRecord?.dappURL || "",
       image: "",
-      isValid: smartDeployableStateView?.isValid || false,
-      isOnline: smartDeployableStateView?.currentState == State.ONLINE,
-      stateId: smartDeployableStateView?.currentState || State.NULL,
-      state: smartDeployableStateView?.currentState || State.NULL,
-      anchoredAtTime: smartDeployableStateView?.anchoredAt.toString() || "",
+      state: smartDeployableStateView?.currentState.toString() || State.NULL,
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
       solarSystem: {
-        solarSystemId: smartAssemblyLocation?.solarSystemId.toString() || "",
-        solarSystemName: smartAssemblyLocation?.solarSystemId.toString() || "",
-        solarSystemNameId:
-          smartAssemblyLocation?.solarSystemId.toString() || "",
+        id: smartAssemblyLocation?.solarSystemId.toString() || "",
+        name: smartAssemblyLocation?.solarSystemId.toString() || "",
+        location: {
+          x: Number(smartAssemblyLocation?.x),
+          y: Number(smartAssemblyLocation?.y),
+          z: Number(smartAssemblyLocation?.z),
+        },
       },
       typeId: Number(smartAssemblyEntityRecord?.typeId) || 0,
       region: "", // TODO: Add logic for fetching region data
-      locationX: smartAssemblyLocation?.x.toString() || "",
-      locationY: smartAssemblyLocation?.y.toString() || "",
-      locationZ: smartAssemblyLocation?.z.toString() || "",
+      floorPrice: "0",
       fuel: {
-        fuelAmount: smartAssemblyFuelBalance?.fuelAmount || BigInt(0),
-        fuelConsumptionPerMin:
-          smartAssemblyFuelBalance?.fuelConsumptionPerMinute || BigInt(0),
-        fuelMaxCapacity: smartAssemblyFuelBalance?.fuelMaxCapacity || BigInt(0),
-        fuelUnitVolume: smartAssemblyFuelBalance?.fuelUnitVolume || BigInt(10),
+        amount: smartAssemblyFuelBalance?.fuelAmount || BigInt(0),
+        fuelConsumptionIntervalInSec:
+          smartAssemblyFuelBalance?.fuelConsumptionIntervalInSeconds ||
+          BigInt(0),
+        maxCapacity: smartAssemblyFuelBalance?.fuelMaxCapacity || BigInt(0),
+        unitVolume: smartAssemblyFuelBalance?.fuelUnitVolume || BigInt(10),
       },
     };
   }
@@ -210,7 +208,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
   // SMART GATE VALUES //
   const smartgateLink = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.SmartGateLinkTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.SmartGateLink,
     key: {
       sourceGateId: smartObjectId,
     },
@@ -218,41 +216,43 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartStorageUnitInv = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.InventoryTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.Inventory,
     key: {
       smartObjectId,
     },
   });
 
   if (smartAssemblyBase)
-    switch (smartAssemblyType?.smartAssemblyType) {
-      case 0:
+    switch (smartAssemblyType?.assemblyType) {
+      case "SSU":
         smartAssembly = {
           ...smartAssemblyBase,
-          assemblyType: "SmartStorageUnit",
-          inventory: {
-            storageCapacity: smartStorageUnitInv?.capacity || BigInt(0),
-            usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-            storageItems: [],
-            ephemeralInventoryList: [],
+          type: "SmartStorageUnit",
+          storage: {
+            mainInventory: {
+              capacity: smartStorageUnitInv?.capacity || BigInt(0),
+              usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
+              items: [],
+            },
+            ephemeralInventories: [],
           },
         };
         break;
-      case 1:
+      case "ST":
         smartAssembly = {
           ...smartAssemblyBase,
-          assemblyType: "SmartTurret",
+          type: "SmartTurret",
           proximity: {},
         };
         break;
-      case 2:
+      case "SG":
         smartAssembly = {
           ...smartAssemblyBase,
-          assemblyType: "SmartGate",
-          gateLink: {
-            gatesInRange: [],
-            isLinked: smartgateLink?.isLinked || false,
-            destinationGate:
+          type: "SmartGate",
+          gate: {
+            inRange: [],
+            linked: smartgateLink?.isLinked || false,
+            destinationId:
               smartgateLink?.destinationGateId.toString() || undefined,
           },
         };

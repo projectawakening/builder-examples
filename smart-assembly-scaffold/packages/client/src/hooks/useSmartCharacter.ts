@@ -157,10 +157,9 @@ export function useSmartCharacter() {
    */
   const smartCharacterByAddress = useRecord({
     stash,
-    table:
-      worldMudConfig.namespaces.evefrontier.tables.CharactersByAddressTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.CharactersByAccount,
     key: {
-      characterAddress: (address as `0x${string}`) || "",
+      account: (address as `0x${string}`) || "",
     },
   });
 
@@ -172,9 +171,9 @@ export function useSmartCharacter() {
    */
   const smartCharacterRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.evefrontier.tables.CharactersByAccount,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordMetadata,
     key: {
-      entityId: smartCharacterByAddress?.characterId || BigInt(0),
+      smartObjectId: smartCharacterByAddress?.smartObjectId || BigInt(0),
     },
   });
 
@@ -185,8 +184,8 @@ export function useSmartCharacter() {
    * @type {SmartCharacter}
    */
   const smartCharacter: SmartCharacter = {
-    address: smartCharacterByAddress?.characterAddress || address || "0x",
-    id: smartCharacterByAddress?.characterId.toString() || "",
+    address: smartCharacterByAddress?.account || address || "0x",
+    id: smartCharacterByAddress?.smartObjectId.toString() || "",
     name: smartCharacterRecord?.name || "",
     isSmartCharacter: smartCharacterRecord != undefined,
     eveBalanceWei: Number(eveBalanceWei),
