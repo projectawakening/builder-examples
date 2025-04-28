@@ -18,8 +18,6 @@ export const App = () => {
   const { chain, address, isConnected } = useAccount();
   const { notification, notify, handleClose } = useNotification();
 
-  console.log(smartCharacter)
-
   useEffect(() => {
     if (!isLive) {
       notify({ type: Severity.Info, message: "Loading..." });

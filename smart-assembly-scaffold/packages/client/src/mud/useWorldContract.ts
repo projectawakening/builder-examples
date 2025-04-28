@@ -41,6 +41,8 @@ export function useWorldContract():
         throw new Error("Not connected.");
       }
 
+      console.log(worldAbi);
+
       return getContract({
         abi: worldAbi,
         address: worldAddress,

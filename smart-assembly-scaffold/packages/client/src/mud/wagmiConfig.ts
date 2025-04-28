@@ -123,7 +123,7 @@ export const wagmiConfig = getDefaultConfig({
       },
       iconUrl:
         "https://pbs.twimg.com/profile_images/1724553277147131904/cdma6E3g_400x400.jpg",
-    },    
+    },
     {
       ...pyrope,
       blockExplorers: {
@@ -131,6 +131,13 @@ export const wagmiConfig = getDefaultConfig({
         worldsExplorer: {
           name: "MUD Worlds Explorer",
           url: "https://explorer.mud.dev/pyrope/worlds",
+        },
+      },
+      rpcUrls: {
+        default: {
+          http: [
+            "https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com",
+          ],
         },
       },
       iconUrl:

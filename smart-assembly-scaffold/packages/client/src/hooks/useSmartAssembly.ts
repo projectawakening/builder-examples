@@ -1,6 +1,6 @@
 import { useRecord } from "../mud/useRecord";
 import { stash } from "../mud/stash";
-import worldMudConfig from "contracts/eveworld/mud.config";
+import worldMudConfig from "contracts/evefrontier/mud.config";
 import {
   SmartAssemblies,
   SmartAssembly,
@@ -29,14 +29,14 @@ export function useSmartAssembly(smartObjectId = 0n) {
   const [owner, setOwner] = useState<`0x${string}` | undefined>();
 
   // Retrieve the Smart Assembly ID from environment variables if it's not already passed
-  if (smartObjectId == 0n){
+  if (smartObjectId == 0n) {
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
   }
 
   // Basic smart assembly information
   const smartDeployableStateView = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.DeployableState,
+    table: worldMudConfig.namespaces.evefrontier.tables.DeployableState,
     key: {
       smartObjectId,
     },
@@ -44,7 +44,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyType = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.SmartAssemblyTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.SmartAssembly,
     key: {
       smartObjectId,
     },
@@ -52,7 +52,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyLocation = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.LocationTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.LocationTable,
     key: {
       smartObjectId,
     },
@@ -60,7 +60,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyEntityOffchainRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.EntityRecordOffchainTable,
+    table:
+      worldMudConfig.namespaces.evefrontier.tables.EntityRecordOffchainTable,
     key: {
       entityId: smartObjectId,
     },
@@ -68,7 +69,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyEntityRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.EntityRecordTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordTable,
     key: {
       entityId: smartObjectId,
     },
@@ -76,7 +77,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartAssemblyFuelBalance = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.DeployableFuelBalance,
+    table: worldMudConfig.namespaces.evefrontier.tables.DeployableFuelBalance,
     key: {
       smartObjectId,
     },
@@ -104,15 +105,15 @@ export function useSmartAssembly(smartObjectId = 0n) {
    */
   useEffect(() => {
     const getOwner = async () => {
-      var chainID = import.meta.env.VITE_CHAIN_ID
+      var chainID = import.meta.env.VITE_CHAIN_ID;
 
       //If this DApp is on your local anvil chain, set the owner as a default
-      if(chainID == 31337){
-        setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+      if (chainID == 31337) {
+        setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
         return;
-      } 
+      }
 
-      const worldAddress = await getWorldDeploy(chainID);       
+      const worldAddress = await getWorldDeploy(chainID);
       // sql query from the indexer.
       const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",
@@ -122,13 +123,13 @@ export function useSmartAssembly(smartObjectId = 0n) {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "tokenId" = ${smartObjectId};`,
+            query: `SELECT "smartObjectId" FROM evefrontier__OwnershipByObjec WHERE "smartObjectId" = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
-      
+
       const ownerApiResult = mapApiResult(response.result);
-      setOwner(ownerApiResult.owner);     
+      setOwner(ownerApiResult.owner);
     };
 
     getOwner();
@@ -136,7 +137,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartCharacterByAddress = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.CharactersByAddressTable,
+    table:
+      worldMudConfig.namespaces.evefrontier.tables.CharactersByAddressTable,
     key: {
       characterAddress: owner ? getAddress(owner as `0x${string}`) : "0x",
     },
@@ -144,7 +146,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartCharacterRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.EntityRecordOffchainTable,
+    table:
+      worldMudConfig.namespaces.evefrontier.tables.EntityRecordOffchainTable,
     key: {
       entityId: smartCharacterByAddress?.characterId || BigInt(0),
     },
@@ -207,7 +210,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
   // SMART GATE VALUES //
   const smartgateLink = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.SmartGateLinkTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.SmartGateLinkTable,
     key: {
       sourceGateId: smartObjectId,
     },
@@ -215,7 +218,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   const smartStorageUnitInv = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.InventoryTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.InventoryTable,
     key: {
       smartObjectId,
     },

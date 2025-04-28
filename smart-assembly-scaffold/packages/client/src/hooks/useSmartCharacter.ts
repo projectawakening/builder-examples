@@ -1,8 +1,13 @@
 import { useRecord } from "../mud/useRecord";
-import worldMudConfig from "contracts/eveworld/mud.config";
+import worldMudConfig from "contracts/evefrontier/mud.config";
 import { SmartCharacter } from "@eveworld/types";
 import { stash } from "../mud/stash";
-import { useAccount, useClient, usePublicClient, useConnectorClient } from "wagmi";
+import {
+  useAccount,
+  useClient,
+  usePublicClient,
+  useConnectorClient,
+} from "wagmi";
 import { erc20Abi, getContract } from "viem";
 import { chainId } from "../common";
 import { observer } from "@latticexyz/explorer/observer";
@@ -33,16 +38,18 @@ export function useSmartCharacter() {
 
   const { data: sessionClient } = useConnectorClient();
 
-  var chainID = import.meta.env.VITE_CHAIN_ID
-  
+  var chainID = import.meta.env.VITE_CHAIN_ID;
+
   const [worldAddress, setWorldAddress] = useState<`0x${string}`>("0x");
 
-  const [eveBalanceWei, setEveBalanceWei] = useState<BigInt>(0)
-  const [GASBalanceWei, setGASBalanceWei] = useState<BigInt>(0)
+  const [eveBalanceWei, setEveBalanceWei] = useState<BigInt>(0n);
+  const [GASBalanceWei, setGASBalanceWei] = useState<BigInt>(0n);
 
   //Array of ID's for the players owned smart assemblies
-  const [ownedSmartAssemblies, setOwnedSmartAssemblies] = useState<BigInt[]>([]);
-  
+  const [ownedSmartAssemblies, setOwnedSmartAssemblies] = useState<BigInt[]>(
+    []
+  );
+
   useEffect(() => {
     const getWorldAddress = async () => {
       const { address: worldAddress } = await getWorldDeploy(chainID ?? 1);
@@ -50,24 +57,25 @@ export function useSmartCharacter() {
     };
 
     getWorldAddress();
-  }, []);   
+  }, []);
 
-  
   useEffect(() => {
-    const getBalance = async() => {      
+    if (!publicClient || !address) return;
+
+    const getBalance = async () => {
       //Get the GAS Balance
       const GASBalance = await publicClient.getBalance({
-        address: address
-      })
+        address: address,
+      });
 
-      setGASBalanceWei(GASBalance)
+      setGASBalanceWei(GASBalance);
 
       //If it's local, don't get the EVE Token Balance as it's not currently supported
-      if(chainID == 31337) {
-        return
-      }      
+      if (chainID == 31337) {
+        return;
+      }
 
-      let EVETokenAddress = import.meta.env.VITE_EVE_TOKEN_ADDRESS
+      let EVETokenAddress = import.meta.env.VITE_EVE_TOKEN_ADDRESS;
 
       //Get the erc20 ABI
       const contract = getContract({
@@ -76,37 +84,35 @@ export function useSmartCharacter() {
         client: {
           public: client,
           wallet: sessionClient?.extend(observer()),
-        }
-      })
-  
+        },
+      });
+
       //Use the balanceOf smart contract read function
-      const balance = await contract.read.balanceOf([
-        address.toString()
-      ])
+      const balance = await contract.read.balanceOf([address.toString()]);
 
-      setEveBalanceWei(balance)
-    }
+      setEveBalanceWei(balance);
+    };
 
-    getBalance()
-  }, [])
+    getBalance();
+  }, []);
 
   //Get an array of ID's for owned smart assemblies
   useEffect(() => {
-    const getOwnedAssemblies = async () => {     
-      if(!address) return;
+    const getOwnedAssemblies = async () => {
+      if (!address) return;
 
-      var chainID = import.meta.env.VITE_CHAIN_ID
-      var ownedArray : BigInt[] = [] 
+      var chainID = import.meta.env.VITE_CHAIN_ID;
+      var ownedArray: BigInt[] = [];
 
       //If this DApp is on your local anvil chain, set the owner as a default
-      if(chainID == 31337){
-        ownedArray.push(import.meta.env.VITE_SMARTASSEMBLY_ID)
+      if (chainID == 31337) {
+        ownedArray.push(import.meta.env.VITE_SMARTASSEMBLY_ID);
 
         setOwnedSmartAssemblies(ownedArray);
         return;
-      } 
+      }
 
-      const worldAddress = await getWorldDeploy(chainID);      
+      const worldAddress = await getWorldDeploy(chainID);
 
       const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",
@@ -116,20 +122,33 @@ export function useSmartCharacter() {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT "tokenId", "owner" FROM erc721deploybl__Owners WHERE "owner" = '${address}';`,
+            query: `SELECT "smartObjectId" FROM evefrontier__OwnershipByObjec WHERE "account" = '${address}';`,
           },
         ]),
       }).then((res) => res.json());
 
-      for(var i = 1; i < response.result[0].length; i++){
-        ownedArray.push(response.result[0][i][0]);
+      if (
+        response.result &&
+        Array.isArray(response.result) &&
+        response.result.length > 0
+      ) {
+        const resultArray = response.result[0];
+
+        // Skip the first element (smartObjectId) and process the rest
+        for (let i = 1; i < resultArray.length; i++) {
+          const value = resultArray[i][0];
+          // Check if the value is a number string (not "smartObjectId")
+          if (value !== "smartObjectId" && /^\d+$/.test(value)) {
+            ownedArray.push(value);
+          }
+        }
       }
 
-      setOwnedSmartAssemblies(ownedArray)
-    }
+      setOwnedSmartAssemblies(ownedArray);
+    };
 
     getOwnedAssemblies();
-  }, [address])
+  }, [address]);
 
   /**
    * Fetch the character ID associated with the user's wallet address.
@@ -138,9 +157,10 @@ export function useSmartCharacter() {
    */
   const smartCharacterByAddress = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.CharactersByAddressTable,
+    table:
+      worldMudConfig.namespaces.evefrontier.tables.CharactersByAddressTable,
     key: {
-      characterAddress: address as `0x${string}` || "",
+      characterAddress: (address as `0x${string}`) || "",
     },
   });
 
@@ -152,7 +172,7 @@ export function useSmartCharacter() {
    */
   const smartCharacterRecord = useRecord({
     stash,
-    table: worldMudConfig.namespaces.eveworld.tables.EntityRecordOffchainTable,
+    table: worldMudConfig.namespaces.evefrontier.tables.CharactersByAccount,
     key: {
       entityId: smartCharacterByAddress?.characterId || BigInt(0),
     },
@@ -169,8 +189,8 @@ export function useSmartCharacter() {
     id: smartCharacterByAddress?.characterId.toString() || "",
     name: smartCharacterRecord?.name || "",
     isSmartCharacter: smartCharacterRecord != undefined,
-    eveBalanceWei: eveBalanceWei,
-    gasBalanceWei: GASBalanceWei,
+    eveBalanceWei: Number(eveBalanceWei),
+    gasBalanceWei: Number(GASBalanceWei),
     image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
     smartAssemblies: ownedSmartAssemblies, // Placeholder for smart assemblies owned by this character
   };

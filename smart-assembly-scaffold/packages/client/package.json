@@ -13,10 +13,9 @@
   },
   "dependencies": {
     "@eveworld/contexts": "0.1.0",
-    "@eveworld/contracts": "0.1.1",
-    "@eveworld/types": "0.0.10",
-    "@eveworld/ui-components": "0.0.11",
-    "@eveworld/utils": "0.0.9",
+    "@eveworld/types": "0.0.11-patch-v2",
+    "@eveworld/ui-components": "0.0.11-patch-v2",
+    "@eveworld/utils": "0.0.10",
     "@latticexyz/common": "2.2.21",
     "@latticexyz/config": "2.2.21",
     "@latticexyz/explorer": "2.2.21",
