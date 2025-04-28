@@ -122,13 +122,14 @@ export function useSmartAssembly(smartObjectId = 0n) {
         body: JSON.stringify([
           {
             address: worldAddress.address,
-            query: `SELECT "smartObjectId" FROM evefrontier__OwnershipByObjec WHERE "smartObjectId" = ${smartObjectId};`,
+            query: `SELECT "smartObjectId", "account" FROM evefrontier__OwnershipByObjec WHERE "smartObjectId" = ${smartObjectId};`,
           },
         ]),
       }).then((res) => res.json());
 
       const ownerApiResult = mapApiResult(response.result);
-      setOwner(ownerApiResult.owner);
+
+      setOwner(ownerApiResult.account);
     };
 
     getOwner();
