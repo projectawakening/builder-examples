@@ -28,7 +28,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../contracts/eveworld/mud.config.ts"],
+  "include": ["src", "../contracts/evefrontier/mud.config.ts.ts"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
