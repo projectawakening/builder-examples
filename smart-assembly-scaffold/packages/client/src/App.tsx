@@ -15,7 +15,7 @@ import { Severity } from "@eveworld/types";
 export const App = () => {
   const { isLive, message, percentage } = useSyncProgress();
   const { smartCharacter } = useSmartCharacter();
-  const { chain, address, isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { notification, notify, handleClose } = useNotification();
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export const App = () => {
         handleClose={notification.handleClose}
         isOpen={notification.isOpen}
         isStyled={false}
-        blockExplorer={chain?.blockExplorers?.default?.url}
         txHash={notification.txHash}
       />
 

@@ -38,7 +38,7 @@ export default function EntityView() {
         <EveButton
           typeClass="secondary"
           onClick={() => window.open(getDappUrl(smartAssembly))}
-          disabled={!smartAssembly?.dappUrl}
+          disabled={!smartAssembly?.dappURL}
         >
           dApp link
         </EveButton>
@@ -48,8 +48,8 @@ export default function EntityView() {
 
       <div>
         <SmartAssemblyInfo
-          smartAssembly={smartAssembly}
-          smartCharacter={smartCharacter}
+          assembly={smartAssembly}
+          character={smartCharacter}
           chainName={chain?.name || ""}
         />
       </div>

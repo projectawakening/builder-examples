@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@eveworld/ui-components': file:../../eve-frontier-dapps/packages/libs/ui-components
+
 importers:
 
   .:
@@ -123,11 +126,11 @@ importers:
         specifier: 0.0.11-patch-v2
         version: 0.0.11-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@eveworld/ui-components':
-        specifier: 0.0.11-patch-v2
-        version: 0.0.11-patch-v2(@types/react@18.3.1)(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: file:../../../../eve-frontier-dapps/packages/libs/ui-components
+        version: file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(babel-plugin-macros@3.1.0)(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(typescript@5.7.3)(utf-8-validate@5.0.10)(wagmi@2.14.8(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)
       '@eveworld/utils':
-        specifier: 0.0.10
-        version: 0.0.10(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 0.0.10-patch-v2
+        version: 0.0.10-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/common':
         specifier: 2.2.21
         version: 2.2.21(@aws-sdk/client-kms@3.731.1)(asn1.js@5.4.1)(typescript@5.7.3)(viem@2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
@@ -1779,17 +1782,14 @@ packages:
   '@eveworld/types@0.0.11-patch-v2':
     resolution: {integrity: sha512-QQBnPgqvW8gR1VuyUZPB1cynyKfpwi+yFD+Ydx2uw79sO7E4K49FKy4fXs9J/XBTodIeMba/drrMzIngGYeR4g==}
 
-  '@eveworld/types@0.0.8':
-    resolution: {integrity: sha512-qgwCp2n897ofEDIrAxt+3lY5FX841Yd4JHAt3yINx8fx9PekwstwsowDLAHsr0Nght238Ucy91ygG2amJFaO9Q==}
-
   '@eveworld/types@0.0.9':
     resolution: {integrity: sha512-yLH7D12oo5XR/eX2ZBR0odxsATGQ/pcD8hHNWYbHOxMg4D09oxUO64adCphjJbivzyOwXsU+Gn7UlTdrPs435Q==}
 
-  '@eveworld/ui-components@0.0.11-patch-v2':
-    resolution: {integrity: sha512-sMympIKgDAAfBRImfTKdyIqVh4h1jEHqZQjclzyw2SANyivDVJMRmGd5wLsc0nqU16GPgHUZeVd2s0kRk78W5A==}
+  '@eveworld/ui-components@file:../../eve-frontier-dapps/packages/libs/ui-components':
+    resolution: {directory: ../../eve-frontier-dapps/packages/libs/ui-components, type: directory}
 
-  '@eveworld/utils@0.0.10':
-    resolution: {integrity: sha512-n/ddsBE0DNOzLU05pQzeJvoBDPQMnDjl40JS9VBjxOUAv2KDeOw7aZHdnir5hhHSo4tyWW5q691KFRMxUfn5yg==}
+  '@eveworld/utils@0.0.10-patch-v2':
+    resolution: {integrity: sha512-KYYBh5CjYcbYvkzzRWdEG971s4z+xkK33OxfOVvlbFpdIW4MQNwbxdGyHiE40svpysWrkbHrumupYgAKmVpPGQ==}
 
   '@eveworld/utils@0.0.9':
     resolution: {integrity: sha512-5OI6IM4h3xkfbm8ynL9I0yVlOUFCaBDoqwDHZZMhs6+RGOur9u0RvVMC5wtGIxwn4hfDLwLibjcgjmM/QRodCA==}
@@ -6400,9 +6400,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-
-  for-each@0.3.3:
-    resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
 
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
@@ -12197,15 +12194,6 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@eveworld/types@0.0.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
-    dependencies:
-      viem: 2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-
   '@eveworld/types@0.0.9(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       viem: 2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -12215,29 +12203,33 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@eveworld/ui-components@0.0.11-patch-v2(@types/react@18.3.1)(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/ui-components@file:../../eve-frontier-dapps/packages/libs/ui-components(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(babel-plugin-macros@3.1.0)(bufferutil@4.0.9)(react-dom@18.3.1(react@18.3.1))(typescript@5.7.3)(utf-8-validate@5.0.10)(wagmi@2.14.8(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))(zod@3.23.8)':
     dependencies:
       '@base_ui/react': 1.0.0-alpha.2(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@emotion/react': 11.14.0(@types/react@18.3.1)(react@18.3.1)
       '@emotion/styled': 11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1)
-      '@eveworld/types': 0.0.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-      '@eveworld/utils': 0.0.10(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/types': 0.0.11-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/utils': 0.0.10-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@mui/material': 5.16.14(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@rainbow-me/rainbowkit': 2.2.3(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(viem@2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.14.8(@tanstack/query-core@5.64.2)(@tanstack/react-query@5.64.2(react@18.3.1))(@types/react@18.3.1)(bufferutil@4.0.9)(react@18.3.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
       react: 18.3.1
       react-router-dom: 6.28.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       viem: 2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
+      - '@tanstack/react-query'
       - '@types/react'
+      - babel-plugin-macros
       - bufferutil
       - react-dom
       - supports-color
       - typescript
       - utf-8-validate
+      - wagmi
       - zod
 
-  '@eveworld/utils@0.0.10(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/utils@0.0.10-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@eveworld/types': 0.0.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/types': 0.0.11-patch-v2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       viem: 2.21.54(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
@@ -19404,7 +19396,7 @@ snapshots:
 
   array-buffer-byte-length@1.0.2:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       is-array-buffer: 3.0.5
 
   array-flatten@1.1.1: {}
@@ -19474,7 +19466,7 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.9
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       is-array-buffer: 3.0.5
 
   asap@2.0.6: {}
@@ -19866,9 +19858,9 @@ snapshots:
 
   call-bind@1.0.8:
     dependencies:
-      call-bind-apply-helpers: 1.0.1
+      call-bind-apply-helpers: 1.0.2
       es-define-property: 1.0.1
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       set-function-length: 1.2.2
 
   call-bound@1.0.3:
@@ -20328,19 +20320,19 @@ snapshots:
 
   data-view-buffer@1.0.2:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
   data-view-byte-length@1.0.2:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
   data-view-byte-offset@1.0.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
@@ -20714,7 +20706,7 @@ snapshots:
       arraybuffer.prototype.slice: 1.0.4
       available-typed-arrays: 1.0.7
       call-bind: 1.0.8
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       data-view-buffer: 1.0.2
       data-view-byte-length: 1.0.2
       data-view-byte-offset: 1.0.1
@@ -20724,7 +20716,7 @@ snapshots:
       es-set-tostringtag: 2.1.0
       es-to-primitive: 1.3.0
       function.prototype.name: 1.1.8
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       get-proto: 1.0.1
       get-symbol-description: 1.1.0
       globalthis: 1.0.4
@@ -20789,7 +20781,7 @@ snapshots:
   es-set-tostringtag@2.1.0:
     dependencies:
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
@@ -21454,10 +21446,6 @@ snapshots:
     optionalDependencies:
       debug: 4.4.0(supports-color@5.5.0)
 
-  for-each@0.3.3:
-    dependencies:
-      is-callable: 1.2.7
-
   for-each@0.3.5:
     dependencies:
       is-callable: 1.2.7
@@ -21531,7 +21519,7 @@ snapshots:
   function.prototype.name@1.1.8:
     dependencies:
       call-bind: 1.0.8
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       define-properties: 1.2.1
       functions-have-names: 1.2.3
       hasown: 2.0.2
@@ -21608,9 +21596,9 @@ snapshots:
 
   get-symbol-description@1.1.0:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
 
   get-tsconfig@4.10.0:
     dependencies:
@@ -22036,8 +22024,8 @@ snapshots:
   is-array-buffer@3.0.5:
     dependencies:
       call-bind: 1.0.8
-      call-bound: 1.0.3
-      get-intrinsic: 1.2.7
+      call-bound: 1.0.4
+      get-intrinsic: 1.3.0
 
   is-arrayish@0.2.1: {}
 
@@ -22073,8 +22061,8 @@ snapshots:
 
   is-data-view@1.0.2:
     dependencies:
-      call-bound: 1.0.3
-      get-intrinsic: 1.2.7
+      call-bound: 1.0.4
+      get-intrinsic: 1.3.0
       is-typed-array: 1.1.15
 
   is-date-object@1.1.0:
@@ -22137,7 +22125,7 @@ snapshots:
 
   is-regex@1.2.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       gopd: 1.2.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
@@ -22148,7 +22136,7 @@ snapshots:
 
   is-shared-array-buffer@1.0.4:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
 
   is-stream@1.1.0: {}
 
@@ -22189,7 +22177,7 @@ snapshots:
 
   is-weakref@1.1.0:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
 
   is-weakset@2.0.4:
     dependencies:
@@ -23226,7 +23214,7 @@ snapshots:
   object.assign@4.1.7:
     dependencies:
       call-bind: 1.0.8
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
       has-symbols: 1.1.0
@@ -23340,7 +23328,7 @@ snapshots:
 
   own-keys@1.0.1:
     dependencies:
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
@@ -24335,7 +24323,7 @@ snapshots:
 
   safe-regex-test@1.1.0:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
       is-regex: 1.2.1
 
@@ -24433,7 +24421,7 @@ snapshots:
       define-data-property: 1.1.4
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       gopd: 1.2.0
       has-property-descriptors: 1.0.2
 
@@ -24489,16 +24477,16 @@ snapshots:
 
   side-channel-map@1.0.1:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       object-inspect: 1.13.3
 
   side-channel-weakmap@1.0.2:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
-      get-intrinsic: 1.2.7
+      get-intrinsic: 1.3.0
       object-inspect: 1.13.3
       side-channel-map: 1.0.1
 
@@ -24763,7 +24751,7 @@ snapshots:
   string.prototype.trim@1.2.10:
     dependencies:
       call-bind: 1.0.8
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       define-data-property: 1.1.4
       define-properties: 1.2.1
       es-abstract: 1.23.9
@@ -25119,14 +25107,14 @@ snapshots:
 
   typed-array-buffer@1.0.3:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       es-errors: 1.3.0
       is-typed-array: 1.1.15
 
   typed-array-byte-length@1.0.3:
     dependencies:
       call-bind: 1.0.8
-      for-each: 0.3.3
+      for-each: 0.3.5
       gopd: 1.2.0
       has-proto: 1.2.0
       is-typed-array: 1.1.15
@@ -25135,7 +25123,7 @@ snapshots:
     dependencies:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.8
-      for-each: 0.3.3
+      for-each: 0.3.5
       gopd: 1.2.0
       has-proto: 1.2.0
       is-typed-array: 1.1.15
@@ -25144,7 +25132,7 @@ snapshots:
   typed-array-length@1.0.7:
     dependencies:
       call-bind: 1.0.8
-      for-each: 0.3.3
+      for-each: 0.3.5
       gopd: 1.2.0
       is-typed-array: 1.1.15
       possible-typed-array-names: 1.0.0
@@ -25168,7 +25156,7 @@ snapshots:
 
   unbox-primitive@1.1.0:
     dependencies:
-      call-bound: 1.0.3
+      call-bound: 1.0.4
       has-bigints: 1.1.0
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
