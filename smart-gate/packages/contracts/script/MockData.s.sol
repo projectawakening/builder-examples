@@ -1,42 +1,29 @@
-pragma solidity >=0.8.20;
+pragma solidity >=0.8.24;
 
+//External imports
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
-import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
-import { System } from "@latticexyz/world/src/System.sol";
-import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
+import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/GlobalDeployableState.sol";
-import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
-import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
-import { EntityRecordData as EntityRecordCharacter } from "@eveworld/world/src/modules/smart-character/types.sol";
-import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
-import { EntityRecordData, WorldPosition, Coord } from "@eveworld/world/src/modules/smart-storage-unit/types.sol";
-import { SmartObjectData } from "@eveworld/world/src/modules/smart-deployable/types.sol";
-import { SmartDeployableLib } from "@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLib.sol";
-import { Utils as SmartGateUtils } from "@eveworld/world/src/modules/smart-gate/Utils.sol";
-import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
-import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
-import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
+//@eveworld imports
+import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
+
+import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
+import { EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/EntityRecord.sol";
+import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
+import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
+import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
+import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
+import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { Tenant, EntityRecordMetadata, EntityRecordMetadataData, Characters, CharactersData, CharactersByAccount } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
+import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
+import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 
 contract MockData is Script {
-  using SmartCharacterUtils for bytes14;
-  using SmartDeployableUtils for bytes14;
-  using SmartGateUtils for bytes14;
-  using SmartCharacterLib for SmartCharacterLib.World;
-  using SmartDeployableLib for SmartDeployableLib.World;
-  using SmartGateLib for SmartGateLib.World;
-
-  SmartCharacterLib.World smartCharacter;
-  SmartDeployableLib.World smartDeployable;
-  SmartGateLib.World smartGate;
-
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
@@ -51,42 +38,32 @@ contract MockData is Script {
     uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
     uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    smartCharacter = SmartCharacterLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
-
-    smartDeployable = SmartDeployableLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
-
-    smartGate = SmartGateLib.World({ iface: IBaseWorld(worldAddress), namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE });
-
     //Get the allowed corp
     uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
 
+    uint256 adminCharacterSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, 234);
+    uint256 playerCharacterSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, 235);
+
     //Create a smart character
-    if (CharactersByAddressTable.get(admin) == 0) {
-      smartCharacter.createCharacter(
-        100,     //Character ID
-        admin,  // Character Address
-        corpID,  // Corp ID
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
-        ""
+    if (CharactersByAccount.get(admin) == 0) {
+      console.log("Creating admin character");
+      smartCharacterSystem.createCharacter(
+        adminCharacterSmartObjectId,
+        admin,
+        7777,
+        EntityRecordParams({ tenantId: tenantId, typeId: 1, itemId: 234, volume: 100 }),
+        EntityMetadataParams({ name: "adminCharacter", dappURL: "noURL", description: "." })
       );
     }
-    
-    //Create a smart character
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        200,     //Character ID
-        player,  // Character Address
-        200,     // Corp ID
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "characterName", dappURL: "noURL", description: "." }),
-        ""
+
+    if (CharactersByAccount.get(player) == 0) {
+      console.log("Creating player character");
+      smartCharacterSystem.createCharacter(
+        playerCharacterSmartObjectId,
+        player,
+        7777,
+        EntityRecordParams({ tenantId: tenantId, typeId: 1, itemId: 234, volume: 100 }),
+        EntityMetadataParams({ name: "playerCharacter", dappURL: "noURL", description: "." })
       );
     }
 
@@ -97,7 +74,7 @@ contract MockData is Script {
   }
 
   function anchorFuelAndOnline(uint256 smartObjectId, address player) public {
-    smartGate.createAndAnchorSmartGate(
+    smartGateSystem.createAndAnchorSmartGate(
       smartObjectId,
       EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 }),
       SmartObjectData({ owner: player, tokenURI: "test" }),
@@ -110,10 +87,10 @@ contract MockData is Script {
 
     // check global state and resume if needed
     if (GlobalDeployableState.getIsPaused() == false) {
-      smartDeployable.globalResume();
+      smartDeployableSystem.globalResume();
     }
 
-    smartDeployable.depositFuel(smartObjectId, 200010);
-    smartDeployable.bringOnline(smartObjectId);
+    smartDeployableSystem.depositFuel(smartObjectId, 200010);
+    smartDeployableSystem.bringOnline(smartObjectId);
   }
 }

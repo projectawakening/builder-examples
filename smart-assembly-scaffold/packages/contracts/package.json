@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.17",
+    "@eveworld/world-v2": "0.1.1",
+    "@eveworld/smart-object-framework-v2": "0.1.1",
     "@latticexyz/cli": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@latticexyz/explorer": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
     "@latticexyz/schema-type": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",

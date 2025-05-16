@@ -35,7 +35,7 @@
     "@latticexyz/world": "2.2.14",
     "@latticexyz/world-modules": "2.2.14",
     "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.17",
+    "@eveworld/world-v2": "0.1.0",
     "eve-frontier": "file:../../../frontier-building-tool"
   },
   "devDependencies": {
