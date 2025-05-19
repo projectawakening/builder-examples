@@ -10,14 +10,20 @@ import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/s
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
 import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
+import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
 import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
 import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
 import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
 import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
 import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+
+import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
+import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
 contract MockSsuData is Script {
   IBaseWorld world;
@@ -26,6 +32,7 @@ contract MockSsuData is Script {
 
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SSU_TYPE_ID = 77917;
+  uint256 FUEL_TYPE_ID = 78437;
 
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
     uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
@@ -80,6 +87,28 @@ contract MockSsuData is Script {
       createAnchorAndOnline(smartStorageUnitId, player);
     }
 
+    //Create and deposit inventory items
+    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOutTypeID);
+
+    CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
+    
+    items[0] = CreateInventoryItemParams({
+      smartObjectId: itemOutSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemOutTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 10, // Non-singleton can have any quantity
+      volume: 10
+    });
+
+    vm.stopBroadcast();
+
+    vm.startBroadcast(playerPrivateKey);
+
+    inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
+
     vm.stopBroadcast();
   }
 
@@ -106,10 +135,29 @@ contract MockSsuData is Script {
       smartStorageUnitSystem.toResourceId(),
       abi.encodeCall(
         SmartStorageUnitSystem.createAndAnchorStorageUnit,
-        (deployableParams, 100000000, 100000000, 0)
+        (deployableParams, 100000000, 100000000, 100000000)
       )
     );
 
+    entityRecordSystem.createMetadata(smartStorageUnitId, EntityMetadataParams({
+      name: "RED DRAGON' SSU",
+      dappURL: "",
+      description: "Example SSU for the Smart Assembly Scaffold"
+    }));
+
     console.log("SSU created and anchored successfully");
+
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+
+    fuelSystem.configureFuelParameters(smartStorageUnitId, FuelParams({
+      fuelMaxCapacity: 100000000,
+      fuelBurnRateInSeconds: 100000000
+    }));
+
+    fuelSystem.depositFuel(smartStorageUnitId, fuelSmartObjectId, 1000);
+
+    deployableSystem.bringOnline(smartStorageUnitId);
+
+    console.log("SSU fueled and online");
   }
 }

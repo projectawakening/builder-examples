@@ -1,4 +1,5 @@
 import { useRecord } from "../mud/useRecord";
+import { useRecords } from "../mud/useRecords";
 import { stash } from "../mud/stash";
 import worldMudConfig from "contracts/evefrontier/mud.config";
 import {
@@ -6,6 +7,7 @@ import {
   SmartAssembly,
   SmartAssemblyType,
   State,
+  InventoryItem
 } from "@eveworld/types";
 import { useEffect, useState } from "react";
 import { getWorldDeploy } from "../mud/getWorldDeploy";
@@ -26,8 +28,6 @@ import { getAddress } from "viem";
  * @returns {Object} `smartAssembly` - The constructed SmartAssembly object, or `undefined` if the data is incomplete.
  */
 export function useSmartAssembly(smartObjectId = 0n) {
-  const [owner, setOwner] = useState<`0x${string}` | undefined>();
-
   // Retrieve the Smart Assembly ID from environment variables if it's not already passed
   if (smartObjectId == 0n) {
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
@@ -58,7 +58,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
     },
   });
 
-  const smartAssemblyEntityOffchainRecord = useRecord({
+  const smartAssemblyEntityRecordMetadata = useRecord({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.EntityRecordMetadata,
     key: {
@@ -82,64 +82,55 @@ export function useSmartAssembly(smartObjectId = 0n) {
     },
   });
 
-  /**
-   * Ownership Information
-   *
-   * This section retrieves the ownership details for a given `smartObjectId`.
-   * Instead of importing the MUD configuration for this namespace, it directly
-   * queries the Indexer API. This approach avoids additional dependencies.
-   *
-   * This method may not be available in local development due to CORS
-   * restrictions on the sqlite indexer.
-   * Local: http://localhost:13690/api/sqlite-indexer
-   * Garnet: https://indexer.mud.garnetchain.com/q
-   * Redstone: https://indexer.mud.redstonechain.com/q
-   *
-   * {@link https://mud.dev/indexer/sql}
-   *
-   * Steps:
-   * 1. Call `getWorldDeploy` to fetch the world address using the chain ID.
-   * 2. Execute an SQL query through the Indexer API.
-   * 3. Map the API result using `mapApiResult`.
-   */
-  useEffect(() => {
-    const getOwner = async () => {
-      var chainID = import.meta.env.VITE_CHAIN_ID;
+  const smartAssemblyInventory = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.Inventory,
+    key: {
+      smartObjectId
+    }
+  })
 
-      //If this DApp is on your local anvil chain, set the owner as a default
-      if (chainID == 31337) {
-        setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
-        return;
+  // Get all inventory items at once using a single useRecord call
+  const inventoryItems = smartAssemblyInventory?.items?.map((item: any) => ({
+    itemId: Number(item),
+    quantity: 0,
+    typeId: 0,
+    name: ""
+  })) || [];
+
+  // Get all inventory item details using useRecords
+  const inventoryItemDetails = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.InventoryItem,
+    keys: smartAssemblyInventory?.items?.map((item: bigint) => ({
+      smartObjectId: smartObjectId,
+      itemObjectId: item
+    })) || []
+  });
+
+  // Update inventory items with details if available
+  if (inventoryItemDetails) {
+    inventoryItemDetails.forEach((detail) => {
+      const item = inventoryItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
+      if (item) {
+        item.quantity = Number(detail.quantity);
       }
+    });
+  }
 
-      const worldAddress = await getWorldDeploy(chainID);
-      // sql query from the indexer.
-      const response = await fetch("https://indexer.mud.pyropechain.com/q", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([
-          {
-            address: worldAddress.address,
-            query: `SELECT "smartObjectId", "account" FROM evefrontier__OwnershipByObjec WHERE "smartObjectId" = ${smartObjectId};`,
-          },
-        ]),
-      }).then((res) => res.json());
-
-      const ownerApiResult = mapApiResult(response.result);
-
-      setOwner(ownerApiResult.account);
-    };
-
-    getOwner();
-  }, [smartObjectId]);
+  const ownershipRecord = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.OwnershipByObject,
+    key: {
+      smartObjectId,
+    },
+  });
 
   const smartCharacterByAddress = useRecord({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.CharactersByAccount,
     key: {
-      account: owner ? getAddress(owner as `0x${string}`) : "0x",
+      account: ownershipRecord?.account || "0x",
     },
   });
 
@@ -155,7 +146,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
   let smartAssemblyBase: SmartAssembly | undefined;
 
   if (
-    owner != undefined &&
+    ownershipRecord != undefined &&
     smartCharacterRecord != undefined &&
     smartDeployableStateView?.smartObjectId
   ) {
@@ -163,14 +154,14 @@ export function useSmartAssembly(smartObjectId = 0n) {
       id: smartDeployableStateView?.smartObjectId.toString() || "",
       itemId: Number(smartAssemblyEntityRecord?.itemId) || 0,
       owner: {
-        address: owner as `0x${string}`,
+        address: ownershipRecord?.account.toString() || "",
         id: smartCharacterRecord?.smartObjectId.toString() || "",
         name: smartCharacterRecord?.name || "",
       },
       chainId: import.meta.env.VITE_CHAIN_ID,
-      name: smartAssemblyEntityOffchainRecord?.name || "",
-      description: smartAssemblyEntityOffchainRecord?.description || "",
-      dappURL: smartAssemblyEntityOffchainRecord?.dappURL || "",
+      name: smartAssemblyEntityRecordMetadata?.name || "",
+      description: smartAssemblyEntityRecordMetadata?.description || "",
+      dappURL: smartAssemblyEntityRecordMetadata?.dappURL || "",
       image: "",
       state: smartDeployableStateView?.currentState.toString() || State.NULL,
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
@@ -233,7 +224,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
             mainInventory: {
               capacity: smartStorageUnitInv?.capacity || BigInt(0),
               usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-              items: [],
+              items: inventoryItems || [],
             },
             ephemeralInventories: [],
           },

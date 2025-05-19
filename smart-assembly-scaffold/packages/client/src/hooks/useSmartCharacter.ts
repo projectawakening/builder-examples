@@ -30,6 +30,10 @@ import { getWorldDeploy } from "../mud/getWorldDeploy";
  *   based on your needs.
  */
 
+interface SmartCharacterExtended extends SmartCharacter{
+  tribeId: BigInt
+}
+
 export function useSmartCharacter() {
   const { address } = useAccount();
 
@@ -163,6 +167,14 @@ export function useSmartCharacter() {
     },
   });
 
+  const smartCharacterData = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.Characters,
+    key: {
+      smartObjectId: smartCharacterByAddress?.smartObjectId || 0n
+    }
+  })
+
   /**
    * Fetch metadata for the character using the retrieved character ID.
    * - Queries `EntityRecordOffchainTable` in the MUD stash.
@@ -183,16 +195,19 @@ export function useSmartCharacter() {
    *
    * @type {SmartCharacter}
    */
-  const smartCharacter: SmartCharacter = {
+  const smartCharacter: SmartCharacterExtended = {
     address: smartCharacterByAddress?.account || address || "0x",
     id: smartCharacterByAddress?.smartObjectId.toString() || "",
     name: smartCharacterRecord?.name || "",
     isSmartCharacter: smartCharacterRecord != undefined,
+    tribeId: smartCharacterData?.tribeId || 0n,
     eveBalanceWei: Number(eveBalanceWei),
     gasBalanceWei: Number(GASBalanceWei),
     image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
     smartAssemblies: ownedSmartAssemblies, // Placeholder for smart assemblies owned by this character
   };
+
+  console.log(smartCharacter)
 
   return { smartCharacter };
 }

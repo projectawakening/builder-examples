@@ -20,6 +20,7 @@ import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/S
 import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
 import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
 import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
+import { EntityRecordSystem, entityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
 
 contract MockSsuData is Script {
   using SmartDeployableLib for SmartDeployableLib.World;

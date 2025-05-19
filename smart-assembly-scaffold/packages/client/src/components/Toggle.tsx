@@ -2,6 +2,7 @@ import React from "react";
 import mudConfig from "contracts/mud.config";
 import { stash } from "../mud/stash";
 import { useRecord } from "../mud/useRecord";
+import { useRecords } from "../mud/useRecords";
 import { useWorldContract } from "../mud/useWorldContract";
 import { Severity } from "@eveworld/types";
 import setToggle from "./systemCalls/handleToggle";
@@ -22,6 +23,13 @@ const Toggle = React.memo(function Toggle() {
     },
   });
 
+  const toggleValues = useRecords({
+    stash,
+    table: mudConfig.namespaces.exampleName.tables.ToggleTable
+  });
+
+  console.log(toggleValues);
+
   const handleToggle = async () => {
     const txHash = await setToggle({
       worldContract,
@@ -37,6 +45,8 @@ const Toggle = React.memo(function Toggle() {
       });
     }
   };
+
+  console.log(toggleValue);
 
   return (
     <EveButton typeClass="primary" onClick={() => handleToggle()}>

@@ -2,18 +2,20 @@ import {
   ErrorNotice,
   ErrorNoticeTypes,
   EveButton,
-  SmartAssemblyInfo,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import Toggle from "./Toggle";
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
+import CustomSmartAssemblyInfo from "./CustomSmartAssemblyInfo";
 
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
   const { smartAssembly } = useSmartAssembly();
+
+  console.log(smartAssembly);
 
   if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
@@ -29,28 +31,21 @@ export default function EntityView() {
         </span>
       </div>
 
-      <div className="grid grid-cols-2">
+      <div className="text-center center">
         <div>
           Description:
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
-
-        <EveButton
-          typeClass="secondary"
-          onClick={() => window.open(getDappUrl(smartAssembly))}
-          disabled={!smartAssembly?.dappURL}
-        >
-          dApp link
-        </EveButton>
       </div>
 
       <Toggle />
 
       <div>
-        <SmartAssemblyInfo
+        <CustomSmartAssemblyInfo
           assembly={smartAssembly}
           character={smartCharacter}
           chainName={chain?.name || ""}
+          inventory={smartAssembly?.storage?.mainInventory?.items}
         />
       </div>
     </div>
