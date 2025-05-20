@@ -31,6 +31,9 @@ contract MockData is Script {
   IBaseWorld world;
   bytes32 tenantId;
 
+  uint256 SOURCE_GATE_ID = 1245;
+  uint256 DESTINATION_GATE_ID = 1246;
+
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SMART_GATE_TYPE_ID = 84955;
   uint256 FUEL_TYPE_ID = 78437;
@@ -83,22 +86,22 @@ contract MockData is Script {
 
     vm.startBroadcast(deployerPrivateKey);
 
-    uint256 smartGateId = ObjectIdLib.calculateSingletonId(tenantId, 1245);
+    uint256 sourceSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
 
-    if(DeployableState.getCurrentState(smartGateId) != State.NULL){
+    if(DeployableState.getCurrentState(sourceSmartGateId) != State.NULL){
       console.log("Source Smart Gate already created");
     } else{
       console.log("Creating Source Smart Gate");
-      createAnchorAndOnline(smartGateId, 1245, player);
+      createAnchorAndOnline(sourceSmartGateId, SOURCE_GATE_ID, player);
     }
 
-    uint256 smartGateId2 = ObjectIdLib.calculateSingletonId(tenantId, 1246);
+    uint256 destinationSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
 
-    if(DeployableState.getCurrentState(smartGateId2) != State.NULL){
+    if(DeployableState.getCurrentState(destinationSmartGateId) != State.NULL){
       console.log("Destination Smart Gate already created");
     } else{
       console.log("Creating Destination Smart Gate");
-      createAnchorAndOnline(smartGateId2, 1246, player);
+      createAnchorAndOnline(destinationSmartGateId, DESTINATION_GATE_ID, player);
     }
 
     vm.stopBroadcast();

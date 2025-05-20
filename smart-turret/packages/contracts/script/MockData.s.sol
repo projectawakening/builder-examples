@@ -1,116 +1,149 @@
-pragma solidity >=0.8.20;
+pragma solidity >=0.8.24;
 
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
-import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
-import { System } from "@latticexyz/world/src/System.sol";
-import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
+import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
-import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
-import { EntityRecordData as EntityRecordCharacter } from "@eveworld/world/src/modules/smart-character/types.sol";
-import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
-import { EntityRecordData, WorldPosition, Coord } from "@eveworld/world/src/modules/smart-storage-unit/types.sol";
-import { SmartObjectData } from "@eveworld/world/src/modules/smart-deployable/types.sol";
-import { SmartDeployableLib } from "@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
-import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
-import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
+import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
+import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
+import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
+import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
+import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
+import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
+import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
+import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
+import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
+import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+import { Turret, SmartTurretTarget } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
+import { SmartTurretSystem, smartTurretSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/SmartTurretSystem.sol";
+
+import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
+import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
+import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
 contract MockData is Script {
-  using SmartCharacterUtils for bytes14;
-  using SmartDeployableUtils for bytes14;
-  using SmartTurretUtils for bytes14;
-  using SmartCharacterLib for SmartCharacterLib.World;
-  using SmartDeployableLib for SmartDeployableLib.World;
-  using SmartTurretLib for SmartTurretLib.World;
+IBaseWorld world;
+  bytes32 tenantId;
 
-  SmartCharacterLib.World smartCharacter;
-  SmartDeployableLib.World smartDeployable;
-  SmartTurretLib.World smartTurret;
+  uint256 SMART_TURRET_ID = 12341;
+
+  uint256 CHARACTER_TYPE_ID = 42000000100;
+  uint256 SMART_TURRET_TYPE_ID = 84556;
+  uint256 FUEL_TYPE_ID = 78437;
+
+  function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
+    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    
+    if (CharactersByAccount.get(account) == 0) {
+      smartCharacterSystem.createCharacter(
+        smartObjectId, 
+        account, 
+        tribeId, 
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        EntityMetadataParams({ name: name, dappURL: "", description: "" })
+      );
+
+      console.log("Character created successfully:", name);
+    } else{
+      console.log("Character already exists:", name);
+    }
+  }
 
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
+    
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
-    // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
-    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
 
-    smartCharacter = SmartCharacterLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    world = IBaseWorld(worldAddress);
 
-    smartDeployable = SmartDeployableLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    tenantId = Tenant.getTenantId();
 
-    smartTurret = SmartTurretLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });    
+    console.log("Tenant ID:");
 
-    uint256 allowedCorpID = vm.envUint("ALLOWED_CORP_ID");
+    uint256 allowedTribeId = vm.envUint("ALLOWED_TRIBE_ID");
 
-    //Create a smart character that is in the corporation
-    if (CharactersByAddressTable.get(admin) == 0) {
-      smartCharacter.createCharacter(
-        123,           //characterID
-        admin,         //characterAddress
-        allowedCorpID, //corpID
-        EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
-        EntityRecordOffchainTableData({ name: "admin", dappURL: "noURL", description: "." }),
-        "tokenCid"
-      );
+    safeCreateCharacter(admin, 1348, allowedTribeId, "adminCharacter");
+    safeCreateCharacter(player, 1349, 7777, "playerCharacter");
+
+    vm.stopBroadcast();
+
+    vm.startBroadcast(playerPrivateKey);
+    world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
+    vm.stopBroadcast();
+
+    vm.startBroadcast(deployerPrivateKey);
+
+    uint256 smartTurretId = ObjectIdLib.calculateSingletonId(tenantId, SMART_TURRET_ID);
+
+    if(DeployableState.getCurrentState(smartTurretId) != State.NULL){
+      console.log("Smart Turret already created");
+    } else{
+      console.log("Creating Smart Turret");
+      createAnchorAndOnline(smartTurretId, SMART_TURRET_ID, player);
     }
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        77777,   //characterID
-        player,  //characterAddress
-        100,     //corpID
-        EntityRecordCharacter({ typeId: 111, itemId: 1, volume: 10 }),
-        EntityRecordOffchainTableData({ name: "testPlayer", dappURL: "noURL", description: "." }),
-        "tokenCid"
-      );
-    }
-
-    anchorAndOnlineSmartTurret(smartTurretId, player);
 
     vm.stopBroadcast();
   }
 
-  function anchorAndOnlineSmartTurret(uint256 smartObjectId, address player) public {
-    EntityRecordData memory entityRecordData = EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 });
-    SmartObjectData memory smartObjectData = SmartObjectData({ owner: player, tokenURI: "test" });
-    WorldPosition memory worldPosition = WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) });
+  function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
+    LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 
-    uint256 fuelUnitVolume = 100;
-    uint256 fuelConsumptionIntervalInSeconds = 100;
-    uint256 fuelMaxCapacity = 100;
-    smartDeployable.globalResume();
-    smartTurret.createAndAnchorSmartTurret(
-      smartObjectId,
-      entityRecordData,
-      smartObjectData,
-      worldPosition,
-      1e18,           // fuelUnitVolume,
-      1,              // fuelConsumptionIntervalInSeconds,
-      1000000 * 1e18  // fuelMaxCapacity,
+    EntityRecordParams memory entityRecordParams = EntityRecordParams({
+      tenantId: tenantId,
+      typeId: SMART_TURRET_TYPE_ID,
+      itemId: itemId,
+      volume: 1000
+    });
+
+    CreateAndAnchorParams memory deployableParams = CreateAndAnchorParams({
+      smartObjectId: smartAssemblyId,
+      assemblyType: "ST",
+      entityRecordParams: entityRecordParams,
+      owner: ownerAddress,
+      locationData: locationParams
+    });
+
+    world.callFrom(
+      ownerAddress,
+      smartTurretSystem.toResourceId(),
+      abi.encodeCall(
+        SmartTurretSystem.createAndAnchorTurret,
+        (deployableParams, 0)
+      )
     );
 
-    smartDeployable.depositFuel(smartObjectId, 1);
-    smartDeployable.bringOnline(smartObjectId);
+    entityRecordSystem.createMetadata(smartAssemblyId, EntityMetadataParams({
+      name: "Name Here",
+      dappURL: "",
+      description: "Example SSU for the Smart Assembly Scaffold"
+    }));
+
+    console.log("Smart Gate created and anchored successfully");
+
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+
+    fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
+      fuelMaxCapacity: 100000000,
+      fuelBurnRateInSeconds: 100000000
+    }));
+
+    fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
+
+    deployableSystem.bringOnline(smartAssemblyId);
+
+    console.log("Smart Gate fueled and online");
   }
 }

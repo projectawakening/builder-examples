@@ -8,32 +8,18 @@ import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.
 import { System } from "@latticexyz/world/src/System.sol";
 import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
-import { IERC20 } from "@latticexyz/world-modules/src/modules/erc20-puppet/IERC20.sol";
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
+import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
 
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
-import { EntityRecordTable, EntityRecordTableData } from "@eveworld/world/src/codegen/tables/EntityRecordTable.sol";
-import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-
-import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
-import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
-import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
-
-import { Utils } from "./Utils.sol";
-import { AccessControl } from "@latticexyz/world/src/AccessControl.sol";
+import { AccessSystem, accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
+import { Turret, SmartTurretTarget } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
+import { TargetPriority } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 
 import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
-
+import { Utils } from "./Utils.sol";
 /**
  * @dev This contract is an example for implementing logic to a smart turret
  */
 contract SmartTurretSystem is System {
-  using EntityRecordUtils for bytes14;
-  using SmartDeployableUtils for bytes14;
-  using SmartCharacterUtils for bytes14;
-
   /**
    * @dev a function to implement logic for Smart Turret based on proximity
    * @param smartTurretId The Smart Turret id
@@ -54,7 +40,7 @@ contract SmartTurretSystem is System {
     //Get the allowed corp ID singleton
     uint256 allowedCorp = TurretAllowlist.get();
     //Get the corp ID of the player that is in proximity of the Smart Turret
-    uint256 characterCorp = CharactersTable.getCorpId(turretTarget.characterId);
+    uint256 characterCorp = Characters.getTribeId(turretTarget.characterId);
     
     //Find if the player is already in the queue. 
     //This might happen if the player joins the corp while in proximity.
@@ -178,20 +164,14 @@ contract SmartTurretSystem is System {
   }
 
   /**
-   * @dev a function to set the allowed corp which does not get targeted by the Smart Turret
-   * @param corpID is the allowed corporation
+   * @dev a function to set the allowed tribe which does not get targeted by the Smart Turret
+   * @param tribeID is the allowed tribe
    */
-  function setAllowedCorp(uint256 corpID) public {
+  function setAllowedTribe(uint256 tribeID) public {
     ResourceId id = Utils.smartTurretSystemId();
 
-    //If the sender has access to the namespace / is the owner.
-    bool hasAccess = AccessControl.hasAccess(id, _msgSender());
-
-    //Ensure the sender has access
-    require(hasAccess, "You do not have access to this function");
-
     //Set the allowed corp ID in MUD
-    TurretAllowlist.set(corpID);
+    TurretAllowlist.set(tribeID);
   }
 
   /**
@@ -212,9 +192,5 @@ contract SmartTurretSystem is System {
     SmartTurretTarget memory victim
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
     return priorityQueue;
-  }
-
-  function _namespace() internal pure returns (bytes14 namespace) {
-    return DEPLOYMENT_NAMESPACE;
   }
 }

@@ -24,7 +24,7 @@ contract ConfigureSmartGate is Script {
 
     ResourceId systemId = SmartGateUtils.smartGateSystemId();
 
-    //This function can only be called by the owner of the smart turret
+    //This function can only be called by the owner of the smart gate
     smartGateSystem.configureGate(smartGateId, systemId);
 
     //Get the allowed tribe
