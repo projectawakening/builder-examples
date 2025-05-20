@@ -3,24 +3,19 @@ pragma solidity >=0.8.24;
 
 import "forge-std/Test.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 
-import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
-import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
 import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
 import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
-import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
 import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
-import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
 import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
 import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
@@ -38,21 +33,27 @@ contract SmartGateTest is MudTest {
 
   IWorld world;
 
+  bytes32 tenantId;
+
   address admin;
   address player;
 
+  //Smart Gate Smart Object IDs (These are generated from the Smart Gate IDs)
   uint256 sourceGateId;
   uint256 destinationGateId;
+
+  //Tribe that can use the Smart Gate
   uint256 ALLOWED_TRIBE_ID = 500;
 
-  bytes32 tenantId;
-
+  //Character IDs
   uint256 ADMIN_CHARACTER_ID = 35000;
   uint256 PLAYER_CHARACTER_ID = 400;
 
+  //Smart Gate IDs
   uint256 SOURCE_GATE_ID = 9000;
   uint256 DESTINATION_GATE_ID = 9001; 
 
+  //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SMART_GATE_TYPE_ID = 84955;
   uint256 FUEL_TYPE_ID = 78437;

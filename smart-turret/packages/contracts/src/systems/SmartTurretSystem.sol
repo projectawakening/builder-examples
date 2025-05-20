@@ -13,6 +13,7 @@ import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codege
 import { AccessSystem, accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
 import { Turret, SmartTurretTarget } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 import { TargetPriority } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
+import { AggressionParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 
 import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
 import { Utils } from "./Utils.sol";
@@ -168,7 +169,7 @@ contract SmartTurretSystem is System {
    * @param tribeID is the allowed tribe
    */
   function setAllowedTribe(uint256 tribeID) public {
-    ResourceId id = Utils.smartTurretSystemId();
+    require(accessSystem.isAdmin(_msgSender()), "You are not authorized to set the allowed tribe");
 
     //Set the allowed corp ID in MUD
     TurretAllowlist.set(tribeID);
@@ -176,21 +177,11 @@ contract SmartTurretSystem is System {
 
   /**
    * @dev a function to implement logic for smart turret based on aggression
-   * @param smartTurretId The smart turret id
-   * @param characterId is the owner of the smart turret
-   * @param priorityQueue is the queue of existing targets ordered by priority, index 0 being the lowest priority
-   * @param turret is the turret data
-   * @param aggressor is the aggressor
-   * @param victim is the victim
+   * @param aggressionParams is the aggression parameters
    */
   function aggression(
-    uint256 smartTurretId,
-    uint256 characterId,
-    TargetPriority[] memory priorityQueue,
-    Turret memory turret,
-    SmartTurretTarget memory aggressor,
-    SmartTurretTarget memory victim
+    AggressionParams memory aggressionParams
   ) public returns (TargetPriority[] memory updatedPriorityQueue) {
-    return priorityQueue;
+    return aggressionParams.priorityQueue;
   }
 }
