@@ -27,11 +27,11 @@ contract ConfigureSmartGate is Script {
     //This function can only be called by the owner of the smart turret
     smartGateSystem.configureGate(smartGateId, systemId);
 
-    //Get the allowed corp
-    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
+    //Get the allowed tribe
+    uint256 tribeID = vm.envUint("ALLOWED_TRIBE_ID");
 
-    //Set the MUD table for the corp whitelist
-    GateAccess.set(smartGateId, corpID);
+    //Set the MUD table for the tribe whitelist
+    GateAccess.set(smartGateId, tribeID);
 
     vm.stopBroadcast();
   }

@@ -6,22 +6,38 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
 
+import { CharactersByAccount } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/CharactersByAccount.sol";
+import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
 contract CanJump is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(playerPrivateKey);
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(adminPrivateKey);
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
+
+    vm.startBroadcast(adminPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
 
     uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
     uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    console.log("-------------------\nTESTING CORRECT CORP");
-    console.log("Can Jump:", smartGateSystem.canJump(100, sourceGateId, destinationGateId));
+    uint256 adminCharacterId = CharactersByAccount.getSmartObjectId(admin);
+    uint256 playerCharacterId = CharactersByAccount.getSmartObjectId(player);
 
-    console.log("-------------------\nTESTING INCORRECT CORP");
-    console.log("Can Jump:", smartGateSystem.canJump(1234, sourceGateId, destinationGateId));
+    uint256 adminCharacterTribeId = Characters.getTribeId(adminCharacterId);
+    uint256 playerCharacterTribeId = Characters.getTribeId(playerCharacterId);
+
+    console.log("-------------------\nTESTING CORRECT TRIBE");
+    console.log("Admin Character ID:", vm.toString(adminCharacterId));
+    console.log("Admin Character Tribe ID:", vm.toString(adminCharacterTribeId));
+    console.log("Can Jump:", smartGateSystem.canJump(adminCharacterId, sourceGateId, destinationGateId));
+
+    console.log("-------------------\nTESTING INCORRECT TRIBE");
+    console.log("Player Character ID:", vm.toString(playerCharacterId));
+    console.log("Player Character Tribe ID:", vm.toString(playerCharacterTribeId));
+    console.log("Can Jump:", smartGateSystem.canJump(playerCharacterId, sourceGateId, destinationGateId));
 
     vm.stopBroadcast();
   }

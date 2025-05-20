@@ -23,9 +23,10 @@ import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libra
 import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
+import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
-contract MockSsuData is Script {
+contract MockData is Script {
   IBaseWorld world;
 
   bytes32 tenantId;
@@ -56,7 +57,7 @@ contract MockSsuData is Script {
     StoreSwitch.setStoreAddress(worldAddress);
     
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address owner = vm.addr(deployerPrivateKey);
+    address admin = vm.addr(deployerPrivateKey);
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
@@ -67,13 +68,13 @@ contract MockSsuData is Script {
 
     tenantId = Tenant.getTenantId();
 
-    safeCreateCharacter(owner, 1348, 7777, "adminCharacter");
+    safeCreateCharacter(admin, 1348, 7777, "adminCharacter");
     safeCreateCharacter(player, 1349, 7777, "playerCharacter");
 
     vm.stopBroadcast();
 
     vm.startBroadcast(playerPrivateKey);
-    world.registerDelegation(owner, UNLIMITED_DELEGATION, new bytes(0));
+    world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
     vm.stopBroadcast();
 
     vm.startBroadcast(deployerPrivateKey);
@@ -99,7 +100,7 @@ contract MockSsuData is Script {
       tenantId: tenantId,
       typeId: itemOutTypeID,
       itemId: 0, // For non-singleton items, itemId is zero
-      quantity: 10, // Non-singleton can have any quantity
+      quantity: 20, // Non-singleton can have any quantity
       volume: 10
     });
 
@@ -108,6 +109,27 @@ contract MockSsuData is Script {
     vm.startBroadcast(playerPrivateKey);
 
     inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
+
+    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
+
+    CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](1);
+
+    ephemeralItems[0] = CreateInventoryItemParams({
+      smartObjectId: itemInSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemInTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 10, // Non-singleton can have any quantity
+      volume: 10
+    });
+
+    vm.stopBroadcast();
+
+    vm.startBroadcast(deployerPrivateKey);
+
+    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitId, admin, ephemeralItems);
 
     vm.stopBroadcast();
   }
@@ -140,7 +162,7 @@ contract MockSsuData is Script {
     );
 
     entityRecordSystem.createMetadata(smartStorageUnitId, EntityMetadataParams({
-      name: "RED DRAGON' SSU",
+      name: "Name Here",
       dappURL: "",
       description: "Example SSU for the Smart Assembly Scaffold"
     }));

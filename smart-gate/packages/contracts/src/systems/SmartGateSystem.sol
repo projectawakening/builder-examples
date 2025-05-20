@@ -18,24 +18,24 @@ import { AccessSystem, accessSystem } from "@eveworld/world-v2/src/namespaces/ev
  */
 contract SmartGateSystem is System {  
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    //Get the allowed corp
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
+    //Get the allowed tribe
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
 
     //Get the character corp
-    uint256 characterCorp = Characters.getTribeId(characterId);
+    uint256 characterTribe = Characters.getTribeId(characterId);
 
-    //If the corp is the same, allow jumps
-    if(allowedCorp == characterCorp){
+    //If the tribe is the same, allow jumps
+    if(allowedTribe == characterTribe){
       return true;
     } else{
       return false;
     }    
   }
 
-  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public {
-    accessSystem.onlyOwner(sourceGateId);
+  function setAllowedTribe(uint256 sourceGateId, uint256 tribeID) public {
+    accessSystem.onlyOwner(sourceGateId, "");
 
-    //Set the allowed corp
-    GateAccess.set(sourceGateId, corpID);
+    //Set the allowed tribe
+    GateAccess.set(sourceGateId, tribeID);
   }
 }

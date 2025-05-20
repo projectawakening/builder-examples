@@ -9,7 +9,7 @@ import Toggle from "./Toggle";
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
 import CustomSmartAssemblyInfo from "./CustomSmartAssemblyInfo";
-
+import EveLoadingAnimation from "@eveworld/ui-components/components/EveLoadingAnimation";
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
@@ -22,6 +22,7 @@ export default function EntityView() {
   }
 
   return (
+    <EveLoadingAnimation position="diagonal">
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
       <div>Welcome to EVE Dapp Scaffold!</div>
       <div>
@@ -49,5 +50,6 @@ export default function EntityView() {
         />
       </div>
     </div>
+    </EveLoadingAnimation>
   );
 }

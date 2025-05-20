@@ -11,6 +11,10 @@ import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
 
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
 import { EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/EntityRecord.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
+import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
+
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
 import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
@@ -24,73 +28,128 @@ import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libra
 import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 
 contract MockData is Script {
+  IBaseWorld world;
+  bytes32 tenantId;
+
+  uint256 CHARACTER_TYPE_ID = 42000000100;
+  uint256 SMART_GATE_TYPE_ID = 84955;
+  uint256 FUEL_TYPE_ID = 78437;
+
+  function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
+    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    
+    if (CharactersByAccount.get(account) == 0) {
+      smartCharacterSystem.createCharacter(
+        smartObjectId, 
+        account, 
+        tribeId, 
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        EntityMetadataParams({ name: name, dappURL: "", description: "" })
+      );
+
+      console.log("Character created successfully:", name);
+    } else{
+      console.log("Character already exists:", name);
+    }
+  }
+
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
+    
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
-    // Start broadcasting transactions from the deployer account
     vm.startBroadcast(deployerPrivateKey);
-    uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    //Get the allowed corp
-    uint256 corpID = vm.envUint("ALLOWED_CORP_ID");
+    world = IBaseWorld(worldAddress);
 
-    uint256 adminCharacterSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, 234);
-    uint256 playerCharacterSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, 235);
+    tenantId = Tenant.getTenantId();
 
-    //Create a smart character
-    if (CharactersByAccount.get(admin) == 0) {
-      console.log("Creating admin character");
-      smartCharacterSystem.createCharacter(
-        adminCharacterSmartObjectId,
-        admin,
-        7777,
-        EntityRecordParams({ tenantId: tenantId, typeId: 1, itemId: 234, volume: 100 }),
-        EntityMetadataParams({ name: "adminCharacter", dappURL: "noURL", description: "." })
-      );
+    console.log("Tenant ID:");
+
+    uint256 allowedTribeId = vm.envUint("ALLOWED_TRIBE_ID");
+
+    safeCreateCharacter(admin, 1348, allowedTribeId, "adminCharacter");
+    safeCreateCharacter(player, 1349, 7777, "playerCharacter");
+
+    vm.stopBroadcast();
+
+    vm.startBroadcast(playerPrivateKey);
+    world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
+    vm.stopBroadcast();
+
+    vm.startBroadcast(deployerPrivateKey);
+
+    uint256 smartGateId = ObjectIdLib.calculateSingletonId(tenantId, 1245);
+
+    if(DeployableState.getCurrentState(smartGateId) != State.NULL){
+      console.log("Source Smart Gate already created");
+    } else{
+      console.log("Creating Source Smart Gate");
+      createAnchorAndOnline(smartGateId, 1245, player);
     }
 
-    if (CharactersByAccount.get(player) == 0) {
-      console.log("Creating player character");
-      smartCharacterSystem.createCharacter(
-        playerCharacterSmartObjectId,
-        player,
-        7777,
-        EntityRecordParams({ tenantId: tenantId, typeId: 1, itemId: 234, volume: 100 }),
-        EntityMetadataParams({ name: "playerCharacter", dappURL: "noURL", description: "." })
-      );
-    }
+    uint256 smartGateId2 = ObjectIdLib.calculateSingletonId(tenantId, 1246);
 
-    anchorFuelAndOnline(sourceGateId, player);
-    anchorFuelAndOnline(destinationGateId, player);
+    if(DeployableState.getCurrentState(smartGateId2) != State.NULL){
+      console.log("Destination Smart Gate already created");
+    } else{
+      console.log("Creating Destination Smart Gate");
+      createAnchorAndOnline(smartGateId2, 1246, player);
+    }
 
     vm.stopBroadcast();
   }
 
-  function anchorFuelAndOnline(uint256 smartObjectId, address player) public {
-    smartGateSystem.createAndAnchorSmartGate(
-      smartObjectId,
-      EntityRecordData({ typeId: 12345, itemId: 45, volume: 10 }),
-      SmartObjectData({ owner: player, tokenURI: "test" }),
-      WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
-      1e18, // fuelUnitVolume,
-      1, // fuelConsumptionIntervalInSeconds,
-      1000100 * 1e18, // fuelMaxCapacity,
-      100010000 * 1e18 // max Distance
+  function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
+    LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
+
+    EntityRecordParams memory entityRecordParams = EntityRecordParams({
+      tenantId: tenantId,
+      typeId: SMART_GATE_TYPE_ID,
+      itemId: itemId,
+      volume: 1000
+    });
+
+    CreateAndAnchorParams memory deployableParams = CreateAndAnchorParams({
+      smartObjectId: smartAssemblyId,
+      assemblyType: "SG",
+      entityRecordParams: entityRecordParams,
+      owner: ownerAddress,
+      locationData: locationParams
+    });
+
+    world.callFrom(
+      ownerAddress,
+      smartGateSystem.toResourceId(),
+      abi.encodeCall(
+        SmartGateSystem.createAndAnchorGate,
+        (deployableParams, 100000000, 0)
+      )
     );
 
-    // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused() == false) {
-      smartDeployableSystem.globalResume();
-    }
+    entityRecordSystem.createMetadata(smartAssemblyId, EntityMetadataParams({
+      name: "Name Here",
+      dappURL: "",
+      description: "Example SSU for the Smart Assembly Scaffold"
+    }));
 
-    smartDeployableSystem.depositFuel(smartObjectId, 200010);
-    smartDeployableSystem.bringOnline(smartObjectId);
+    console.log("Smart Gate created and anchored successfully");
+
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+
+    fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
+      fuelMaxCapacity: 100000000,
+      fuelBurnRateInSeconds: 100000000
+    }));
+
+    fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
+
+    deployableSystem.bringOnline(smartAssemblyId);
+
+    console.log("Smart Gate fueled and online");
   }
 }

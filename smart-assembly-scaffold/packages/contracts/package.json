@@ -16,7 +16,7 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test:deploy": "tsc --noEmit && mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
-    "mock-data": ". ./.env && pnpm forge script ./script/MockSsuData.s.sol:MockSsuData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv --sender 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv --sender 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "configure-toggle": ". ./.env && pnpm forge script ./script/ConfigureToggle.s.sol:ConfigureToggle --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "env-stillness": "eve-frontier stillness",
     "env-local": "eve-frontier local",

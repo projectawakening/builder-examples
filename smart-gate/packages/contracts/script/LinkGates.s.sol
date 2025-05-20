@@ -10,7 +10,7 @@ import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespa
 contract LinkGates is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 privateKey = vm.envUint("PRIVATE_KEY");
+    uint256 privateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     vm.startBroadcast(privateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
@@ -19,8 +19,8 @@ contract LinkGates is Script {
     uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
     uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    //This function can only be called by the owner of the smart turret
-    smartGateSystem.linkSmartGates(sourceGateId, destinationGateId);
+    //This function can only be called by the owner of the smart gate
+    smartGateSystem.linkGates(sourceGateId, destinationGateId);
 
     vm.stopBroadcast();
   }

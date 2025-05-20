@@ -48,7 +48,7 @@ contract ToggleTest is MudTest {
   uint64 inRatio = 15;
   uint64 outRatio = 5;
 
-  uint256 smartStorageUnitId = 1245;
+  uint256 smartStorageUnitId = 1246;
   uint256 smartStorageUnitSmartId;
 
   bytes32 tenantId;
@@ -89,8 +89,8 @@ contract ToggleTest is MudTest {
     tenantId = Tenant.getTenantId();
 
     vm.startPrank(player, owner);
-    safeCreateCharacter(owner, 1348, 7777, "adminCharacter");
-    safeCreateCharacter(player, 1349, 7777, "playerCharacter");
+    safeCreateCharacter(owner, 1, 7777, "adminCharacter");
+    safeCreateCharacter(player, 2, 7777, "playerCharacter");
     vm.stopPrank();
 
     // Add delegation setup
@@ -166,7 +166,7 @@ contract ToggleTest is MudTest {
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,
       typeId: SSU_TYPE_ID,
-      itemId: 1245,
+      itemId: 1246,
       volume: 1000
     });
 

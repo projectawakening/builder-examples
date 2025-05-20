@@ -13,8 +13,8 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 contract ConfigureToggle is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 ownerPrivateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(ownerPrivateKey);
+    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    vm.startBroadcast(deployerPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);

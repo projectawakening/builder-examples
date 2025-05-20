@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { getWorldDeploy } from "../mud/getWorldDeploy";
 import { mapApiResult } from "../utils/mapApiResult";
 import { getAddress } from "viem";
+import { useAccount } from "wagmi";
 
 /**
  * `useSmartAssembly` hook
@@ -28,6 +29,7 @@ import { getAddress } from "viem";
  * @returns {Object} `smartAssembly` - The constructed SmartAssembly object, or `undefined` if the data is incomplete.
  */
 export function useSmartAssembly(smartObjectId = 0n) {
+  const { address } = useAccount();
   // Retrieve the Smart Assembly ID from environment variables if it's not already passed
   if (smartObjectId == 0n) {
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
@@ -111,6 +113,34 @@ export function useSmartAssembly(smartObjectId = 0n) {
   // Update inventory items with details if available
   if (inventoryItemDetails) {
     inventoryItemDetails.forEach((detail) => {
+      const item = inventoryItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
+      if (item) {
+        item.quantity = Number(detail.quantity);
+      }
+    });
+  }
+
+  const ephemeralInventory = useRecord({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.EphemeralInventory,
+    key: {
+      smartObjectId: smartObjectId,
+      ephemeralOwner: address
+    },
+  });
+
+  const ephemeralInventoryItemDetails = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.EphemeralInvItem,
+    keys: ephemeralInventory?.items?.map((item: bigint) => ({
+      smartObjectId: smartObjectId,
+      ephemeralOwner: address,
+      itemObjectId: item
+    })) || []
+  });
+
+  if(ephemeralInventoryItemDetails) {
+    ephemeralInventoryItemDetails.forEach((detail) => {
       const item = inventoryItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
       if (item) {
         item.quantity = Number(detail.quantity);
@@ -226,7 +256,15 @@ export function useSmartAssembly(smartObjectId = 0n) {
               usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
               items: inventoryItems || [],
             },
-            ephemeralInventories: [],
+            ephemeralInventories: [
+              {
+                ownerId: address || "",
+                ownerName: ephemeralInventory?.ownerName || "",
+                storageCapacity: ephemeralInventory?.capacity || BigInt(0),
+                usedCapacity: ephemeralInventory?.usedCapacity || BigInt(0),
+                ephemeralInventoryItems: [...(ephemeralInventoryItemDetails || [])],
+              }
+            ],
           },
         };
         break;
@@ -250,6 +288,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
         };
         break;
     }
+
+  console.log("smartAssembly", smartAssembly);
 
   return { smartAssemblyBase, smartAssembly };
 }

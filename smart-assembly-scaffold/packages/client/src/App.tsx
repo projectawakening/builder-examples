@@ -11,7 +11,7 @@ import { Explorer } from "./Explorer";
 import { useSmartCharacter } from "./hooks/useSmartCharacter";
 import { useEffect } from "react";
 import { Severity } from "@eveworld/types";
-
+import { EveLinearBar } from "@eveworld/ui-components";
 export const App = () => {
   const { isLive, message, percentage } = useSyncProgress();
   const { smartCharacter } = useSmartCharacter();
@@ -45,8 +45,13 @@ export const App = () => {
             <EntityView />
           </div>
         ) : (
-          <div className="tabular-nums">
-            {message} ({percentage.toFixed(1)}%)…
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="tabular-nums">
+              <div className="align-center text-center center">
+                <EveLinearBar nominator={percentage} denominator={100} />
+                {message}…
+              </div>
+            </div>
           </div>
         )}
       </EveLayout>
