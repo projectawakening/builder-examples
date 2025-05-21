@@ -1,10 +1,4 @@
-// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
-
-import "forge-std/Test.sol";
-import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
@@ -19,6 +13,8 @@ import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefro
 import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
 import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
 import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
 import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
@@ -28,32 +24,12 @@ import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
 import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
-
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
-import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Utils } from "../src/systems/Utils.sol";
-import { ToggleSystem } from "../src/systems/ToggleSystem.sol";
-import { ToggleTable } from "../src/codegen/tables/ToggleTable.sol";
-
-contract ToggleTest is MudTest {
-  ResourceId systemId = Utils.toggleSystemId();
-
-  IWorld world;
+contract MockData is Script {
+  IBaseWorld world;
 
   bytes32 tenantId;
-
-  address admin;
-  address player;
-
-  uint256 inventoryItemIn;
-  uint256 inventoryItemOut;
-
-  uint256 smartStorageUnitId = 1246;
-  uint256 smartStorageUnitSmartId;
-
-  uint64 INV_ITEM_QUANTITY = 100;
-  uint64 EPH_ITEM_QUANTITY = 100;
 
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SSU_TYPE_ID = 77917;
@@ -70,47 +46,51 @@ contract ToggleTest is MudTest {
         EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
         EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
       );
+
+      console.log("Character created successfully:", name);
+    } else{
+      console.log("Character already exists:", name);
     }
   }
 
-  function setUp() public override {
-    super.setUp();
-
-    world = IWorld(worldAddress);
+  function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
+    
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(adminPrivateKey);
 
-    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    admin = vm.addr(deployerPrivateKey);
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
-    player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls
+    vm.startBroadcast(adminPrivateKey);
 
-    inventoryItemIn = vm.envUint("ITEM_IN_TYPE_ID");
-    inventoryItemOut = vm.envUint("ITEM_OUT_TYPE_ID");
+    world = IBaseWorld(worldAddress);
 
     tenantId = Tenant.getTenantId();
 
-    vm.startPrank(player, admin);
-    safeCreateCharacter(admin, 1, 7777, "adminCharacter");
-    safeCreateCharacter(player, 2, 7777, "playerCharacter");
-    vm.stopPrank();
+    safeCreateCharacter(admin, 1348, 7777, "adminCharacter");
+    safeCreateCharacter(player, 1349, 7777, "playerCharacter");
 
-    // Add delegation setup
-    vm.startPrank(player);
+    vm.stopBroadcast();
+
+    vm.startBroadcast(playerPrivateKey);
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
-    vm.stopPrank();
+    vm.stopBroadcast();
 
-    vm.startPrank(admin);
-    smartStorageUnitSmartId = ObjectIdLib.calculateSingletonId(tenantId, smartStorageUnitId);
+    vm.startBroadcast(adminPrivateKey);
 
-    console.log("Creating and anchoring smart storage unit");
-    
-    if(DeployableState.getCurrentState(smartStorageUnitSmartId) == State.NULL){
-      createAnchorAndOnline(smartStorageUnitSmartId, admin);
+    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, 1245);
+
+    if(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL){
+      console.log("SSU already created");
+    } else{
+      console.log("Creating SSU");
+      createAnchorAndOnline(smartStorageUnitId, admin);
     }
-    console.log("Smart storage unit created and anchored");
 
     //Create and deposit inventory items
     uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+
     uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOutTypeID);
 
     CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
@@ -119,89 +99,66 @@ contract ToggleTest is MudTest {
       smartObjectId: itemOutSmartObjectId,
       tenantId: tenantId,
       typeId: itemOutTypeID,
-      itemId: 0,
-      quantity: INV_ITEM_QUANTITY,
+      itemId: 0,    // For non-singleton items, itemId is zero
+      quantity: 10, // Non-singleton can have any quantity
       volume: 10
     });
 
-    vm.startPrank(admin, admin);
+    vm.stopBroadcast();
 
-    console.log("Creating and depositing inventory items");
-    inventorySystem.createAndDepositInventory(smartStorageUnitSmartId, items);
-    
+    vm.startBroadcast(adminPrivateKey);
+
+    inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
+
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+
     uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
 
-    items[0] = CreateInventoryItemParams({
+    CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](2);
+
+    ephemeralItems[0] = CreateInventoryItemParams({
       smartObjectId: itemInSmartObjectId,
       tenantId: tenantId,
       typeId: itemInTypeID,
-      itemId: 0,
-      quantity: EPH_ITEM_QUANTITY,
+      itemId: 0,    // For non-singleton items, itemId is zero
+      quantity: 15, // Non-singleton can have any quantity
+      volume: 10
+    });
+    ephemeralItems[1] = CreateInventoryItemParams({
+      smartObjectId: itemOutSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemOutTypeID,
+      itemId: 0,    // For non-singleton items, itemId is zero
+      quantity: 15, // Non-singleton can have any quantity
       volume: 10
     });
 
-    vm.stopPrank();
+    vm.stopBroadcast();
 
-    vm.startPrank(player, admin);
-    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitSmartId, player, items);
-    vm.stopPrank();
-  }  
+    vm.startBroadcast(playerPrivateKey);
 
-  function testWorldExists() public {
-    uint256 codeSize;
-    address addr = worldAddress;
-    assembly {
-      codeSize := extcodesize(addr)
-    }
-    assertTrue(codeSize > 0);
+    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitId, player, ephemeralItems);
+    
+    vm.stopBroadcast();
   }
 
-  function testSetTrue() public {
-    //Set the ratio
-    world.call(
-      systemId,
-      abi.encodeCall(
-        ToggleSystem.setTrue, smartStorageUnitSmartId
-      )
-    );
-
-    //Check has been set
-    assertTrue(ToggleTable.getIsSet(smartStorageUnitSmartId));
-  }
-
-  function testSetFalse() public {
-    //Set the ratio
-    world.call(
-      systemId,
-      abi.encodeCall(
-        ToggleSystem.setFalse, smartStorageUnitSmartId
-      )
-    );
-
-    //Check has been set
-    assertFalse(ToggleTable.getIsSet(smartStorageUnitSmartId));
-  }
-
-  function createAnchorAndOnline(uint256 ssuId, address ownerAddress) private {
+  function createAnchorAndOnline(uint256 smartStorageUnitId, address ownerAddress) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,
       typeId: SSU_TYPE_ID,
-      itemId: 1246,
+      itemId: 1245,
       volume: 1000
     });
 
     CreateAndAnchorParams memory deployableParams = CreateAndAnchorParams({
-      smartObjectId: ssuId,
+      smartObjectId: smartStorageUnitId,
       assemblyType: "SSU",
       entityRecordParams: entityRecordParams,
       owner: ownerAddress,
       locationData: locationParams
     });
-
-    vm.startPrank(admin, admin);
 
     world.callFrom(
       ownerAddress,
@@ -212,25 +169,25 @@ contract ToggleTest is MudTest {
       )
     );
 
+    entityRecordSystem.createMetadata(smartStorageUnitId, EntityMetadataParams({
+      name: "Name Here",
+      dappURL: "",
+      description: "Example SSU for the Smart Assembly Scaffold"
+    }));
+
+    console.log("SSU created and anchored successfully");
+
     uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
 
-    vm.stopPrank();
-
-    vm.startPrank(admin);
-
-    console.log("Configuring fuel parameters");
-
-    fuelSystem.configureFuelParameters(ssuId, FuelParams({
+    fuelSystem.configureFuelParameters(smartStorageUnitId, FuelParams({
       fuelMaxCapacity: 100000000,
       fuelBurnRateInSeconds: 100000000
     }));
 
-    console.log("Depositing fuel");
+    fuelSystem.depositFuel(smartStorageUnitId, fuelSmartObjectId, 1000);
 
-    fuelSystem.depositFuel(ssuId, fuelSmartObjectId, 1000);
+    deployableSystem.bringOnline(smartStorageUnitId);
 
-    console.log("Fuel deposited");
-
-    deployableSystem.bringOnline(ssuId);
+    console.log("SSU fueled and online");
   }
 }

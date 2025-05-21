@@ -8,50 +8,39 @@ import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
-import { InventoryLib } from "@eveworld/world/src/modules/inventory/InventoryLib.sol";
-import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
-import { IInventoryErrors } from "@eveworld/world/src/modules/inventory/IInventoryErrors.sol";
+import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
+import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
+import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
+import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
+import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
+import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
+import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
+import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { Tenant, Characters, CharactersByAccount, EntityRecord, EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
+import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
+import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+import { OwnershipSystem, ownershipSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/OwnershipSystemLib.sol";
 
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
-import { InventoryItemTable } from "@eveworld/world/src/codegen/tables/InventoryItemTable.sol";
-import { EphemeralInvTable } from "@eveworld/world/src/codegen/tables/EphemeralInvTable.sol";
-import { EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
-import { EntityRecordTable, EntityRecordTableData } from "@eveworld/world/src/codegen/tables/EntityRecordTable.sol";
-import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
-import { InventoryItemTableData, InventoryItemTable } from "@eveworld/world/src/codegen/tables/InventoryItemTable.sol";
+import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
+import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
+import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
+import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
+import { InventoryInteractSystem, inventoryInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventoryInteractSystemLib.sol";
 
-import { Utils as EntityRecordUtils } from "@eveworld/world/src/modules/entity-record/Utils.sol";
-import { Utils as InventoryUtils } from "@eveworld/world/src/modules/inventory/Utils.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE as DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
+import { InventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
 import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
-import { TransferItem } from "@eveworld/world/src/modules/inventory/types.sol";
 
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
-
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 /**
  * @dev This contract is an example for extending Inventory functionality from game.
  * This contract implements item trade as a feature to the existing inventoryIn logic
  */
 contract SmartStorageUnitSystem is System {
-  using InventoryLib for InventoryLib.World;
-  using EntityRecordUtils for bytes14;
-  using InventoryUtils for bytes14;
-  using SmartDeployableUtils for bytes14;
-
-  error InvalidRatio(string message);
-
-  /**
-   * @dev Only owner modifer
-   */
-  modifier onlyOwner(uint256 smartObjectId) {
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
-    require(_msgSender() == ssuOwner, "Only owner can call this function");
-    _;
-  }
 
   /**
    * @dev Define what goes in and out and set the exchange ratio for a item trade
@@ -68,7 +57,7 @@ contract SmartStorageUnitSystem is System {
     uint256 inventoryItemIdOut,
     uint64 ratioIn,
     uint64 ratioOut
-  ) public onlyOwner(smartObjectId) {
+  ) public {
     require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");    
     
     //Check for overflow issues
@@ -76,11 +65,11 @@ contract SmartStorageUnitSystem is System {
 
     //make sure the inventoryItem out item exists
     //Revert if the items to deposit is not created on-chain
-    EntityRecordTableData memory entityInRecord = EntityRecordTable.get(inventoryItemIdIn);
-    EntityRecordTableData memory entityOutRecord = EntityRecordTable.get(inventoryItemIdOut);
+    EntityRecordData memory entityInRecordData = EntityRecord.get(inventoryItemIdIn);
+    EntityRecordData memory entityOutRecordData = EntityRecord.get(inventoryItemIdOut);
 
-    if (entityInRecord.recordExists == false || entityOutRecord.recordExists == false) {
-      revert IInventoryErrors.Inventory_InvalidItem("Item is not created on-chain", inventoryItemIdIn);
+    if (entityInRecordData.exists == false || entityOutRecordData.exists == false) {
+      revert InventorySystem.Inventory_InvalidItemObjectId(inventoryItemIdIn);
     }
 
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
@@ -96,10 +85,11 @@ contract SmartStorageUnitSystem is System {
    */
   function execute(uint256 smartObjectId, uint64 quantity, uint256 inventoryItemIdIn) public {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
+
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
+    address ssuOwner = ownershipSystem.owner(smartObjectId);
 
     // Make sure there are enough items
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
@@ -115,14 +105,11 @@ contract SmartStorageUnitSystem is System {
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
 
-    TransferItem[] memory inItems = new TransferItem[](1);
-    inItems[0] = TransferItem(inventoryItemIdIn, ssuOwner, calculatedInput);
+    InventoryItemParams[] memory inItems = new InventoryItemParams[](1);
+    inItems[0] = InventoryItemParams(32405186305713341162402166909623213452806236265591347791747984352594936240888, 1);
 
-    TransferItem[] memory ephTransferItems = new TransferItem[](1);
-    ephTransferItems[0] = TransferItem(itemObjectIdOut, _msgSender(), quantityOutputItem);
-
-    _inventoryLib().inventoryToEphemeralTransfer(smartObjectId, _msgSender(), ephTransferItems);
-    _inventoryLib().ephemeralToInventoryTransfer(smartObjectId, inItems);
+    console.log("Transferring from ephemeral");
+    ephemeralInteractSystem.transferFromEphemeral(smartObjectId, _msgSender(), inItems);
   }
 
   /**
@@ -176,13 +163,7 @@ contract SmartStorageUnitSystem is System {
     return a;
   }
 
-  function _inventoryLib() internal view returns (InventoryLib.World memory) {
-    if (!ResourceIds.getExists(WorldResourceIdLib.encodeNamespace(DEPLOYMENT_NAMESPACE))) {
-      return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: DEPLOYMENT_NAMESPACE });
-    } else return InventoryLib.World({ iface: IBaseWorld(_world()), namespace: DEPLOYMENT_NAMESPACE });
-  }
-
-  function _namespace() internal pure returns (bytes14 namespace) {
-    return DEPLOYMENT_NAMESPACE;
+  function getAddress() public view returns (address) {
+    return address(this);
   }
 }

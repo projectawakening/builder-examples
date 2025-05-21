@@ -85,7 +85,7 @@ contract MockData is Script {
       console.log("SSU already created");
     } else{
       console.log("Creating SSU");
-      createAnchorAndOnline(smartStorageUnitId, player);
+      createAnchorAndOnline(smartStorageUnitId, admin);
     }
 
     //Create and deposit inventory items
@@ -103,10 +103,6 @@ contract MockData is Script {
       quantity: 20, // Non-singleton can have any quantity
       volume: 10
     });
-
-    vm.stopBroadcast();
-
-    vm.startBroadcast(playerPrivateKey);
 
     inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
 
@@ -127,9 +123,8 @@ contract MockData is Script {
 
     vm.stopBroadcast();
 
-    vm.startBroadcast(deployerPrivateKey);
-
-    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitId, admin, ephemeralItems);
+    vm.startBroadcast(playerPrivateKey);
+    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitId, player, ephemeralItems);
 
     vm.stopBroadcast();
   }

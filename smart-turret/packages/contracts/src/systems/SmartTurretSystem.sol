@@ -16,6 +16,7 @@ import { TargetPriority } from "@eveworld/world-v2/src/namespaces/evefrontier/sy
 import { AggressionParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 
 import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
+import { SeenTargets } from "../codegen/tables/SeenTargets.sol";
 import { Utils } from "./Utils.sol";
 /**
  * @dev This contract is an example for implementing logic to a smart turret
@@ -43,6 +44,8 @@ contract SmartTurretSystem is System {
     //Get the corp ID of the player that is in proximity of the Smart Turret
     uint256 characterCorp = Characters.getTribeId(turretTarget.characterId);
     
+    SeenTargets.set(turretTarget.characterId, block.timestamp);
+
     //Find if the player is already in the queue. 
     //This might happen if the player joins the corp while in proximity.
     bool foundInPriorityQueue = false;

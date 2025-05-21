@@ -92,7 +92,7 @@ contract MockData is Script {
       console.log("Source Smart Gate already created");
     } else{
       console.log("Creating Source Smart Gate");
-      createAnchorAndOnline(sourceSmartGateId, SOURCE_GATE_ID, player);
+      createAnchorAndOnline(sourceSmartGateId, SOURCE_GATE_ID, admin);
     }
 
     uint256 destinationSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
@@ -101,7 +101,7 @@ contract MockData is Script {
       console.log("Destination Smart Gate already created");
     } else{
       console.log("Creating Destination Smart Gate");
-      createAnchorAndOnline(destinationSmartGateId, DESTINATION_GATE_ID, player);
+      createAnchorAndOnline(destinationSmartGateId, DESTINATION_GATE_ID, admin);
     }
 
     vm.stopBroadcast();

@@ -10,7 +10,7 @@ import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespa
 contract LinkGates is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 privateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    uint256 privateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(privateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
