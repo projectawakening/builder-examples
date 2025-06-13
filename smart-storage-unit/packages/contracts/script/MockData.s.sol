@@ -5,150 +5,104 @@ import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
-import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
-import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
-import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
-import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
-import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
-import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
-import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
-import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
-import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
-import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
-import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
-import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
-import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
-import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
-import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
-import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+import { IWorldWithContext } from "@eveworld/smart-object-framework-v2/src/IWorldWithContext.sol";
 
+import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
+import { EntityRecordSystem, entityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
+import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
 import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
+import { SmartStorageUnitSystem, smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
+
+import { Tenant, Characters, CharactersByAccount, EntityRecord, Location, LocationData, DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
+import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
-contract MockData is Script {
-  IBaseWorld world;
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
 
-  bytes32 tenantId;
+contract MockData is Script {
+  IWorldWithContext world;
 
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SSU_TYPE_ID = 77917;
   uint256 FUEL_TYPE_ID = 78437;
 
-  function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
-    
-    if (CharactersByAccount.get(account) == 0) {
-      smartCharacterSystem.createCharacter(
-        smartObjectId, 
-        account, 
-        tribeId, 
-        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
-        EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
-      );
+  uint256 aliceCharacterItemId = 1348;
+  uint256 bobCharacterItemId = 1349;
 
-      console.log("Character created successfully:", name);
-    } else{
-      console.log("Character already exists:", name);
-    }
-  }
+  uint256 tribeId = 100;
+
+  uint256 ssuItemId = 565656565;
 
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
-    
+    world = IWorldWithContext(worldAddress);
+
     uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(adminPrivateKey);
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
+    bytes32 tenantId = Tenant.getTenantId();
+
+    // Create characters
     vm.startBroadcast(adminPrivateKey);
-
-    world = IBaseWorld(worldAddress);
-
-    tenantId = Tenant.getTenantId();
-
-    safeCreateCharacter(admin, 1348, 7777, "adminCharacter");
-    safeCreateCharacter(player, 1349, 7777, "playerCharacter");
-
+    _safeCreateCharacter(tenantId, admin, aliceCharacterItemId, "adminCharacter");
+    _safeCreateCharacter(tenantId, player, bobCharacterItemId, "playerCharacter");
     vm.stopBroadcast();
 
+    // Register delegation
     vm.startBroadcast(playerPrivateKey);
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
     vm.stopBroadcast();
 
+    // Create SSU
+    uint256 smartStorageUnitId = ObjectIdLib.calculateObjectId(tenantId, ssuItemId);
+
     vm.startBroadcast(adminPrivateKey);
-
-    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, 1245);
-
-    if(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL){
+    if (DeployableState.getCurrentState(smartStorageUnitId) != State.NULL) {
       console.log("SSU already created");
-    } else{
+    } else {
       console.log("Creating SSU");
-      createAnchorAndOnline(smartStorageUnitId, admin);
+      _createAnchorAndOnline(smartStorageUnitId, tenantId, admin);
     }
 
-    //Create and deposit inventory items
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+    // Create and deposit inventory items
+    _depositToInventory(smartStorageUnitId, tenantId, player);
+    _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
 
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOutTypeID);
-
-    CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
-    
-    items[0] = CreateInventoryItemParams({
-      smartObjectId: itemOutSmartObjectId,
-      tenantId: tenantId,
-      typeId: itemOutTypeID,
-      itemId: 0,    // For non-singleton items, itemId is zero
-      quantity: 10, // Non-singleton can have any quantity
-      volume: 10
-    });
-
-    vm.stopBroadcast();
-
-    vm.startBroadcast(adminPrivateKey);
-
-    inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
-
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
-
-    CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](2);
-
-    ephemeralItems[0] = CreateInventoryItemParams({
-      smartObjectId: itemInSmartObjectId,
-      tenantId: tenantId,
-      typeId: itemInTypeID,
-      itemId: 0,    // For non-singleton items, itemId is zero
-      quantity: 15, // Non-singleton can have any quantity
-      volume: 10
-    });
-    ephemeralItems[1] = CreateInventoryItemParams({
-      smartObjectId: itemOutSmartObjectId,
-      tenantId: tenantId,
-      typeId: itemOutTypeID,
-      itemId: 0,    // For non-singleton items, itemId is zero
-      quantity: 15, // Non-singleton can have any quantity
-      volume: 10
-    });
-
-    vm.stopBroadcast();
-
-    vm.startBroadcast(playerPrivateKey);
-
-    ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitId, player, ephemeralItems);
-    
     vm.stopBroadcast();
   }
 
-  function createAnchorAndOnline(uint256 smartStorageUnitId, address ownerAddress) private {
+  function _safeCreateCharacter(bytes32 tenantId, address account, uint256 characterId, string memory name) private {
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
+
+    if (CharactersByAccount.get(account) == 0) {
+      smartCharacterSystem.createCharacter(
+        smartObjectId,
+        account,
+        tribeId,
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
+        EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
+      );
+
+      console.log("Character created successfully:", name);
+    } else {
+      console.log("Character already exists:", name);
+    }
+  }
+
+  function _createAnchorAndOnline(uint256 smartStorageUnitId, bytes32 tenantId, address ownerAddress) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,
       typeId: SSU_TYPE_ID,
-      itemId: 1245,
+      itemId: ssuItemId,
       volume: 1000
     });
 
@@ -160,34 +114,57 @@ contract MockData is Script {
       locationData: locationParams
     });
 
-    world.callFrom(
+    bytes memory result = world.callFrom(
       ownerAddress,
       smartStorageUnitSystem.toResourceId(),
-      abi.encodeCall(
-        SmartStorageUnitSystem.createAndAnchorStorageUnit,
-        (deployableParams, 100000000, 100000000, 100000000)
-      )
+      abi.encodeCall(SmartStorageUnitSystem.createAndAnchorStorageUnit, (deployableParams, 100000000, 100000000, 0))
     );
-
-    entityRecordSystem.createMetadata(smartStorageUnitId, EntityMetadataParams({
-      name: "Name Here",
-      dappURL: "",
-      description: "Example SSU for the Smart Assembly Scaffold"
-    }));
-
     console.log("SSU created and anchored successfully");
-
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
-
-    fuelSystem.configureFuelParameters(smartStorageUnitId, FuelParams({
-      fuelMaxCapacity: 100000000,
-      fuelBurnRateInSeconds: 100000000
-    }));
-
-    fuelSystem.depositFuel(smartStorageUnitId, fuelSmartObjectId, 1000);
-
     deployableSystem.bringOnline(smartStorageUnitId);
+    console.log("SSU brought online");
+  }
 
-    console.log("SSU fueled and online");
+  function _depositToInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
+    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
+
+    CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
+
+    items[0] = CreateInventoryItemParams({
+      smartObjectId: itemOutSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemOutTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 10, // Non-singleton can have any quantity
+      volume: 1
+    });
+
+    world.callFrom(
+      player,
+      inventorySystem.toResourceId(),
+      abi.encodeCall(InventorySystem.createAndDepositInventory, (smartStorageUnitId, items))
+    );
+  }
+
+  function _depositToEphemeralInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
+    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
+    CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](1);
+
+    ephemeralItems[0] = CreateInventoryItemParams({
+      smartObjectId: itemInSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemInTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 15, // Non-singleton can have any quantity
+      volume: 10
+    });
+
+    world.callFrom(
+      player,
+      ephemeralInventorySystem.toResourceId(),
+      abi.encodeCall(EphemeralInventorySystem.createAndDepositEphemeral, (smartStorageUnitId, player, ephemeralItems))
+    );
   }
 }

@@ -17,7 +17,7 @@ import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/system
 import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
 import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
-import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { entityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
 import { Tenant, Characters, CharactersByAccount, EntityRecord, EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 import { smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
 import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
@@ -41,7 +41,6 @@ import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol"
  * This contract implements item trade as a feature to the existing inventoryIn logic
  */
 contract SmartStorageUnitSystem is System {
-
   /**
    * @dev Define what goes in and out and set the exchange ratio for a item trade
    * @param smartObjectId The smart object id of the item trade
@@ -58,8 +57,8 @@ contract SmartStorageUnitSystem is System {
     uint64 ratioIn,
     uint64 ratioOut
   ) public {
-    require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");    
-    
+    require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");
+
     //Check for overflow issues
     require(ratioIn * ratioOut >= ratioIn, "Overflow with ratios. The ratios are too large.");
 
@@ -89,27 +88,25 @@ contract SmartStorageUnitSystem is System {
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
-    address ssuOwner = ownershipSystem.owner(smartObjectId);
-
     // Make sure there are enough items
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
       ratioConfigData.ratioIn,
       ratioConfigData.ratioOut,
       quantity
-    );    
+    );
 
-    uint64 calculatedInput = quantity-quantityInputItemLeftOver;
+    uint64 calculatedInput = quantity - quantityInputItemLeftOver;
 
     require(quantityOutputItem > 0, "Output quantity cannot be 0");
     require(calculatedInput > 0, "Calculated input quantity cannot be 0");
 
-    uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
+    uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 
-    InventoryItemParams[] memory inItems = new InventoryItemParams[](1);
-    inItems[0] = InventoryItemParams(32405186305713341162402166909623213452806236265591347791747984352594936240888, 1);
+    InventoryItemParams[] memory ephToInvItems = new InventoryItemParams[](1);
+    ephToInvItems[0] = InventoryItemParams(inventoryItemIdIn, calculatedInput);
 
     console.log("Transferring from ephemeral");
-    ephemeralInteractSystem.transferFromEphemeral(smartObjectId, _msgSender(), inItems);
+    ephemeralInteractSystem.transferFromEphemeral(smartObjectId, _msgSender(), ephToInvItems);
   }
 
   /**
@@ -161,9 +158,5 @@ contract SmartStorageUnitSystem is System {
       a = temp;
     }
     return a;
-  }
-
-  function getAddress() public view returns (address) {
-    return address(this);
   }
 }
