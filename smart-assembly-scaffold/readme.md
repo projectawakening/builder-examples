@@ -115,7 +115,7 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
+WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
 RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```

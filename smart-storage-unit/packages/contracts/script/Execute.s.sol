@@ -5,6 +5,7 @@ import { console } from "forge-std/console.sol";
 import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
 
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
 import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
@@ -41,6 +42,20 @@ contract Execute is Script {
   //Testing
   uint64 testQuantityIn;
 
+  function ConsoleLogInventories(uint256 itemInSmartObjectId, uint256 itemOutSmartObjectId) view internal {
+    EphemeralInvItemData memory ephInvInItem = EphemeralInvItem.get(smartStorageUnitId, player, itemInSmartObjectId);
+    console.log("[EPHEMERAL] Player's Ephemeral Inventory [Item In]: ", vm.toString(ephInvInItem.quantity));
+
+    EphemeralInvItemData memory ephInvOutItem = EphemeralInvItem.get(smartStorageUnitId, player, itemOutSmartObjectId);
+    console.log("[EPHEMERAL] Player's Ephemeral Inventory [Item Out]: ", vm.toString(ephInvOutItem.quantity));
+
+    InventoryItemData memory invItemOut = InventoryItem.get(smartStorageUnitId, itemOutSmartObjectId);
+    console.log("[INVENTORY] Admins Inventory [Item Out]: ", vm.toString(invItemOut.quantity));
+
+    InventoryItemData memory invItemIn = InventoryItem.get(smartStorageUnitId, itemInSmartObjectId);
+    console.log("[INVENTORY] Admins Inventory [Item In]: ", vm.toString(invItemIn.quantity));
+  }
+
   function run(address worldAddress) external {
     adminPrivateKey = vm.envUint("PRIVATE_KEY");
     admin = vm.addr(adminPrivateKey);
@@ -65,26 +80,14 @@ contract Execute is Script {
     uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemIn);
     uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOut);
 
-    EphemeralInvItemData memory ephInvItem = EphemeralInvItem.get(smartStorageUnitId, player, itemInSmartObjectId);
-    console.log("[EPHEMERAL] Player's Ephemeral Inventory [Item In]: ", vm.toString(ephInvItem.quantity));
-
-    InventoryItemData memory invItem = InventoryItem.get(smartStorageUnitId, itemOutSmartObjectId);
-    console.log("[INVENTORY] Admins Inventory [Item Out]: ", vm.toString(invItem.quantity));
-
     ResourceId systemId = Utils.smartStorageUnitSystemId();
 
+    ConsoleLogInventories(itemInSmartObjectId, itemOutSmartObjectId);
+
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartStorageUnitId, itemInSmartObjectId);
-    console.log("Ratio In:", vm.toString(ratioConfigData.ratioIn));
-    console.log("Ratio Out:", vm.toString(ratioConfigData.ratioOut));
-    console.log("Item Out:", vm.toString(ratioConfigData.itemOut));
+    console.log("Ratio: ", vm.toString(ratioConfigData.ratioIn), " : ", vm.toString(ratioConfigData.ratioOut));
 
-    console.log("Item In:", vm.toString(itemInSmartObjectId));
-    console.log("SSU ID: ", vm.toString(smartStorageUnitId));
-    console.log("Sender: ", vm.toString(admin));
-
-    address contractAddress = smartStorageUnitSystem.getAddress();
-
-    console.log("Contract Address: ", vm.toString(contractAddress));
+    (address contractAddress, ) = Systems.get(systemId);
 
     vm.stopBroadcast();
 
@@ -98,19 +101,14 @@ contract Execute is Script {
 
     vm.startBroadcast(playerPrivateKey);
 
-    // Use the item that's already in the ephemeral inventory
-    InventoryItemParams[] memory inItems = new InventoryItemParams[](1);
-    inItems[0] = InventoryItemParams(32405186305713341162402166909623213452806236265591347791747984352594936240888, 1);
-
-    console.log("Transferring from ephemeral");
-    ephemeralInteractSystem.transferFromEphemeral(107917160961269205918737706720208697708623178898411038747739517574974176991232, player, inItems);
-    console.log("Transferred from ephemeral 12");
     world.call(systemId, 
       abi.encodeCall(
         SmartStorageUnitSystem.execute, 
         (smartStorageUnitId, testQuantityIn, itemInSmartObjectId)
       )
     );
+
+    ConsoleLogInventories(itemInSmartObjectId, itemOutSmartObjectId);
 
     vm.stopBroadcast();
   }

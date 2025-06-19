@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
@@ -10,6 +11,8 @@ import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespa
 import { Utils as SmartGateUtils } from "../src/systems/Utils.sol";
 
 import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
+
+import { SmartGateSystem as CustomSmartGateSystem } from "../src/systems/SmartGateSystem.sol";
 
 contract ConfigureSmartGate is Script {
   function run(address worldAddress) external {
@@ -31,7 +34,13 @@ contract ConfigureSmartGate is Script {
     uint256 tribeID = vm.envUint("ALLOWED_TRIBE_ID");
 
     //Set the MUD table for the tribe whitelist
-    GateAccess.set(smartGateId, tribeID);
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartGateSystem.setAllowedTribe,
+        (smartGateId, tribeID)
+      )
+    );
 
     vm.stopBroadcast();
   }

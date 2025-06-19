@@ -152,7 +152,7 @@ contract SmartGateTest is MudTest {
   }
 
   function testSetAllowedCorpNotAdmin() public {
-    vm.expectRevert();
+    vm.expectRevert(abi.encodeWithSignature("Access_NotOwner(address,uint256)", admin, sourceGateId));
 
     vm.startPrank(admin);
 

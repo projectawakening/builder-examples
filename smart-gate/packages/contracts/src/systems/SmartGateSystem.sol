@@ -2,21 +2,24 @@
 pragma solidity >=0.8.24;
 
 import { console } from "forge-std/console.sol";
-import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
-import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
 import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
-import { GateAccess } from "../codegen/tables/GateAccess.sol";
+import { accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
 
-import { AccessSystem, accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
+import { GateAccess } from "../codegen/tables/GateAccess.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
 contract SmartGateSystem is System {  
+  /**
+   * @dev Check if a character can jump to a gate
+   * @param characterId The ID of the character to check
+   * @param sourceGateId The ID of the gate to check
+   * @param destinationGateId The ID of the gate to jump to
+   * @return bool True if the character can jump, false otherwise
+   */
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
     //Get the allowed tribe
     uint256 allowedTribe = GateAccess.get(sourceGateId);
@@ -25,15 +28,21 @@ contract SmartGateSystem is System {
     uint256 characterTribe = Characters.getTribeId(characterId);
 
     //If the tribe is the same, allow jumps
-    if(allowedTribe == characterTribe){
+    if (allowedTribe == characterTribe) {
       return true;
-    } else{
+    } else {
       return false;
     }    
   }
 
+  /**
+   * @dev Set the allowed tribe for a gate
+   * @param sourceGateId The ID of the gate to set the allowed tribe for
+   * @param tribeID The ID of the tribe to allow
+   */
   function setAllowedTribe(uint256 sourceGateId, uint256 tribeID) public {
-    accessSystem.onlyOwner(sourceGateId, "");
+    //This will error if the caller is not the owner of the gate
+    accessSystem.onlyOwner(sourceGateId, "Access denied");
 
     //Set the allowed tribe
     GateAccess.set(sourceGateId, tribeID);

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
@@ -8,6 +9,7 @@ import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespa
 
 import { CharactersByAccount } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/CharactersByAccount.sol";
 import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
+
 contract CanJump is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)

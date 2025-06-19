@@ -36,7 +36,9 @@ import { Utils } from "../src/systems/Utils.sol";
 import { ToggleSystem } from "../src/systems/ToggleSystem.sol";
 import { ToggleTable } from "../src/codegen/tables/ToggleTable.sol";
 
-contract ToggleTest is MudTest {
+import { ConfigureToggle } from "../script/ConfigureToggle.s.sol";
+
+contract ConfigureToggleTest is MudTest {
   ResourceId systemId = Utils.toggleSystemId();
 
   IWorld world;
@@ -51,6 +53,8 @@ contract ToggleTest is MudTest {
 
   uint256 smartStorageUnitId = 1246;
   uint256 smartStorageUnitSmartId;
+
+  ConfigureToggle configureToggleScript;
 
   uint64 INV_ITEM_QUANTITY = 100;
   uint64 EPH_ITEM_QUANTITY = 100;
@@ -146,6 +150,8 @@ contract ToggleTest is MudTest {
     vm.startPrank(player, admin);
     ephemeralInventorySystem.createAndDepositEphemeral(smartStorageUnitSmartId, player, items);
     vm.stopPrank();
+
+    configureToggleScript = new ConfigureToggle();
   }  
 
   function testWorldExists() public {
@@ -157,46 +163,16 @@ contract ToggleTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
-  function testSetTrue() public {
-    //Set the ratio
-    world.call(
-      systemId,
-      abi.encodeCall(
-        ToggleSystem.setTrue, smartStorageUnitSmartId
-      )
-    );
+  function testConfigureToggle() public {
+    bool isSet = ToggleTable.getIsSet(smartStorageUnitSmartId);
+    assertFalse(isSet, "Toggle should be false");
 
-    //Check has been set
-    assertTrue(ToggleTable.getIsSet(smartStorageUnitSmartId));
-  }
+    vm.setEnv("SSU_ID", vm.toString(smartStorageUnitSmartId));
 
-  function testSetTrueRevertIfSSUIdZero() public {
-    vm.expectRevert("Smart Object ID cannot be 0");
-    world.call(
-      systemId,
-      abi.encodeCall(ToggleSystem.setTrue, 0)
-    );
-  }
+    configureToggleScript.run(worldAddress);
 
-  function testSetFalse() public {
-    //Set the ratio
-    world.call(
-      systemId,
-      abi.encodeCall(
-        ToggleSystem.setFalse, smartStorageUnitSmartId
-      )
-    );
-
-    //Check has been set
-    assertFalse(ToggleTable.getIsSet(smartStorageUnitSmartId));
-  }
-
-  function testSetFalseRevertIfSSUIdZero() public {
-    vm.expectRevert("Smart Object ID cannot be 0");
-    world.call(
-      systemId,
-      abi.encodeCall(ToggleSystem.setFalse, 0)
-    );
+    isSet = ToggleTable.getIsSet(smartStorageUnitSmartId);
+    assertTrue(isSet, "Toggle should be true");
   }
 
   function createAnchorAndOnline(uint256 ssuId, address ownerAddress) private {

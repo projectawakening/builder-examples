@@ -137,8 +137,8 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
-RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
+RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
@@ -257,7 +257,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 
 #### Step 1.3: Item ID's
 
-To retrieve the Item ID's you can use https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and then search for the item name.
+To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/types and then search for the item name.
 
 You can use the "smartItemId" as the Item ID.
 

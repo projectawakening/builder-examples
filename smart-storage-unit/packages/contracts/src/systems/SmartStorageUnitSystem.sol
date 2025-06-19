@@ -106,7 +106,7 @@ contract SmartStorageUnitSystem is System {
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);    
 
     InventoryItemParams[] memory inItems = new InventoryItemParams[](1);
-    inItems[0] = InventoryItemParams(32405186305713341162402166909623213452806236265591347791747984352594936240888, 1);
+    inItems[0] = InventoryItemParams(inventoryItemIdIn, calculatedInput);
 
     console.log("Transferring from ephemeral");
     ephemeralInteractSystem.transferFromEphemeral(smartObjectId, _msgSender(), inItems);
