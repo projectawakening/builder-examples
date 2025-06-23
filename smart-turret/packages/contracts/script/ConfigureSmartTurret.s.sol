@@ -1,18 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
 import { Utils } from "../src/systems/Utils.sol";
-import { AccessSystem, accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
-import { Turret, SmartTurretTarget } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
-import { TargetPriority } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-
+import { SmartAssembly } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/SmartAssembly.sol";
 import { SmartTurretSystem, smartTurretSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/SmartTurretSystem.sol";
 import { SmartTurretSystem as CustomSmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
 
@@ -27,6 +24,11 @@ contract ConfigureSmartTurret is Script {
 
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
     uint256 allowedTribeId = vm.envUint("ALLOWED_TRIBE_ID");
+
+    require(
+      SmartAssembly.lengthAssemblyType(smartTurretId) != 0,
+      "No Smart Assembly found. Please run 'pnpm mock-data' to generate one."
+    );
 
     ResourceId systemId = Utils.smartTurretSystemId();
     

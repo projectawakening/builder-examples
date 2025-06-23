@@ -39,7 +39,6 @@ contract SmartTurretTest is MudTest {
   ResourceId systemId = Utils.smartTurretSystemId();
 
   IWorld world;
-
   bytes32 tenantId;
 
   address admin;
@@ -57,13 +56,13 @@ contract SmartTurretTest is MudTest {
   uint256 smartTurretId;
 
   //Tribe that does not get targeted
-  uint256 ALLOWED_TRIBE_ID = 500;
+  uint256 ALLOWED_TRIBE_ID = 1500;
 
   //Character IDs
   uint256 ADMIN_CHARACTER_ID = 35000;
-  uint256 PLAYER_CHARACTER_ID = 400;
-  uint256 PLAYER2_CHARACTER_ID = 401;
-  uint256 PLAYER3_CHARACTER_ID = 402;
+  uint256 PLAYER_CHARACTER_ID = 1;
+  uint256 PLAYER2_CHARACTER_ID = 2;
+  uint256 PLAYER3_CHARACTER_ID = 3;
 
   //Gate IDs
   uint256 SOURCE_GATE_ID = 9000;
@@ -72,18 +71,18 @@ contract SmartTurretTest is MudTest {
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SMART_TURRET_TYPE_ID = 84556;
-  uint256 FUEL_TYPE_ID = 78437;
+  uint256 FUEL_TYPE_ID = 84868;
 
   function safeCreateCharacter(address account, uint256 smartObjectId, uint256 characterId, uint256 tribeId, string memory name) private {
-    if (CharactersByAccount.get(account) == 0) {
-      smartCharacterSystem.createCharacter(
-        smartObjectId, 
-        account, 
-        tribeId, 
-        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
-        EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
-      );
-    }
+    if (CharactersByAccount.get(account) != 0) return;
+
+    smartCharacterSystem.createCharacter(
+      smartObjectId, 
+      account, 
+      tribeId, 
+      EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+      EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
+    );
   }
 
   //Setup for the tests
@@ -96,12 +95,11 @@ contract SmartTurretTest is MudTest {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     admin = vm.addr(deployerPrivateKey);
 
-    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
-    player = vm.addr(playerPrivateKey);
-
-    //Create a second and third player for testing. The address is randomly generated
-    player2 = address(0x280Efa9b3A0c1608119fB01f2Df0AFCcA1c7EA3d);
-    player3 = address(0xd628d44B1ca0B1240152B282F4f88bDE93347aac);
+    // Using the last 3 automatically generated public addresses from Anvil.
+    // These are different to the mock data to ensure there is no overlap
+    player = address(0x14dC79964da2C08b23698B3D3cc7Ca32193d9955);
+    player2 = address(0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f);
+    player3 = address(0xa0Ee7A142d267C1f36714E4a8F75612F20a79720);
 
     vm.startPrank(admin);
     world.call(
@@ -142,13 +140,6 @@ contract SmartTurretTest is MudTest {
     }
 
     vm.stopPrank();
-
-    vm.startPrank(admin);
-
-    // Set the allowed tribe directly
-    TurretAllowlist.set(ALLOWED_TRIBE_ID);
-
-    vm.stopPrank();
   }
 
   //Test if the world exists
@@ -162,29 +153,48 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test setAllowedTribe
-  function testSetAllowedCorp() public {    
+  function testSetAllowedTribe() public {    
     vm.startPrank(admin);
 
     world.call(
       systemId,
       abi.encodeCall(
         CustomSmartTurretSystem.setAllowedTribe,
-        (200)
+        (2000)
       )
     );
 
-    uint256 fetchedAllowedCorpID = TurretAllowlist.get();
+    uint256 fetchedAllowedTribeID = TurretAllowlist.get();
 
-    assertEq(fetchedAllowedCorpID, 200, "Allowed Corp ID should be set to 200");
+    assertEq(fetchedAllowedTribeID, 2000, "Allowed Tribe ID should be set to 2000");
   }
 
-  //Test setAllowedTribe to make sure that people without admin access to the namespace cannot set the allowed corporation ID
-  function testSetAllowedCorpNotAdmin() public {    
-    uint256 originalAllowedCorpID = TurretAllowlist.get();
-
+  //Test setAllowedTribe to make sure that people without admin access to the namespace cannot set the allowed tribeoration ID
+  function testSetAllowedTribeNotAdmin() public {    
     vm.startPrank(player2);
 
-    vm.expectRevert();
+    vm.expectRevert("You are not authorized to set the allowed tribe");
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartTurretSystem.setAllowedTribe,
+        (2000)
+      )
+    );
+
+    vm.stopPrank();
+
+    uint256 fetchedAllowedTribeID = TurretAllowlist.get();
+
+    assertEq(fetchedAllowedTribeID, ALLOWED_TRIBE_ID, "Allowed Tribe ID should not have changed");
+  }
+
+  //Test setAllowedTribe
+  function testSetAllowedTribeRevertIfInvalidID() public {    
+    vm.startPrank(admin);
+
+    vm.expectRevert("Invalid Tribe ID");
+
     world.call(
       systemId,
       abi.encodeCall(
@@ -193,15 +203,13 @@ contract SmartTurretTest is MudTest {
       )
     );
 
-    vm.stopPrank();
+    uint256 fetchedAllowedTribeID = TurretAllowlist.get();
 
-    uint256 fetchedAllowedCorpID = TurretAllowlist.get();
-
-    assertEq(fetchedAllowedCorpID, originalAllowedCorpID, "Allowed Corp ID should not have changed");
+    assertEq(fetchedAllowedTribeID, ALLOWED_TRIBE_ID, "Allowed Tribe ID should not have changed");
   }
 
   //Test inProximity with a player that should not be targeted
-  function testInProximityInCorp() public {
+  function testInProximityInTribe() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
@@ -233,7 +241,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test inProximity with a player that should not be targeted and is already in the queue
-  function testInProximityNotInCorp() public {
+  function testInProximityNotInTribe() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
@@ -265,7 +273,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test inProximity with a player that should not be targeted and is already in the queue
-  function testInProximityNotInCorpNew() public {
+  function testInProximityNotInTribeNew() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](0);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
@@ -296,7 +304,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test inProximity with a player that should not be targeted and is already in the queue
-  function testInProximityNotInCorpPriority() public {
+  function testInProximityNotInTribePriority() public {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
@@ -359,7 +367,7 @@ contract SmartTurretTest is MudTest {
     assertEq(returnTargetQueue[0].target.characterId, player2CharacterSmartId, "The first target should be turretTarget2, as it has the lowest total health. Test 2");
   }
 
-  function testBubbleSortAlgorithm() public {    
+  function testBubbleSortAlgorithmGeneral() public {    
     //Total Weight: 150
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -435,6 +443,35 @@ contract SmartTurretTest is MudTest {
     assertEq(outputQueue[0].weight, 100, "The first target weight should be 100, as it is the lowest");
   }
 
+  function testBubbleSortAlgorithmOneTarget() public {    
+    //Total Weight: 150
+    SmartTurretTarget memory turretTarget = SmartTurretTarget({
+      shipId: 1,
+      shipTypeId: 1,
+      characterId: playerCharacterSmartId,
+      hpRatio: 50,
+      shieldRatio: 50,
+      armorRatio: 50
+    });
+
+    TargetPriority[] memory priorityQueue = new TargetPriority[](1);
+    priorityQueue[0] = TargetPriority({ target: turretTarget, weight: 150 });
+
+    TargetPriority[] memory outputQueue = abi.decode(
+      world.call(
+        systemId,
+        abi.encodeCall(
+          CustomSmartTurretSystem.bubbleSortTargetPriorityArray,
+          (priorityQueue)
+        )
+      ),
+      (TargetPriority[])
+    );
+
+    assertEq(outputQueue[0].target.characterId, playerCharacterSmartId, "The first target should be turretTarget, as it has the lowest weight");
+    assertEq(outputQueue[0].weight, 150, "The first target weight should be 150, as it is the lowest");
+    assertEq(outputQueue.length, 1, "The output queue should only have 1 target");
+  }
   //Test aggression
   function testAggression() public {    
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);

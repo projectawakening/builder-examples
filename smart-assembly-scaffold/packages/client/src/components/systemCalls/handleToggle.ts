@@ -9,6 +9,8 @@ const setToggle = async ({
 }): Promise<string | undefined> => {
   let txHash;
 
+  console.log("SMART OBJECT ID", smartObjectId);
+
   if (!currentValue) {
     txHash = await worldContract.write.exampleName__setTrue([smartObjectId]);
   } else {

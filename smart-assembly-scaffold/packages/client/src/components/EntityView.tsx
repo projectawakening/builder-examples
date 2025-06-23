@@ -2,20 +2,22 @@ import {
   ErrorNotice,
   ErrorNoticeTypes,
   EveButton,
+  EveLoadingAnimation,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
-import Toggle from "./Toggle";
+
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
+
 import CustomSmartAssemblyInfo from "./CustomSmartAssemblyInfo";
-import EveLoadingAnimation from "@eveworld/ui-components/components/EveLoadingAnimation";
+
+import Toggle from "./Toggle";
+
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
   const { smartAssembly } = useSmartAssembly();
-
-  console.log(smartAssembly);
 
   if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
@@ -23,6 +25,7 @@ export default function EntityView() {
 
   return (
     <EveLoadingAnimation position="diagonal">
+      
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
       <div>Welcome to EVE Dapp Scaffold!</div>
       <div>
@@ -50,6 +53,7 @@ export default function EntityView() {
         />
       </div>
     </div>
+
     </EveLoadingAnimation>
   );
 }

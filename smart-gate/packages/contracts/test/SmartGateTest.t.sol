@@ -21,9 +21,9 @@ import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/names
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
 import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
 
 import { SmartGateSystem as CustomSmartGateSystem } from "../src/systems/SmartGateSystem.sol";
-import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
@@ -152,7 +152,7 @@ contract SmartGateTest is MudTest {
   }
 
   function testSetAllowedCorpNotAdmin() public {
-    vm.expectRevert();
+    vm.expectRevert(abi.encodeWithSignature("Access_NotOwner(address,uint256)", admin, sourceGateId));
 
     vm.startPrank(admin);
 

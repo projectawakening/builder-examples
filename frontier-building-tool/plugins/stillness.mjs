@@ -13,7 +13,7 @@ const fallbackStillnessEnv = {
 export async function execute({ contracts, params }) {
   console.log("");
 
-  const stillness = await axios.get('https://blockchain-gateway-stillness.live.tech.evefrontier.com/config');
+  const stillness = await axios.get('https://world-api-stillness.live.tech.evefrontier.com/config');
   const stillnesResponse = stillness.data;
 
   let stillnessEnv = fallbackStillnessEnv;
