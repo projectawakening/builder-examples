@@ -57,20 +57,22 @@ contract SmartStorageUnitSystem is System {
     uint64 ratioIn,
     uint64 ratioOut
   ) public {
-    require(ratioIn > 0 && ratioOut > 0, "ratio cannot be lower than 1");
+    // Check for invalid ratios
+    require(ratioIn > 0 && ratioOut > 0, "Ratio cannot be less than 1");
 
-    //Check for overflow issues
-    require(ratioIn * ratioOut >= ratioIn, "Overflow with ratios. The ratios are too large.");
+    // Check for overflow issues
+    require(ratioIn * ratioOut >= ratioIn, "Overflow with ratios. The ratios are too large");
 
-    //make sure the inventoryItem out item exists
-    //Revert if the items to deposit is not created on-chain
+    // Fetch the item entity data
     EntityRecordData memory entityInRecordData = EntityRecord.get(inventoryItemIdIn);
     EntityRecordData memory entityOutRecordData = EntityRecord.get(inventoryItemIdOut);
 
+    // Revert if the items are not created on-chain
     if (entityInRecordData.exists == false || entityOutRecordData.exists == false) {
       revert InventorySystem.Inventory_InvalidItemObjectId(inventoryItemIdIn);
     }
 
+    // Set the Ratio Config MUD Table for this SSU
     RatioConfig.set(smartObjectId, inventoryItemIdIn, inventoryItemIdOut, ratioIn, ratioOut);
   }
 
@@ -88,7 +90,7 @@ contract SmartStorageUnitSystem is System {
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
     require(quantity > 0, "Quantity cannot be 0");
 
-    // Make sure there are enough items
+    // Ensure there are enough items
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
       ratioConfigData.ratioIn,
       ratioConfigData.ratioOut,
@@ -105,8 +107,12 @@ contract SmartStorageUnitSystem is System {
     InventoryItemParams[] memory ephToInvItems = new InventoryItemParams[](1);
     ephToInvItems[0] = InventoryItemParams(inventoryItemIdIn, calculatedInput);
 
-    console.log("Transferring from ephemeral");
     ephemeralInteractSystem.transferFromEphemeral(smartObjectId, _msgSender(), ephToInvItems);
+
+    InventoryItemParams[] memory invToEphItems = new InventoryItemParams[](1);
+    invToEphItems[0] = InventoryItemParams(itemObjectIdOut, quantityOutputItem);
+
+    ephemeralInteractSystem.transferToEphemeral(smartObjectId, _msgSender(), invToEphItems);
   }
 
   /**

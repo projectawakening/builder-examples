@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
 import { Script } from "forge-std/Script.sol";
@@ -22,9 +23,18 @@ import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+import { InventoryItem, InventoryItemData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/InventoryItem.sol";
+import { EphemeralInvItem, EphemeralInvItemData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/EphemeralInvItem.sol";
 
+/**
+ * @title MockData
+ * @dev This script creates smart characters, a Smart Storage Unit and deposits items into the SSU. 
+ * @notice This can only be run on your local world.
+ */
 contract MockData is Script {
   IWorldWithContext world;
+
+  address admin;
 
   uint256 CHARACTER_TYPE_ID = 42000000100;
   uint256 SSU_TYPE_ID = 77917;
@@ -42,7 +52,7 @@ contract MockData is Script {
     world = IWorldWithContext(worldAddress);
 
     uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
-    address admin = vm.addr(adminPrivateKey);
+    admin = vm.addr(adminPrivateKey);
 
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
@@ -61,7 +71,7 @@ contract MockData is Script {
     vm.stopBroadcast();
 
     // Create SSU
-    uint256 smartStorageUnitId = ObjectIdLib.calculateObjectId(tenantId, ssuItemId);
+    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, ssuItemId);
 
     vm.startBroadcast(adminPrivateKey);
     if (DeployableState.getCurrentState(smartStorageUnitId) != State.NULL) {
@@ -71,15 +81,18 @@ contract MockData is Script {
       _createAnchorAndOnline(smartStorageUnitId, tenantId, admin);
     }
 
+    console.log("Depositing to inventory");
     // Create and deposit inventory items
-    _depositToInventory(smartStorageUnitId, tenantId, player);
+    _depositToInventory(smartStorageUnitId, tenantId, admin);
+    console.log("Depositing to ephemeral inventory");
     _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
+    console.log("Depositing to inventory and ephemeral inventory complete");
 
     vm.stopBroadcast();
   }
 
   function _safeCreateCharacter(bytes32 tenantId, address account, uint256 characterId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
 
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
@@ -119,6 +132,7 @@ contract MockData is Script {
       smartStorageUnitSystem.toResourceId(),
       abi.encodeCall(SmartStorageUnitSystem.createAndAnchorStorageUnit, (deployableParams, 100000000, 100000000, 0))
     );
+    
     console.log("SSU created and anchored successfully");
     deployableSystem.bringOnline(smartStorageUnitId);
     console.log("SSU brought online");
@@ -127,7 +141,7 @@ contract MockData is Script {
   function _depositToInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
     uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
 
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOutTypeID);
 
     CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
 
@@ -149,7 +163,7 @@ contract MockData is Script {
 
   function _depositToEphemeralInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemInTypeID);
     CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](1);
 
     ephemeralItems[0] = CreateInventoryItemParams({
