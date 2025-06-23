@@ -30,7 +30,7 @@ For additional details on the Smart Turret, see our [Documentation](https://docs
 
 This example alters the Smart Turret to have two specific behaviors:
 
-1. It does not shoot at anyone in the specified corporation.
+1. It does not shoot at anyone in the specified tribe.
    
 2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example. 
 
@@ -91,13 +91,13 @@ Generate the test data by:
 > This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
-To set the smart turret ID, and allowed corporation ID use:
+To set the smart turret ID, and allowed tribe ID use:
 
 ```bash
 pnpm configure
 ```
 
-> You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
+> You can adjust the values of the Smart Turret ID and allowed tribe ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
 To test the custom Smart Turret functionality you can use the follow command:
@@ -155,7 +155,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or corporation name as your namespace.
+> 💡 **Tip** Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -239,30 +239,30 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
     SMART_TURRET_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
     ```
 
-#### Step 1.2: Allowed Corp ID
+#### Step 1.2: Allowed Tribe ID
 
-Now set the `ALLOWED_CORP_ID` variable.
+Now set the `ALLOWED_TRIBE_ID` variable.
 
 1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
 
 2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 
-3. Use the **"corpId"** value which should be in:
-    ```json
-    {
-        "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
-        "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
-        "corpId": "98000002",
-        "name": "CCP Red Dragon",
-        ...
-    ```
+3. Use the **"tribeId"** value which should be in:
 
-4. Set the `ALLOWED_CORP_ID` variable in the [.env](./packages/contracts/.env) file.
+```json
+{
+    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+    "tribeId": "98000002",
+    "name": "CCP Red Dragon",
+    ...
+```
 
-    ```bash
-    ALLOWED_CORP_ID=98000002
-    ```
-    
+4. Set the `ALLOWED_TRIBE_ID` variable in the [.env](./packages/contracts/.env) file.
+
+```bash
+ALLOWED_TRIBE_ID=98000002
+```
 
 You can also set these values automatically using the below command:
 
@@ -271,13 +271,13 @@ pnpm set-config
 ```
 
 ### Step 2: Configure Smart Turret
-To configure which Smart Turret the contract uses and the allowed corporation, run:
+To configure which Smart Turret the contract uses and the allowed tribe, run:
 
 ```bash
 pnpm configure
 ```
 
-> You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
+> You can alter the smart turret ID and allowed tribe ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
 
@@ -287,7 +287,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Turret ID Mismatch (Devnet)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
+3. **Turret ID Mismatch (Stillness)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
 
 ## Need Help? 
 

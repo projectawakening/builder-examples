@@ -1,12 +1,11 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-//External imports
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
-//@eveworld imports
 import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
 
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";

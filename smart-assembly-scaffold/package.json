@@ -18,7 +18,6 @@
     "@latticexyz/store-indexer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@types/debug": "4.1.7",
     "mprocs": "^0.7.2",
-    "shx": "^0.3.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.16.3",
@@ -58,8 +57,13 @@
       "@eveworld/contracts": "file:../../eve-frontier-dapps/packages/libs/contracts",
       "@eveworld/types": "file:../../eve-frontier-dapps/packages/libs/types",
       "@eveworld/ui-components": "file:../../eve-frontier-dapps/packages/libs/ui-components",
-      "@eveworld/utils": "file:../../eve-frontier-dapps/packages/libs/utils",
-      "better-sqlite3": "^9.4.3"
+      "@eveworld/utils": "file:../../eve-frontier-dapps/packages/libs/utils"
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "better-sqlite3": "^9.4.3",
+      "@eveworld/smart-object-framework-v2": "0.1.1"
     }
   },
   "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"

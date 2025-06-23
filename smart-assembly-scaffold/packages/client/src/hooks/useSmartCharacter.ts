@@ -207,7 +207,5 @@ export function useSmartCharacter() {
     smartAssemblies: ownedSmartAssemblies, // Placeholder for smart assemblies owned by this character
   };
 
-  console.log(smartCharacter)
-
   return { smartCharacter };
 }
