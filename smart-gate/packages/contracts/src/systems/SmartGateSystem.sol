@@ -44,6 +44,8 @@ contract SmartGateSystem is System {
     //This will error if the caller is not the owner of the gate
     accessSystem.onlyOwner(sourceGateId, "Access denied");
 
+    require(tribeID > 0, "Tribe ID cannot be 0 or negative");
+
     //Set the allowed tribe
     GateAccess.set(sourceGateId, tribeID);
   }

@@ -102,12 +102,14 @@ contract SmartGateTest is MudTest {
 
     vm.startPrank(player, admin);
 
+    //Create the source gate if it doesn't exist
     if(DeployableState.getCurrentState(sourceGateId) != State.NULL){
       console.log("Source gate already exists");
     } else{
       createAnchorAndOnline(sourceGateId, SOURCE_GATE_ID, player);
     }
 
+    //Create the destination gate if it doesn't exist
     if(DeployableState.getCurrentState(destinationGateId) != State.NULL){
       console.log("Destination gate already exists");
     } else{
@@ -133,6 +135,7 @@ contract SmartGateTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
+  //Test setting the allowed corporation
   function testSetAllowedCorp() public {
     vm.startPrank(player, admin);
 
@@ -151,6 +154,7 @@ contract SmartGateTest is MudTest {
     vm.stopPrank();
   }
 
+  //Test if the setAllowedCorp function can only be called by the admin
   function testSetAllowedCorpNotAdmin() public {
     vm.expectRevert(abi.encodeWithSignature("Access_NotOwner(address,uint256)", admin, sourceGateId));
 
@@ -242,8 +246,6 @@ contract SmartGateTest is MudTest {
       description: "Example SSU for the Smart Assembly Scaffold"
     }));
 
-    vm.stopPrank();
-
     vm.startPrank(admin);
 
     uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
@@ -252,8 +254,6 @@ contract SmartGateTest is MudTest {
       fuelMaxCapacity: 100000000,
       fuelBurnRateInSeconds: 100000000
     }));
-
-    vm.stopPrank();
 
     vm.startPrank(player, admin);
 

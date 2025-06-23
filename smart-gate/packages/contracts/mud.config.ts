@@ -9,6 +9,14 @@ export default defineWorld({
         tribeId: "uint256"
       },
       key: ["smartObjectId"],
+    },
+    UsedGate: {
+      schema: {
+        playerSmartCharacterId: "uint256",
+        gateSmartObjectId: "uint256",
+        timestamp: "uint256"
+      },
+      key: ["playerSmartCharacterId", "gateSmartObjectId"]
     }
   },
 });

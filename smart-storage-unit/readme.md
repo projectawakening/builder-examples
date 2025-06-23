@@ -275,9 +275,9 @@ Configure the Item ID's in the .env file.
 
 ```bash
 #Item Bought
-ITEM_IN_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
+ITEM_IN_TYPE_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
 #Item Sold
-ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
+ITEM_OUT_TYPE_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 ```
 
 #### Step 1.4: Ratios
@@ -329,7 +329,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
 
 3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
 
-4. **The Trade is not Working**: Ensure the `ITEM_IN_ID` and `ITEM_OUT_ID` are correctly set in the `contracts/.env` file.
+4. **The Trade is not Working**: Ensure the `ITEM_IN_TYPE_ID` and `ITEM_OUT_TYPE_ID` are correctly set in the `contracts/.env` file.
 
 ## Need Help? 
 

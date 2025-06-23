@@ -9,6 +9,9 @@ import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.
 import { Utils } from "../src/systems/Utils.sol";
 import { ToggleSystem } from "../src/systems/ToggleSystem.sol";
 
+/**
+ * @dev Set the SSU to True in the Toggle MUD Table
+ */
 contract ConfigureToggle is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)

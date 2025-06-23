@@ -19,6 +19,7 @@ import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
  * @dev This contract is an example for implementing logic to a smart turret
  */
 contract SmartTurretSystem is System {
+
   /**
    * @dev a function to implement logic for Smart Turret based on proximity
    * @param smartTurretId The Smart Turret id

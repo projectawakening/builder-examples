@@ -27,6 +27,11 @@ import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespa
 import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
+/**
+ * @dev Mock data for the Smart Assembly Scaffold
+ * Generates a admin and player character, SSU, and fuel.
+ * Also creates the items and deposits them into the SSU inventories.
+ */
 contract MockData is Script {
   IBaseWorld world;
 
@@ -36,6 +41,13 @@ contract MockData is Script {
   uint256 SSU_TYPE_ID = 77917;
   uint256 FUEL_TYPE_ID = 78437;
 
+  /**
+   * @dev Create a character if it doesn't exist
+   * @param account The address of the character
+   * @param characterId The character id
+   * @param tribeId The tribe id of the character
+   * @param name The name of the character
+   */
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
     uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
     
@@ -130,6 +142,11 @@ contract MockData is Script {
     vm.stopBroadcast();
   }
 
+  /**
+   * @dev Create, anchor, fuel and bring online the SSU
+   * @param smartStorageUnitId The smart storage unit id
+   * @param ownerAddress The address of the owner
+   */
   function createAnchorAndOnline(uint256 smartStorageUnitId, address ownerAddress) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 

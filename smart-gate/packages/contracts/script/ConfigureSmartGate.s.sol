@@ -20,8 +20,8 @@ import { SmartGateSystem as CustomSmartGateSystem } from "../src/systems/SmartGa
 contract ConfigureSmartGate is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 privateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(privateKey);
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    vm.startBroadcast(adminPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);

@@ -13,7 +13,6 @@ import { EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/
 import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
 import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
 import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
-
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
 import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
@@ -28,6 +27,7 @@ import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 
 contract MockData is Script {
   IBaseWorld world;
+
   bytes32 tenantId;
 
   uint256 SOURCE_GATE_ID = 1245;
@@ -37,6 +37,13 @@ contract MockData is Script {
   uint256 SMART_GATE_TYPE_ID = 84955;
   uint256 FUEL_TYPE_ID = 78437;
 
+  /**
+   * @dev Create a character if it doesn't exist
+   * @param account The address of the character
+   * @param characterId The character id
+   * @param tribeId The tribe id of the character
+   * @param name The name of the character
+   */
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
     uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
     
@@ -106,6 +113,12 @@ contract MockData is Script {
     vm.stopBroadcast();
   }
 
+  /**
+   * @notice Create and anchor a smart gate
+   * @param smartAssemblyId The smart assembly id of the smart gate
+   * @param itemId The item id of the smart gate
+   * @param ownerAddress The owner address of the smart gate
+   */
   function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 

@@ -11,7 +11,6 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
-import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
 import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
 import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
@@ -78,8 +77,7 @@ contract SmartStorageUnitSystem is System {
 
   /**
    * @notice Handle the interaction flow for item trade to exchange x:y items between two players
-   * @dev Ideally the ration can be configured in a seperate function and stored on-chain
-   * //TODO this function needs to be authorized by the builder to access inventory functions through RBAC
+   * @dev The ratio is set in the setRatio function and stored through the RatioConfig table
    * @param smartObjectId The smart object id of the smart storage unit
    * @param quantity The quantity of the item to be exchanged
    * @param inventoryItemIdIn The inventory item id of the item that goes in

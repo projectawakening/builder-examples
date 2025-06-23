@@ -6,28 +6,26 @@ import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
-
 import { CharactersByAccount } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/CharactersByAccount.sol";
 import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
 
 /**
- * @notice This script tests if characters can jump between two configured smart gates
- * @dev This script can only be called by the owner of the smart gate
+ * @notice This script is used to test if the custom Smart Gate Behavior limits Smart Gate Usage
  */
 contract CanJump is Script {
-  uint256 sourceGateId;
-  uint256 destinationGateId;
+  function displayPlayerCanJumpFromAddress(address playerAddress, string memory testName, uint256 sourceGateId, uint256 destinationGateId) internal returns (bool) {
+    uint256 playerCharacterId = CharactersByAccount.getSmartObjectId(playerAddress);
+    uint256 playerCharacterTribeId = Characters.getTribeId(playerCharacterId);
 
-  function testCharacterCanJump(address character, string memory name) internal {
-    uint256 characterId = CharactersByAccount.getSmartObjectId(character);
+    console.log("-------------------\n", testName);
+    console.log("Player Character ID:", vm.toString(playerCharacterId));
+    console.log("Player Character Tribe ID:", vm.toString(playerCharacterTribeId));
 
-    require(characterId != 0, "Character does not exist");
+    bool canJump = smartGateSystem.canJump(playerCharacterId, sourceGateId, destinationGateId);
 
-    uint256 tribeId = Characters.getTribeId(characterId);
+    console.log("Can Jump:", canJump);
 
-    console.log(name, "Character ID:", vm.toString(characterId));
-    console.log(name, "Character Tribe ID:", vm.toString(tribeId));
-    console.log(name, "Can Jump:", smartGateSystem.canJump(characterId, sourceGateId, destinationGateId));
+    return canJump;
   }
 
   function run(address worldAddress) external {
@@ -41,14 +39,11 @@ contract CanJump is Script {
 
     StoreSwitch.setStoreAddress(worldAddress);
 
-    sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    destinationGateId = vm.envUint("DESTINATION_GATE_ID");
+    uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
+    uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
 
-    console.log("-------------------\nTESTING CORRECT TRIBE");
-    testCharacterCanJump(admin, "Admin");
-
-    console.log("-------------------\nTESTING INCORRECT TRIBE");
-    testCharacterCanJump(player, "Player");
+    displayPlayerCanJumpFromAddress(admin, "TESTING CORRECT TRIBE", sourceGateId, destinationGateId);
+    displayPlayerCanJumpFromAddress(player, "TESTING INCORRECT TRIBE", sourceGateId, destinationGateId);
 
     vm.stopBroadcast();
   }
