@@ -15,8 +15,6 @@ contract ToggleSystem is System {
   function setTrue(
     uint256 smartObjectId
   ) public {
-    require(smartObjectId != 0, "Smart Object ID cannot be 0");
-
     ToggleTable.set(smartObjectId, true);
   }
 
@@ -27,8 +25,12 @@ contract ToggleSystem is System {
   function setFalse(
     uint256 smartObjectId
   ) public {
-    require(smartObjectId != 0, "Smart Object ID cannot be 0");
-    
     ToggleTable.set(smartObjectId, false);
+  }
+
+  function getToggle(
+    uint256 smartObjectId
+  ) public view returns (bool) {
+    return ToggleTable.get(smartObjectId);
   }
 }

@@ -17,10 +17,10 @@
 
 EVE Frontier Smart Assembly Scaffold is a streamlined framework designed for interfacing with the EVE Frontier game. It provides:
 
-- **Blockchain Primitives**: Access to basic smart assembly information and ownership details
+- **Blockchain Primitives**: Access to basic assembly information and ownership details
 - **MUD Integration**: Built on MUD framework for efficient blockchain state management
 - **Modern Tech Stack**: Utilizes React, Rainbowkit, TypeScript, Tailwind CSS, and Vite
-- **Contract Management**: Uses the `example` MUD namespace for simplified contract interactions
+- **Contract Management**: Uses the `exampleName` MUD namespace for simplified contract interactions
 
 ### 🚀 User Flow
 
@@ -30,12 +30,15 @@ The Smart Assembly Scaffold provides a minimal example to toggle the state of an
 
 ## 🛠️ Development & Deployment Steps in Local Environment
 
-### Step 1: 🛠️ Setup your Local MetaMask Wallet
+### Step 1: 🛠️ Setup your EVE Vault Wallet
 
-The local environment uses MetaMask as the wallet as it allows for private key import.
+The local DApp development toolset uses the EVE Vault with a local recovery phrase. You can optionally use other wallets such as MetaMask if you prefer. 
 
-1. Install MetaMask through: https://metamask.io/download/
-2. Open the extension and create a new wallet:
+If you haven't already got the EVE Vault Web Extension:
+
+1. If you don't already have Chrome, install it here:  . You need Chrome if using EVE Vault as your wallet as it currently only supports Chrome. 
+2. Install the EVE Vault Chrome Extension through: https://metamask.io/download/
+3. Import the Wallet
 
 ![MetaMask Import](../readme-imgs/metamask/2.png)
 
@@ -227,7 +230,7 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
 
 3. Update the following environment variables in `./packages/client/.env`:
    - **`VITE_SMARTASSEMBLY_ID`**: The ID obtained from your deployed smart assembly in-game.
-   - **`VITE_CHAIN_ID`**: The chain ID that the World uses, which for Stillness is **17069**.
+   - **`VITE_CHAIN_ID`**: The chain ID that the World uses, which for Stillness is **695569**.
 
 ### Step 4: Updating Namespace Client References
 
@@ -235,7 +238,7 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
 
 To update the namespace client references, you need to search and replace the namespace in the client code. You can do this through:
 
-1. In your IDE, for example Visual Studio Code, press Ctrl+Shift+H and search for `exampleNamesp`.
+1. In your IDE, for example Visual Studio Code, press Ctrl+Shift+H and search for `exampleName`.
 
 2. Include `smart-assembly-scaffold/packages/client/src` in the search.
 
@@ -246,7 +249,7 @@ To update the namespace client references, you need to search and replace the na
 ---
 
 <details>
-<summary><b>You can also replace each entry manually by:</b></summary>
+<summary><b>You can also replace each entry manually:</b></summary>
 
 #### Step 4.1: [smart-assembly-scaffold/packages/client/src/components/Toggle.tsx](smart-assembly-scaffold/packages/client/src/components/Toggle.tsx)
 
@@ -294,9 +297,9 @@ You can view the dApp at `localhost:3000`. Make sure your wallet is connected to
 
 ## 🖥️ dApp Overview
 
-The dApp leverages MUD tooling (`@latticexyz`) and Eveworld tooling (`@eveworld`) to integrate with EVE Frontier’s in-game systems. The UI dynamically updates as on-chain data changes, providing an immersive and real-time experience.
+The dApp leverages MUD tooling (`@latticexyz`) and EVE World tooling (`@eveworld`) to integrate with EVE Frontier’s in-game systems. The UI dynamically updates as on-chain data changes, providing an immersive and real-time experience.
 
-With the environment variables set correctly and the right blockchain gateway URLs in place, you’ll be able to toggle states, inspect game entities, and interact directly with the contracts deployed via your chosen environment.
+With the environment variables set correctly and the right World API URL in place, you’ll be able to toggle states, inspect game structures, and interact directly with the contracts deployed via your chosen environment.
 
 The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 
@@ -304,11 +307,9 @@ The dApp uses Stash and the `useRecord` hook to fetch table data from your deplo
 
 If you encounter any issues, refer to the troubleshooting tips below:
 
-1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
+1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` and `client/.env` file. Make sure you are deploying contracts to the correct world.
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
-
-3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.  
 
 ### Still having issues?
 If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

@@ -10,9 +10,6 @@ import {
   InventoryItem
 } from "@eveworld/types";
 import { useEffect, useState } from "react";
-import { getWorldDeploy } from "../mud/getWorldDeploy";
-import { mapApiResult } from "../utils/mapApiResult";
-import { getAddress } from "viem";
 import { useAccount } from "wagmi";
 
 /**
@@ -30,6 +27,9 @@ import { useAccount } from "wagmi";
  */
 export function useSmartAssembly(smartObjectId = 0n) {
   const { address } = useAccount();
+
+  const [solarSystemName, setSolarSystemName] = useState<string>("");
+
   // Retrieve the Smart Assembly ID from environment variables if it's not already passed
   if (smartObjectId == 0n) {
     smartObjectId = BigInt(import.meta.env.VITE_SMARTASSEMBLY_ID);
@@ -59,6 +59,22 @@ export function useSmartAssembly(smartObjectId = 0n) {
       smartObjectId,
     },
   });
+
+  useEffect(() => {
+    if(!smartAssemblyLocation) {
+      return;
+    }
+
+    async function getSolarSystem() {
+      const worldAPIURL = import.meta.env.VITE_WORLD_API_URL;
+      const response = await fetch(`${worldAPIURL}/v2/solarsystems/${smartAssemblyLocation?.solarSystemId}`);
+      const data = await response.json();
+
+      setSolarSystemName(data.name);
+    }
+
+    getSolarSystem();
+  }, [smartAssemblyLocation])
 
   const smartAssemblyEntityRecordMetadata = useRecord({
     stash,
@@ -94,10 +110,11 @@ export function useSmartAssembly(smartObjectId = 0n) {
 
   // Get all inventory items at once using a single useRecord call
   const inventoryItems = smartAssemblyInventory?.items?.map((item: any) => ({
-    itemId: Number(item),
+    itemId: item,
     quantity: 0,
     typeId: 0,
-    name: ""
+    name: "",
+    smartObjectId: 0
   })) || [];
 
   // Get all inventory item details using useRecords
@@ -113,9 +130,27 @@ export function useSmartAssembly(smartObjectId = 0n) {
   // Update inventory items with details if available
   if (inventoryItemDetails) {
     inventoryItemDetails.forEach((detail) => {
-      const item = inventoryItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
+      const item = inventoryItems.find((item: InventoryItem) => item.itemId === detail.itemObjectId);
       if (item) {
         item.quantity = Number(detail.quantity);
+        item.smartObjectId = Number(detail.smartObjectId);
+      }
+    });
+  }
+
+  const inventoryItemMetadata = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecord,
+    keys: inventoryItems?.map((item: InventoryItem) => ({
+      smartObjectId: BigInt(item.itemId)
+    }))
+  });
+
+  if(inventoryItemMetadata) {
+    inventoryItemMetadata.forEach((detail) => {
+      const item = inventoryItems.find((item: InventoryItem) => item.itemId === detail.smartObjectId);
+      if (item) {
+        item.typeId = Number(detail.typeId);
       }
     });
   }
@@ -139,11 +174,37 @@ export function useSmartAssembly(smartObjectId = 0n) {
     })) || []
   });
 
+  const ephemeralInventoryItemMetadata = useRecords({
+    stash,
+    table: worldMudConfig.namespaces.evefrontier.tables.EntityRecord,
+    keys: ephemeralInventory?.items?.map((item: bigint) => ({
+      smartObjectId: item
+    }))
+  });
+
+  const ephemeralItems = ephemeralInventory?.items?.map((item: any) => ({
+    itemId: Number(item),
+    quantity: 0,
+    typeId: 0,
+    name: "",
+    smartObjectId: 0
+  })) || [];
+
   if(ephemeralInventoryItemDetails) {
     ephemeralInventoryItemDetails.forEach((detail) => {
-      const item = inventoryItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
+      const item = ephemeralItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
       if (item) {
         item.quantity = Number(detail.quantity);
+        item.smartObjectId = Number(detail.smartObjectId);
+      }
+    });
+  }
+
+  if(ephemeralInventoryItemMetadata) {
+    ephemeralInventoryItemMetadata.forEach((detail) => {
+      const item = ephemeralItems.find((item: any) => item.itemId === Number(detail.smartObjectId));
+      if (item) {
+        item.typeId = Number(detail.typeId);
       }
     });
   }
@@ -197,7 +258,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
       solarSystem: {
         id: smartAssemblyLocation?.solarSystemId.toString() || "",
-        name: smartAssemblyLocation?.solarSystemId.toString() || "",
+        name: solarSystemName || "Unknown",
         location: {
           x: Number(smartAssemblyLocation?.x),
           y: Number(smartAssemblyLocation?.y),
@@ -206,7 +267,6 @@ export function useSmartAssembly(smartObjectId = 0n) {
       },
       typeId: Number(smartAssemblyEntityRecord?.typeId) || 0,
       region: "", // TODO: Add logic for fetching region data
-      floorPrice: "0",
       fuel: {
         amount: smartAssemblyFuelBalance?.fuelAmount || BigInt(0),
         fuelConsumptionIntervalInSec:
@@ -236,6 +296,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
     },
   });
 
+  // SMART STORAGE UNIT VALUES //
   const smartStorageUnitInv = useRecord({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.Inventory,
@@ -262,7 +323,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
                 ownerName: ephemeralInventory?.ownerName || "",
                 storageCapacity: ephemeralInventory?.capacity || BigInt(0),
                 usedCapacity: ephemeralInventory?.usedCapacity || BigInt(0),
-                ephemeralInventoryItems: [...(ephemeralInventoryItemDetails || [])],
+                ephemeralInventoryItems: [...(ephemeralItems || [])],
               }
             ],
           },

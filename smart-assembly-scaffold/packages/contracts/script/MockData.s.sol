@@ -119,6 +119,8 @@ contract MockData is Script {
 
     inventorySystem.createAndDepositInventory(smartStorageUnitId, items);
 
+    console.log("Created Inventory With Smart Object ID", vm.toString(itemOutSmartObjectId));
+
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
 
     uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
@@ -134,6 +136,8 @@ contract MockData is Script {
       volume: 10
     });
 
+    console.log("Created Ephemeral With Smart Object ID", vm.toString(itemInSmartObjectId));
+
     vm.stopBroadcast();
 
     vm.startBroadcast(playerPrivateKey);
@@ -148,7 +152,7 @@ contract MockData is Script {
    * @param ownerAddress The address of the owner
    */
   function createAnchorAndOnline(uint256 smartStorageUnitId, address ownerAddress) private {
-    LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
+    LocationData memory locationParams = LocationData({ solarSystemId: 30000042, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,

@@ -5,10 +5,10 @@ import { useRecord } from "../mud/useRecord";
 import { useRecords } from "../mud/useRecords";
 import { useWorldContract } from "../mud/useWorldContract";
 import { Severity } from "@eveworld/types";
-import setToggle from "./systemCalls/handleToggle";
 import { EveButton } from "@eveworld/ui-components";
 import { useNotification } from "@eveworld/contexts";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
+import setToggle from "./systemCalls/handleToggle";
 
 const Toggle = React.memo(function Toggle() {
   const { smartAssembly } = useSmartAssembly();
@@ -22,13 +22,6 @@ const Toggle = React.memo(function Toggle() {
       smartObjectId: BigInt(smartAssembly?.id || 0),
     },
   });
-
-  const toggleValues = useRecords({
-    stash,
-    table: mudConfig.namespaces.exampleName.tables.ToggleTable
-  });
-
-  console.log(toggleValues);
 
   const handleToggle = async () => {
     const txHash = await setToggle({
@@ -45,8 +38,6 @@ const Toggle = React.memo(function Toggle() {
       });
     }
   };
-
-  console.log(toggleValue);
 
   return (
     <EveButton typeClass="primary" onClick={() => handleToggle()}>

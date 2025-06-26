@@ -1,23 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
 
-import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { console } from "forge-std/console.sol";
-import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
-import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { IBaseWorld } from "@eveworld/world-v2/src/codegen/world/IWorld.sol";
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
-import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
 import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
 import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
 import { SmartAssemblySystem, smartAssemblySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartAssemblySystemLib.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
 import { EntityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/EntityRecordSystem.sol";
 import { entityRecordSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
-import { Tenant, Characters, CharactersByAccount, EntityRecord, EntityRecordData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { Tenant, Characters, CharactersByAccount, EntityRecord, EntityRecordData, Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 import { smartStorageUnitSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartStorageUnitSystemLib.sol";
 import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
 import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
@@ -86,7 +80,7 @@ contract SmartStorageUnitSystem is System {
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartObjectId, inventoryItemIdIn);
 
     require(ratioConfigData.ratioIn > 0 && ratioConfigData.ratioOut > 0, "Invalid ratio");
-    require(quantity > 0, "Quantity cannot be 0");
+    require(quantity > 0, "Quantity cannot be 0 or less");
 
     // Ensure there are enough items
     (uint64 quantityOutputItem, uint64 quantityInputItemLeftOver) = calculateOutput(
@@ -97,8 +91,8 @@ contract SmartStorageUnitSystem is System {
 
     uint64 calculatedInput = quantity - quantityInputItemLeftOver;
 
-    require(quantityOutputItem > 0, "Output quantity cannot be 0");
-    require(calculatedInput > 0, "Calculated input quantity cannot be 0");
+    require(quantityOutputItem > 0, "Output quantity cannot be 0 or less");
+    require(calculatedInput > 0, "Calculated input quantity cannot be 0 or less");
 
     uint256 itemObjectIdOut = RatioConfig.getItemOut(smartObjectId, inventoryItemIdIn);
 

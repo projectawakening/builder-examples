@@ -35,7 +35,7 @@ export const EVEVault = (): Wallet => {
         "https://artifacts.evefrontier.com/wallet/android/eve-vault-v1.0.5.apk",
       ios: "https://testflight.apple.com/join/w2NCeawN",
       chrome:
-        "https://artifacts.evefrontier.com/wallet/extension/vault-v1.0.9/wallet-alpha.zip",
+        "https://artifacts.evefrontier.com/wallet/extension/vault-v1.1.1/wallet-alpha.zip",
       qrCode: "https://vault.evefrontier.com",
     },
     mobile: {

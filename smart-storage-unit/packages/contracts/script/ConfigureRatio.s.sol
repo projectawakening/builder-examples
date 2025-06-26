@@ -1,19 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
-
-import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
-import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
-import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
+import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
+import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
-import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
-import { SmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
+import { Tenant } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
 import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
+
+import { SmartStorageUnitSystem as CustomSmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 import { Utils } from "../src/systems/Utils.sol";
 
 /**
@@ -56,7 +55,7 @@ contract ConfigureRatio is Script {
     world.call(
       systemId,
       abi.encodeCall(
-        SmartStorageUnitSystem.setRatio,
+        CustomSmartStorageUnitSystem.setRatio,
         (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, inRatio, outRatio)
       )
     );

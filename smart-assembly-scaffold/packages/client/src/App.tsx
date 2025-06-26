@@ -14,7 +14,10 @@ import { EveLinearBar } from "@eveworld/ui-components";
 
 import EntityView from "./components/EntityView";
 
+// DApp Simple Customization
 const DISPLAY_EXPLORER = true;
+const DISPLAY_DOCS_BUTTON = false;
+const CUSTOM_LOGO_URL = ""
 
 export const App = () => {
   const { isLive, message, percentage } = useSyncProgress();
@@ -31,7 +34,14 @@ export const App = () => {
   }, [handleClose, isLive, notify]);
 
   if (!address || !isConnected){ 
-    return <ConnectWallet displayDocsButton={false} logoUrl={"https://evefrontier.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fnl199sv2jlik%2F1GcQ6Bm96b8S5aOXM6LeVX%2F5b384ffae8174e69c2952458b07cf232%2Fccp_logo.png&w=3840&q=75"} />;
+    return (
+      <>
+        <ConnectWallet 
+          displayDocsButton={DISPLAY_DOCS_BUTTON} 
+          logoUrl={CUSTOM_LOGO_URL} 
+        />
+      </>
+    );
   }
 
   return (

@@ -8,6 +8,7 @@ import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
+import { IWorldWithContext } from "@eveworld/smart-object-framework-v2/src/IWorldWithContext.sol";
 
 import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
 import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
@@ -26,21 +27,21 @@ import { InventoryItem, InventoryItemData } from "@eveworld/world-v2/src/namespa
 import { EphemeralInvItem, EphemeralInvItemData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/EphemeralInvItem.sol";
 import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
+import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
+import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
 
 import { SmartStorageUnitSystem as CustomSmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
 import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
+import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
 
 contract SmartGateTest is MudTest {
   ResourceId systemId = Utils.smartStorageUnitSystemId();
 
-  IWorld world;
+  IWorldWithContext world;
 
   bytes32 tenantId;
-
-  address admin;
-  address player;
 
   //Smart Gate Smart Object IDs (These are generated from the Smart Gate IDs)
   uint256 sourceGateId;
@@ -59,7 +60,7 @@ contract SmartGateTest is MudTest {
 
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
-  uint256 SSU_TYPE_ID = 84955;
+  uint256 SSU_TYPE_ID = 77917;
   uint256 FUEL_TYPE_ID = 78437;
 
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
@@ -79,13 +80,14 @@ contract SmartGateTest is MudTest {
   function setUp() public override {
     super.setUp();
 
-    world = IWorld(worldAddress);
+    world = IWorldWithContext(worldAddress);
     StoreSwitch.setStoreAddress(worldAddress);
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    admin = vm.addr(deployerPrivateKey);
+    address admin = vm.addr(deployerPrivateKey);
 
-    player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
 
     tenantId = Tenant.getTenantId();
 
@@ -100,27 +102,45 @@ contract SmartGateTest is MudTest {
     vm.startPrank(player);
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
     vm.stopPrank();
+    vm.startPrank(admin);
+    world.registerDelegation(address(this), UNLIMITED_DELEGATION, new bytes(0));
+    vm.stopPrank();
 
-    sourceGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
-    destinationGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
+    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
+    
+    vm.startPrank(admin);
 
-    vm.startPrank(player, admin);
+    console.log("0");
 
-    if(DeployableState.getCurrentState(sourceGateId) != State.NULL){
-      console.log("Source gate already exists");
+    if(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL){
+      console.log("SSU already exists");
     } else{
-      createAnchorAndOnline(sourceGateId, SOURCE_GATE_ID, player);
-    }
-
-    if(DeployableState.getCurrentState(destinationGateId) != State.NULL){
-      console.log("Destination gate already exists");
-    } else{
-      createAnchorAndOnline(destinationGateId, DESTINATION_GATE_ID, player);
+      createAnchorAndOnline(smartStorageUnitId, SOURCE_GATE_ID, admin, admin);
     }
 
     vm.stopPrank();
 
-    vm.startPrank(admin);
+    vm.startPrank(player);
+
+    console.log("1");
+
+    ephemeralInteractSystem.setTransferFromEphemeralAccess(smartStorageUnitId, address(this), true);
+    ephemeralInteractSystem.setTransferToEphemeralAccess(smartStorageUnitId, address(this), true);
+
+    vm.stopPrank();
+
+    vm.startPrank(player, admin);
+
+    console.log("2");
+
+
+
+    console.log("Depositing to inventory");
+    // Create and deposit inventory items
+    _depositToInventory(smartStorageUnitId, tenantId, admin);
+    console.log("Depositing to ephemeral inventory");
+    _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
+    console.log("Depositing to inventory and ephemeral inventory complete");
 
     vm.stopPrank();
   }  
@@ -136,7 +156,7 @@ contract SmartGateTest is MudTest {
   }
 
 
-  function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
+  function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress, address admin) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
@@ -179,10 +199,55 @@ contract SmartGateTest is MudTest {
 
     vm.stopPrank();
 
-    vm.startPrank(player, admin);
+    vm.startPrank(ownerAddress, admin);
 
     fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
 
     deployableSystem.bringOnline(smartAssemblyId);
+  }
+
+
+  function _depositToInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
+    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOutTypeID);
+
+    CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
+
+    items[0] = CreateInventoryItemParams({
+      smartObjectId: itemOutSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemOutTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 10, // Non-singleton can have any quantity
+      volume: 1
+    });
+
+    world.callFrom(
+      player,
+      inventorySystem.toResourceId(),
+      abi.encodeCall(InventorySystem.createAndDepositInventory, (smartStorageUnitId, items))
+    );
+  }
+
+  function _depositToEphemeralInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
+    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemInTypeID);
+    CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](1);
+
+    ephemeralItems[0] = CreateInventoryItemParams({
+      smartObjectId: itemInSmartObjectId,
+      tenantId: tenantId,
+      typeId: itemInTypeID,
+      itemId: 0, // For non-singleton items, itemId is zero
+      quantity: 15, // Non-singleton can have any quantity
+      volume: 10
+    });
+
+    world.callFrom(
+      player,
+      ephemeralInventorySystem.toResourceId(),
+      abi.encodeCall(EphemeralInventorySystem.createAndDepositEphemeral, (smartStorageUnitId, player, ephemeralItems))
+    );
   }
 }

@@ -2,7 +2,6 @@ import {
   ErrorNotice,
   ErrorNoticeTypes,
   EveButton,
-  EveLoadingAnimation,
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
@@ -24,8 +23,6 @@ export default function EntityView() {
   }
 
   return (
-    <EveLoadingAnimation position="diagonal">
-      
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
       <div>Welcome to EVE Dapp Scaffold!</div>
       <div>
@@ -35,7 +32,7 @@ export default function EntityView() {
         </span>
       </div>
 
-      <div className="text-center center">
+      <div>
         <div>
           Description:
           <div>{smartAssembly?.description || "No description set"}</div>
@@ -53,7 +50,5 @@ export default function EntityView() {
         />
       </div>
     </div>
-
-    </EveLoadingAnimation>
   );
 }

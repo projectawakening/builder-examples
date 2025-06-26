@@ -19,9 +19,10 @@ import { getWorldDeploy } from "../mud/getWorldDeploy";
  * `useSmartCharacter` hook
  *
  * This hook fetches information about a user based on whether their connected wallet address
- * is registered to a character ID in a MUD table. It retrieves data from two MUD tables:
- * 1. `CharactersByAddressTable` - Maps an address to a character ID.
- * 2. `EntityRecordOffchainTable` - Contains metadata for the character, such as its name.
+ * is registered to a character ID in a MUD table. It retrieves data from the following MUD tables:
+ * 1. `CharactersByAccount` - Maps an address to a character ID.
+ * 2. `Characters` - Contains the character's tribe ID.
+ * 3. `EntityRecordMetadata` - Contains metadata for the character, such as its name.
  *
  * Note:
  * - Some fields, like ERC-20 token balances, are not fetched from MUD and must be queried
@@ -29,10 +30,6 @@ import { getWorldDeploy } from "../mud/getWorldDeploy";
  * - This hook provides a foundation for creating SmartCharacter objects that can be expanded
  *   based on your needs.
  */
-
-interface SmartCharacterExtended extends SmartCharacter{
-  tribeId: BigInt
-}
 
 export function useSmartCharacter() {
   const { address } = useAccount();
@@ -63,6 +60,7 @@ export function useSmartCharacter() {
     getWorldAddress();
   }, []);
 
+  // Get the GAS and EVE Token balances for the character
   useEffect(() => {
     if (!publicClient || !address) return;
 
@@ -156,7 +154,7 @@ export function useSmartCharacter() {
 
   /**
    * Fetch the character ID associated with the user's wallet address.
-   * - Queries `CharactersByAddressTable` in the MUD stash.
+   * - Queries `CharactersByAccount` in the MUD stash.
    * - Key: `{ characterAddress }`
    */
   const smartCharacterByAddress = useRecord({
@@ -167,17 +165,22 @@ export function useSmartCharacter() {
     },
   });
 
+  /**
+   * Fetch the character Tribe ID.
+   * - Queries `Characters` in the MUD stash.
+   * - Key: `{ smartObjectId }`
+   */
   const smartCharacterData = useRecord({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.Characters,
     key: {
-      smartObjectId: smartCharacterByAddress?.smartObjectId || 0n
+      smartObjectId: smartCharacterByAddress?.smartObjectId || BigInt(0)
     }
   })
 
   /**
    * Fetch metadata for the character using the retrieved character ID.
-   * - Queries `EntityRecordOffchainTable` in the MUD stash.
+   * - Queries `EntityRecordMetadata` in the MUD stash.
    * - Key: `{ entityId }`
    * - If no character ID is found, defaults to `BigInt(0)` (no record).
    */
@@ -195,7 +198,7 @@ export function useSmartCharacter() {
    *
    * @type {SmartCharacter}
    */
-  const smartCharacter: SmartCharacterExtended = {
+  const smartCharacter: SmartCharacter = {
     address: smartCharacterByAddress?.account || address || "0x",
     id: smartCharacterByAddress?.smartObjectId.toString() || "",
     name: smartCharacterRecord?.name || "",
@@ -204,7 +207,7 @@ export function useSmartCharacter() {
     eveBalanceWei: Number(eveBalanceWei),
     gasBalanceWei: Number(GASBalanceWei),
     image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
-    smartAssemblies: ownedSmartAssemblies, // Placeholder for smart assemblies owned by this character
+    smartAssemblies: ownedSmartAssemblies, // Stores the Smart Object ID's of the Smart Assemblies owned by this character
   };
 
   return { smartCharacter };
