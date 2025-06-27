@@ -244,6 +244,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
     smartAssemblyBase = {
       id: smartDeployableStateView?.smartObjectId.toString() || "",
       itemId: Number(smartAssemblyEntityRecord?.itemId) || 0,
+      smartAssemblyType: smartAssemblyType?.assemblyType || "Unknown",
       owner: {
         address: ownershipRecord?.account.toString() || "",
         id: smartCharacterRecord?.smartObjectId.toString() || "",
@@ -252,7 +253,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
       chainId: import.meta.env.VITE_CHAIN_ID,
       name: smartAssemblyEntityRecordMetadata?.name || "",
       description: smartAssemblyEntityRecordMetadata?.description || "",
-      dappURL: smartAssemblyEntityRecordMetadata?.dappURL || "",
+      dappURL: smartAssemblyEntityRecordMetadata?.dappURL || "http://localhost:3000/",
       image: "",
       state: smartDeployableStateView?.currentState.toString() || State.NULL,
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
@@ -349,6 +350,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
         };
         break;
     }
+
+  console.log(smartAssembly);
 
   return { smartAssemblyBase, smartAssembly };
 }

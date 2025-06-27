@@ -3,3 +3,24 @@
 @import "tailwindcss/utilities";
 
 @import "@eveworld/ui-components/styles";
+
+.item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.item-empty {
+    background-color: transparent;
+    border: 0.5px solid hsla(26, 85%, 58%, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: hsla(26, 85%, 58%, 1);
+    font-size: 20px;
+}
+
+.inventory-container {
+    min-height: 100px!important;
+    max-height: 100px!important;
+}

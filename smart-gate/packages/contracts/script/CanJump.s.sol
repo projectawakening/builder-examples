@@ -13,6 +13,36 @@ import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codege
  * @notice This script is used to test if the custom Smart Gate Behavior limits Smart Gate Usage
  */
 contract CanJump is Script {
+  function run(address worldAddress) external {
+    // The deployer / builder
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(adminPrivateKey);
+    // The test player
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
+
+    // Broadcast the script as the admin
+    vm.startBroadcast(adminPrivateKey);
+
+    StoreSwitch.setStoreAddress(worldAddress);
+
+    uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
+    uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
+
+    displayPlayerCanJumpFromAddress(admin, "TESTING CORRECT TRIBE", sourceGateId, destinationGateId);
+    displayPlayerCanJumpFromAddress(player, "TESTING INCORRECT TRIBE", sourceGateId, destinationGateId);
+
+    vm.stopBroadcast();
+  }
+
+  /**
+   * @notice Logs to console whether the player is able to jump between gates
+   * @param playerAddress The address of the player
+   * @param testName The name of the test
+   * @param sourceGateId The ID of the source gate
+   * @param destinationGateId The ID of the destination gate
+   * @return canJump Whether the player can jump from the source gate to the destination gate
+   */
   function displayPlayerCanJumpFromAddress(address playerAddress, string memory testName, uint256 sourceGateId, uint256 destinationGateId) internal returns (bool) {
     uint256 playerCharacterId = CharactersByAccount.getSmartObjectId(playerAddress);
     uint256 playerCharacterTribeId = Characters.getTribeId(playerCharacterId);
@@ -26,25 +56,5 @@ contract CanJump is Script {
     console.log("Can Jump:", canJump);
 
     return canJump;
-  }
-
-  function run(address worldAddress) external {
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
-    address admin = vm.addr(adminPrivateKey);
-    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
-    address player = vm.addr(playerPrivateKey);
-
-    vm.startBroadcast(adminPrivateKey);
-
-    StoreSwitch.setStoreAddress(worldAddress);
-
-    uint256 sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    uint256 destinationGateId = vm.envUint("DESTINATION_GATE_ID");
-
-    displayPlayerCanJumpFromAddress(admin, "TESTING CORRECT TRIBE", sourceGateId, destinationGateId);
-    displayPlayerCanJumpFromAddress(player, "TESTING INCORRECT TRIBE", sourceGateId, destinationGateId);
-
-    vm.stopBroadcast();
   }
 }

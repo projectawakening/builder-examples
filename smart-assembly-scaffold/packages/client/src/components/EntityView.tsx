@@ -9,6 +9,8 @@ import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
 
+import { ExternalIcon } from "@eveworld/ui-components/assets";
+
 import CustomSmartAssemblyInfo from "./CustomSmartAssemblyInfo";
 
 import Toggle from "./Toggle";
@@ -24,7 +26,7 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
-      <div>Welcome to EVE Dapp Scaffold!</div>
+      <div>Welcome to the <b>EVE Dapp Scaffold</b>!</div>
       <div>
         You are currently viewing information for{" "}
         <span className="underline font-bold">
@@ -32,11 +34,26 @@ export default function EntityView() {
         </span>
       </div>
 
-      <div>
-        <div>
+      <div className="grid grid-cols-2">
+        <div style={{width: '150%', paddingRight: '10px'}}>
           Description:
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
+
+        <EveButton
+          typeClass="secondary"
+          onClick={() => window.open(getDappUrl(smartAssembly))}
+          disabled={!smartAssembly?.dappURL}
+          style={{width: '50%', justifySelf: 'end'}}
+        >
+          <ExternalIcon 
+            style={{
+              width: '15px', 
+              height: '15px'
+            }} 
+          />
+          <span style={{marginLeft: '5px'}}>dApp link</span>
+        </EveButton>
       </div>
 
       <Toggle />

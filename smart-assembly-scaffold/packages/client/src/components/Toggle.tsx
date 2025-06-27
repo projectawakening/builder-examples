@@ -2,7 +2,6 @@ import React from "react";
 import mudConfig from "contracts/mud.config";
 import { stash } from "../mud/stash";
 import { useRecord } from "../mud/useRecord";
-import { useRecords } from "../mud/useRecords";
 import { useWorldContract } from "../mud/useWorldContract";
 import { Severity } from "@eveworld/types";
 import { EveButton } from "@eveworld/ui-components";

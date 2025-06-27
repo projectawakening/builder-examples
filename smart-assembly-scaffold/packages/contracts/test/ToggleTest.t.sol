@@ -200,7 +200,7 @@ contract ToggleTest is MudTest {
   }
 
   function createAnchorAndOnline(uint256 ssuId, address ownerAddress) private {
-    LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
+    LocationData memory locationParams = LocationData({ solarSystemId: 30000042, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,

@@ -74,6 +74,8 @@ contract MockData is Script {
 
     uint256 smartTurretId = ObjectIdLib.calculateSingletonId(tenantId, SMART_TURRET_ID);
 
+    console.log("Smart Turret ID:", vm.toString(smartTurretId));
+
     if (DeployableState.getCurrentState(smartTurretId) != State.NULL) {
       console.log("Smart Turret already created");
     } else {
@@ -84,7 +86,7 @@ contract MockData is Script {
   }
 
   function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
-    LocationData memory locationParams = LocationData({ solarSystemId: 1, x: 1001, y: 1001, z: 1001 });
+    LocationData memory locationParams = LocationData({ solarSystemId: 30000042, x: 1001, y: 1001, z: 1001 });
 
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,

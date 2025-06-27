@@ -210,5 +210,7 @@ export function useSmartCharacter() {
     smartAssemblies: ownedSmartAssemblies, // Stores the Smart Object ID's of the Smart Assemblies owned by this character
   };
 
+  console.log(smartCharacter);
+
   return { smartCharacter };
 }

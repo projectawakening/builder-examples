@@ -266,7 +266,7 @@ export default defineWorld({
             ephemeralSmartObjectId: "uint256",
             exists: "bool",
             smartObjectId: "uint256", // parent container ID
-            ephemeralOwner: "address", // TODO : ? why is this needed? is this inventory owner?
+            ephemeralOwner: "address", 
           },
           key: ["ephemeralSmartObjectId"],
         },

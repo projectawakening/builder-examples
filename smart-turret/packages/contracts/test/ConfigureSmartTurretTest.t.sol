@@ -74,6 +74,7 @@ contract ConfigureSmartTurretTest is MudTest {
     configureSmartTurretScript.run(worldAddress);
 
     uint256 smartTurretId = ObjectIdLib.calculateSingletonId(tenantId, SMART_TURRET_ID);
+    console.log("SMART TURRET ID AFTER DEPLOYMENT:", vm.toString(smartTurretId));
     assertTrue(
       DeployableState.getCurrentState(smartTurretId) != State.NULL, 
       "Smart assembly should exist after deployment"

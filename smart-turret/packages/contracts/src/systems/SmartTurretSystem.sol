@@ -179,7 +179,6 @@ contract SmartTurretSystem is System {
     bool swapped;
     // Loop until the bubble sort algorithm stops sorting
     do {
-      // Reset the swapped value
       swapped = false;
 
       // Loop to the second last element, as it will sort for the next element
