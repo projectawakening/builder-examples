@@ -18,5 +18,3 @@ mock-data/broadcast/
 mock-data/cache/
 
 mprocs.log
-
-packages/contracts/.env
