@@ -94,6 +94,8 @@ contract MockData is Script {
 
     uint256 sourceSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
 
+    console.log("Source Smart Gate ID:", vm.toString(sourceSmartGateId));
+
     if(DeployableState.getCurrentState(sourceSmartGateId) != State.NULL){
       console.log("Source Smart Gate already created");
     } else{
@@ -103,10 +105,11 @@ contract MockData is Script {
 
     uint256 destinationSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
 
+    console.log("Destination Smart Gate ID:", vm.toString(destinationSmartGateId));
+
     if(DeployableState.getCurrentState(destinationSmartGateId) != State.NULL){
       console.log("Destination Smart Gate already created");
     } else{
-      console.log("Creating Destination Smart Gate");
       createAnchorAndOnline(destinationSmartGateId, DESTINATION_GATE_ID, admin);
     }
 
@@ -164,7 +167,5 @@ contract MockData is Script {
     fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
 
     deployableSystem.bringOnline(smartAssemblyId);
-
-    console.log("Smart Gate fueled and online");
   }
 }

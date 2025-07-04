@@ -135,8 +135,8 @@ contract SmartGateTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
-  //Test setting the allowed corporation
-  function testSetAllowedCorp() public {
+  //Test setting the allowed tribe
+  function testSetAllowedTribe() public {
     vm.startPrank(player, admin);
 
     world.call(
@@ -147,15 +147,32 @@ contract SmartGateTest is MudTest {
       )
     );
 
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
 
-    assertEq(allowedCorp, 200, "Allowed corp should now be 200");
+    assertEq(allowedTribe, 200, "Allowed tribe should now be 200");
 
     vm.stopPrank();
   }
 
-  //Test if the setAllowedCorp function can only be called by the admin
-  function testSetAllowedCorpNotAdmin() public {
+  //Test setting the allowed tribe to 0
+  function testSetAllowedTribeIncorrectTribeID() public {
+    vm.startPrank(player, admin);
+
+    vm.expectRevert("Tribe ID cannot be 0 or negative");
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartGateSystem.setAllowedTribe,
+        (sourceGateId, 0)
+      )
+    );
+
+    vm.stopPrank();
+  }
+
+  //Test if the setAllowedTribe function can only be called by the admin
+  function testSetAllowedTribeNotAdmin() public {
     vm.expectRevert(abi.encodeWithSignature("Access_NotOwner(address,uint256)", admin, sourceGateId));
 
     vm.startPrank(admin);
@@ -170,9 +187,9 @@ contract SmartGateTest is MudTest {
 
     vm.stopPrank();
 
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
 
-    assertEq(allowedCorp, ALLOWED_TRIBE_ID, "Allowed tribe should be set to tribeID");
+    assertEq(allowedTribe, ALLOWED_TRIBE_ID, "Allowed tribe should be set to tribeID");
   }
 
   //Test can jump to the destination gate

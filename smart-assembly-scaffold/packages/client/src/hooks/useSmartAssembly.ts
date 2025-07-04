@@ -351,7 +351,5 @@ export function useSmartAssembly(smartObjectId = 0n) {
         break;
     }
 
-  console.log(smartAssembly);
-
   return { smartAssemblyBase, smartAssembly };
 }

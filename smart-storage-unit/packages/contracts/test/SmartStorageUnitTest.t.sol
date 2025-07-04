@@ -36,7 +36,7 @@ import { Utils } from "../src/systems/Utils.sol";
 import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
 import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
 
-contract SmartGateTest is MudTest {
+contract SmartStorageUnitTest is MudTest {
   ResourceId systemId = Utils.smartStorageUnitSystemId();
 
   IWorldWithContext world;
@@ -55,8 +55,7 @@ contract SmartGateTest is MudTest {
   uint256 PLAYER_CHARACTER_ID = 400;
 
   //Smart Gate IDs
-  uint256 SOURCE_GATE_ID = 9000;
-  uint256 DESTINATION_GATE_ID = 9001; 
+  uint256 SSU_ID = 9000;
 
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
@@ -106,21 +105,21 @@ contract SmartGateTest is MudTest {
     world.registerDelegation(address(this), UNLIMITED_DELEGATION, new bytes(0));
     vm.stopPrank();
 
-    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
+    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, SSU_ID);
     
-    vm.startPrank(admin);
+    vm.startPrank(admin, admin);
 
     console.log("0");
 
     if(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL){
       console.log("SSU already exists");
     } else{
-      createAnchorAndOnline(smartStorageUnitId, SOURCE_GATE_ID, admin, admin);
+      createAnchorAndOnline(smartStorageUnitId, SSU_ID, admin, admin);
     }
 
     vm.stopPrank();
 
-    vm.startPrank(player);
+    vm.startPrank(admin);
 
     console.log("1");
 
@@ -137,7 +136,7 @@ contract SmartGateTest is MudTest {
 
     console.log("Depositing to inventory");
     // Create and deposit inventory items
-    _depositToInventory(smartStorageUnitId, tenantId, admin);
+    _depositToInventory(smartStorageUnitId, tenantId, player);
     console.log("Depositing to ephemeral inventory");
     _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
     console.log("Depositing to inventory and ephemeral inventory complete");
@@ -159,6 +158,8 @@ contract SmartGateTest is MudTest {
   function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress, address admin) private {
     LocationData memory locationParams = LocationData({ solarSystemId: 30000042, x: 1001, y: 1001, z: 1001 });
 
+    console.log("Creating anchor and online");
+
     EntityRecordParams memory entityRecordParams = EntityRecordParams({
       tenantId: tenantId,
       typeId: SSU_TYPE_ID,
@@ -174,11 +175,15 @@ contract SmartGateTest is MudTest {
       locationData: locationParams
     });
 
+    console.log("Creating deployable params");
+
     bytes memory result = world.callFrom(
       ownerAddress,
       smartStorageUnitSystem.toResourceId(),
       abi.encodeCall(SmartStorageUnitSystem.createAndAnchorStorageUnit, (deployableParams, 100000000, 100000000, 0))
     );
+
+    console.log("Entity record created");
 
     entityRecordSystem.createMetadata(smartAssemblyId, EntityMetadataParams({
       name: "Name Here",
