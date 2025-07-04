@@ -28,9 +28,9 @@ CHAIN_ID=31337 #Local Chain ID
 # Copy the ID from the in-game smart turret
 SMART_TURRET_ID=9640513001323359261895106592991319872122110296371423549860904054745193604808
 
-# ALLOWED CORP
-# What corp won't be targeted by the turret
-ALLOWED_CORP_ID=1000
+# ALLOWED TRIBE
+# What tribe won't be targeted by the turret
+ALLOWED_TRIBE_ID=1000
 
 # TESTING CONFIG
 # This is the private key for tests / testing related scripts.

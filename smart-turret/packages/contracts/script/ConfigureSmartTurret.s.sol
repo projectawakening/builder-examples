@@ -1,48 +1,43 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
 import { Utils } from "../src/systems/Utils.sol";
-import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
-import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
-import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
+import { SmartAssembly } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/SmartAssembly.sol";
+import { SmartTurretSystem, smartTurretSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/SmartTurretSystem.sol";
+import { SmartTurretSystem as CustomSmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
 
 contract ConfigureSmartTurret is Script {
-  using SmartTurretUtils for bytes14;
-  using SmartTurretLib for SmartTurretLib.World;
-
-  SmartTurretLib.World smartTurret;
-
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(playerPrivateKey);
+    uint256 deployerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    vm.startBroadcast(deployerPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
     IBaseWorld world = IBaseWorld(worldAddress);
 
-    smartTurret = SmartTurretLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
-
     uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
-    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
+    uint256 allowedTribeId = vm.envUint("ALLOWED_TRIBE_ID");
+
+    require(
+      SmartAssembly.lengthAssemblyType(smartTurretId) != 0,
+      "No Smart Assembly found. Please run 'pnpm mock-data' to generate one."
+    );
 
     ResourceId systemId = Utils.smartTurretSystemId();
     
     // This function can only be called by the owner of the smart turret
-    smartTurret.configureSmartTurret(smartTurretId, systemId);
+    smartTurretSystem.configureTurret(smartTurretId, systemId);
     
     world.call(
       systemId,
-      abi.encodeCall(SmartTurretSystem.setAllowedCorp, (allowedCorpId))
+      abi.encodeCall(CustomSmartTurretSystem.setAllowedTribe, (allowedTribeId))
     );
 
     vm.stopBroadcast();
