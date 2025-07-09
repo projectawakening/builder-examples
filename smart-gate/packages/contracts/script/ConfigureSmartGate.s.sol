@@ -20,7 +20,7 @@ import { SmartGateSystem as CustomSmartGateSystem } from "../src/systems/SmartGa
 contract ConfigureSmartGate is Script {
   function run(address worldAddress) external {
     // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    uint256 adminPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     vm.startBroadcast(adminPrivateKey);
 
     StoreSwitch.setStoreAddress(worldAddress);
@@ -32,8 +32,8 @@ contract ConfigureSmartGate is Script {
     ResourceId systemId = SmartGateUtils.smartGateSystemId();
 
     //This function can only be called by the owner of the smart gate
-    smartGateSystem.configureGate(sourceSmartGateId, systemId);
-    smartGateSystem.configureGate(destinationSmartGateId, systemId);
+    //smartGateSystem.configureGate(sourceSmartGateId, systemId);
+    //smartGateSystem.configureGate(destinationSmartGateId, systemId);
 
     //Get the allowed tribe
     uint256 tribeID = vm.envUint("ALLOWED_TRIBE_ID");

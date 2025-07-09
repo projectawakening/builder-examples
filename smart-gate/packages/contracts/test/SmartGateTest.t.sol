@@ -173,7 +173,7 @@ contract SmartGateTest is MudTest {
 
   //Test if the setAllowedTribe function can only be called by the admin
   function testSetAllowedTribeNotAdmin() public {
-    vm.expectRevert(abi.encodeWithSignature("Access_NotOwner(address,uint256)", admin, sourceGateId));
+    vm.expectRevert("Access Denied. You are not the owner of this gate.");
 
     vm.startPrank(admin);
 

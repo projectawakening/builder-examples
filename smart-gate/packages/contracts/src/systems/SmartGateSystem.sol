@@ -46,7 +46,7 @@ contract SmartGateSystem is System {
 
     //Ensure the caller is the owner of the gate
     address gateOwner = OwnershipByObject.get(sourceGateId);
-    require(gateOwner == _msgSender(), "Access Denied");
+    require(gateOwner == _msgSender(), "Access Denied. You are not the owner of this gate.");
 
     //Set the allowed tribe
     GateAccess.set(sourceGateId, tribeID);
