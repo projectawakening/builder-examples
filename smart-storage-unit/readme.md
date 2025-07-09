@@ -257,7 +257,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 
 #### Step 1.3: Item ID's
 
-To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/types and then search for the item name.
+To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/v2/types and then search for the item name.
 
 You can use the "smartItemId" as the Item ID.
 
