@@ -41,10 +41,10 @@ contract SmartGateSystem is System {
    * @param tribeID The ID of the tribe to allow
    */
   function setAllowedTribe(uint256 sourceGateId, uint256 tribeID) public {
+    require(tribeID > 0, "Tribe ID cannot be 0 or negative");
+
     //This will error if the caller is not the owner of the gate
     accessSystem.onlyOwner(sourceGateId, "Access denied");
-
-    require(tribeID > 0, "Tribe ID cannot be 0 or negative");
 
     //Set the allowed tribe
     GateAccess.set(sourceGateId, tribeID);

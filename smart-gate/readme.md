@@ -2,7 +2,7 @@
 
 # 🚪 Smart Gate Example
 
-> Build a [**Smart Gate**](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribeoration to use it
+> Build a [**Smart Gate**](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribe to use it
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## Introduction
 
-This example will show you how to deploy and configure contracts for a [Smart Gate](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribeoration to use it.
+This example will show you how to deploy and configure contracts for a [Smart Gate](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribe to use it.
 
 Before starting make sure you've installed all required tools from the main [README](../README.md)
 
@@ -148,7 +148,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or tribeoration name as your namespace.
+> 💡 **Tip** Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
