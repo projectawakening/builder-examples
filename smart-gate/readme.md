@@ -59,7 +59,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+    > [!NOTE]
+    > This will deploy the contracts to a forked version of your local world for testing.
 
 ### Step 2: Mock data for the existing world
 Generate the test data by:
@@ -74,6 +75,7 @@ Generate the test data by:
     pnpm mock-data
     ```
 
+> [!NOTE]
 > This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
 
 ### Step 3: Configure Smart Gate
@@ -83,6 +85,7 @@ To configure which smart gates will be used and the allowed tribe ID, run:
 pnpm configure-smart-gate
 ```
 
+> [!NOTE]
 > You can adjust the values for the SMART_GATE_ID and ALLOWED_TRIBE_ID in the .env file as needed, though they are optional.
 
 ### Step 4: Link Gates
@@ -148,7 +151,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or tribe name as your namespace.
+> [!TIP]
+> Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -274,6 +278,7 @@ To configure which smart gates will be used, run:
 pnpm configure
 ```
 
+> [!NOTE]
 > You can alter the gate ID's and the allowed tribe in the .env file as needed.
 
 ### Troubleshooting
