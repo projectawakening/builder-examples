@@ -59,8 +59,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > [!NOTE]
-    > This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 ### Step 2: Mock data for the existing world
 Generate the test data by:

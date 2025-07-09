@@ -17,7 +17,7 @@ TEST_PLAYER_PRIVATE_KEY=0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f460
 # Local Chain Settings
 RPC_URL=http://127.0.0.1:8545 #Forked Anvil Local RPC URL
 CHAIN_ID=31337 #Local Chain ID
-WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
+WORLD_ADDRESS=0x0165878a594ca255338adfa4d48449f69242eb8f #Local World Address
 
 # Stillness Chain Settings
 # RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com

@@ -5,6 +5,7 @@ import { console } from "forge-std/console.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 
 import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
+import { OwnershipByObject } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/OwnershipByObject.sol";
 import { accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
 
 import { GateAccess } from "../codegen/tables/GateAccess.sol";
@@ -43,8 +44,9 @@ contract SmartGateSystem is System {
   function setAllowedTribe(uint256 sourceGateId, uint256 tribeID) public {
     require(tribeID > 0, "Tribe ID cannot be 0 or negative");
 
-    //This will error if the caller is not the owner of the gate
-    accessSystem.onlyOwner(sourceGateId, "Access denied");
+    //Ensure the caller is the owner of the gate
+    address gateOwner = OwnershipByObject.get(sourceGateId);
+    require(gateOwner == _msgSender(), "Access Denied");
 
     //Set the allowed tribe
     GateAccess.set(sourceGateId, tribeID);
