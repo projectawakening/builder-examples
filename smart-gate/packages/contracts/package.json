@@ -16,6 +16,7 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test:deploy": "mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
+    "test:watch": ". ./.env && forge test --fork-url $RPC_URL --watch",
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
@@ -27,25 +28,31 @@
     "set-key": "eve-frontier private-key"
   },
   "dependencies": {
-    "@latticexyz/cli": "2.2.14",
-    "@latticexyz/schema-type": "2.2.14",
-    "@latticexyz/store": "2.2.14",
-    "@latticexyz/store-indexer": "2.2.14",
-    "@latticexyz/explorer": "2.2.14",
-    "@latticexyz/world": "2.2.14",
-    "@latticexyz/world-modules": "2.2.14",
+    "@eveworld/smart-object-framework-v2": "0.1.1",
+    "@eveworld/world-v2": "0.1.1",
+    "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/schema-type": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/store-indexer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/explorer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/world": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/world-modules": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@eveworld/common-constants": "0.0.13",
-    "@eveworld/world": "0.0.17",
     "eve-frontier": "file:../../../frontier-building-tool"
   },
+  "//pnpm": {
+    "overrides": {
+      "react": "^19.0.0"
+    }
+  },
   "devDependencies": {
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.14.10",
     "ds-test": "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0",
     "forge-std": "https://github.com/foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1",
     "prettier": "3.2.5",
     "prettier-plugin-solidity": "1.3.1",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.2.9",
-    "solhint-plugin-mud": "2.2.9"
+    "solhint-config-mud": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "solhint-plugin-mud": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304"
   }
 }

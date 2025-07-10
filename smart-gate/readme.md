@@ -2,7 +2,7 @@
 
 # 🚪 Smart Gate Example
 
-> Build a [**Smart Gate**](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific corporation to use it
+> Build a [**Smart Gate**](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribe to use it
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## Introduction
 
-This example will show you how to deploy and configure contracts for a [Smart Gate](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific corporation to use it.
+This example will show you how to deploy and configure contracts for a [Smart Gate](https://docs.evefrontier.com/SmartAssemblies/SmartGate) that only allows members of a specific tribe to use it.
 
 Before starting make sure you've installed all required tools from the main [README](../README.md)
 
@@ -59,31 +59,34 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 ### Step 2: Mock data for the existing world
 Generate the test data by:
 
 #### Step 2.1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 #### Step 2.2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
+> [!NOTE]
 > This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
 
 ### Step 3: Configure Smart Gate
-To configure which smart gates will be used and the allowed corp ID, run:
+To configure which smart gates will be used and the allowed tribe ID, run:
 
 ```bash
-pnpm configure-smart-gate
+pnpm configure
 ```
 
-> You can adjust the values for the SMART_GATE_ID and ALLOWED_CORP_ID in the .env file as needed, though they are optional.
+> [!NOTE]
+> You can adjust the values for the SMART_GATE_ID and ALLOWED_TRIBE_ID in the .env file as needed, though they are optional.
 
 ### Step 4: Link Gates
 To use the smart gates, you need to link them together to create a connection. To link the source and destination gates through a script use:
@@ -96,7 +99,7 @@ pnpm link-gates
 To test the smart gate and check the canJump, use the following command:
 
 ```bash
-pnpm execute
+pnpm can-jump
 ```
 
 ## Deployment To The Game (Stillness)
@@ -124,8 +127,8 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
-RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
+RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
@@ -148,7 +151,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or corporation name as your namespace.
+> [!TIP]
+> Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -205,7 +209,6 @@ pnpm run deploy:pyrope
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-
 <div align="center">
 <img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
 </div>
@@ -237,28 +240,28 @@ For Stillness, the Smart Gate ID is available once you have deployed an Smart Ga
 
 4. Repeat the above steps for the DESTINATION_GATE_ID value.
 
-#### Step 1.2: Allowed Corp ID
+#### Step 1.2: Allowed Tribe ID
 
-Now set the ALLOWED_CORP_ID variable.
+Now set the ALLOWED_TRIBE_ID variable.
 
-1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
 
-2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 
-3. Use the **"corpId"** value which should be in:
+3. Use the **"tribeId"** value which should be in:
     ```json
     {
         "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
         "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
-        "corpId": "98000002",
+        "tribeId": "98000002",
         "name": "CCP Red Dragon",
         ...
     ```
 
-4. Set the ALLOWED_CORP_ID variable in the [.env](./packages/contracts/.env) file.
+4. Set the ALLOWED_TRIBE_ID variable in the [.env](./packages/contracts/.env) file.
 
     ```bash
-    ALLOWED_CORP_ID=98000002
+    ALLOWED_TRIBE_ID=98000002
     ```
 
 You can also set these values automatically using the below command:
@@ -274,7 +277,8 @@ To configure which smart gates will be used, run:
 pnpm configure
 ```
 
-> You can alter the gate ID's and the allowed corp in the .env file as needed.
+> [!NOTE]
+> You can alter the gate ID's and the allowed tribe in the .env file as needed.
 
 ### Troubleshooting
 
@@ -284,7 +288,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.
+3. **Not able to jump even though it's the correct tribe**: Ensure you have set the correct tribe ID set in the `contracts/.env` file.
 
 ## Need Help? 
 

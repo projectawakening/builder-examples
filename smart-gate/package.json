@@ -12,21 +12,27 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.2.14",
-    "@latticexyz/common": "2.2.14",
-    "@latticexyz/explorer": "2.2.14",
+    "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/common": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/explorer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@types/debug": "4.1.7",
-    "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
-    "@latticexyz/store": "2.2.14",
-    "eslint": "8.57.0",
+    "@typescript-eslint/eslint-plugin": "8.34.1",
+    "@typescript-eslint/parser": "8.34.1",
+    "eslint": "9.29.0",
     "mprocs": "^0.7.1",
-    "shx": "^0.3.4",
     "typescript": "5.4.2"
   },
   "engines": {
-    "node": "^18",
+    "node": "^20",
     "pnpm": ">=9.15.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "better-sqlite3": "^9.4.3",
+      "@eveworld/smart-object-framework-v2": "0.1.1",
+      "react": "^19.0.0"
+    }
   },
   "packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }

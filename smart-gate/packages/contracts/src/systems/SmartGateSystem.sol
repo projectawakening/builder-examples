@@ -2,48 +2,53 @@
 pragma solidity >=0.8.24;
 
 import { console } from "forge-std/console.sol";
-import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
-import { WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { RESOURCE_SYSTEM } from "@latticexyz/world/src/worldResourceTypes.sol";
 
-import { CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
+import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
+import { OwnershipByObject } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/OwnershipByObject.sol";
+import { accessSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/AccessSystemLib.sol";
+
 import { GateAccess } from "../codegen/tables/GateAccess.sol";
-
-import { IERC721 } from "@eveworld/world/src/modules/eve-erc721-puppet/IERC721.sol";
-
-import { DeployableTokenTable } from "@eveworld/world/src/codegen/tables/DeployableTokenTable.sol";
 
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
 contract SmartGateSystem is System {  
   /**
-   * @dev Only owner modifer
+   * @dev Check if a character can jump to a gate
+   * @param characterId The ID of the character to check
+   * @param sourceGateId The ID of the gate to check
+   * @param destinationGateId The ID of the gate to jump to
+   * @return bool True if the character can jump, false otherwise
    */
-  modifier onlyOwner(uint256 smartObjectId) {
-    address ssuOwner = IERC721(DeployableTokenTable.getErc721Address()).ownerOf(smartObjectId);
-    require(_msgSender() == ssuOwner, "Only owner can call this function");
-    _;
-  }
-
   function canJump(uint256 characterId, uint256 sourceGateId, uint256 destinationGateId) public view returns (bool) {
-    //Get the allowed corp
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
+    //Get the allowed tribe
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
 
     //Get the character corp
-    uint256 characterCorp = CharactersTable.getCorpId(characterId);
+    uint256 characterTribe = Characters.getTribeId(characterId);
 
-    //If the corp is the same, allow jumps
-    if(allowedCorp == characterCorp){
+    //If the tribe is the same, allow jumps
+    if (allowedTribe == characterTribe) {
       return true;
-    } else{
+    } else {
       return false;
     }    
   }
 
-  function setAllowedCorp(uint256 sourceGateId, uint256 corpID) public onlyOwner(sourceGateId) {
-    GateAccess.set(sourceGateId, corpID);
+  /**
+   * @dev Set the allowed tribe for a gate
+   * @param sourceGateId The ID of the gate to set the allowed tribe for
+   * @param tribeID The ID of the tribe to allow
+   */
+  function setAllowedTribe(uint256 sourceGateId, uint256 tribeID) public {
+    require(tribeID > 0, "Tribe ID cannot be 0 or negative");
+
+    //Ensure the caller is the owner of the gate
+    address gateOwner = OwnershipByObject.get(sourceGateId);
+    require(gateOwner == _msgSender(), "Access Denied. You are not the owner of this gate.");
+
+    //Set the allowed tribe
+    GateAccess.set(sourceGateId, tribeID);
   }
 }
