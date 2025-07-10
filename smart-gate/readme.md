@@ -67,13 +67,13 @@ Generate the test data by:
 
 #### Step 2.1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 #### Step 2.2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
 > [!NOTE]
 > This will create the on-chain Gates, fuel them, bring them online, and create a test smart character.
@@ -82,7 +82,7 @@ Generate the test data by:
 To configure which smart gates will be used and the allowed tribe ID, run:
 
 ```bash
-pnpm configure-smart-gate
+pnpm configure
 ```
 
 > [!NOTE]
@@ -208,7 +208,6 @@ pnpm run deploy:pyrope
 ```
 
 Once the deployment is successful, you'll see a screen similar to the one below.
-
 
 <div align="center">
 <img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
