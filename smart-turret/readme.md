@@ -49,7 +49,7 @@ Then, run the following commands:
 
 1. Navigate to the example directory:
     ```bash
-    cd smart-storage-unit
+    cd smart-turret
     ```
 
 2. Install the Solidity dependencies for the contracts:
@@ -90,6 +90,7 @@ Generate the test data by:
 pnpm mock-data
 ```
 
+> [!NOTE]
 > This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
@@ -99,6 +100,7 @@ To set the smart turret ID, and allowed tribe ID use:
 pnpm configure
 ```
 
+> [!NOTE]
 > You can adjust the values of the Smart Turret ID and allowed tribe ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
@@ -280,6 +282,7 @@ To configure which Smart Turret the contract uses and the allowed tribe, run:
 pnpm configure
 ```
 
+> [!NOTE]
 > You can alter the smart turret ID and allowed tribe ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
