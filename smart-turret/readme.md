@@ -34,7 +34,8 @@ This example alters the Smart Turret to have two specific behaviors:
    
 2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example. 
 
-> 🔧 **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
+> [!NOTE]
+> **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
 
 ## Deployment and Testing in Local Environment
 To deploy the example to your local world hosted on Docker, follow the below steps.
@@ -66,7 +67,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
@@ -80,13 +82,13 @@ Generate the test data by:
 
 1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 2. To generate mock data for testing the Smart Turret logic on the local world, run the following command. This generates and deploys the smart turret deployable and items.
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
 > This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
@@ -155,7 +157,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or tribe name as your namespace.
+> [!TIP]
+> Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
