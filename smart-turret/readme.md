@@ -117,7 +117,7 @@ To deploy the example to the game server which is named Stillness, follow the be
 Move to the example directory with:
 
 ```bash
-cd smart-storage-unit/packages/contracts
+cd smart-turret/packages/contracts
 ```
 
 Then install the Solidity dependencies for the contracts:
@@ -209,7 +209,7 @@ pnpm set-key
 
 ### Step 5: Deploy the Contract
 
-Then deploy the SSU contracts using:
+Then deploy the Smart Turret contracts using:
 
 ```bash
 pnpm run deploy:pyrope
@@ -232,10 +232,10 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
 
 1. Right click your Smart Turret and press Interact
 
-2. Copy the smart turret id.
+2. Copy the smart turret id through the copy icon.
 
 <div align="center">
-<img src="../readme-imgs/turret-id.png" alt="Turret ID" width="800">
+<img src="../readme-imgs/ssu-id.png" alt="Turret ID" width="800">
 </div>
 
 3. Set the `SMART_TURRET_ID` in the [.env](./packages/contracts/.env) file.
