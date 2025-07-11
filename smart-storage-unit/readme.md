@@ -104,16 +104,15 @@ To configure which items should be traded and the ratio's to trade for run:
 pnpm configure
 ```
 
-> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+> [!NOTE]
+> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional to change for local development.
 
 ### Step 5: Test The SSU (Optional)
-To test the SSU, execute the following command:
+To test the SSU, execute the following command which will run a series of pre-defined tests to ensure the contracts are working:
 
 ```bash
 pnpm execute
 ```
-
-> This will run a series of pre-developed tests to ensure the SSU is working as expected.
 
 ## Deployment to The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
