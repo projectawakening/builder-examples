@@ -56,7 +56,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
@@ -72,10 +73,12 @@ IN_RATIO=1
 OUT_RATIO=2
 ```
 
+> [!NOTE]
 > **Trading Ratio Example:**  
 > With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
-> 
-> ⚠️ **Warning:** Choose your ratios carefully to avoid accidentally depleting your item supply!
+
+> [!WARN]
+> Choose your ratios carefully to avoid accidentally depleting your item supply!
 
 
 ### Step 3: Mock data for the existing world **(Local Development Only)**
@@ -161,7 +164,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or corporation name as your namespace.
+> [!TIP]
+> Consider using your username or corporation name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -235,7 +239,8 @@ Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the ac
 TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-> ⚠️ Note: This is only for testing, and an example not requiring this is on it's way.
+> [!NOTE] 
+> This is only for testing, and an example not requiring this is on it's way.
 
 #### Step 1.2: Smart Storage Unit ID (SSU ID)
 
