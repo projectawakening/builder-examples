@@ -1,58 +1,30 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { ResourceIds } from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 
-import { Utils } from "../src/systems/Utils.sol";
-import { Utils as SmartTurretUtils } from "@eveworld/world/src/modules/smart-turret/Utils.sol";
-import { SmartTurretLib } from "@eveworld/world/src/modules/smart-turret/SmartTurretLib.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world/src/modules/smart-turret/types.sol";
-import { DeployableState, DeployableStateData } from "@eveworld/world/src/codegen/tables/DeployableState.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { Utils as SmartCharacterUtils } from "@eveworld/world/src/modules/smart-character/Utils.sol";
-import { SmartTurretConfigTable } from "@eveworld/world/src/codegen/tables/SmartTurretConfigTable.sol";
-import { CharactersTableData, CharactersTable } from "@eveworld/world/src/codegen/tables/CharactersTable.sol";
+import { TargetPriority, Turret, SmartTurretTarget } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
+import { Tenant, Characters, CharactersByAccount } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
 
+import { Utils } from "../src/systems/Utils.sol";
 import { SmartTurretSystem } from "../src/systems/SmartTurretSystem.sol";
 import { TurretAllowlist } from "../src/codegen/tables/TurretAllowlist.sol";
 
 contract ExecuteInProximity is Script {
-  using SmartTurretUtils for bytes14;
-  using SmartTurretLib for SmartTurretLib.World;
-  using SmartDeployableUtils for bytes14;
-  using SmartCharacterUtils for bytes14;
+  IBaseWorld world;
+  uint256 smartTurretId;
 
-  SmartTurretLib.World smartTurret;
-
-  function run(address worldAddress) external {
-    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
-    uint256 playerPrivateKey = vm.envUint("PRIVATE_KEY");
-    vm.startBroadcast(playerPrivateKey);
-
-    StoreSwitch.setStoreAddress(worldAddress);
-    IBaseWorld world = IBaseWorld(worldAddress);
-
-    smartTurret = SmartTurretLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
-
-    uint256 smartTurretId = vm.envUint("SMART_TURRET_ID");
-    uint256 allowedCorpId = vm.envUint("ALLOWED_CORP_ID");
-
-    console.log("Corp ID of character 123:", CharactersTable.getCorpId(123));
-    console.log("Corp ID of character 77777:", CharactersTable.getCorpId(77777));
-
-    uint256 allowedCorp = TurretAllowlist.get();
-
-    console.log("\n");
-    console.log("ALLOWED CORP FROM MUD: ", allowedCorp);
-    console.log("\n");
+  function testWithCharacter(uint256 characterId, uint256[] memory health) internal {
+    console.log(
+      "Tribe ID of character", 
+      vm.toString(characterId), 
+      ":", 
+      vm.toString(Characters.getTribeId(characterId))
+    );
 
     ResourceId systemId = Utils.smartTurretSystemId();
 
@@ -62,10 +34,10 @@ contract ExecuteInProximity is Script {
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
       shipTypeId: 1,
-      characterId: 123,
-      hpRatio: 100,
-      shieldRatio: 100,
-      armorRatio: 100
+      characterId: characterId,
+      hpRatio: health[0],
+      armorRatio: health[1],
+      shieldRatio: health[2]
     });
 
     inputQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
@@ -75,19 +47,53 @@ contract ExecuteInProximity is Script {
         systemId,
         abi.encodeCall(
           SmartTurretSystem.inProximity,
-          (smartTurretId, 11111, inputQueue, turret, turretTarget)
+          (smartTurretId, characterId, inputQueue, turret, turretTarget)
         )
       ),
       (TargetPriority[])
     );
 
-    console.log("Input Target Queue Length: ", inputQueue.length); //1
-    console.log("Output Target Queue Length: ", outputTargetQueue.length); //1
-
-    vm.stopBroadcast();
+    console.log("Input Target Queue Length: ", vm.toString(inputQueue.length));
+    console.log("Output Target Queue Length: ", vm.toString(outputTargetQueue.length));
   }
 
-  function _namespace() internal pure returns (bytes14 namespace) {
-    return FRONTIER_WORLD_DEPLOYMENT_NAMESPACE;
+  function run(address worldAddress) external {
+    // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    address admin = vm.addr(adminPrivateKey);
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    address player = vm.addr(playerPrivateKey);
+
+    vm.startBroadcast(adminPrivateKey);
+
+    StoreSwitch.setStoreAddress(worldAddress);
+    world = IBaseWorld(worldAddress);
+
+    smartTurretId = vm.envUint("SMART_TURRET_ID");
+
+    uint256 adminCharacterId = CharactersByAccount.getSmartObjectId(admin);
+    uint256 playerCharacterId = CharactersByAccount.getSmartObjectId(player);
+
+    require(
+      adminCharacterId != 0 && playerCharacterId != 0, 
+      "Characters do not exist. Run 'pnpm mock-data' to generate them."
+    );
+
+    uint256 allowedTribe = TurretAllowlist.get();
+    require(allowedTribe != 0, "MUD Data not configured. Run 'pnpm configure' to configure it.");
+
+    console.log("-------------------\nTEST SETUP");
+    console.log("ALLOWED TRIBE FROM MUD: ", vm.toString(allowedTribe));
+
+    uint256[] memory health = new uint256[](3);
+    (health[0], health[1], health[2]) = (100, 100, 100);
+
+    console.log("-------------------\nTESTING CORRECT TRIBE");
+    testWithCharacter(adminCharacterId, health);
+
+    console.log("-------------------\nTESTING INCORRECT TRIBE");
+    testWithCharacter(playerCharacterId, health);
+
+    vm.stopBroadcast();
   }
 }
