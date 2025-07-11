@@ -74,10 +74,9 @@ OUT_RATIO=2
 ```
 
 > [!NOTE]
-> **Trading Ratio Example:**  
-> With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
+> **Trading Ratio Example:** With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
 
-> [!WARN]
+> [!WARNING]
 > Choose your ratios carefully to avoid accidentally depleting your item supply!
 
 
@@ -313,9 +312,11 @@ To configure which items should be traded and the ratio's to trade for run:
 pnpm configure
 ```
 
+> [!NOTE]
 > You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed.
 
-> ⚠️ **Warning:** Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
+> [!IMPORTANT]
+> Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
 
 ### Step 3: Execute the trade
 To trade items, make sure the items are in the inventories and then you need to run:
