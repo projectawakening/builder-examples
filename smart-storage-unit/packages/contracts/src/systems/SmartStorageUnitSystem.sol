@@ -18,13 +18,13 @@ import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/names
 import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
 import { State } from "@eveworld/world-v2/src/codegen/common.sol";
 import { OwnershipSystem, ownershipSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/OwnershipSystemLib.sol";
+import { OwnershipByObject } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/OwnershipByObject.sol";
 
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
 import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
 import { InventoryInteractSystem, inventoryInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventoryInteractSystemLib.sol";
-
 import { InventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 
 import { RatioConfig, RatioConfigData } from "../codegen/tables/RatioConfig.sol";
@@ -50,6 +50,10 @@ contract SmartStorageUnitSystem is System {
     uint64 ratioIn,
     uint64 ratioOut
   ) public {
+    //Ensure the caller is the owner of the SSU
+    address ssuOwner = OwnershipByObject.get(smartObjectId);
+    require(ssuOwner == _msgSender(), "Access Denied. You are not the owner of this SSU.");
+
     // Check for invalid ratios
     require(ratioIn > 0 && ratioOut > 0, "Ratio cannot be less than 1");
 

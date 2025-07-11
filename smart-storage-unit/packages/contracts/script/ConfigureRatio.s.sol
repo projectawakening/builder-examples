@@ -21,9 +21,7 @@ import { Utils } from "../src/systems/Utils.sol";
  * @dev It also gives permissions to the custom contract to transfer from and to the SSU (to and from ephemeral inventories)
  */
 contract ConfigureRatio is Script {
-  uint256 SSU_TYPE_ID = 77917;
-  uint256 ssuItemId = 565656565;
-
+  
   function run(address worldAddress) external {
     uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
     StoreSwitch.setStoreAddress(worldAddress);
@@ -40,7 +38,7 @@ contract ConfigureRatio is Script {
     uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOut);
 
     //Configure the vending machine
-    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, ssuItemId);
+    uint256 smartStorageUnitId = vm.envUint("SSU_ID");
     console.log("Smart Storage Unit ID: ", vm.toString(smartStorageUnitId));
     console.log("Item In Smart Object ID: ", vm.toString(itemInSmartObjectId));
 

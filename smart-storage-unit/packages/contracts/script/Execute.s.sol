@@ -42,7 +42,7 @@ contract Execute is Script {
 
     bytes32 tenantId = Tenant.getTenantId();
 
-    smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, ssuItemId);
+    smartStorageUnitId = vm.envUint("SSU_ID");
 
     vm.startBroadcast(adminPrivateKey);
 

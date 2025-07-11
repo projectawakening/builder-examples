@@ -73,16 +73,14 @@ contract MockData is Script {
 
     vm.startBroadcast(adminPrivateKey);
     if (DeployableState.getCurrentState(smartStorageUnitId) != State.NULL) {
-      console.log("SSU already created");
+      console.log("SSU already created ID:", vm.toString(smartStorageUnitId));
     } else {
       console.log("Creating SSU");
       _createAnchorAndOnline(smartStorageUnitId, tenantId, admin);
     }
 
-    console.log("Depositing to inventory");
     // Create and deposit inventory items
     _depositToInventory(smartStorageUnitId, tenantId, admin);
-    console.log("Depositing to ephemeral inventory");
     _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
     console.log("Depositing to inventory and ephemeral inventory complete");
 
@@ -131,9 +129,8 @@ contract MockData is Script {
       abi.encodeCall(SmartStorageUnitSystem.createAndAnchorStorageUnit, (deployableParams, 100000000, 100000000, 0))
     );
     
-    console.log("SSU created and anchored successfully");
     deployableSystem.bringOnline(smartStorageUnitId);
-    console.log("SSU brought online");
+    console.log("SSU created anchored and brought online");
   }
 
   function _depositToInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
