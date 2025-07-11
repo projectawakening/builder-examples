@@ -7,6 +7,10 @@ import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 
+/**
+ * @dev This script is run after deploying the smart turret contracts.
+ * You can change the logic here to do anything you want on deployment. 
+ */
 contract PostDeploy is Script {
   function run(address worldAddress) external {
     // Specify a store so that you can use tables directly in PostDeploy

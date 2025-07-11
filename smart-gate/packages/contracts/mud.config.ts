@@ -6,7 +6,7 @@ export default defineWorld({
     GateAccess: {
       schema: {
         smartObjectId: "uint256",
-        corp: "uint256"
+        tribeId: "uint256"
       },
       key: ["smartObjectId"],
     }

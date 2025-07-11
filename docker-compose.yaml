@@ -17,10 +17,12 @@ services:
 
   world-deployer:
     container_name: world-deployer
-    image: ghcr.io/projectawakening/world-chain-deployer-image:0.0.21
+    image: ghcr.io/projectawakening/world-chain-deployer-image:0.1.8
     platform: linux/amd64
     depends_on:
       foundry:
         condition: service_healthy
-    command: "--rpc-url http://foundry:8546 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    command: "deploy-v2 --rpc-url http://foundry:8546 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
     tty: true
+    env_file:
+      - world.env

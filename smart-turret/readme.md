@@ -30,11 +30,12 @@ For additional details on the Smart Turret, see our [Documentation](https://docs
 
 This example alters the Smart Turret to have two specific behaviors:
 
-1. It does not shoot at anyone in the specified corporation.
+1. It does not shoot at anyone in the specified tribe.
    
 2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example. 
 
-> 🔧 **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
+> [!NOTE]
+> **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
 
 ## Deployment and Testing in Local Environment
 To deploy the example to your local world hosted on Docker, follow the below steps.
@@ -48,7 +49,7 @@ Then, run the following commands:
 
 1. Navigate to the example directory:
     ```bash
-    cd smart-storage-unit
+    cd smart-turret
     ```
 
 2. Install the Solidity dependencies for the contracts:
@@ -66,7 +67,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
@@ -80,24 +82,26 @@ Generate the test data by:
 
 1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 2. To generate mock data for testing the Smart Turret logic on the local world, run the following command. This generates and deploys the smart turret deployable and items.
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
+> [!NOTE]
 > This will create the on-chain turret, fuel it, bring it online, and create a test smart character.
 
 ### Step 2: Configure Smart Turret
-To set the smart turret ID, and allowed corporation ID use:
+To set the smart turret ID, and allowed tribe ID use:
 
 ```bash
 pnpm configure
 ```
 
-> You can adjust the values of the Smart Turret ID and allowed corp ID in the .env file as needed, though they are optional.
+> [!NOTE]
+> You can adjust the values of the Smart Turret ID and allowed tribe ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
 To test the custom Smart Turret functionality you can use the follow command:
@@ -113,7 +117,7 @@ To deploy the example to the game server which is named Stillness, follow the be
 Move to the example directory with:
 
 ```bash
-cd smart-storage-unit/packages/contracts
+cd smart-turret/packages/contracts
 ```
 
 Then install the Solidity dependencies for the contracts:
@@ -131,8 +135,8 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
-RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
+RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
@@ -155,7 +159,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or corporation name as your namespace.
+> [!TIP]
+> Consider using your username or tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -204,7 +209,7 @@ pnpm set-key
 
 ### Step 5: Deploy the Contract
 
-Then deploy the SSU contracts using:
+Then deploy the Smart Turret contracts using:
 
 ```bash
 pnpm run deploy:pyrope
@@ -227,10 +232,10 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
 
 1. Right click your Smart Turret and press Interact
 
-2. Copy the smart turret id.
+2. Copy the smart turret id through the copy icon.
 
 <div align="center">
-<img src="../readme-imgs/turret-id.png" alt="Turret ID" width="800">
+<img src="../readme-imgs/ssu-id.png" alt="Turret ID" width="800">
 </div>
 
 3. Set the `SMART_TURRET_ID` in the [.env](./packages/contracts/.env) file.
@@ -239,30 +244,30 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
     SMART_TURRET_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
     ```
 
-#### Step 1.2: Allowed Corp ID
+#### Step 1.2: Allowed Tribe ID
 
-Now set the `ALLOWED_CORP_ID` variable.
+Now set the `ALLOWED_TRIBE_ID` variable.
 
-1. Retrieve your character address from searching your username here: [Smart Characters World API](https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters)
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
 
-2. Use this link: https://blockchain-gateway-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 
-3. Use the **"corpId"** value which should be in:
-    ```json
-    {
-        "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
-        "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
-        "corpId": "98000002",
-        "name": "CCP Red Dragon",
-        ...
-    ```
+3. Use the **"tribeId"** value which should be in:
 
-4. Set the `ALLOWED_CORP_ID` variable in the [.env](./packages/contracts/.env) file.
+```json
+{
+    "address": "0x9dcd62f5c02e7066a3154bc3ba029e85345a5ce9",
+    "id": "27968150122480120904130498262405934486185445355744041492535994892832439518842",
+    "tribeId": "98000002",
+    "name": "CCP Red Dragon",
+    ...
+```
 
-    ```bash
-    ALLOWED_CORP_ID=98000002
-    ```
-    
+4. Set the `ALLOWED_TRIBE_ID` variable in the [.env](./packages/contracts/.env) file.
+
+```bash
+ALLOWED_TRIBE_ID=98000002
+```
 
 You can also set these values automatically using the below command:
 
@@ -271,13 +276,14 @@ pnpm set-config
 ```
 
 ### Step 2: Configure Smart Turret
-To configure which Smart Turret the contract uses and the allowed corporation, run:
+To configure which Smart Turret the contract uses and the allowed tribe, run:
 
 ```bash
 pnpm configure
 ```
 
-> You can alter the smart turret ID and allowed corporation ID in the .env file or using the config command as needed.
+> [!NOTE]
+> You can alter the smart turret ID and allowed tribe ID in the .env file or using the config command as needed.
 
 ### Troubleshooting
 
@@ -287,7 +293,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
    
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Turret ID Mismatch (Devnet)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
+3. **Turret ID Mismatch (Stillness)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
 
 ## Need Help? 
 

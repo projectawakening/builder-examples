@@ -47,9 +47,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash 
 ```
 
 #### Installing Node
-Install Node version 18 by using this command:
+Install Node version 20 by using this command:
 ```bash
-nvm install 18
+nvm install 20
 ```
 
 #### Installing PNPM
