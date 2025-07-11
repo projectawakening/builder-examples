@@ -86,14 +86,15 @@ Generate the test data by:
 
 1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 2. To generate mock data for testing the SSU logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
+> [!NOTE]
 > This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 4: Configure SSU
@@ -295,7 +296,8 @@ IN_RATIO=1
 OUT_RATIO=2
 ```
 
-> ⚠️ Note: Be careful not to accidentally give away your whole supply of items with the wrong ratio.
+> [!WARNING]
+> **Note**: Be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ---
 
