@@ -3,127 +3,127 @@ pragma solidity >=0.8.24;
 
 import "forge-std/Test.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
-import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 
-import { IBaseWorld } from "@eveworld/world/src/codegen/world/IWorld.sol";
-import { System } from "@latticexyz/world/src/System.sol";
-import { InventoryItem } from "@eveworld/world/src/modules/inventory/types.sol";
-import { Utils as SmartDeployableUtils } from "@eveworld/world/src/modules/smart-deployable/Utils.sol";
-import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLib.sol";
-import { SmartDeployableLib } from "@eveworld/world/src/modules/smart-deployable/SmartDeployableLib.sol";
-import { Coord, WorldPosition, EntityRecordData } from "@eveworld/world/src/modules/smart-storage-unit/types.sol";
-import { SmartObjectData } from "@eveworld/world/src/modules/smart-deployable/types.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
-import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/GlobalDeployableState.sol";
-import { SmartGateLib } from "@eveworld/world/src/modules/smart-gate/SmartGateLib.sol";
-import { EntityRecordLib } from "@eveworld/world/src/modules/entity-record/EntityRecordLib.sol";
-import { SmartCharacterLib } from "@eveworld/world/src/modules/smart-character/SmartCharacterLib.sol";
-import { EntityRecordData as CharacterEntityRecord } from "@eveworld/world/src/modules/smart-character/types.sol";
-import { EntityRecordOffchainTableData } from "@eveworld/world/src/codegen/tables/EntityRecordOffchainTable.sol";
-import { CharactersByAddressTable } from "@eveworld/world/src/codegen/tables/CharactersByAddressTable.sol";
-import { DeployableState, DeployableStateData } from "@eveworld/world/src/codegen/tables/DeployableState.sol";
-import { State } from "@eveworld/world/src/modules/smart-deployable/types.sol";
-import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
-import { GlobalDeployableState } from "@eveworld/world/src/codegen/tables/GlobalDeployableState.sol";
+import { console } from "forge-std/console.sol";
+import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
+import { UNLIMITED_DELEGATION } from "@latticexyz/world/src/constants.sol";
 
+import { SmartCharacterSystem, smartCharacterSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartCharacterSystemLib.sol";
+import { Location, LocationData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Location.sol";
+import { DeployableState } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/DeployableState.sol";
+import { FuelSystem, fuelSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/FuelSystemLib.sol";
+import { FuelParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/fuel/types.sol";
+import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/entity-record/types.sol";
+import { Tenant, Characters, CharactersByAccount, EntityRecord } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { CreateAndAnchorParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/deployable/types.sol";
+import { DeployableSystem, deployableSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/DeployableSystemLib.sol";
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+import { State } from "@eveworld/world-v2/src/codegen/common.sol";
+import { entityRecordSystem} from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EntityRecordSystemLib.sol";
+import { SmartGateSystem, smartGateSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/SmartGateSystemLib.sol";
+
+import { SmartGateSystem as CustomSmartGateSystem } from "../src/systems/SmartGateSystem.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Utils } from "../src/systems/Utils.sol";
-import { SmartGateSystem } from "../src/systems/SmartGateSystem.sol";
 import { GateAccess } from "../src/codegen/tables/GateAccess.sol";
 
-
 contract SmartGateTest is MudTest {
-  using SmartDeployableLib for SmartDeployableLib.World;
-  using SmartGateLib for SmartGateLib.World;
-  using EntityRecordLib for EntityRecordLib.World;
-  using SmartCharacterLib for SmartCharacterLib.World;
-  using SmartDeployableUtils for bytes14;
-
-  SmartDeployableLib.World smartDeployable;
-  SmartGateLib.World smartGate;
-  EntityRecordLib.World entityRecord;
-  SmartCharacterLib.World smartCharacter;
   ResourceId systemId = Utils.smartGateSystemId();
 
   IWorld world;
 
-  address admin;
+  bytes32 tenantId;
 
+  address admin;
+  address player;
+
+  //Smart Gate Smart Object IDs (These are generated from the Smart Gate IDs)
   uint256 sourceGateId;
   uint256 destinationGateId;
-  uint256 corpID;
 
-  //Setup for the tests
+  //Tribe that can use the Smart Gate
+  uint256 ALLOWED_TRIBE_ID = 500;
+
+  //Character IDs
+  uint256 ADMIN_CHARACTER_ID = 35000;
+  uint256 PLAYER_CHARACTER_ID = 400;
+
+  //Smart Gate IDs
+  uint256 SOURCE_GATE_ID = 9000;
+  uint256 DESTINATION_GATE_ID = 9001; 
+
+  //Type IDs
+  uint256 CHARACTER_TYPE_ID = 42000000100;
+  uint256 SMART_GATE_TYPE_ID = 84955;
+  uint256 FUEL_TYPE_ID = 78437;
+
+  function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
+    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+
+    if (CharactersByAccount.get(account) == 0) {
+      smartCharacterSystem.createCharacter(
+        smartObjectId, 
+        account, 
+        tribeId, 
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
+      );
+    }
+  }
+
   function setUp() public override {
     super.setUp();
+
     world = IWorld(worldAddress);
+    StoreSwitch.setStoreAddress(worldAddress);
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     admin = vm.addr(deployerPrivateKey);
 
-    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
-    address player = vm.addr(playerPrivateKey);
+    player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls
 
-    smartDeployable = SmartDeployableLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    tenantId = Tenant.getTenantId();
 
-    smartGate = SmartGateLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    vm.startPrank(player, admin);
 
-    entityRecord = EntityRecordLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    safeCreateCharacter(admin, ADMIN_CHARACTER_ID, 7777, "adminCharacter");
+    safeCreateCharacter(player, PLAYER_CHARACTER_ID, ALLOWED_TRIBE_ID, "playerCharacter");
 
-    smartCharacter = SmartCharacterLib.World({
-      iface: IBaseWorld(worldAddress),
-      namespace: FRONTIER_WORLD_DEPLOYMENT_NAMESPACE
-    });
+    vm.stopPrank();
 
-    //Get the allowed corp
-    corpID = vm.envUint("ALLOWED_CORP_ID");
-    sourceGateId = vm.envUint("SOURCE_GATE_ID");
-    sourceGateId = vm.envUint("DESTINATION_GATE_ID");
+    // Add delegation setup
+    vm.startPrank(player);
+    world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
+    vm.stopPrank();
 
-    if (CharactersByAddressTable.get(admin) == 0) {
-      smartCharacter.createCharacter(
-        400,
-        admin,
-        corpID,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "ron", dappURL: "noURL", description: "." }),
-        ""
-      );
-    }
-    if (CharactersByAddressTable.get(player) == 0) {
-      smartCharacter.createCharacter(
-        456,
-        player,
-        4041,
-        CharacterEntityRecord({ typeId: 123, itemId: 234, volume: 100 }),
-        EntityRecordOffchainTableData({ name: "mockOwnerChar", dappURL: "noURL", description: "." }),
-        ""
-      );
+    sourceGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
+    destinationGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
+
+    vm.startPrank(player, admin);
+
+    //Create the source gate if it doesn't exist
+    if(DeployableState.getCurrentState(sourceGateId) != State.NULL){
+      console.log("Source gate already exists");
+    } else{
+      createAnchorAndOnline(sourceGateId, SOURCE_GATE_ID, player);
     }
 
-    createAnchorAndOnline(sourceGateId, admin);
-    createAnchorAndOnline(destinationGateId, admin);     
+    //Create the destination gate if it doesn't exist
+    if(DeployableState.getCurrentState(destinationGateId) != State.NULL){
+      console.log("Destination gate already exists");
+    } else{
+      createAnchorAndOnline(destinationGateId, DESTINATION_GATE_ID, player);
+    }
+
+    vm.stopPrank();
 
     vm.startPrank(admin);
-    world.call(
-      systemId,
-      abi.encodeCall(
-        SmartGateSystem.setAllowedCorp,
-        (sourceGateId, corpID)
-      )
-    );
+    // Set the allowed tribe directly
+    GateAccess.set(sourceGateId, ALLOWED_TRIBE_ID);
+
     vm.stopPrank();
-  }
+  }  
 
   //Test if the world exists
   function testWorldExists() public {
@@ -135,49 +135,77 @@ contract SmartGateTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
-  function testSetAllowedCorp() public {
+  //Test setting the allowed tribe
+  function testSetAllowedTribe() public {
+    vm.startPrank(player, admin);
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartGateSystem.setAllowedTribe,
+        (sourceGateId, 200)
+      )
+    );
+
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
+
+    assertEq(allowedTribe, 200, "Allowed tribe should now be 200");
+
+    vm.stopPrank();
+  }
+
+  //Test setting the allowed tribe to 0
+  function testSetAllowedTribeIncorrectTribeID() public {
+    vm.startPrank(player, admin);
+
+    vm.expectRevert("Tribe ID cannot be 0 or negative");
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartGateSystem.setAllowedTribe,
+        (sourceGateId, 0)
+      )
+    );
+
+    vm.stopPrank();
+  }
+
+  //Test if the setAllowedTribe function can only be called by the admin
+  function testSetAllowedTribeNotAdmin() public {
+    vm.expectRevert("Access Denied. You are not the owner of this gate.");
+
     vm.startPrank(admin);
 
     world.call(
       systemId,
       abi.encodeCall(
-        SmartGateSystem.setAllowedCorp,
+        CustomSmartGateSystem.setAllowedTribe,
         (sourceGateId, 200)
       )
     );
-
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
-
-    assertEq(allowedCorp, 200, "Allowed corp should now be 200");
 
     vm.stopPrank();
-  }
 
-  function testSetAllowedCorpNotAdmin() public {
-    vm.expectRevert();
+    uint256 allowedTribe = GateAccess.get(sourceGateId);
 
-    world.call(
-      systemId,
-      abi.encodeCall(
-        SmartGateSystem.setAllowedCorp,
-        (sourceGateId, 200)
-      )
-    );
-
-    uint256 allowedCorp = GateAccess.get(sourceGateId);
-
-    assertEq(allowedCorp, corpID, "Allowed corp should be set to ALLOWED_CORP_ID");
+    assertEq(allowedTribe, ALLOWED_TRIBE_ID, "Allowed tribe should be set to tribeID");
   }
 
   //Test can jump to the destination gate
   function testSourceCanJumpAllowed() public {    
+    uint256 characterId = ObjectIdLib.calculateSingletonId(tenantId, PLAYER_CHARACTER_ID);
+
+    uint256 characterTribe = Characters.getTribeId(characterId);
+    assertEq(characterTribe, ALLOWED_TRIBE_ID, "Character tribe should be the same as the allowed tribe");
+
     //Test acccess
     bool canJumpResult = abi.decode(
       world.call(
         systemId,
         abi.encodeCall(
-          SmartGateSystem.canJump,
-          (400, sourceGateId, destinationGateId)
+          CustomSmartGateSystem.canJump,
+          (characterId, sourceGateId, destinationGateId)
         )
       ),
       (bool)
@@ -192,8 +220,8 @@ contract SmartGateTest is MudTest {
       world.call(
         systemId,
         abi.encodeCall(
-          SmartGateSystem.canJump,
-          (456, sourceGateId, destinationGateId)
+          CustomSmartGateSystem.canJump,
+          (ADMIN_CHARACTER_ID, sourceGateId, destinationGateId)
         )
       ),
       (bool)
@@ -202,25 +230,52 @@ contract SmartGateTest is MudTest {
     assertTrue(canJumpResult == false, "Should not have access to jump to destination");
   }
 
-  function createAnchorAndOnline(uint256 anchoredSmartGateId, address admin) private {
-    //Create and anchor the smart gate and bring online
-    smartGate.createAndAnchorSmartGate(
-      anchoredSmartGateId,
-      EntityRecordData({ typeId: 7888, itemId: 111, volume: 10 }),
-      SmartObjectData({ owner: admin, tokenURI: "test" }),
-      WorldPosition({ solarSystemId: 1, position: Coord({ x: 1, y: 1, z: 1 }) }),
-      1e18,             // fuelUnitVolume,
-      1,                // fuelConsumptionPerMinute,
-      1000000 * 1e18,   // fuelMaxCapacity,
-      100010000 * 1e18  // maxDistance
+  function createAnchorAndOnline(uint256 smartAssemblyId, uint256 itemId, address ownerAddress) private {
+    LocationData memory locationParams = LocationData({ solarSystemId: 30000042, x: 1001, y: 1001, z: 1001 });
+
+    EntityRecordParams memory entityRecordParams = EntityRecordParams({
+      tenantId: tenantId,
+      typeId: SMART_GATE_TYPE_ID,
+      itemId: itemId,
+      volume: 1000
+    });
+
+    CreateAndAnchorParams memory deployableParams = CreateAndAnchorParams({
+      smartObjectId: smartAssemblyId,
+      assemblyType: "SG",
+      entityRecordParams: entityRecordParams,
+      owner: ownerAddress,
+      locationData: locationParams
+    });
+
+    world.callFrom(
+      ownerAddress,
+      smartGateSystem.toResourceId(),
+      abi.encodeCall(
+        SmartGateSystem.createAndAnchorGate,
+        (deployableParams, 100000000, 0)
+      )
     );
 
-    // check global state and resume if needed
-    if (GlobalDeployableState.getIsPaused() == false) {
-      smartDeployable.globalResume();
-    }
+    entityRecordSystem.createMetadata(smartAssemblyId, EntityMetadataParams({
+      name: "Name Here",
+      dappURL: "",
+      description: "Example SSU for the Smart Assembly Scaffold"
+    }));
 
-    smartDeployable.depositFuel(anchoredSmartGateId, 200010);
-    smartDeployable.bringOnline(anchoredSmartGateId);
+    vm.startPrank(admin);
+
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+
+    fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
+      fuelMaxCapacity: 100000000,
+      fuelBurnRateInSeconds: 100000000
+    }));
+
+    vm.startPrank(player, admin);
+
+    fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
+
+    deployableSystem.bringOnline(smartAssemblyId);
   }
 }
