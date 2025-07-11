@@ -19,7 +19,6 @@ import { TurretAllowlist } from "../codegen/tables/TurretAllowlist.sol";
  * @dev This contract is an example for implementing logic to a smart turret
  */
 contract SmartTurretSystem is System {
-
   /**
    * @dev a function to implement logic for Smart Turret based on proximity
    * @param smartTurretId The Smart Turret id
@@ -204,7 +203,9 @@ contract SmartTurretSystem is System {
    * As the targets are prioritized and the game selects the targets in reverse order they are returned.
    */
   function calculateWeight(SmartTurretTarget memory target) internal pure returns (uint256 weight) {
-    weight = 300 - (
+    uint256 MAX_COMBINED_HP_RATIO = 300;
+
+    weight = MAX_COMBINED_HP_RATIO - (
       target.hpRatio + 
       target.shieldRatio + 
       target.armorRatio

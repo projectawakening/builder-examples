@@ -30,7 +30,7 @@ SMART_TURRET_ID=9380263955854871665042465791797081921839195291019534404733630045
 
 # ALLOWED TRIBE
 # What tribe won't be targeted by the turret
-ALLOWED_TRIBE_ID=1000
+ALLOWED_TRIBE_ID=5001
 
 # TESTING CONFIG
 # This is the private key for tests / testing related scripts.
