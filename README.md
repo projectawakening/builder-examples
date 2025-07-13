@@ -30,10 +30,10 @@ To start building, follow the steps below to setup your local development tools 
 --- 
 
 ### Step 1: Installing general tools
-Before you get started you need to either install, or make sure you have the required tools. Install these tools for Linux, if you use a different OS then visit https://docs.evefrontier.com/Tools and follow the guide for your operating system.
+Before you get started you need to either install, or make sure you have the required tools. Install these tools for Linux, if you use a different OS then visit [Tools Setup](https://docs.evefrontier.com/Tools) and follow the guide for your operating system.
 
 #### Installing Git
-Install Git through https://git-scm.com/book/en/v2/Getting-Started-Installing-Git. 
+Install Git through [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). 
 
 To confirm Git has been installed run:
 ```bash
@@ -72,10 +72,10 @@ foundryup
 ### Step 2: Setting up your environment:
 This guide will walk you through setting up a local environment for running a local Anvil node, deploying world contracts using Docker, and pulling ABIs.
 
-### Prerequisites
+#### Prerequisites
 Ensure you have **Docker** installed on your system: [Installation Guide](https://docs.docker.com/get-docker/)
 
-### Deploying world contracts into a local node.
+#### Deploying world contracts into a local node.
 We have provided a docker compose file which bundles the running of the local node/world and deploying the world chain contracts to simulate the existing world. Run that with the command:
 
 ```bash
@@ -94,7 +94,7 @@ Once deployment is complete, you should see an output similar to the one below. 
 
 ![alt text](readme-imgs/docker-deployment.png)
 
-### Retrieving world ABIs (Optional)
+#### Retrieving world ABIs (Optional)
 You can also retrieve the world abis and save them to the root directory from the deployment by running:
 
 ```bash
@@ -112,33 +112,6 @@ cd smart-storage-unit
 cat readme.md
 ```
 
-### Bonus Tip
-
-<details>
-<summary><b>Run the local indexer, explore, interact and observe the state changes using world explorer</b></summary>
-
-From any of the example root folder for example (builder-examples/smart-storage-unit/) run the below command to run a local world explorer to see all changes in realtime:
-
-```bash
-pnpm explorer <worldAddress>
-```
-
-eg: `pnpm explorer 0x8a791620dd6260079bf849dc5567adc3f2fdc318`
-
-The command should then output something like this:
-
-![alt text](readme-imgs/explorer.png)
-
-You can view the state of MUD tables by using the explore tab
-
-![alt text](readme-imgs/query.png)
-
-You can interact with smart contract functions with the interact tab
-
-![alt text](readme-imgs/explorer-view.png)
-</details>
-
-
 ## Example Projects
 
 ### [📦 Smart Storage Unit](./smart-storage-unit/readme.md)
@@ -148,7 +121,7 @@ Create a SSU vending machine for item trading
 Configure a Smart Turret with a custom strategy
 
 ### [🚪 Smart Gate](./smart-gate/readme.md)
-Control access to a Smart Gate based on corporation membership
+Control access to a Smart Gate based on Tribe membership
 
 ## Need Help? 
 
