@@ -18,7 +18,7 @@ DEBUG=mud:*
 #
 #Deployer [Currently set to the anvil default private key]
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
+WORLD_ADDRESS=0x0165878a594ca255338adfa4d48449f69242eb8f #Local World Address
 
 #Local RPC
 RPC_URL="http://127.0.0.1:8545" #Forked Anvil Local RPC Url
@@ -26,11 +26,11 @@ CHAIN_ID=31337 #Local Chain ID
 
 # SMART TURRET CONFIG
 # Copy the ID from the in-game smart turret
-SMART_TURRET_ID=9640513001323359261895106592991319872122110296371423549860904054745193604808
+SMART_TURRET_ID=93802639558548716650424657917970819218391952910195344047336300457542616800807
 
-# ALLOWED CORP
-# What corp won't be targeted by the turret
-ALLOWED_CORP_ID=1000
+# ALLOWED TRIBE
+# What tribe won't be targeted by the turret
+ALLOWED_TRIBE_ID=5001
 
 # TESTING CONFIG
 # This is the private key for tests / testing related scripts.
