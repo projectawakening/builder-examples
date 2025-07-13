@@ -62,8 +62,8 @@ contract ToggleTest is MudTest {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     owner = vm.addr(deployerPrivateKey);
 
-    inventoryItemIn = vm.envUint("ITEM_IN");
-    inventoryItemOut = vm.envUint("ITEM_OUT");
+    inventoryItemIn = vm.envUint("ITEM_IN_ID");
+    inventoryItemOut = vm.envUint("ITEM_OUT_ID");
 
     player = address(this); // setting the address to the system contract as prank does not work for subsequent calls in world() calls
 
