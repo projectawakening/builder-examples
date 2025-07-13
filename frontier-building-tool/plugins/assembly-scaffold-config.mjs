@@ -5,7 +5,7 @@ const contractsPath = '../../packages/contracts/';
 const clientPath = '../../packages/client/';
 
 export async function execute() {
-  console.log(chalk.yellow('[INFO]'), 'This script will update the config for the smart storage unit example.\n');
+  console.log(chalk.yellow('[INFO]'), 'This script will update the config for the smart assembly scaffold.\n');
 
   const ssuId = await validateInput('Please enter the Smart Storage Unit ID: ', 10, 100);
 

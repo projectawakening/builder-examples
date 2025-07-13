@@ -9,32 +9,40 @@ You can use the tool by using eve-frontier <strong>[plugin]</strong>. The plugin
 eve-frontier namespace
 ```
 
+In the examples, they can also be called by using for example:
+```bash
+pnpm set-namespace
+```
+
+> [!NOTE]
+> Check the documentation or package.json for how to call it in the example if you use the pnpm "command"
+
 ## Plugins
-### - Assembly-Scaffold-Config
+### - assembly-scaffold-config
 Sets the assembly scaffold .env values for:
 - SSU ID
 
-### - Gate-Config
+### - gate-config
 Sets the Smart Gate example .env values for:
 - Source Smart Gate ID
 - Destination Smart Gate ID
 - Allowed Tribe ID
 
-### - Local
+### - local
 Sets .env values to the local chain values:
 - World Address
 - Chain ID
 - RPC URL
 
-### - Namespace
+### - namespace
 Sets the namespace in:
 - contracts/src/systems/constants.sol
 - contracts/mud.config.ts
 
-### - Private-Key
+### - private-key
 Sets the private key for your .env
 
-### - SSU-Config
+### - ssu-config
 Sets the Smart Storage Unit example .env values for:
 - SSU ID
 - Item In ID
@@ -42,15 +50,13 @@ Sets the Smart Storage Unit example .env values for:
 - In Ratio
 - Out Ratio
 
-### - Stillness
+### - stillness
 Fetches the most up-to-date stillness config values and sets them to the .env for:
 - World Address
 - Chain ID
 - RPC URL
 
-### - Turret-Config
+### - turret-config
 Sets the Smart Turret example .env values for:
 - Smart Turret ID
 - Allowed Tribe ID
-
-## Want to add a new plugin?

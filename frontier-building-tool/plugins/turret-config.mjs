@@ -4,7 +4,7 @@ import { validateInput, updateFiles } from '../utils.mjs';
 const contractsPath = '../../packages/contracts/';
 
 export async function execute() {
-  console.log(chalk.yellow('[INFO]'), 'This script will update the config for the smart gate example.\n');
+  console.log(chalk.yellow('[INFO]'), 'This script will update the config for the smart turret example.\n');
 
   const turretId = await validateInput('Please enter the turret ID: ', 1, 10);
   const allowedTribeId = await validateInput('Please enter the allowed tribe ID: ', 1, 30);
