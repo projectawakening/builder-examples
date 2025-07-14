@@ -3,7 +3,7 @@ import { validateInput, updateFiles } from '../utils.mjs';
 import { join } from 'path';
 
 const localEnv = {
-  WORLD_ADDRESS: "0x8a791620dd6260079bf849dc5567adc3f2fdc318",
+  WORLD_ADDRESS: "0x0165878a594ca255338adfa4d48449f69242eb8f",
   CHAIN_ID: "31337",
   RPC_URL: "http://127.0.0.1:8545",
   SERVER: "Local"

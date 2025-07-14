@@ -65,12 +65,15 @@ async function main() {
     const plugins = await loadPlugins();
     
     let pluginName;
+    let additionalArg = '';
     const args = process.argv.slice(2);
 
     if (args[0] === '--plugin' || args[0] === '-p') {
       pluginName = args[1];
+      additionalArg = args[2];
     } else {
       pluginName = args[0];
+      additionalArg = args[1];
     }
 
     if (!pluginName) {
@@ -88,7 +91,7 @@ async function main() {
       process.exit(1);
     }
 
-    await plugin.execute(paths);
+    await plugin.execute(paths, additionalArg);
   } catch (error) {
     if (error.name === 'ExitPromptError') {
       console.log("\n" + chalk.yellow('[INFO]'), 'Cancelled command execution');

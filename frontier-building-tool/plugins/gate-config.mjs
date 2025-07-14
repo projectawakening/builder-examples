@@ -8,7 +8,7 @@ export async function execute() {
 
   const sourceGateId = await validateInput('Please enter the source gate ID: ', 1, 10);
   const destinationGateId = await validateInput('Please enter the destination gate ID: ', 1, 10);
-  const allowedCorpId = await validateInput('Please enter the allowed corp ID: ', 1, 30);
+  const allowedTribeId = await validateInput('Please enter the allowed tribe ID: ', 1, 30);
 
   console.log("");
 
@@ -25,8 +25,8 @@ export async function execute() {
     },
     {
       path: contractsPath + '.env',
-      pattern: /^ALLOWED_CORP_ID=.*/m,
-      replacement: `ALLOWED_CORP_ID=${allowedCorpId}`
+      pattern: /^ALLOWED_TRIBE_ID=.*/m,
+      replacement: `ALLOWED_TRIBE_ID=${allowedTribeId}`
     }   
   ];
 

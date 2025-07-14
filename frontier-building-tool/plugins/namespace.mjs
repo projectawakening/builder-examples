@@ -2,10 +2,10 @@ import chalk from 'chalk';
 import { validateInput, updateFiles } from '../utils.mjs';
 import { join } from 'path';
 
-export async function execute({ contracts, params }) {
-  console.log(chalk.yellow('[INFO]'), 'This script will update the namespace for the smart gate deployment.\n');
+export async function execute({ contracts, params }, additionalArg) {
+  console.log(chalk.yellow('[INFO]'), 'This script will update the namespace for your contract deployment.\n');
 
-  const namespace = await validateInput('Please type your namespace: ', 2, 14);
+  const namespace = additionalArg || await validateInput('Please type your namespace: ', 2, 14);
 
   console.log("");
 

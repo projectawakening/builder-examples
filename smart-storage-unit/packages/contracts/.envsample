@@ -18,21 +18,19 @@ DEBUG=mud:*
 #
 #Deployer [Currently set to the anvil default private key]
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
+WORLD_ADDRESS=0x0165878a594ca255338adfa4d48449f69242eb8f #Local World Address
 
 #Local RPC
 RPC_URL="http://127.0.0.1:8545" #Local RPC URL
 CHAIN_ID=31337 #Local Chain ID
 
 #SMART STORAGE UNIT ID
-#Copy this info from the in-game Smart Storage Unit
-SSU_ID=17614304337475056394242299294383532840873792487945557467064313427436901763824
+# Copy this info from the in-game Smart Storage Unit
+SSU_ID=263171114538654274438749619211973208698572458800881337194040309134791495280
 
-# Retrieve the smart item ID's using https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and search for the item name.
-#ITEM IN : COILGUN AMMO 1 (S)
-ITEM_IN_ID=72303041834441799565597028082148290553073890313361053989246429514519533100781
-#ITEM OUT : LENS 3X
-ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
+# Retrieve the item type ID's using https://world-api-stillness.live.tech.evefrontier.com/v2/types and search for the item name.
+ITEM_IN_TYPE_ID=12345
+ITEM_OUT_TYPE_ID=77800
 
 #RATIOS
 IN_RATIO=5
@@ -41,6 +39,6 @@ OUT_RATIO=1
 # How many items to input each execute
 EXECUTE_QUANTITY=5
 
-# TESTING CONFIG
+#TESTING CONFIG
 # This is the private key for tests / the execute script.
-TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+TEST_PLAYER_PRIVATE_KEY=0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d

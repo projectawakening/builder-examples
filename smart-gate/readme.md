@@ -102,6 +102,14 @@ To test the smart gate and check the canJump, use the following command:
 pnpm can-jump
 ```
 
+You can also test the smart gate using the unit tests with:
+```bash
+pnpm test
+```
+
+This will run a series of pre-defined tests, and should display the results like:
+![../readme-imgs/tests-gate.png]
+
 ## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
 

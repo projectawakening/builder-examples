@@ -56,7 +56,8 @@ Then, run the following commands:
     pnpm dev
     ```
 
-    > **Note:** This will deploy the contracts to a forked version of your local world for testing.
+> [!NOTE]
+> This will deploy the contracts to a forked version of your local world for testing.
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
@@ -72,10 +73,11 @@ IN_RATIO=1
 OUT_RATIO=2
 ```
 
-> **Trading Ratio Example:**  
-> With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
-> 
-> ⚠️ **Warning:** Choose your ratios carefully to avoid accidentally depleting your item supply!
+> [!NOTE]
+> **Trading Ratio Example:** With the above ratio (1:2), when a player deposits 1 item, they receive 2 items in return.
+
+> [!WARNING]
+> Choose your ratios carefully to avoid accidentally depleting your item supply!
 
 
 ### Step 3: Mock data for the existing world **(Local Development Only)**
@@ -84,14 +86,15 @@ Generate the test data by:
 
 1. Select the "shell" process and then click on the main terminal window. 
 
-    ![Processes Image](../readme-imgs/processes.png)
+![Processes Image](../readme-imgs/processes.png)
 
 2. To generate mock data for testing the SSU logic on the local world, run the following command. This generates and deploys the smart storage deployable and items.
 
-    ```bash
-    pnpm mock-data
-    ```
+```bash
+pnpm mock-data
+```
 
+> [!NOTE]
 > This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 4: Configure SSU
@@ -101,16 +104,15 @@ To configure which items should be traded and the ratio's to trade for run:
 pnpm configure
 ```
 
-> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional.
+> [!NOTE]
+> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional to change for local development.
 
 ### Step 5: Test The SSU (Optional)
-To test the SSU, execute the following command:
+To test the SSU, execute the following command which will run a series of pre-defined tests to ensure the contracts are working:
 
 ```bash
 pnpm execute
 ```
-
-> This will run a series of pre-developed tests to ensure the SSU is working as expected.
 
 ## Deployment to The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
@@ -137,8 +139,8 @@ cp .envsample .env
 Next, set the following values in the [.env](./packages/contracts/.env) file to direct the scripts to use Stillness:
 
 ```bash copy
-WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
-RPC_URL=https://pyrope-external-rpc.live.tech.evefrontier.com
+WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
+RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
@@ -161,7 +163,8 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 
 Change the namespace from test to your own custom namespace. 
 
-> 💡 **Tip** Consider using your username or corporation name as your namespace.
+> [!TIP]
+> Consider using your username or corporation name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
@@ -235,7 +238,8 @@ Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the ac
 TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-> ⚠️ Note: This is only for testing, and an example not requiring this is on it's way.
+> [!NOTE] 
+> This is only for testing, and an example not requiring this is on it's way.
 
 #### Step 1.2: Smart Storage Unit ID (SSU ID)
 
@@ -257,7 +261,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 
 #### Step 1.3: Item ID's
 
-To retrieve the Item ID's you can use https://blockchain-gateway-stillness.live.tech.evefrontier.com/types and then search for the item name.
+To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/v2/types and then search for the item name.
 
 You can use the "smartItemId" as the Item ID.
 
@@ -275,9 +279,9 @@ Configure the Item ID's in the .env file.
 
 ```bash
 #Item Bought
-ITEM_IN_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
+ITEM_IN_TYPE_ID=70505200487489129491533272716910408603753256595363780714882065332876101173161
 #Item Sold
-ITEM_OUT_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
+ITEM_OUT_TYPE_ID=112603025077760770783264636189502217226733230421932850697496331082050661822826
 ```
 
 #### Step 1.4: Ratios
@@ -291,7 +295,8 @@ IN_RATIO=1
 OUT_RATIO=2
 ```
 
-> ⚠️ Note: Be careful not to accidentally give away your whole supply of items with the wrong ratio.
+> [!WARNING]
+> **Note**: Be careful not to accidentally give away your whole supply of items with the wrong ratio.
 
 ---
 
@@ -308,9 +313,11 @@ To configure which items should be traded and the ratio's to trade for run:
 pnpm configure
 ```
 
+> [!NOTE]
 > You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed.
 
-> ⚠️ **Warning:** Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
+> [!IMPORTANT]
+> Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
 
 ### Step 3: Execute the trade
 To trade items, make sure the items are in the inventories and then you need to run:
@@ -329,7 +336,7 @@ If you encounter any issues, refer to the troubleshooting tips below:
 
 3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
 
-4. **The Trade is not Working**: Ensure the `ITEM_IN_ID` and `ITEM_OUT_ID` are correctly set in the `contracts/.env` file.
+4. **The Trade is not Working**: Ensure the `ITEM_IN_TYPE_ID` and `ITEM_OUT_TYPE_ID` are correctly set in the `contracts/.env` file.
 
 ## Need Help? 
 

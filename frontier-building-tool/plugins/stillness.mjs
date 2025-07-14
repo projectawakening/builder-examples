@@ -13,16 +13,17 @@ const fallbackStillnessEnv = {
 export async function execute({ contracts, params }) {
   console.log("");
 
-  const stillness = await axios.get('https://blockchain-gateway-stillness.live.tech.evefrontier.com/config');
-  const stillnesResponse = stillness.data;
+  const stillness = await axios.get('https://world-api-stillness.live.tech.evefrontier.com/config');
+  const stillnessResponse = stillness.data;
 
   let stillnessEnv = fallbackStillnessEnv;
 
-  if(stillnesResponse == null) {
+  if(stillnessResponse && stillnessResponse.length > 0) {
+    let config = stillnessResponse[0];
     stillnessEnv = {
-      WORLD_ADDRESS: stillnesResponse.world.address,
-      CHAIN_ID: stillnesResponse.chainId,
-      RPC_URL: stillnesResponse.default.http,
+      WORLD_ADDRESS: config.contracts.world.address,
+      CHAIN_ID: config.chainId,
+      RPC_URL: config.rpcUrls.default.http,
       SERVER: "Stillness"
     }
   } 

@@ -1,73 +1,90 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.24;
+
 import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
-import { ResourceId, WorldResourceIdLib } from "@latticexyz/world/src/WorldResourceId.sol";
-import { IBaseWorld } from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
-import { EphemeralInvItemTableData, EphemeralInvItemTable } from "@eveworld/world/src/codegen/tables/EphemeralInvItemTable.sol";
-import { InventoryItemTableData, InventoryItemTable } from "@eveworld/world/src/codegen/tables/InventoryItemTable.sol";
-import { Utils as InventoryUtils } from "@eveworld/world/src/modules/inventory/Utils.sol";
-import { FRONTIER_WORLD_DEPLOYMENT_NAMESPACE } from "@eveworld/common-constants/src/constants.sol";
 
-import { RatioConfig } from "../src/codegen/tables/RatioConfig.sol";
-import { IWorld } from "../src/codegen/world/IWorld.sol";
+import { IWorldWithContext } from "@eveworld/smart-object-framework-v2/src/IWorldWithContext.sol";
+
+import { InventoryItem, InventoryItemData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/InventoryItem.sol";
+import { EphemeralInvItem, EphemeralInvItemData } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/EphemeralInvItem.sol";
+import { Tenant } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/index.sol";
+import { ObjectIdLib } from "@eveworld/world-v2/src/namespaces/evefrontier/libraries/ObjectIdLib.sol";
+
+import { SmartStorageUnitSystem, smartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 import { Utils } from "../src/systems/Utils.sol";
-import { SmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 
+/**
+ * @title Execute
+ * @notice This script is used to execute the trade for the custom SSU contract in systems/SmartStorageUnitSystem.sol
+ */
 contract Execute is Script {
-  using InventoryUtils for bytes14;  
-
-  //Player
-  uint256 playerPrivateKey;
+  address admin;
   address player;
 
-  //SSU ID
+  uint256 SSU_TYPE_ID = 77917;
+  uint256 ssuItemId = 565656565;
+
   uint256 smartStorageUnitId;
 
-  //Items
-  uint256 itemIn; 
-  uint256 itemOut;
-
-  //Testing
-  uint64 testQuantityIn;
-
-  function displayInventory() public {    
-    InventoryItemTableData memory invItem = InventoryItemTable.get(smartStorageUnitId, itemOut);
-    console.log("[INVENTORY] Owner's Inventory [Item Out]: ", invItem.quantity);
-
-    EphemeralInvItemTableData memory ephInvItem = EphemeralInvItemTable.get(smartStorageUnitId, itemIn, player);
-    console.log("[EPHEMERAL] Other Player's Inventory [Item In]: ", ephInvItem.quantity);
-  }
-
+  IWorldWithContext world;
   function run(address worldAddress) external {
-    playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
+    uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
+    admin = vm.addr(adminPrivateKey);
+
+    uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     player = vm.addr(playerPrivateKey);
 
-    vm.startBroadcast(playerPrivateKey);
-
     StoreSwitch.setStoreAddress(worldAddress);
-    IBaseWorld world = IBaseWorld(worldAddress);
+    world = IWorldWithContext(worldAddress);
 
-    //Read from .env
+    bytes32 tenantId = Tenant.getTenantId();
+
     smartStorageUnitId = vm.envUint("SSU_ID");
-    itemIn = vm.envUint("ITEM_IN_ID");
-    itemOut = vm.envUint("ITEM_OUT_ID");
-    testQuantityIn = uint64(vm.envUint("EXECUTE_QUANTITY"));
+
+    vm.startBroadcast(adminPrivateKey);
+
+    _execute(tenantId, smartStorageUnitId, player);
+
+    vm.stopBroadcast();
+  }
+
+  function _execute(bytes32 tenantId, uint256 smartStorageUnitId, address player) private {
+    uint256 itemIn = vm.envUint("ITEM_IN_TYPE_ID");
+    uint256 itemOut = vm.envUint("ITEM_OUT_TYPE_ID");
+    uint64 testQuantityIn = uint64(vm.envUint("EXECUTE_QUANTITY"));
+
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemIn);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOut);
+
+    console.log("BEFORE EXECUTE -----");
+    _consoleLogInventories(itemInSmartObjectId, itemOutSmartObjectId);
 
     ResourceId systemId = Utils.smartStorageUnitSystemId();
 
-    //Check Players ephemeral inventory before
-    console.log("Inventories Before");
-    displayInventory();
+    world.callFrom(
+      player,
+      systemId,
+      abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, testQuantityIn, itemInSmartObjectId))
+    );
 
-    //The method below will change based on the namespace you have configurd. If the namespace is changed, make sure to update the method name
-    world.call(systemId, abi.encodeCall(SmartStorageUnitSystem.execute, (smartStorageUnitId, testQuantityIn, itemIn)));
+    console.log("AFTER EXECUTE -----");
+    _consoleLogInventories(itemInSmartObjectId, itemOutSmartObjectId);
+  }
 
-    //Check Players ephemeral inventory after
-    console.log("\nInventories After");
-    displayInventory();
+  function _consoleLogInventories(uint256 itemInSmartObjectId, uint256 itemOutSmartObjectId) view internal {
+    EphemeralInvItemData memory ephInvInItem = EphemeralInvItem.get(smartStorageUnitId, player, itemInSmartObjectId);
+    console.log("[EPHEMERAL] Player's Ephemeral Inventory [Item In]: ", vm.toString(ephInvInItem.quantity));
 
-    vm.stopBroadcast();
+    EphemeralInvItemData memory ephInvOutItem = EphemeralInvItem.get(smartStorageUnitId, player, itemOutSmartObjectId);
+    console.log("[EPHEMERAL] Player's Ephemeral Inventory [Item Out]: ", vm.toString(ephInvOutItem.quantity));
+
+    InventoryItemData memory invItemOut = InventoryItem.get(smartStorageUnitId, itemOutSmartObjectId);
+    console.log("[INVENTORY] Admins Inventory [Item Out]: ", vm.toString(invItemOut.quantity));
+
+    InventoryItemData memory invItemIn = InventoryItem.get(smartStorageUnitId, itemInSmartObjectId);
+    console.log("[INVENTORY] Admins Inventory [Item In]: ", vm.toString(invItemIn.quantity));
   }
 }
