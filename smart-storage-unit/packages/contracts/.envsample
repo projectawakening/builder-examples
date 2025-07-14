@@ -29,6 +29,7 @@ CHAIN_ID=31337 #Local Chain ID
 SSU_ID=263171114538654274438749619211973208698572458800881337194040309134791495280
 
 # Retrieve the item type ID's using https://world-api-stillness.live.tech.evefrontier.com/v2/types and search for the item name.
+# NOTE: These are the short IDs and not long Smart Object ID's anymore. If you are importing the ID from V1, please fetch the Type ID in the above link first. 
 ITEM_IN_TYPE_ID=12345
 ITEM_OUT_TYPE_ID=77800
 
