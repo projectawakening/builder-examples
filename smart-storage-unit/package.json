@@ -11,8 +11,8 @@
     "test": "pnpm recursive run test"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/explorer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/cli": "2.2.22",
+    "@latticexyz/explorer": "2.2.22",
     "@types/debug": "4.1.7",
     "@types/prettier": "2.7.2",
     "@typescript-eslint/eslint-plugin": "8.34.1",
