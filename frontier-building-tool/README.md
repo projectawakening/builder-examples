@@ -1,7 +1,7 @@
 # Frontier Building Tool
 
 ## Introduction
-The Frontier Building Tool helps with setting environment and general variables for Buidling in Frontier without having to dig through files or find the correct information.
+The Frontier Building Tool helps with setting environment and general variables for Building in Frontier without having to dig through files or find the correct information.
 
 ## Usage
 You can use the tool by using eve-frontier <strong>[plugin]</strong>. The plugins are listed below with their function.
