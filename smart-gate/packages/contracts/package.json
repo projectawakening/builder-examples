@@ -30,13 +30,13 @@
   "dependencies": {
     "@eveworld/smart-object-framework-v2": "0.1.1",
     "@eveworld/world-v2": "0.1.1",
-    "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/schema-type": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/store-indexer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/explorer": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/world": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "@latticexyz/world-modules": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
+    "@latticexyz/cli": "2.2.22",
+    "@latticexyz/schema-type": "2.2.22",
+    "@latticexyz/store": "2.2.22",
+    "@latticexyz/store-indexer": "2.2.22",
+    "@latticexyz/explorer": "2.2.22",
+    "@latticexyz/world": "2.2.22",
+    "@latticexyz/world-modules": "2.2.22",
     "@eveworld/common-constants": "0.0.13",
     "eve-frontier": "file:../../../frontier-building-tool"
   },
@@ -52,7 +52,7 @@
     "prettier": "3.2.5",
     "prettier-plugin-solidity": "1.3.1",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "solhint-plugin-mud": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304"
+    "solhint-config-mud": "2.2.22",
+    "solhint-plugin-mud": "2.2.22"
   }
 }

@@ -27,12 +27,12 @@
   "dependencies": {
     "@eveworld/common-constants": "0.0.13",
     "@eveworld/world": "0.0.17",
-    "@latticexyz/cli": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "@latticexyz/explorer": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "@latticexyz/schema-type": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "@latticexyz/store": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "@latticexyz/world": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "@latticexyz/world-modules": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
+    "@latticexyz/cli": "2.2.22",
+    "@latticexyz/explorer": "2.2.22",
+    "@latticexyz/schema-type": "2.2.22",
+    "@latticexyz/store": "2.2.22",
+    "@latticexyz/world": "2.2.22",
+    "@latticexyz/world-modules": "2.2.22",
     "i": "^0.3.7",
     "npm": "^10.8.0",
     "eve-frontier": "file:../../../frontier-building-tool"
@@ -44,7 +44,7 @@
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "1.1.3",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf",
-    "solhint-plugin-mud": "2.2.20-b774ab28b3de6cefcbfce5e1bb6fcb68b9374abf"
+    "solhint-config-mud": "2.2.22",
+    "solhint-plugin-mud": "2.2.22"
   }
 }
