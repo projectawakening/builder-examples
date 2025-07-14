@@ -110,6 +110,14 @@ To test the custom Smart Turret functionality you can use the follow command:
 pnpm execute
 ```
 
+You can also test the smart turret using the unit tests with:
+```bash
+pnpm test
+```
+
+This will run a series of pre-defined tests, and should display the results like:
+![../readme-imgs/tests-turret.png]
+
 ## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
