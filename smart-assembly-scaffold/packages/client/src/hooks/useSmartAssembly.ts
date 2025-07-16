@@ -7,7 +7,7 @@ import {
   SmartAssembly,
   SmartAssemblyType,
   State,
-  InventoryItem
+  InventoryItem,
 } from "@eveworld/types";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -61,20 +61,22 @@ export function useSmartAssembly(smartObjectId = 0n) {
   });
 
   useEffect(() => {
-    if(!smartAssemblyLocation) {
+    if (!smartAssemblyLocation) {
       return;
     }
 
     async function getSolarSystem() {
       const worldAPIURL = import.meta.env.VITE_WORLD_API_URL;
-      const response = await fetch(`${worldAPIURL}/v2/solarsystems/${smartAssemblyLocation?.solarSystemId}`);
+      const response = await fetch(
+        `${worldAPIURL}/v2/solarsystems/${smartAssemblyLocation?.solarSystemId}`
+      );
       const data = await response.json();
 
       setSolarSystemName(data.name);
     }
 
     getSolarSystem();
-  }, [smartAssemblyLocation])
+  }, [smartAssemblyLocation]);
 
   const smartAssemblyEntityRecordMetadata = useRecord({
     stash,
@@ -104,33 +106,37 @@ export function useSmartAssembly(smartObjectId = 0n) {
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.Inventory,
     key: {
-      smartObjectId
-    }
-  })
+      smartObjectId,
+    },
+  });
 
   // Get all inventory items at once using a single useRecord call
-  const inventoryItems = smartAssemblyInventory?.items?.map((item: any) => ({
-    itemId: item,
-    quantity: 0,
-    typeId: 0,
-    name: "",
-    smartObjectId: 0
-  })) || [];
+  const inventoryItems =
+    smartAssemblyInventory?.items?.map((item: any) => ({
+      itemId: item,
+      quantity: 0,
+      typeId: 0,
+      name: "",
+      smartObjectId: 0,
+    })) || [];
 
   // Get all inventory item details using useRecords
   const inventoryItemDetails = useRecords({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.InventoryItem,
-    keys: smartAssemblyInventory?.items?.map((item: bigint) => ({
-      smartObjectId: smartObjectId,
-      itemObjectId: item
-    })) || []
+    keys:
+      smartAssemblyInventory?.items?.map((item: bigint) => ({
+        smartObjectId: smartObjectId,
+        itemObjectId: item,
+      })) || [],
   });
 
   // Update inventory items with details if available
   if (inventoryItemDetails) {
     inventoryItemDetails.forEach((detail) => {
-      const item = inventoryItems.find((item: InventoryItem) => item.itemId === detail.itemObjectId);
+      const item = inventoryItems.find(
+        (item: InventoryItem) => item.itemId === detail.itemObjectId
+      );
       if (item) {
         item.quantity = Number(detail.quantity);
         item.smartObjectId = Number(detail.smartObjectId);
@@ -142,13 +148,15 @@ export function useSmartAssembly(smartObjectId = 0n) {
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.EntityRecord,
     keys: inventoryItems?.map((item: InventoryItem) => ({
-      smartObjectId: BigInt(item.itemId)
-    }))
+      smartObjectId: BigInt(item.itemId),
+    })),
   });
 
-  if(inventoryItemMetadata) {
+  if (inventoryItemMetadata) {
     inventoryItemMetadata.forEach((detail) => {
-      const item = inventoryItems.find((item: InventoryItem) => item.itemId === detail.smartObjectId);
+      const item = inventoryItems.find(
+        (item: InventoryItem) => item.itemId === detail.smartObjectId
+      );
       if (item) {
         item.typeId = Number(detail.typeId);
       }
@@ -160,39 +168,43 @@ export function useSmartAssembly(smartObjectId = 0n) {
     table: worldMudConfig.namespaces.evefrontier.tables.EphemeralInventory,
     key: {
       smartObjectId: smartObjectId,
-      ephemeralOwner: address
+      ephemeralOwner: address,
     },
   });
 
   const ephemeralInventoryItemDetails = useRecords({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.EphemeralInvItem,
-    keys: ephemeralInventory?.items?.map((item: bigint) => ({
-      smartObjectId: smartObjectId,
-      ephemeralOwner: address,
-      itemObjectId: item
-    })) || []
+    keys:
+      ephemeralInventory?.items?.map((item: bigint) => ({
+        smartObjectId: smartObjectId,
+        ephemeralOwner: address,
+        itemObjectId: item,
+      })) || [],
   });
 
   const ephemeralInventoryItemMetadata = useRecords({
     stash,
     table: worldMudConfig.namespaces.evefrontier.tables.EntityRecord,
     keys: ephemeralInventory?.items?.map((item: bigint) => ({
-      smartObjectId: item
-    }))
+      smartObjectId: item,
+    })),
   });
 
-  const ephemeralItems = ephemeralInventory?.items?.map((item: any) => ({
-    itemId: Number(item),
-    quantity: 0,
-    typeId: 0,
-    name: "",
-    smartObjectId: 0
-  })) || [];
+  const ephemeralItems =
+    ephemeralInventory?.items?.map((item: any) => ({
+      itemId: Number(item),
+      quantity: 0,
+      typeId: 0,
+      name: "",
+      smartObjectId: 0,
+    })) || [];
 
-  if(ephemeralInventoryItemDetails) {
+  if (ephemeralInventoryItemDetails) {
     ephemeralInventoryItemDetails.forEach((detail) => {
-      const item = ephemeralItems.find((item: InventoryItem) => item.itemId === Number(detail.itemObjectId));
+      const item = ephemeralItems.find(
+        (item: InventoryItem) => item.itemId === Number(detail.itemObjectId)
+      );
       if (item) {
         item.quantity = Number(detail.quantity);
         item.smartObjectId = Number(detail.smartObjectId);
@@ -200,9 +212,11 @@ export function useSmartAssembly(smartObjectId = 0n) {
     });
   }
 
-  if(ephemeralInventoryItemMetadata) {
+  if (ephemeralInventoryItemMetadata) {
     ephemeralInventoryItemMetadata.forEach((detail) => {
-      const item = ephemeralItems.find((item: any) => item.itemId === Number(detail.smartObjectId));
+      const item = ephemeralItems.find(
+        (item: any) => item.itemId === Number(detail.smartObjectId)
+      );
       if (item) {
         item.typeId = Number(detail.typeId);
       }
@@ -253,7 +267,8 @@ export function useSmartAssembly(smartObjectId = 0n) {
       chainId: import.meta.env.VITE_CHAIN_ID,
       name: smartAssemblyEntityRecordMetadata?.name || "",
       description: smartAssemblyEntityRecordMetadata?.description || "",
-      dappURL: smartAssemblyEntityRecordMetadata?.dappURL || "http://localhost:3000/",
+      dappURL:
+        smartAssemblyEntityRecordMetadata?.dappURL || "http://localhost:3000/",
       image: "",
       state: smartDeployableStateView?.currentState.toString() || State.NULL,
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
@@ -311,21 +326,19 @@ export function useSmartAssembly(smartObjectId = 0n) {
       case "SSU":
         smartAssembly = {
           ...smartAssemblyBase,
-          type: "SmartStorageUnit",
-          storage: {
-            mainInventory: {
-              capacity: smartStorageUnitInv?.capacity || BigInt(0),
-              usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
-              items: inventoryItems || [],
-            },
-            ephemeralInventories: [
+          assemblyType: "SmartStorageUnit",
+          inventory: {
+            storageItems: inventoryItems || [],
+            usedCapacity: smartStorageUnitInv?.usedCapacity || BigInt(0),
+            storageCapacity: smartStorageUnitInv?.capacity || BigInt(0),
+            ephemeralInventoryList: [
               {
                 ownerId: address || "",
-                ownerName: ephemeralInventory?.ownerName || "",
+                ownerName: ephemeralInventory?.ephemeralOwner || "",
                 storageCapacity: ephemeralInventory?.capacity || BigInt(0),
                 usedCapacity: ephemeralInventory?.usedCapacity || BigInt(0),
-                ephemeralInventoryItems: [...(ephemeralItems || [])],
-              }
+                ephemeralInventoryItems: ephemeralItems || [],
+              },
             ],
           },
         };
@@ -333,18 +346,18 @@ export function useSmartAssembly(smartObjectId = 0n) {
       case "ST":
         smartAssembly = {
           ...smartAssemblyBase,
-          type: "SmartTurret",
+          assemblyType: "SmartTurret",
           proximity: {},
         };
         break;
       case "SG":
         smartAssembly = {
           ...smartAssemblyBase,
-          type: "SmartGate",
-          gate: {
-            inRange: [],
-            linked: smartgateLink?.isLinked || false,
-            destinationId:
+          assemblyType: "SmartGate",
+          gateLink: {
+            gatesInRange: [],
+            isLinked: smartgateLink?.isLinked || false,
+            destinationGate:
               smartgateLink?.destinationGateId.toString() || undefined,
           },
         };

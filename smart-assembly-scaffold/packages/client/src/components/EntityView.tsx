@@ -5,6 +5,7 @@ import {
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
+import { SmartAssemblyType } from "@eveworld/types";
 
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
@@ -18,7 +19,9 @@ import Toggle from "./Toggle";
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
-  const { smartAssembly } = useSmartAssembly();
+  const { smartAssembly: assembly } = useSmartAssembly();
+
+  const smartAssembly = assembly as SmartAssemblyType<"SmartStorageUnit">;
 
   if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
@@ -45,7 +48,7 @@ export default function EntityView() {
         <EveButton
           typeClass="secondary"
           onClick={() => window.open(getDappUrl(smartAssembly))}
-          disabled={!smartAssembly?.dappURL}
+          disabled={!smartAssembly?.dappUrl}
           style={{ width: "50%", justifySelf: "end" }}
         >
           <ExternalIcon
@@ -65,7 +68,7 @@ export default function EntityView() {
           assembly={smartAssembly}
           character={smartCharacter}
           chainName={chain?.name || ""}
-          inventory={smartAssembly?.storage?.mainInventory?.items}
+          inventory={smartAssembly?.inventory.storageItems}
         />
       </div>
     </div>
