@@ -1,4 +1,4 @@
-import { useSyncProgress } from "./mud/useSyncProgress";
+import { useSyncStatus } from "./mud/useSyncStatus";
 import { useAccount } from "wagmi";
 
 import "./App.css";
@@ -17,10 +17,10 @@ import EntityView from "./components/EntityView";
 // DApp Simple Customization
 const DISPLAY_EXPLORER = true;
 const DISPLAY_DOCS_BUTTON = false;
-const CUSTOM_LOGO_URL = ""
+const CUSTOM_LOGO_URL = "";
 
 export const App = () => {
-  const { isLive, message, percentage } = useSyncProgress();
+  const { isLive, message, percentage } = useSyncStatus();
   const { smartCharacter } = useSmartCharacter();
   const { address, isConnected } = useAccount();
   const { notification, notify, handleClose } = useNotification();
@@ -33,12 +33,12 @@ export const App = () => {
     }
   }, [handleClose, isLive, notify]);
 
-  if (!address || !isConnected){ 
+  if (!address || !isConnected) {
     return (
       <>
-        <ConnectWallet 
-          displayDocsButton={DISPLAY_DOCS_BUTTON} 
-          logoUrl={CUSTOM_LOGO_URL} 
+        <ConnectWallet
+          displayDocsButton={DISPLAY_DOCS_BUTTON}
+          logoUrl={CUSTOM_LOGO_URL}
         />
       </>
     );

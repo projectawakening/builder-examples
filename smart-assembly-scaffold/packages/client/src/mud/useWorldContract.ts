@@ -1,29 +1,32 @@
 import { useAccount, useClient, useConnectorClient } from "wagmi";
 import { chainId, worldAbi } from "../common";
-import { getContract } from "viem";
-import { useSync } from "./useSync";
+import {
+  Account,
+  Chain,
+  Client,
+  GetContractReturnType,
+  Transport,
+  getContract,
+} from "viem";
 import { useQuery } from "@tanstack/react-query";
-import { observer } from "@latticexyz/explorer/observer";
 import { useEffect, useState } from "react";
 import { getWorldDeploy } from "./getWorldDeploy";
-
-type InferredUseSyncResult = ReturnType<typeof useSync>;
+import { observer } from "@latticexyz/explorer/observer";
 
 export function useWorldContract():
-  | {
-      worldContract: any;
-      waitForTransaction: InferredUseSyncResult["waitForTransaction"];
-    }
-  | {
-      worldContract?: undefined;
-      waitForTransaction?: undefined;
-    } {
+  | GetContractReturnType<
+      typeof worldAbi,
+      {
+        public: Client<Transport, Chain>;
+        wallet: Client<Transport, Chain, Account>;
+      }
+    >
+  | undefined {
   const [worldAddress, setWorldAddress] = useState<`0x${string}`>("0x");
 
-  const { waitForTransaction } = useSync();
+  const { chain } = useAccount();
   const client = useClient({ chainId });
   const { data: sessionClient } = useConnectorClient();
-  const { chain } = useAccount();
 
   useEffect(() => {
     const getWorldAddress = async () => {
@@ -35,7 +38,7 @@ export function useWorldContract():
   }, []);
 
   const { data: worldContract } = useQuery({
-    queryKey: ["worldContract", worldAddress, client?.uid, sessionClient?.uid],
+    queryKey: ["worldContract", client?.uid, sessionClient?.uid],
     queryFn: () => {
       if (!client || !sessionClient) {
         throw new Error("Not connected.");
@@ -56,10 +59,5 @@ export function useWorldContract():
     refetchOnWindowFocus: false,
   });
 
-  return worldContract && waitForTransaction
-    ? {
-        worldContract,
-        waitForTransaction,
-      }
-    : {};
+  return worldContract;
 }

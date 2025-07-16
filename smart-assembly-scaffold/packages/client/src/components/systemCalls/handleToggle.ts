@@ -2,24 +2,29 @@ const setToggle = async ({
   worldContract,
   smartObjectId,
   currentValue,
+  sync,
 }: {
   worldContract: any;
   smartObjectId: string;
   currentValue?: boolean;
+  sync: any;
 }): Promise<string | undefined> => {
-  let txHash;
+  let tx;
 
   console.log("SMART OBJECT ID", smartObjectId);
-
   console.log("CURRENT VALUE", currentValue);
+  console.log("SYNC", sync);
+  console.log("WORLD CONTRACT", worldContract);
 
   if (!currentValue) {
-    txHash = await worldContract.write.exampleName__setTrue([smartObjectId]);
+    tx = await worldContract.write.exampleName__setTrue([smartObjectId]);
+    await sync.data.waitForTransaction(tx);
   } else {
-    txHash = await worldContract.write.exampleName__setFalse([smartObjectId]);
+    tx = await worldContract.write.exampleName__setFalse([smartObjectId]);
+    await sync.data.waitForTransaction(tx);
   }
 
-  return txHash;
+  return tx;
 };
 
 export default setToggle;

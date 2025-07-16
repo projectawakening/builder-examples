@@ -4,7 +4,7 @@ import { SyncStep } from "@latticexyz/store-sync";
 import { useMemo } from "react";
 import { useRecord } from "./useRecord";
 
-export function useSyncProgress() {
+export function useSyncStatus() {
   const progress = useRecord({
     stash,
     table: SyncProgress,
@@ -17,6 +17,6 @@ export function useSyncProgress() {
       ...progress,
       isLive: progress.step === SyncStep.LIVE,
     }),
-    [progress],
+    [progress]
   );
 }

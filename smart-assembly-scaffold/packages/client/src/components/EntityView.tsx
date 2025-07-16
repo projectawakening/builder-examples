@@ -26,7 +26,9 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
-      <div>Welcome to the <b>EVE Dapp Scaffold</b>!</div>
+      <div>
+        Welcome to the <b>EVE Dapp Scaffold</b>!
+      </div>
       <div>
         You are currently viewing information for{" "}
         <span className="underline font-bold">
@@ -35,7 +37,7 @@ export default function EntityView() {
       </div>
 
       <div className="grid grid-cols-2">
-        <div style={{width: '150%', paddingRight: '10px'}}>
+        <div style={{ width: "150%", paddingRight: "10px" }}>
           Description:
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
@@ -44,15 +46,15 @@ export default function EntityView() {
           typeClass="secondary"
           onClick={() => window.open(getDappUrl(smartAssembly))}
           disabled={!smartAssembly?.dappURL}
-          style={{width: '50%', justifySelf: 'end'}}
+          style={{ width: "50%", justifySelf: "end" }}
         >
-          <ExternalIcon 
+          <ExternalIcon
             style={{
-              width: '15px', 
-              height: '15px'
-            }} 
+              width: "15px",
+              height: "15px",
+            }}
           />
-          <span style={{marginLeft: '5px'}}>dApp link</span>
+          <span style={{ marginLeft: "5px" }}>dApp link</span>
         </EveButton>
       </div>
 

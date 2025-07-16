@@ -8,11 +8,13 @@ import { EveButton } from "@eveworld/ui-components";
 import { useNotification } from "@eveworld/contexts";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
 import setToggle from "./systemCalls/handleToggle";
+import { useSync } from "@latticexyz/store-sync/react";
 
 const Toggle = React.memo(function Toggle() {
   const { smartAssembly } = useSmartAssembly();
-  const { worldContract } = useWorldContract();
+  const worldContract = useWorldContract();
   const { notify } = useNotification();
+  const sync = useSync();
 
   const toggleValue = useRecord({
     stash,
@@ -25,6 +27,7 @@ const Toggle = React.memo(function Toggle() {
   const handleToggle = async () => {
     const txHash = await setToggle({
       worldContract,
+      sync,
       smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
       currentValue: toggleValue?.isSet,
     });
