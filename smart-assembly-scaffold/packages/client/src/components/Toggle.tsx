@@ -8,11 +8,13 @@ import { EveButton } from "@eveworld/ui-components";
 import { useNotification } from "@eveworld/contexts";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
 import setToggle from "./systemCalls/handleToggle";
+import { useSync } from "@latticexyz/store-sync/react";
 
 const Toggle = React.memo(function Toggle() {
   const { smartAssembly } = useSmartAssembly();
-  const { worldContract } = useWorldContract();
+  const worldContract = useWorldContract();
   const { notify } = useNotification();
+  const sync = useSync();
 
   const toggleValue = useRecord({
     stash,
@@ -23,26 +25,42 @@ const Toggle = React.memo(function Toggle() {
   });
 
   const handleToggle = async () => {
-    const txHash = await setToggle({
-      worldContract,
-      smartObjectId: smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
-      currentValue: toggleValue?.isSet,
-    });
-    if (txHash) {
-      notify({ type: Severity.Success, txHash });
-    } else {
+    try {
+      const txHash = await setToggle({
+        worldContract,
+        sync,
+        smartObjectId:
+          smartAssembly?.id || import.meta.env.VITE_SMARTASSEMBLY_ID,
+        currentValue: toggleValue?.isSet,
+      });
+      if (txHash) {
+        notify({ type: Severity.Success, txHash });
+      } else {
+        notify({
+          type: Severity.Error,
+          message: "Transaction failed to execute",
+        });
+      }
+    } catch (error: any) {
+      console.error("Toggle transaction error:", error);
       notify({
         type: Severity.Error,
-        message: "Transaction failed to execute",
+        message: error.message || "Transaction failed to execute",
       });
     }
   };
 
   return (
-    <EveButton typeClass="primary" onClick={() => handleToggle()}>
-      {toggleValue !== undefined
-        ? `currently set to: ${toggleValue.isSet}`
-        : "Click here to set toggle"}
+    <EveButton
+      typeClass="primary"
+      onClick={() => handleToggle()}
+      disabled={!worldContract}
+    >
+      {!worldContract
+        ? "Loading contract..."
+        : toggleValue !== undefined
+          ? `currently set to: ${toggleValue.isSet}`
+          : "Click here to set toggle"}
     </EveButton>
   );
 });

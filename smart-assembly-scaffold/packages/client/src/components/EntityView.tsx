@@ -5,6 +5,7 @@ import {
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
 import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
+import { SmartAssemblyType } from "@eveworld/types";
 
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
@@ -18,7 +19,9 @@ import Toggle from "./Toggle";
 export default function EntityView() {
   const { chain } = useAccount();
   const { smartCharacter } = useSmartCharacter();
-  const { smartAssembly } = useSmartAssembly();
+  const { smartAssembly: assembly } = useSmartAssembly();
+
+  const smartAssembly = assembly as SmartAssemblyType<"SmartStorageUnit">;
 
   if (!smartAssembly || smartAssembly == null) {
     return <ErrorNotice type={ErrorNoticeTypes.SMART_ASSEMBLY} />;
@@ -26,7 +29,9 @@ export default function EntityView() {
 
   return (
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
-      <div>Welcome to the <b>EVE Dapp Scaffold</b>!</div>
+      <div>
+        Welcome to the <b>EVE Dapp Scaffold</b>!
+      </div>
       <div>
         You are currently viewing information for{" "}
         <span className="underline font-bold">
@@ -35,7 +40,7 @@ export default function EntityView() {
       </div>
 
       <div className="grid grid-cols-2">
-        <div style={{width: '150%', paddingRight: '10px'}}>
+        <div style={{ width: "150%", paddingRight: "10px" }}>
           Description:
           <div>{smartAssembly?.description || "No description set"}</div>
         </div>
@@ -43,16 +48,16 @@ export default function EntityView() {
         <EveButton
           typeClass="secondary"
           onClick={() => window.open(getDappUrl(smartAssembly))}
-          disabled={!smartAssembly?.dappURL}
-          style={{width: '50%', justifySelf: 'end'}}
+          disabled={!smartAssembly?.dappUrl}
+          style={{ width: "50%", justifySelf: "end" }}
         >
-          <ExternalIcon 
+          <ExternalIcon
             style={{
-              width: '15px', 
-              height: '15px'
-            }} 
+              width: "15px",
+              height: "15px",
+            }}
           />
-          <span style={{marginLeft: '5px'}}>dApp link</span>
+          <span style={{ marginLeft: "5px" }}>dApp link</span>
         </EveButton>
       </div>
 
@@ -63,7 +68,7 @@ export default function EntityView() {
           assembly={smartAssembly}
           character={smartCharacter}
           chainName={chain?.name || ""}
-          inventory={smartAssembly?.storage?.mainInventory?.items}
+          inventory={smartAssembly?.inventory.storageItems}
         />
       </div>
     </div>

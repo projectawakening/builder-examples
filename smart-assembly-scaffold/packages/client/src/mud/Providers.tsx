@@ -2,6 +2,8 @@ import { WagmiProvider } from "wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { StashSyncProvider } from "./StashSyncProvider";
+import { createSyncAdapter } from "@latticexyz/store-sync/internal";
+import { SyncProvider } from "@latticexyz/store-sync/react";
 import { stash } from "./stash";
 import { Address } from "viem";
 import { wagmiConfig } from "./wagmiConfig";
@@ -12,6 +14,7 @@ const queryClient = new QueryClient();
 
 export type Props = {
   worldDeploy: {
+    chainId: number;
     address: Address;
     blockNumber: bigint | null;
   };
@@ -28,13 +31,14 @@ export function Providers({ worldDeploy, children }: Props) {
             accentColor: "hsla(26, 85%, 58%, 1)",
           })}
         >
-          <StashSyncProvider
+          <SyncProvider
+            chainId={worldDeploy.chainId}
             address={worldDeploy.address}
             startBlock={worldDeploy.blockNumber ?? undefined}
-            stash={stash}
+            adapter={createSyncAdapter({ stash })}
           >
             <NotificationProvider>{children}</NotificationProvider>
-          </StashSyncProvider>
+          </SyncProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
