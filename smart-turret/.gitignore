@@ -16,5 +16,3 @@ mock-data/cache/
 mock-data/out/
 mock-data/broadcast/
 mock-data/cache/
-
-packages/contracts/.env

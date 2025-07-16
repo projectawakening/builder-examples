@@ -256,9 +256,9 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
 
 Now set the `ALLOWED_TRIBE_ID` variable.
 
-1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters)
 
-2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 
 3. Use the **"tribeId"** value which should be in:
 

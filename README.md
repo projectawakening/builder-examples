@@ -11,7 +11,7 @@
 </div>
 
 ## Welcome to EVE Frontier Building!
-Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
+Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit [docs.evefrontier.com](https://docs.evefrontier.com/). 
 
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 

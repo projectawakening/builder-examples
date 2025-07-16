@@ -164,7 +164,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 Change the namespace from test to your own custom namespace. 
 
 > [!TIP]
-> Consider using your username or corporation name as your namespace.
+> Consider using your username or Tribe name as your namespace.
 
 First, edit **packages/contracts/mud.config.ts** to include your new namespace:
 
