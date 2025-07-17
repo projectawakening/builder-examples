@@ -49,7 +49,7 @@ contract MockData is Script {
    * @param name The name of the character
    */
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
     
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
@@ -92,7 +92,7 @@ contract MockData is Script {
 
     vm.startBroadcast(deployerPrivateKey);
 
-    uint256 smartStorageUnitId = ObjectIdLib.calculateSingletonId(tenantId, 1245);
+    uint256 smartStorageUnitId = ObjectIdLib.calculateObjectId(tenantId, 1245);
 
     if(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL){
       console.log("SSU already created");
@@ -104,7 +104,7 @@ contract MockData is Script {
     //Create and deposit inventory items
     uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
 
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOutTypeID);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
 
     CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
     
@@ -123,7 +123,7 @@ contract MockData is Script {
 
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
 
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
 
     CreateInventoryItemParams[] memory ephemeralItems = new CreateInventoryItemParams[](1);
 
@@ -186,7 +186,7 @@ contract MockData is Script {
 
     console.log("SSU created and anchored successfully");
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     fuelSystem.configureFuelParameters(smartStorageUnitId, FuelParams({
       fuelMaxCapacity: 100000000,

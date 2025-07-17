@@ -60,7 +60,7 @@ contract ToggleTest is MudTest {
   uint256 FUEL_TYPE_ID = 78437;
 
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
     
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
@@ -100,7 +100,7 @@ contract ToggleTest is MudTest {
     vm.stopPrank();
 
     vm.startPrank(admin);
-    smartStorageUnitSmartId = ObjectIdLib.calculateSingletonId(tenantId, smartStorageUnitId);
+    smartStorageUnitSmartId = ObjectIdLib.calculateObjectId(tenantId, smartStorageUnitId);
 
     console.log("Creating and anchoring smart storage unit");
     
@@ -111,7 +111,7 @@ contract ToggleTest is MudTest {
 
     //Create and deposit inventory items
     uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemOutTypeID);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
 
     CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
     
@@ -130,7 +130,7 @@ contract ToggleTest is MudTest {
     inventorySystem.createAndDepositInventory(smartStorageUnitSmartId, items);
     
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, itemInTypeID);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
 
     items[0] = CreateInventoryItemParams({
       smartObjectId: itemInSmartObjectId,
@@ -228,7 +228,7 @@ contract ToggleTest is MudTest {
       )
     );
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     vm.stopPrank();
 
