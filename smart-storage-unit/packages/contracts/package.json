@@ -28,8 +28,8 @@
     "set-key": "eve-frontier private-key"
   },
   "dependencies": {
-    "@eveworld/smart-object-framework-v2": "0.1.1",
-    "@eveworld/world-v2": "0.1.1",
+    "@eveworld/smart-object-framework-v2": "0.1.2",
+    "@eveworld/world-v2": "0.1.2",
     "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/schema-type": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",

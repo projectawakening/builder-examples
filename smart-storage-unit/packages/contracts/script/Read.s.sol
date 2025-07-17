@@ -31,8 +31,8 @@ contract Read is Script {
     // Get Item IDs
     uint256 itemIn = vm.envUint("ITEM_IN_TYPE_ID");
     uint256 itemOut = vm.envUint("ITEM_OUT_TYPE_ID");
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemIn);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOut);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemIn);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOut);
 
     // Get Player's Ephemeral Inventory
     EphemeralInvItemData memory ephInvInItem = EphemeralInvItem.get(smartStorageUnitId, player, itemInSmartObjectId);

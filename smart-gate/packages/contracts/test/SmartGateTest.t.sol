@@ -59,7 +59,7 @@ contract SmartGateTest is MudTest {
   uint256 FUEL_TYPE_ID = 78437;
 
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
 
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
@@ -97,8 +97,8 @@ contract SmartGateTest is MudTest {
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
     vm.stopPrank();
 
-    sourceGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
-    destinationGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
+    sourceGateId = ObjectIdLib.calculateObjectId(tenantId, SOURCE_GATE_ID);
+    destinationGateId = ObjectIdLib.calculateObjectId(tenantId, DESTINATION_GATE_ID);
 
     vm.startPrank(player, admin);
 
@@ -194,7 +194,7 @@ contract SmartGateTest is MudTest {
 
   //Test can jump to the destination gate
   function testSourceCanJumpAllowed() public {    
-    uint256 characterId = ObjectIdLib.calculateSingletonId(tenantId, PLAYER_CHARACTER_ID);
+    uint256 characterId = ObjectIdLib.calculateObjectId(tenantId, PLAYER_CHARACTER_ID);
 
     uint256 characterTribe = Characters.getTribeId(characterId);
     assertEq(characterTribe, ALLOWED_TRIBE_ID, "Character tribe should be the same as the allowed tribe");
@@ -265,7 +265,7 @@ contract SmartGateTest is MudTest {
 
     vm.startPrank(admin);
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
       fuelMaxCapacity: 100000000,
