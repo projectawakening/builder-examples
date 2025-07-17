@@ -16,7 +16,7 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test:deploy": "mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
-    "test:watch": ". ./.env && forge test --fork-url $RPC_URL --watch",
+    "test-watch": ". ./.env && forge test --fork-url $RPC_URL --watch ./deploys ./script ./test --run-all",
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
