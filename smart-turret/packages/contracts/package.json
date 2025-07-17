@@ -16,8 +16,8 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test:deploy": "mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
-    "test-watch": ". ./.env && forge test --fork-url $RPC_URL --watch",
-    "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
+    "test-watch": ". ./.env && forge test --fork-url $RPC_URL --watch ./deploys ./src/systems ./script ./test --run-all",
+    "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv > output.log 2>&1",
     "configure": ". ./.env && pnpm forge script ./script/ConfigureSmartTurret.s.sol:ConfigureSmartTurret --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "execute": ". ./.env && pnpm forge script ./script/ExecuteInProximity.s.sol:ExecuteInProximity --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vv",
     "env-stillness": "eve-frontier stillness",
@@ -27,8 +27,8 @@
     "set-key": "eve-frontier private-key"
   },
   "dependencies": {
-    "@eveworld/smart-object-framework-v2": "0.1.1",
-    "@eveworld/world-v2": "0.1.1",
+    "@eveworld/smart-object-framework-v2": "0.1.2",
+    "@eveworld/world-v2": "0.1.2",
     "@eveworld/common-constants": "0.0.13",
     "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/schema-type": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
