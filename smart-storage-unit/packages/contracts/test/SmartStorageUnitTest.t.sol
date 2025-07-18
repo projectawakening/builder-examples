@@ -4,6 +4,8 @@ pragma solidity >=0.8.24;
 import "forge-std/Test.sol";
 import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
+import { Systems } from "@latticexyz/world/src/codegen/tables/Systems.sol";
+import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 
 import { console } from "forge-std/console.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
@@ -117,8 +119,10 @@ contract SmartStorageUnitTest is MudTest {
 
     vm.startPrank(admin);
 
-    ephemeralInteractSystem.setTransferFromEphemeralAccess(smartStorageUnitId, address(this), true);
-    ephemeralInteractSystem.setTransferToEphemeralAccess(smartStorageUnitId, address(this), true);
+    (address contractAddress, ) = Systems.get(systemId);
+
+    ephemeralInteractSystem.setTransferFromEphemeralAccess(smartStorageUnitId, address(contractAddress), true);
+    ephemeralInteractSystem.setTransferToEphemeralAccess(smartStorageUnitId, address(contractAddress), true);
 
     vm.stopPrank();
 
@@ -311,16 +315,22 @@ contract SmartStorageUnitTest is MudTest {
   function testExecute() public {
     testSetRatio();
 
-    console.log('1');
-
-    console.log('2');
     uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
 
     uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
 
-    console.log('3');
+    expectItems(
+      itemInSmartObjectId, 
+      itemOutSmartObjectId, 
+      0, // Item In Expected Quantity
+      15, // Item In Expected Ephemeral Quantity
+      10, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
     vm.startPrank(player);
-
     world.call(
       systemId,
       abi.encodeCall(
@@ -453,6 +463,27 @@ contract SmartStorageUnitTest is MudTest {
     fuelSystem.depositFuel(smartAssemblyId, fuelSmartObjectId, 1000);
 
     deployableSystem.bringOnline(smartAssemblyId);
+  }
+
+  function expectItems(
+    uint256 itemInSmartObjectId, 
+    uint256 itemOutSmartObjectId,
+    uint256 itemInQuantityExpected,
+    uint256 itemInEphemeralQuantityExpected,
+    uint256 itemOutQuantityExpected,
+    uint256 itemOutEphemeralQuantityExpected
+  ) internal {
+    uint256 itemInQuantity = InventoryItem.getQuantity(smartStorageUnitId, itemInSmartObjectId);
+    assertEq(itemInQuantity, itemInQuantityExpected, "Item in quantity incorrect");
+
+    uint256 itemInEphemeralQuantity = EphemeralInvItem.getQuantity(smartStorageUnitId, player, itemInSmartObjectId);
+    assertEq(itemInEphemeralQuantity, itemInEphemeralQuantityExpected, "Item in ephemeral quantity incorrect");
+
+    uint256 itemOutEphemeralQuantity = EphemeralInvItem.getQuantity(smartStorageUnitId, player, itemOutSmartObjectId);
+    assertEq(itemOutEphemeralQuantity, itemOutEphemeralQuantityExpected, "Item out ephemeral quantity incorrect");
+
+    uint256 itemOutQuantity = InventoryItem.getQuantity(smartStorageUnitId, itemOutSmartObjectId);
+    assertEq(itemOutQuantity, itemOutQuantityExpected, "Item out quantity incorrect");
   }
 
 
