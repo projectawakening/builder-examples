@@ -55,14 +55,17 @@ contract MockData is Script {
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
-    bytes32 tenantId = Tenant.getTenantId();
+    console.log("Admin address:");
+    bytes32 tenantId = Tenant.get();
 
+    console.log("Creating characters");
     // Create characters
     vm.startBroadcast(adminPrivateKey);
     _safeCreateCharacter(tenantId, admin, aliceCharacterItemId, "adminCharacter");
     _safeCreateCharacter(tenantId, player, bobCharacterItemId, "playerCharacter");
     vm.stopBroadcast();
 
+    console.log("Characters created");
     // Register delegation
     vm.startBroadcast(playerPrivateKey);
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
