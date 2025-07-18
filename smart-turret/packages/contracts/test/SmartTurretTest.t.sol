@@ -112,10 +112,10 @@ contract SmartTurretTest is MudTest {
     vm.stopPrank();
     vm.startPrank(player, admin);
     
-    adminCharacterSmartId = ObjectIdLib.calculateSingletonId(tenantId, ADMIN_CHARACTER_ID);
-    playerCharacterSmartId = ObjectIdLib.calculateSingletonId(tenantId, PLAYER_CHARACTER_ID);
-    player2CharacterSmartId = ObjectIdLib.calculateSingletonId(tenantId, PLAYER2_CHARACTER_ID);
-    player3CharacterSmartId = ObjectIdLib.calculateSingletonId(tenantId, PLAYER3_CHARACTER_ID);
+    adminCharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, ADMIN_CHARACTER_ID);
+    playerCharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, PLAYER_CHARACTER_ID);
+    player2CharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, PLAYER2_CHARACTER_ID);
+    player3CharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, PLAYER3_CHARACTER_ID);
 
     safeCreateCharacter(admin, adminCharacterSmartId, ADMIN_CHARACTER_ID, ALLOWED_TRIBE_ID, "adminCharacter");
     safeCreateCharacter(player, playerCharacterSmartId, PLAYER_CHARACTER_ID, ALLOWED_TRIBE_ID, "playerCharacter");
@@ -129,7 +129,7 @@ contract SmartTurretTest is MudTest {
     world.registerDelegation(admin, UNLIMITED_DELEGATION, new bytes(0));
     vm.stopPrank();
 
-    smartTurretId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
+    smartTurretId = ObjectIdLib.calculateObjectId(tenantId, SOURCE_GATE_ID);
 
     vm.startPrank(player, admin);
 
@@ -563,7 +563,7 @@ contract SmartTurretTest is MudTest {
 
     vm.startPrank(admin);
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
       fuelMaxCapacity: 100000000,

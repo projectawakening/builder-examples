@@ -6,7 +6,7 @@ settings:
 
 overrides:
   better-sqlite3: ^9.4.3
-  '@eveworld/smart-object-framework-v2': 0.1.1
+  '@eveworld/smart-object-framework-v2': 0.1.2
   react: ^19.0.0
 
 importers:
@@ -50,11 +50,11 @@ importers:
         specifier: 0.0.13
         version: 0.0.13(@aws-sdk/client-kms@3.840.0)(asn1.js@5.4.1)(bufferutil@4.0.9)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@eveworld/smart-object-framework-v2':
-        specifier: 0.1.1
-        version: 0.1.1(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 0.1.2
+        version: 0.1.2(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@eveworld/world-v2':
-        specifier: 0.1.1
-        version: 0.1.1(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 0.1.2
+        version: 0.1.2(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.2.22-7367a813d9b394415ba70678c4295cc90562c304
         version: 2.2.22-7367a813d9b394415ba70678c4295cc90562c304(@opentelemetry/api@1.9.0)(@tanstack/react-query@5.81.5(react@19.1.0))(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(wagmi@2.15.5(@tanstack/query-core@5.81.5)(@tanstack/react-query@5.81.5(react@19.1.0))(bufferutil@4.0.9)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(viem@2.31.6(bufferutil@4.0.9)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
@@ -598,11 +598,11 @@ packages:
   '@eveworld/common-constants@0.0.13':
     resolution: {integrity: sha512-SI3RZhejBq7hNyLst32OCuhmpyKwrWg98EVnAQm8q/9yiLRSWIMe9xS3fflcfKrm+C7yE1lpESNgxI0gOi09ww==}
 
-  '@eveworld/smart-object-framework-v2@0.1.1':
-    resolution: {integrity: sha512-MMMQlhIC/MW3xrwuLDuZffBJsHnBiNbwpXJoDCVgiw3bdhjAmCS+rFYscFvvL3UMe4rINYq7IGjTt8+f2OqBfg==}
+  '@eveworld/smart-object-framework-v2@0.1.2':
+    resolution: {integrity: sha512-V5IDK+Upg4P5EWXefgOfMcACu3vcVhckorvmT8iU111/7E2aC2Eo40kGe63biHB25pnH146qyQQyfa8WX6PHNQ==}
 
-  '@eveworld/world-v2@0.1.1':
-    resolution: {integrity: sha512-Imol4k2NavHea+MfJ6HP0kFFmRhRFsxhUD18YwQfcFnHMAR8RBdX6HGHHGMaZk3n/Y5VMewEUCnP8wBFn6m9Dg==}
+  '@eveworld/world-v2@0.1.2':
+    resolution: {integrity: sha512-UVfz1UdjhWSVmjrwK9UJbnnrfWuHYUgEAsORAK8+1b1I/wGA4+06023MQXZXkC8fywcS6RweIkRYTz4g/140Kg==}
 
   '@floating-ui/core@1.7.2':
     resolution: {integrity: sha512-wNB5ooIKHQc+Kui96jE/n69rHFWAVoxn5CAzL1Xdd8FG03cgY3MLO+GF9U3W737fYDSgPWA6MReKhBQBop6Pcw==}
@@ -5929,7 +5929,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@eveworld/smart-object-framework-v2@0.1.1(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/smart-object-framework-v2@0.1.2(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@latticexyz/cli': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(@opentelemetry/api@1.9.0)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(utf-8-validate@5.0.10)
       '@latticexyz/schema-type': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(bufferutil@4.0.9)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -5965,9 +5965,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@eveworld/world-v2@0.1.1(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/world-v2@0.1.2(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@eveworld/smart-object-framework-v2': 0.1.1(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/smart-object-framework-v2': 0.1.2(@aws-sdk/client-kms@3.840.0)(@opentelemetry/api@1.9.0)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/cli': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(@opentelemetry/api@1.9.0)(better-sqlite3@9.6.0)(bufferutil@4.0.9)(pg@8.16.3)(react@19.1.0)(utf-8-validate@5.0.10)
       '@latticexyz/gas-report': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7
       '@latticexyz/schema-type': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(bufferutil@4.0.9)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -8995,7 +8995,7 @@ snapshots:
 
   '@scure/bip32@1.4.0':
     dependencies:
-      '@noble/curves': 1.4.0
+      '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
 
@@ -9013,7 +9013,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.2
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -11655,10 +11655,10 @@ snapshots:
   ox@0.6.7(typescript@5.4.2)(zod@3.23.8):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
-      '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
-      '@scure/bip32': 1.6.2
-      '@scure/bip39': 1.5.4
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
       abitype: 1.0.8(typescript@5.4.2)(zod@3.23.8)
       eventemitter3: 5.0.1
     optionalDependencies:
@@ -11670,7 +11670,7 @@ snapshots:
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/ciphers': 1.3.0
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.2
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
@@ -12755,13 +12755,13 @@ snapshots:
 
   webauthn-p256@0.0.10:
     dependencies:
-      '@noble/curves': 1.6.0
-      '@noble/hashes': 1.5.0
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
 
   webauthn-p256@0.0.5:
     dependencies:
-      '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
 
   webextension-polyfill@0.10.0: {}
 

@@ -45,7 +45,7 @@ contract MockData is Script {
    * @param name The name of the character
    */
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
     
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
@@ -92,7 +92,7 @@ contract MockData is Script {
 
     vm.startBroadcast(deployerPrivateKey);
 
-    uint256 sourceSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, SOURCE_GATE_ID);
+    uint256 sourceSmartGateId = ObjectIdLib.calculateObjectId(tenantId, SOURCE_GATE_ID);
 
     console.log("Source Smart Gate ID:", vm.toString(sourceSmartGateId));
 
@@ -103,7 +103,7 @@ contract MockData is Script {
       createAnchorAndOnline(sourceSmartGateId, SOURCE_GATE_ID, admin);
     }
 
-    uint256 destinationSmartGateId = ObjectIdLib.calculateSingletonId(tenantId, DESTINATION_GATE_ID);
+    uint256 destinationSmartGateId = ObjectIdLib.calculateObjectId(tenantId, DESTINATION_GATE_ID);
 
     console.log("Destination Smart Gate ID:", vm.toString(destinationSmartGateId));
 
@@ -157,7 +157,7 @@ contract MockData is Script {
 
     console.log("Smart Gate created and anchored successfully");
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
       fuelMaxCapacity: 100000000,

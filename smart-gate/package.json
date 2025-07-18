@@ -30,7 +30,7 @@
   "pnpm": {
     "overrides": {
       "better-sqlite3": "^9.4.3",
-      "@eveworld/smart-object-framework-v2": "0.1.1",
+      "@eveworld/smart-object-framework-v2": "0.1.2",
       "react": "^19.0.0"
     }
   },

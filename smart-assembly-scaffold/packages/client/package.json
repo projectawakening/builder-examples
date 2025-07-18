@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@eveworld/contexts": "0.1.0",
-    "@eveworld/contracts": "0.1.1",
+    "@eveworld/contracts": "0.1.2",
     "@eveworld/types": "0.0.10",
     "@eveworld/ui-components": "0.0.11",
     "@eveworld/utils": "0.0.9",

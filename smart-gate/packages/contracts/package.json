@@ -16,7 +16,7 @@
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
     "test:deploy": "mud test",
     "test": ". ./.env && forge test --fork-url $RPC_URL",
-    "test:watch": ". ./.env && forge test --fork-url $RPC_URL --watch",
+    "test-watch": ". ./.env && forge test --fork-url $RPC_URL --watch ./deploys ./script ./test --run-all",
     "mock-data": ". ./.env && pnpm forge script ./script/MockData.s.sol:MockData --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "configure": ". ./.env && pnpm forge script ./script/ConfigureSmartGate.s.sol:ConfigureSmartGate --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
     "link-gates": ". ./.env && pnpm forge script ./script/LinkGates.s.sol:LinkGates --broadcast --rpc-url $RPC_URL --chain-id $CHAIN_ID --sig \"run(address)\" $WORLD_ADDRESS -vvv",
@@ -28,8 +28,8 @@
     "set-key": "eve-frontier private-key"
   },
   "dependencies": {
-    "@eveworld/smart-object-framework-v2": "0.1.1",
-    "@eveworld/world-v2": "0.1.1",
+    "@eveworld/smart-object-framework-v2": "0.1.2",
+    "@eveworld/world-v2": "0.1.2",
     "@latticexyz/cli": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/schema-type": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",

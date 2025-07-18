@@ -6,7 +6,7 @@ settings:
 
 overrides:
   better-sqlite3: ^9.4.3
-  '@eveworld/smart-object-framework-v2': 0.1.1
+  '@eveworld/smart-object-framework-v2': 0.1.2
 
 importers:
 
@@ -43,11 +43,11 @@ importers:
   packages/contracts:
     dependencies:
       '@eveworld/smart-object-framework-v2':
-        specifier: 0.1.1
-        version: 0.1.1(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 0.1.2
+        version: 0.1.2(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@eveworld/world-v2':
-        specifier: 0.1.1
-        version: 0.1.1(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 0.1.2
+        version: 0.1.2(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/cli':
         specifier: 2.2.22-7367a813d9b394415ba70678c4295cc90562c304
         version: 2.2.22-7367a813d9b394415ba70678c4295cc90562c304(@opentelemetry/api@1.9.0)(@tanstack/react-query@5.60.5(react@18.3.1))(@types/react@18.2.22)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(wagmi@2.15.5(@tanstack/query-core@5.60.5)(@tanstack/react-query@5.60.5(react@18.3.1))(@types/react@18.2.22)(bufferutil@4.0.8)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(viem@2.31.6(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
@@ -599,11 +599,11 @@ packages:
     resolution: {integrity: sha512-zQ0IqbdX8FZ9aw11vP+dZkKDkS+kgIvQPHnSAXzP9pLu+Rfu3D3XEeLbicvoXJTYnhZiPmsZUxgdzXwNKxRPbA==}
     engines: {node: '>=14'}
 
-  '@eveworld/smart-object-framework-v2@0.1.1':
-    resolution: {integrity: sha512-MMMQlhIC/MW3xrwuLDuZffBJsHnBiNbwpXJoDCVgiw3bdhjAmCS+rFYscFvvL3UMe4rINYq7IGjTt8+f2OqBfg==}
+  '@eveworld/smart-object-framework-v2@0.1.2':
+    resolution: {integrity: sha512-V5IDK+Upg4P5EWXefgOfMcACu3vcVhckorvmT8iU111/7E2aC2Eo40kGe63biHB25pnH146qyQQyfa8WX6PHNQ==}
 
-  '@eveworld/world-v2@0.1.1':
-    resolution: {integrity: sha512-Imol4k2NavHea+MfJ6HP0kFFmRhRFsxhUD18YwQfcFnHMAR8RBdX6HGHHGMaZk3n/Y5VMewEUCnP8wBFn6m9Dg==}
+  '@eveworld/world-v2@0.1.2':
+    resolution: {integrity: sha512-UVfz1UdjhWSVmjrwK9UJbnnrfWuHYUgEAsORAK8+1b1I/wGA4+06023MQXZXkC8fywcS6RweIkRYTz4g/140Kg==}
 
   '@floating-ui/core@1.6.8':
     resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
@@ -6203,7 +6203,7 @@ snapshots:
       ethereum-cryptography: 2.2.1
       micro-ftch: 0.3.1
 
-  '@eveworld/smart-object-framework-v2@0.1.1(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/smart-object-framework-v2@0.1.2(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@latticexyz/cli': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(utf-8-validate@5.0.10)
       '@latticexyz/schema-type': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -6239,9 +6239,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@eveworld/world-v2@0.1.1(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@eveworld/world-v2@0.1.2(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@eveworld/smart-object-framework-v2': 0.1.1(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@eveworld/smart-object-framework-v2': 0.1.2(@aws-sdk/client-kms@3.693.0)(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(asn1.js@5.4.1)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/cli': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(@opentelemetry/api@1.9.0)(@types/react@18.2.22)(better-sqlite3@9.6.0)(bufferutil@4.0.8)(pg@8.16.2)(react@18.3.1)(utf-8-validate@5.0.10)
       '@latticexyz/gas-report': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7
       '@latticexyz/schema-type': 2.2.15-main-ba5191c3d6f74b3c4982afd465cf449d23d70bb7(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -9309,7 +9309,7 @@ snapshots:
   '@safe-global/safe-apps-sdk@9.1.0(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@safe-global/safe-gateway-typescript-sdk': 3.22.2
-      viem: 2.23.2(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      viem: 2.31.6(bufferutil@4.0.8)(typescript@5.4.2)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
