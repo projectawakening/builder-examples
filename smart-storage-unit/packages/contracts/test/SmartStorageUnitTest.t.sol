@@ -31,6 +31,7 @@ import { EntityRecordParams, EntityMetadataParams } from "@eveworld/world-v2/src
 import { CreateInventoryItemParams } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/inventory/types.sol";
 import { InventorySystem, inventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/InventorySystemLib.sol";
 import { EphemeralInventorySystem, ephemeralInventorySystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInventorySystemLib.sol";
+import { InventoryOwnershipSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/ownership/InventoryOwnershipSystem.sol";
 
 import { SmartStorageUnitSystem as CustomSmartStorageUnitSystem } from "../src/systems/SmartStorageUnitSystem.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
@@ -38,6 +39,11 @@ import { Utils } from "../src/systems/Utils.sol";
 import { RatioConfig, RatioConfigData } from "../src/codegen/tables/RatioConfig.sol";
 import { EphemeralInteractSystem, ephemeralInteractSystem } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/systems/EphemeralInteractSystemLib.sol";
 
+
+/**
+ * @title SmartStorageUnitTest
+ * @notice These tests are used to test the example custom SSU contract in src/systems/SmartStorageUnitSystem.sol
+ */
 contract SmartStorageUnitTest is MudTest {
   ResourceId systemId = Utils.smartStorageUnitSystemId();
 
@@ -50,6 +56,12 @@ contract SmartStorageUnitTest is MudTest {
 
   uint256 smartStorageUnitId;
 
+  uint256 itemInTypeID;
+  uint256 itemOutTypeID;
+
+  uint256 itemInSmartObjectId;
+  uint256 itemOutSmartObjectId;
+
   //Tribe that can use the Smart Gate
   uint256 ALLOWED_TRIBE_ID = 500;
 
@@ -57,8 +69,16 @@ contract SmartStorageUnitTest is MudTest {
   uint256 ADMIN_CHARACTER_ID = 35000;
   uint256 PLAYER_CHARACTER_ID = 400;
 
-  //Smart Gate IDs
+  //Smart Storage Unit ID
   uint256 SSU_ID = 9000;
+
+  // Item Quantities
+  uint256 ITEM_IN_QUANTITY = 15;
+  uint256 ITEM_OUT_QUANTITY = 10;
+
+  // Test Ratios ( Changing this will cause some tests to fail, and will require some changes to the tests expected values )
+  uint64 TEST_RATIO_IN = 5;
+  uint64 TEST_RATIO_OUT = 1;
 
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
@@ -131,6 +151,12 @@ contract SmartStorageUnitTest is MudTest {
     // Create and deposit inventory items
     _depositToInventory(smartStorageUnitId, tenantId, admin);
     _depositToEphemeralInventory(smartStorageUnitId, tenantId, player);
+
+    itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
+    itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
+
+    itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
+    itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
     
     vm.stopPrank();
   }  
@@ -145,6 +171,14 @@ contract SmartStorageUnitTest is MudTest {
     assertTrue(codeSize > 0);
   }
 
+  function testCharactersExist() public {
+    uint256 playerCharacter = CharactersByAccount.get(player);
+    uint256 adminCharacter = CharactersByAccount.get(admin);
+
+    assertTrue(playerCharacter != 0, "Player character should exist");
+    assertTrue(adminCharacter != 0, "Admin character should exist");
+  }
+
   function testSSUExists() public {
     assertTrue(DeployableState.getCurrentState(smartStorageUnitId) != State.NULL);
   }
@@ -154,61 +188,41 @@ contract SmartStorageUnitTest is MudTest {
   }
 
   function testSSUHasInventoryItems() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-
     uint256 itemInQuantity = InventoryItem.getQuantity(smartStorageUnitId, itemInSmartObjectId);
 
-    assertEq(itemInQuantity, 10, "Item in quantity should be 10");
+    assertEq(itemInQuantity, 0, "Item in quantity should be 0");
+
+    uint256 itemOutQuantity = InventoryItem.getQuantity(smartStorageUnitId, itemOutSmartObjectId);
+
+    assertEq(itemOutQuantity, 10, "Item out quantity should be 10");
   }
 
   function testSSUHasEphemeralItems() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-
     uint256 itemInQuantity = EphemeralInvItem.getQuantity(smartStorageUnitId, player, itemInSmartObjectId);
 
     assertEq(itemInQuantity, 15, "Item in quantity should be 15");
   }
 
   function testSetRatio() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
-    uint64 ratioIn = 5;
-    uint64 ratioOut = 1;
-
     vm.startPrank(admin);
 
     world.call(
       systemId,
       abi.encodeCall(
         CustomSmartStorageUnitSystem.setRatio,
-        (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, ratioIn, ratioOut)
+        (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, TEST_RATIO_IN, TEST_RATIO_OUT)
       )
     );
 
     RatioConfigData memory ratioConfigData = RatioConfig.get(smartStorageUnitId, itemInSmartObjectId);
 
-    assertEq(ratioConfigData.ratioIn, ratioIn, "Ratio in should be 5");
-    assertEq(ratioConfigData.ratioOut, ratioOut, "Ratio out should be 1");
+    assertEq(ratioConfigData.ratioIn, TEST_RATIO_IN, "Ratio in should be 5");
+    assertEq(ratioConfigData.ratioOut, TEST_RATIO_OUT, "Ratio out should be 1");
 
     vm.stopPrank();
   }
 
   function testSetRatioRevertNotAdmin() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
-    uint64 ratioIn = 5;
-    uint64 ratioOut = 1;
-
     vm.startPrank(player);
 
     vm.expectRevert("Access Denied. You are not the owner of this SSU.");
@@ -217,7 +231,7 @@ contract SmartStorageUnitTest is MudTest {
       systemId,
       abi.encodeCall(
         CustomSmartStorageUnitSystem.setRatio,
-        (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, ratioIn, ratioOut)
+        (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, TEST_RATIO_IN, TEST_RATIO_OUT)
       )
     );
 
@@ -225,12 +239,6 @@ contract SmartStorageUnitTest is MudTest {
   }
 
   function testSetRatioRevertInvalidRatio() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
     uint64 ratioIn = 0;
     uint64 ratioOut = 1;
 
@@ -263,21 +271,17 @@ contract SmartStorageUnitTest is MudTest {
   }
   
   function testSetRatioRevertInvalidItem() public {
-    uint256 itemInTypeID = 1;
-    uint256 itemOutTypeID = 2;
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
     vm.startPrank(admin);
 
-    vm.expectRevert(abi.encodeWithSelector(InventorySystem.Inventory_InvalidItemObjectId.selector, itemInSmartObjectId));
+    uint256 randomId = 1;
+
+    vm.expectRevert(abi.encodeWithSelector(InventorySystem.Inventory_InvalidItemObjectId.selector, randomId));
 
     world.call(
       systemId,
       abi.encodeCall(
         CustomSmartStorageUnitSystem.setRatio,
-        (smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, 1, 1)
+        (smartStorageUnitId, randomId, itemOutSmartObjectId, 1, 1)
       )
     );
 
@@ -315,18 +319,10 @@ contract SmartStorageUnitTest is MudTest {
   function testExecute() public {
     testSetRatio();
 
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
     expectItems(
-      itemInSmartObjectId, 
-      itemOutSmartObjectId, 
       0, // Item In Expected Quantity
-      15, // Item In Expected Ephemeral Quantity
-      10, // Item Out Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
       0 // Item Out Expected Ephemeral Quantity
     );
 
@@ -339,19 +335,72 @@ contract SmartStorageUnitTest is MudTest {
       )
     );
 
+    expectItems(
+      5, // Item In Expected Quantity
+      10, // Item In Expected Ephemeral Quantity
+      9, // Item Out Expected Quantity
+      1 // Item Out Expected Ephemeral Quantity
+    );
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartStorageUnitSystem.execute,
+        (smartStorageUnitId, 5, itemInSmartObjectId)
+      )
+    );
+
+    expectItems(
+      10, // Item In Expected Quantity
+      5, // Item In Expected Ephemeral Quantity
+      8, // Item Out Expected Quantity
+      2 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.stopPrank();
+  }
+
+  function testExecuteItemsLeftOver() public {
+    testSetRatio();
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.startPrank(player);
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartStorageUnitSystem.execute,
+        (smartStorageUnitId, 7, itemInSmartObjectId)
+      )
+    );
+
+    // It should only take 5 items, not 7
+    expectItems(
+      5, // Item In Expected Quantity
+      10, // Item In Expected Ephemeral Quantity
+      9, // Item Out Expected Quantity
+      1 // Item Out Expected Ephemeral Quantity
+    );
+
     vm.stopPrank();
   }
 
   function testExecuteRevertQuantityZero() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
     vm.startPrank(admin);
 
     RatioConfig.set(smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, 5, 1);
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
 
     vm.stopPrank();
     vm.startPrank(player);
@@ -366,13 +415,23 @@ contract SmartStorageUnitTest is MudTest {
       )
     );
 
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
     vm.stopPrank();
   }
 
   function testExecuteRevertNoRatio() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
 
     vm.startPrank(player);
 
@@ -386,19 +445,27 @@ contract SmartStorageUnitTest is MudTest {
       )
     );
 
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
     vm.stopPrank();
   }
 
   function testExecuteRevertOutputQuantityZero() public {
-    uint256 itemInTypeID = vm.envUint("ITEM_IN_TYPE_ID");
-    uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-
     vm.startPrank(admin);
     RatioConfig.set(smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, 5, 1);
     vm.stopPrank();
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
 
     vm.startPrank(player);
 
@@ -410,6 +477,82 @@ contract SmartStorageUnitTest is MudTest {
         CustomSmartStorageUnitSystem.execute,
         (smartStorageUnitId, 1, itemInSmartObjectId)
       )
+    );
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.stopPrank();
+  }
+
+  function testExecuteRevertNotEnoughItemsInput() public {
+    vm.startPrank(admin);
+    RatioConfig.set(smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, 20, 1);
+    vm.stopPrank();
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.startPrank(player);
+
+    vm.expectRevert();
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartStorageUnitSystem.execute,
+        (smartStorageUnitId, 20, itemInSmartObjectId)
+      )
+    );
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.stopPrank();
+  }
+
+
+  function testExecuteRevertNotEnoughItemsOutput() public {
+    vm.startPrank(admin);
+    RatioConfig.set(smartStorageUnitId, itemInSmartObjectId, itemOutSmartObjectId, 1, 20);
+    vm.stopPrank();
+
+    vm.startPrank(player);
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
+    );
+
+    vm.expectRevert();
+
+    world.call(
+      systemId,
+      abi.encodeCall(
+        CustomSmartStorageUnitSystem.execute,
+        (smartStorageUnitId, 1, itemInSmartObjectId)
+      )
+    );
+
+    expectItems(
+      0, // Item In Expected Quantity
+      ITEM_IN_QUANTITY, // Item In Expected Ephemeral Quantity
+      ITEM_OUT_QUANTITY, // Item Out Expected Quantity
+      0 // Item Out Expected Ephemeral Quantity
     );
 
     vm.stopPrank();
@@ -466,8 +609,6 @@ contract SmartStorageUnitTest is MudTest {
   }
 
   function expectItems(
-    uint256 itemInSmartObjectId, 
-    uint256 itemOutSmartObjectId,
     uint256 itemInQuantityExpected,
     uint256 itemInEphemeralQuantityExpected,
     uint256 itemOutQuantityExpected,
@@ -486,10 +627,8 @@ contract SmartStorageUnitTest is MudTest {
     assertEq(itemOutQuantity, itemOutQuantityExpected, "Item out quantity incorrect");
   }
 
-
   function _depositToInventory(uint256 smartStorageUnitId, bytes32 tenantId, address player) private {
     uint256 itemOutTypeID = vm.envUint("ITEM_OUT_TYPE_ID");
-
     uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
 
     CreateInventoryItemParams[] memory items = new CreateInventoryItemParams[](1);
@@ -499,7 +638,7 @@ contract SmartStorageUnitTest is MudTest {
       tenantId: tenantId,
       typeId: itemOutTypeID,
       itemId: 0, // For non-singleton items, itemId is zero
-      quantity: 10, // Non-singleton can have any quantity
+      quantity: ITEM_OUT_QUANTITY, // Non-singleton can have any quantity
       volume: 1
     });
 
@@ -520,7 +659,7 @@ contract SmartStorageUnitTest is MudTest {
       tenantId: tenantId,
       typeId: itemInTypeID,
       itemId: 0, // For non-singleton items, itemId is zero
-      quantity: 15, // Non-singleton can have any quantity
+      quantity: ITEM_IN_QUANTITY, // Non-singleton can have any quantity
       volume: 10
     });
 
