@@ -104,7 +104,7 @@ pnpm configure
 > You can adjust the values of the Smart Turret ID and allowed tribe ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
-To test the custom Smart Turret functionality you can use the follow command:
+To test the custom Smart Turret functionality you can use:
 
 ```bash
 pnpm execute
@@ -116,7 +116,7 @@ pnpm test
 ```
 
 This will run a series of pre-defined tests, and should display the results like:
-![../readme-imgs/tests-turret.png]
+![Smart Turret Unit Tests](../readme-imgs/tests-turret.png)
 
 ## Deployment To The Game (Stillness)</a>
 To deploy the example to the game server which is named Stillness, follow the below steps.

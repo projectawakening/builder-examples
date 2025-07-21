@@ -108,7 +108,7 @@ pnpm test
 ```
 
 This will run a series of pre-defined tests, and should display the results like:
-![../readme-imgs/tests-gate.png]
+![Smart Gate Unit Tests](../readme-imgs/tests-gate.png)
 
 ## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
