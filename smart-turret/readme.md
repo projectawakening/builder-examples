@@ -118,7 +118,7 @@ pnpm test
 This will run a series of pre-defined tests, and should display the results like:
 ![Smart Turret Unit Tests](../readme-imgs/tests-turret.png)
 
-## Deployment To The Game (Stillness)</a>
+## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
 ### Step 1: Setup your Environment
@@ -133,7 +133,7 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Then, if you haven't already copy the .envsample file to a .env file with:
+Then, if you haven't already, copy the .envsample file to a .env file with:
 ```bash
 cp .envsample .env
 ```
@@ -236,7 +236,7 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 
 #### Step 1.1: Smart Turret ID (Turret ID)
 
-For Stillness, the Smart Turret ID is available once you have deployed an Smart Turret in the game.
+For Stillness, the Smart Turret ID is available once you have deployed a Smart Turret in the game.
 
 1. Right click your Smart Turret and press Interact
 

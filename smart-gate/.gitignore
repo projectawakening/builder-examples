@@ -11,8 +11,4 @@ node_modules
 packages/contracts/worlds.json
 packages/contracts/src/codegen
 
-# foundry artefacts
-mock-data/cache/
-mock-data/out/
-mock-data/broadcast/
-mock-data/cache/
+mprocs.log

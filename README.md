@@ -58,7 +58,7 @@ Install PNPM, which is used as a more efficient version of NPM with:
 npm install -g pnpm
 ```
 
-### Installing Foundry + Forge
+#### Installing Foundry + Forge
 Install foundry and restart the shell with:
 ```bash
 curl -L https://foundry.paradigm.xyz | bash && source ~/.bashrc

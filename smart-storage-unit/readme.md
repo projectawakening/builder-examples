@@ -118,6 +118,9 @@ You can also test the Smart Storage Unit using the unit tests with:
 pnpm test
 ```
 
+This will run a series of pre-defined tests, and should display the results like:
+![Smart Storage Unit Tests](../readme-imgs/tests-ssu.png)
+
 ## Deployment to The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
