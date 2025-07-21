@@ -34,8 +34,8 @@ contract ConfigureRatio is Script {
     uint64 inRatio = uint64(vm.envUint("IN_RATIO"));
     uint64 outRatio = uint64(vm.envUint("OUT_RATIO"));
 
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemIn);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOut);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemIn);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOut);
 
     //Configure the vending machine
     uint256 smartStorageUnitId = vm.envUint("SSU_ID");

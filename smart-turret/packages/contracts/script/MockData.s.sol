@@ -32,7 +32,7 @@ contract MockData is Script {
   uint256 FUEL_TYPE_ID = 84868;
 
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
-    uint256 smartObjectId = ObjectIdLib.calculateSingletonId(tenantId, characterId);
+    uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
 
     if (CharactersByAccount.get(account) != 0) {
       console.log("Character already exists:", name);
@@ -53,7 +53,7 @@ contract MockData is Script {
 
     world = IBaseWorld(worldAddress);
 
-    tenantId = Tenant.getTenantId();
+    tenantId = Tenant.get();
     
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
@@ -72,7 +72,7 @@ contract MockData is Script {
     safeCreateCharacter(admin, 1348, allowedTribeId, "adminCharacter");
     safeCreateCharacter(player, 1349, 7777, "playerCharacter");
 
-    uint256 smartTurretId = ObjectIdLib.calculateSingletonId(tenantId, SMART_TURRET_ID);
+    uint256 smartTurretId = ObjectIdLib.calculateObjectId(tenantId, SMART_TURRET_ID);
 
     console.log("Smart Turret ID:", vm.toString(smartTurretId));
 
@@ -105,13 +105,15 @@ contract MockData is Script {
 
     smartTurretSystem.createAndAnchorTurret(deployableParams, 0);
 
+    console.log("Smart Turret created and anchored");
+
     entityRecordSystem.createMetadata(smartAssemblyId, EntityMetadataParams({
       name: "Name Here",
       dappURL: "",
       description: "Example Turret for the Smart Turret Example"
     }));
 
-    uint256 fuelSmartObjectId = ObjectIdLib.calculateNonSingletonId(tenantId, FUEL_TYPE_ID);
+    uint256 fuelSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, FUEL_TYPE_ID);
 
     fuelSystem.configureFuelParameters(smartAssemblyId, FuelParams({
       fuelMaxCapacity: 100000000,

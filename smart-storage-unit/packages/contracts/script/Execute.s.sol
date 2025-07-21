@@ -56,8 +56,8 @@ contract Execute is Script {
     uint256 itemOut = vm.envUint("ITEM_OUT_TYPE_ID");
     uint64 testQuantityIn = uint64(vm.envUint("EXECUTE_QUANTITY"));
 
-    uint256 itemInSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemIn);
-    uint256 itemOutSmartObjectId = ObjectIdLib.calculateSingletonId(tenantId, itemOut);
+    uint256 itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemIn);
+    uint256 itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOut);
 
     console.log("BEFORE EXECUTE -----");
     _consoleLogInventories(itemInSmartObjectId, itemOutSmartObjectId);
