@@ -55,7 +55,7 @@ contract MockData is Script {
     uint256 playerPrivateKey = vm.envUint("TEST_PLAYER_PRIVATE_KEY");
     address player = vm.addr(playerPrivateKey);
 
-    bytes32 tenantId = Tenant.getTenantId();
+    bytes32 tenantId = Tenant.get();
 
     // Create characters
     vm.startBroadcast(adminPrivateKey);
