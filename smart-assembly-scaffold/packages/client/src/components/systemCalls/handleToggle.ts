@@ -53,11 +53,6 @@ const setToggle = async ({
 
     console.log("Transaction submitted:", tx);
 
-    // Wait only for fast transaction confirmation
-    const receipt = await worldContract.client.public.waitForTransactionReceipt(
-      { hash: tx }
-    );
-
     // MUD sync happens in background (no waiting)
     sync.data.waitForTransaction(tx).catch(() => console.warn("Sync delayed"));
   } catch (error: any) {

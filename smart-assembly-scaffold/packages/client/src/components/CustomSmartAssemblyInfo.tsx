@@ -132,7 +132,7 @@ const CustomSmartAssemblyInfo: React.FC<CustomSmartAssemblyInfoProps> = (
             <div className="Quantum-Container !py-4 !px-4 inventory-container">
               <EveScroll maxHeight="100px">
                 <InventoryView
-                  inventory={props.assembly?.storage?.mainInventory?.items}
+                  inventory={props.assembly?.inventory?.storageItems}
                 />
               </EveScroll>
             </div>
@@ -146,7 +146,7 @@ const CustomSmartAssemblyInfo: React.FC<CustomSmartAssemblyInfoProps> = (
                 <InventoryView
                   noItemsMessage="No items in your ephemeral inventory"
                   inventory={
-                    props.assembly?.storage?.ephemeralInventories[0]
+                    props.assembly?.inventory?.ephemeralInventoryList[0]
                       ?.ephemeralInventoryItems
                   }
                 />

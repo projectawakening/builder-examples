@@ -5,7 +5,7 @@ export const url = new URL(window.location.href);
 
 const getAbis = async () => {
   const abiResponse = await fetch(
-    "https://world-api-nova.live.tech.evefrontier.com/abis/config"
+    "https://world-api-stillness.live.tech.evefrontier.com/abis/config"
   );
 
   const abi = await abiResponse.json();
