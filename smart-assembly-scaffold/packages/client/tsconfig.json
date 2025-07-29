@@ -2,13 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "useDefineForClassFields": true,
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "moduleResolution": "bundler",
 
     /* Bundler mode */
     "moduleResolution": "node",

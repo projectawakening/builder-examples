@@ -34,31 +34,9 @@ The Smart Assembly Scaffold provides a minimal example to toggle the state of an
 
 The local DApp development toolset uses the EVE Vault with a local recovery phrase. You can optionally use other wallets such as MetaMask if you prefer. 
 
-If you haven't already got the EVE Vault Web Extension:
 
-1. If you don't already have Chrome, install it here:  . You need Chrome if using EVE Vault as your wallet as it currently only supports Chrome. 
-2. Install the EVE Vault Chrome Extension through: https://metamask.io/download/
-3. Import the Wallet
 
-![MetaMask Import](../readme-imgs/metamask/2.png)
-
-3. Select the account dropdown in the top center:
-
-![MetaMask Import](../readme-imgs/metamask/3.png)
-
-4. Select `Add account or hardware wallet`:
-
-![MetaMask Import](../readme-imgs/metamask/4.png)
-
-5. Select `Import account`:
-
-![MetaMask Import](../readme-imgs/metamask/5.png)
-
-6. Import the default private key `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`:
-
-![Metamask Import](../readme-imgs/metamask/6.png)
-
-You should now see the account in your wallet, and be able to use it to interact with the local environment.
+You should now see the imported wallet, and be able to use it to interact with the local environment.
 
 ### Step 2: 🏗️ Deploy Anvil, Contracts, and World Explorer
 
@@ -84,7 +62,7 @@ This command will:
 
 - **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
 - **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
-- **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment so you can begin interacting with them immediately.
+- **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment.
 
 You can then open the DApp through: http://localhost:3000
 
@@ -92,11 +70,13 @@ You can then open the DApp through: http://localhost:3000
 
 You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
 
-http://localhost:13690/anvil/worlds/0x8a791620dd6260079bf849dc5567adc3f2fdc318/explore
+http://localhost:13690/anvil/worlds/0x0165878a594ca255338adfa4d48449f69242eb8f/explore
 
 With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
 
 ## 🛠️ Development & Deployment Steps for the Game (Stillness)
+
+Follow these steps to configure and use your DApp with the live game server.
 
 ### Step 1: 🏗️ Contracts Deployment
 
@@ -208,13 +188,10 @@ pnpm deploy:pyrope
 
 - Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Pyrope, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
 
-### Step 2: 🌐 dApp Environment Variables and Considerations
 
-The Smart Assembly Scaffold’s client UI (dApp) leverages a `<SmartObjectContext>` to provide read-only blockchain primitives, such as smart assembly info. These primitives require access to a deployed world instance and a corresponding World API service to function correctly. This typically means working against an environment like Nova or Stillness, where dedicated API HTTP and WebSocket endpoints are available.
+### Step 2: 💻 Configuring dApp Environment Variables
 
-By connecting to these endpoints, the dApp can stream real-time updates over WebSockets, enabling dynamic state changes and real-time feedback within your dApp. To fully realize this functionality, you’ll need properly configured environment variables that point to a running instance of the World API service.
-
-### Step 3: 💻 Configuring dApp Environment Variables
+The DApp Scaffold uses MUD data from the chain, but it also uses the World API to fetch off-chain data. 
 
 1. Navigate to the client directory with:
 
@@ -230,9 +207,10 @@ By connecting to these endpoints, the dApp can stream real-time updates over Web
 
 3. Update the following environment variables in `./packages/client/.env`:
    - **`VITE_SMARTASSEMBLY_ID`**: The ID obtained from your deployed smart assembly in-game.
-   - **`VITE_CHAIN_ID`**: The chain ID that the World uses, which for Stillness is **695569**.
+   - **`VITE_CHAIN_ID`**: The chain ID that the World uses, which for Stillness is **31337**.
+   - **`VITE_EVE_TOKEN_ADDRESS`** (Optional): The token address for EVE Token.
 
-### Step 4: Updating Namespace Client References
+### Step 3: Updating Namespace Client References
 
 > 💡 **Tip** If you have already used the command `pnpm set-namespace` in the contracts step then you can skip this step.
 
@@ -291,7 +269,7 @@ To run the dApp, navigate to the client directory and run:
 pnpm dev
 ```
 
-You can view the dApp at `localhost:3000`. Make sure your wallet is connected to the Pyrope chain to fully interact with the deployed contracts.
+You can view the dApp at http://localhost:3000. Make sure your wallet is connected to the Pyrope chain to fully interact with the deployed contracts.
 
 ---
 
@@ -301,7 +279,7 @@ The dApp leverages MUD tooling (`@latticexyz`) and EVE World tooling (`@eveworld
 
 With the environment variables set correctly and the right World API URL in place, you’ll be able to toggle states, inspect game structures, and interact directly with the contracts deployed via your chosen environment.
 
-The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed to visually inspect states and updates in real time, streamlining your development and debugging workflows.
+The dApp uses Stash and the `useRecord` hook to fetch table data from your deployed contracts. Additionally, the World Explorer UI can be accessed at http://localhost:13690 to visually inspect states and updates in real time, streamlining your development and debugging workflows.
 
 ## Troubleshooting
 

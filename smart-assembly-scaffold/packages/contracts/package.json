@@ -34,8 +34,6 @@
     "@latticexyz/store": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/world": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
     "@latticexyz/world-modules": "2.2.22-7367a813d9b394415ba70678c4295cc90562c304",
-    "i": "^0.3.7",
-    "npm": "^10.8.0",
     "eve-frontier": "file:../../../frontier-building-tool"
   },
   "devDependencies": {

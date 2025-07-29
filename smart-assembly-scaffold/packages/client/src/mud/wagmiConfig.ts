@@ -89,6 +89,74 @@ export const EVEVault = (): Wallet => {
   };
 };
 
+pyrope.name = "Pyrope Testnet (Stillness)"
+anvil.name = "Anvil (Local)"
+
+let pyropeChain = {
+  ...pyrope,
+  blockExplorers: {
+    ...pyrope.blockExplorers,
+    worldsExplorer: {
+      name: "MUD Worlds Explorer",
+      url: "https://explorer.mud.dev/pyrope/worlds",
+    },
+  },
+  rpcUrls: {
+    default: {
+      http: [
+        "https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com",
+      ],
+    },
+  },
+  iconUrl:
+    "https://explorer.pyropechain.com/assets/configs/network_icon.svg",
+}
+
+let anvilChain = {
+  ...anvil,
+  blockExplorers: {
+    ...anvil.blockExplorers,
+    worldsExplorer: {
+      name: "MUD Worlds Explorer",
+      url: "http://localhost:13690/anvil/worlds",
+    },
+  },
+}
+
+let redstoneChain = {
+  ...redstone,
+  blockExplorers: {
+    ...redstone.blockExplorers,
+    worldsExplorer: {
+      name: "MUD Worlds Explorer",
+      url: "https://explorer.mud.dev/redstone/worlds",
+    },
+  },
+  iconUrl:
+    "https://pbs.twimg.com/profile_images/1724553277147131904/cdma6E3g_400x400.jpg",
+}
+
+let chainID = import.meta.env.VITE_CHAIN_ID;
+
+let chains = [
+  pyropeChain,
+  anvilChain,
+  redstoneChain,
+]
+
+if(chainID == 31337){
+  chains = [
+    anvilChain,
+    pyropeChain,
+    redstoneChain
+  ]
+}
+else if (chainID == 690){
+  chains = [
+    pyropeChain
+  ]
+}
+
 export const wagmiConfig = getDefaultConfig({
   projectId: "EVE_FRONTIER_DAPP",
   appName: document.title,
@@ -111,65 +179,10 @@ export const wagmiConfig = getDefaultConfig({
   ],
   autoConnect: true,
   multiInjectedProviderDiscovery: true,
-  chains: [
-    {
-      ...redstone,
-      blockExplorers: {
-        ...redstone.blockExplorers,
-        worldsExplorer: {
-          name: "MUD Worlds Explorer",
-          url: "https://explorer.mud.dev/redstone/worlds",
-        },
-      },
-      iconUrl:
-        "https://pbs.twimg.com/profile_images/1724553277147131904/cdma6E3g_400x400.jpg",
-    },
-    {
-      ...pyrope,
-      blockExplorers: {
-        ...pyrope.blockExplorers,
-        worldsExplorer: {
-          name: "MUD Worlds Explorer",
-          url: "https://explorer.mud.dev/pyrope/worlds",
-        },
-      },
-      rpcUrls: {
-        default: {
-          http: [
-            "https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com",
-          ],
-        },
-      },
-      iconUrl:
-        "https://explorer.pyropechain.com/assets/configs/network_icon.svg",
-    },
-    {
-      ...garnet,
-      blockExplorers: {
-        ...garnet.blockExplorers,
-        worldsExplorer: {
-          name: "MUD Worlds Explorer",
-          url: "https://explorer.mud.dev/garnet/worlds",
-        },
-      },
-      iconUrl:
-        "https://explorer.garnetchain.com/assets/configs/network_icon.svg",
-    },
-    {
-      ...anvil,
-      blockExplorers: {
-        ...anvil.blockExplorers,
-        worldsExplorer: {
-          name: "MUD Worlds Explorer",
-          url: "http://localhost:13690/anvil/worlds",
-        },
-      },
-    },
-  ],
+  chains: chains,
   transports,
   pollingInterval: {
     [anvil.id]: 2000,
-    [pyrope.id]: 2000,
     [garnet.id]: 2000,
     [redstone.id]: 2000,
   },

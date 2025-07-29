@@ -72,11 +72,6 @@ export function useSmartCharacter() {
 
       setGASBalanceWei(GASBalance);
 
-      //If it's local, don't get the EVE Token Balance as it's not currently supported
-      if (chainID == 31337) {
-        return;
-      }
-
       let EVETokenAddress = import.meta.env.VITE_EVE_TOKEN_ADDRESS;
 
       //Get the erc20 ABI
@@ -209,6 +204,8 @@ export function useSmartCharacter() {
     image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
     smartAssemblies: ownedSmartAssemblies, // Stores the Smart Object ID's of the Smart Assemblies owned by this character
   };
+
+  console.log("smartCharacter", smartCharacter);
 
   return { smartCharacter };
 }

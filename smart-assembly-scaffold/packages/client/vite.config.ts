@@ -16,8 +16,22 @@ export default defineConfig({
       include: '**/*.svg',
     }),
   ],
+  esbuild: {
+    target: 'es2022',
+    supported: {
+      'import-assertions': true,
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2022',
+      supported: {
+        'import-assertions': true,
+      },
+    },
+  },
   server: {
-    port: parseInt(process.env.VITE_PORT) || 3000,
+    port: parseInt(process.env.VITE_PORT) || 8080,
     fs: {
       strict: false,
     },

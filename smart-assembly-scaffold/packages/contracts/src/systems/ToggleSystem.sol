@@ -2,6 +2,9 @@
 pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
+
+import { OwnershipByObject } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/OwnershipByObject.sol";
+
 import { ToggleTable } from "../codegen/tables/ToggleTable.sol";
 
 /**
@@ -15,6 +18,10 @@ contract ToggleSystem is System {
   function setTrue(
     uint256 smartObjectId
   ) public {
+    //Ensure the caller is the owner of the SSU
+    address ssuOwner = OwnershipByObject.get(smartObjectId);
+    require(ssuOwner == _msgSender(), "Access Denied. You are not the owner of this SSU.");
+    
     ToggleTable.set(smartObjectId, true);
   }
 
@@ -25,6 +32,10 @@ contract ToggleSystem is System {
   function setFalse(
     uint256 smartObjectId
   ) public {
+    //Ensure the caller is the owner of the SSU
+    address ssuOwner = OwnershipByObject.get(smartObjectId);
+    require(ssuOwner == _msgSender(), "Access Denied. You are not the owner of this SSU.");
+    
     ToggleTable.set(smartObjectId, false);
   }
 

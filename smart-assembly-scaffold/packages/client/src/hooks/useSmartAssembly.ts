@@ -110,7 +110,6 @@ export function useSmartAssembly(smartObjectId = 0n) {
     },
   });
 
-  // Get all inventory items at once using a single useRecord call
   const inventoryItems =
     smartAssemblyInventory?.items?.map((item: any) => ({
       itemId: item,

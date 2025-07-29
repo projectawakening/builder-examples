@@ -25,7 +25,7 @@ export function Explorer() {
   return (
     <div className="fixed bottom-0 inset-x-0 flex flex-col opacity-80 transition hover:opacity-100">
       <div>
-        <EveButton onClick={() => setOpen(!open)} typeClass="primary">
+        <EveButton onClick={() => setOpen(!open)} typeClass="primary explorer-button">
           {open ? "Close" : "World Explorer"}
         </EveButton>
       </div>

@@ -11,8 +11,10 @@ import { useSmartCharacter } from "./hooks/useSmartCharacter";
 import { useEffect } from "react";
 import { Severity } from "@eveworld/types";
 import { EveLinearBar } from "@eveworld/ui-components";
+import { Routes, Route } from "react-router-dom";
 
 import EntityView from "./components/EntityView";
+import ComponentSamples from "./components/ComponentSamples";
 
 // DApp Simple Customization
 const DISPLAY_EXPLORER = true;
@@ -58,7 +60,10 @@ export const App = () => {
       <EveLayout smartCharacter={smartCharacter}>
         {isLive ? (
           <div className="flex flex-col align-center max-w-[1250px] mx-auto px-4">
-            <EntityView />
+            <Routes>
+              <Route path="/docs" element={<ComponentSamples />} />
+              <Route path="/" element={<EntityView />} />
+            </Routes>
           </div>
         ) : (
           <div className="flex items-center justify-center min-h-screen">

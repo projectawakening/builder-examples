@@ -32,10 +32,8 @@ export function useWorldContract():
     const getWorldAddress = async () => {
       try {
         const currentChainId = chain?.id ?? chainId ?? 31337;
-        console.log("Getting world deploy for chain ID:", currentChainId);
 
         const { address: worldAddress } = await getWorldDeploy(currentChainId);
-        console.log("World address retrieved:", worldAddress);
 
         setWorldAddress(worldAddress);
       } catch (error) {
@@ -60,8 +58,6 @@ export function useWorldContract():
       if (!worldAddress || worldAddress === "0x") {
         throw new Error("World address not available yet.");
       }
-
-      console.log("Creating world contract with address:", worldAddress);
 
       return getContract({
         abi: worldAbi,

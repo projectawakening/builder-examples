@@ -13,11 +13,6 @@ const setToggle = async ({
 }): Promise<string | undefined> => {
   let tx;
 
-  console.log("SMART OBJECT ID", smartObjectId);
-  console.log("CURRENT VALUE", currentValue);
-  console.log("SYNC", sync);
-  console.log("WORLD CONTRACT", worldContract);
-
   if (!worldContract) {
     throw new Error(
       "World contract not available. Please wait for connection."
@@ -50,8 +45,6 @@ const setToggle = async ({
         txOptions
       );
     }
-
-    console.log("Transaction submitted:", tx);
 
     // MUD sync happens in background (no waiting)
     sync.data.waitForTransaction(tx).catch(() => console.warn("Sync delayed"));

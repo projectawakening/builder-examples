@@ -24,3 +24,12 @@
     min-height: 100px!important;
     max-height: 100px!important;
 }
+
+.explorer-button {
+    width: 200px!important;
+}
+
+.color-guide {
+    border-color: white!important;
+    border-width: 1px!important;
+}

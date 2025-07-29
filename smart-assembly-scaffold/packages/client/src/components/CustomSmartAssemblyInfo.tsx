@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import SmartAssemblyInfo from "@eveworld/ui-components/components/SmartAssemblyInfo";
 import type { InventoryItem } from "@eveworld/types";
 import EveScroll from "@eveworld/ui-components/components/EveScroll";
@@ -9,6 +9,15 @@ type CustomSmartAssemblyInfoProps = React.ComponentProps<
   typeof SmartAssemblyInfo
 > & {
   inventory?: any[];
+  assembly?: {
+    smartAssemblyType?: string;
+    inventory?: {
+      storageItems?: InventoryItem[];
+      ephemeralInventoryList?: Array<{
+        ephemeralInventoryItems?: InventoryItem[];
+      }>;
+    };
+  };
 };
 
 type InventoryViewProps = {
@@ -20,11 +29,24 @@ type ExtendedInventoryItem = InventoryItem & {
   imageUrl: string;
 };
 
+// Cache for item data to prevent re-fetching
+const itemCache = new Map<number, { name: string; imageUrl: string }>();
+
 const InventoryView: React.FC<InventoryViewProps> = (props) => {
   const [inventoryItems, setInventoryItems] = useState<ExtendedInventoryItem[]>(
     []
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  // Create a stable key for the inventory to detect actual changes
+  const inventoryKey = useMemo(() => {
+    if (!props.inventory) return "";
+    return props.inventory
+      .map(item => `${item.typeId}-${item.quantity}-${item.itemId}`)
+      .sort()
+      .join("|");
+  }, [props.inventory]);
 
   useEffect(() => {
     const backupInventoryItems = props?.inventory?.map((item) => {
@@ -38,14 +60,24 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
     });
 
     const getAllInventoryItemInfo = async () => {
-      if (!props.inventory) return;
+      if (!props.inventory) {
+        setInventoryItems([]);
+        setIsInitialLoad(false);
+        return;
+      }
 
-      setIsLoading(true);
+      // Only show loading on initial load or when we have new items to fetch
+      const newItems = props.inventory.filter(item => !itemCache.has(item.typeId));
+      if (newItems.length > 0) {
+        setIsLoading(true);
+      }
+
       const worldAPIURL = import.meta.env.VITE_WORLD_API_URL;
 
       if (!worldAPIURL) {
         setInventoryItems(backupInventoryItems || []);
         setIsLoading(false);
+        setIsInitialLoad(false);
         return;
       }
 
@@ -56,7 +88,12 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
             let itemName = "";
             let imageUrl = "";
 
-            if (item.typeId) {
+            // Check cache first
+            if (itemCache.has(itemTypeId)) {
+              const cached = itemCache.get(itemTypeId)!;
+              itemName = cached.name;
+              imageUrl = cached.imageUrl;
+            } else if (item.typeId) {
               const response = await fetch(
                 `${worldAPIURL}/v2/types/${itemTypeId}`
               );
@@ -65,11 +102,15 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
 
               itemName = data.name;
               imageUrl = data?.metadata?.image || "";
+              
+              // Cache the result
+              itemCache.set(itemTypeId, { name: itemName, imageUrl });
             }
+            
             return {
-              name: itemName || itemTypeId,
+              name: itemName || String(itemTypeId),
               quantity: Number(item.quantity),
-              itemId: item.itemId || item.itemObjectId || 0,
+              itemId: item.itemId || 0,
               typeId: item.typeId || 0,
               imageUrl: imageUrl,
             };
@@ -82,20 +123,21 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
         setInventoryItems(backupInventoryItems || []);
       } finally {
         setIsLoading(false);
+        setIsInitialLoad(false);
       }
     };
 
     getAllInventoryItemInfo();
-  }, [props.inventory]);
+  }, [inventoryKey]); // Use inventoryKey instead of props.inventory
 
   return (
     <div>
-      {isLoading ? (
+      {isInitialLoad ? (
         <EveLoadingAnimation position="horizontal">
           <div className="h-20" />
         </EveLoadingAnimation>
       ) : inventoryItems.length > 0 ? (
-        inventoryItems.map((item: InventoryItem) => (
+        inventoryItems.map((item: ExtendedInventoryItem) => (
           <div
             className="text-xs flex items-center justify-between"
             key={item.itemId}
@@ -119,6 +161,7 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
   );
 };
 
+// This is an example of how to extend the Smart Assembly Scaffold
 const CustomSmartAssemblyInfo: React.FC<CustomSmartAssemblyInfoProps> = (
   props
 ) => {
@@ -132,7 +175,7 @@ const CustomSmartAssemblyInfo: React.FC<CustomSmartAssemblyInfoProps> = (
             <div className="Quantum-Container !py-4 !px-4 inventory-container">
               <EveScroll maxHeight="100px">
                 <InventoryView
-                  inventory={props.assembly?.inventory?.storageItems}
+                  inventory={props.assembly?.inventory?.storageItems || []}
                 />
               </EveScroll>
             </div>
@@ -146,8 +189,8 @@ const CustomSmartAssemblyInfo: React.FC<CustomSmartAssemblyInfoProps> = (
                 <InventoryView
                   noItemsMessage="No items in your ephemeral inventory"
                   inventory={
-                    props.assembly?.inventory?.ephemeralInventoryList[0]
-                      ?.ephemeralInventoryItems
+                    props.assembly?.inventory?.ephemeralInventoryList?.[0]
+                      ?.ephemeralInventoryItems || []
                   }
                 />
               </EveScroll>
