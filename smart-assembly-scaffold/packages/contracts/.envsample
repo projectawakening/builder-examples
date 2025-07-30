@@ -23,7 +23,7 @@ WORLD_ADDRESS=0x8a791620dd6260079bf849dc5567adc3f2fdc318 #Local World Address
 #Stillness RPC
 # RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 # CHAIN_ID=695569
-# WORLD_ADDRESS=0x9891ee4bf5f2a9e74e9d81b06b855eec70b78d4f
+# WORLD_ADDRESS=0xcdb380e0cd3949caf70c45c67079f2e27a77fc47
 
 #SMART STORAGE UNIT ID
 #Copy this info from the in-game Smart Storage Unit
