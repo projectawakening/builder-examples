@@ -11,10 +11,10 @@ GREEN="\033[32m"
 YELLOW="\033[33m"
 RESET="\033[0m"
 
-API_URL="blockchain-gateway-$SERVER.test.tech.evefrontier.com"
+API_URL="world-api-$SERVER.test.tech.evefrontier.com"
 
 if [[ $SERVER = "stillness" ]]; then
-    API_URL="blockchain-gateway-$SERVER.live.tech.evefrontier.com"
+    API_URL="world-api-$SERVER.live.tech.evefrontier.com"
 fi
 
 API_URL="https://${API_URL}"
