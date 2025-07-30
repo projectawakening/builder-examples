@@ -217,9 +217,7 @@ pnpm run deploy:pyrope
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-<div align="center">
-<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
-</div>
+![Deployment Success Message Image](../readme-imgs/deploy.png)
 
 ## Configuring and Testing the Game Contracts (Stillness)
 

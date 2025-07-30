@@ -98,14 +98,14 @@ pnpm mock-data
 > This will create the on-chain SSU, fuel it and bring it online.
 
 ### Step 4: Configure SSU
-To configure which items should be traded and the ratio's to trade for run:
+To configure which items should be traded and the ratios to trade for run:
 
 ```bash
 pnpm configure
 ```
 
 > [!NOTE]
-> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed, though they are optional to change for local development.
+> You can adjust the values for the SSU_ID, in and out item IDs and the ratios in the .env file as needed, though they are optional to change for local development.
 
 ### Step 5: Test The SSU (Optional)
 To test the behavior of the SSU contracts, you can use this command to execute a trade:
@@ -228,9 +228,7 @@ pnpm run deploy:pyrope
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-<div align="center">
-<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
-</div>
+![Deployment Success Message Image](../readme-imgs/deploy.png)
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
@@ -246,7 +244,7 @@ TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d
 ```
 
 > [!NOTE] 
-> This is only for testing, and an example not requiring this is on it's way.
+> This is only for testing, and an example not requiring this is on its way.
 
 #### Step 1.2: Smart Storage Unit ID (SSU ID)
 
@@ -266,9 +264,9 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
     SSU_ID=34818344039668088032259299209624217066809194721387714788472158182502870248994
     ```
 
-#### Step 1.3: Item ID's
+#### Step 1.3: Item IDs
 
-To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/v2/types and then search for the item name.
+To retrieve the Item IDs you can use https://world-api-stillness.live.tech.evefrontier.com/v2/types and then search for the item name.
 
 You can use the "smartItemId" as the Item ID.
 
@@ -282,7 +280,7 @@ You can use the "smartItemId" as the Item ID.
 ```
 
 
-Configure the Item ID's in the .env file.
+Configure the Item IDs in the .env file.
 
 ```bash
 #Item Bought
@@ -314,14 +312,14 @@ pnpm set-config
 ```
 
 ### Step 2: Configure SSU
-To configure which items should be traded and the ratio's to trade for run:
+To configure which items should be traded and the ratios to trade for run:
 
 ```bash
 pnpm configure
 ```
 
 > [!NOTE]
-> You can adjust the values for the SSU_ID, in and out item ID's and the ratios in the .env file as needed.
+> You can adjust the values for the SSU_ID, in and out item IDs and the ratios in the .env file as needed.
 
 > [!IMPORTANT]
 > Trades are not automatic, which means that you need to run the `pnpm execute` command or call the execute smart contract function on the SSU to trade items.
