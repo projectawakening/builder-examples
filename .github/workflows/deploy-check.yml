@@ -117,6 +117,7 @@ jobs:
 
       - name: Set RPC
         run: |
+          cp ./smart-storage-unit/packages/contracts/.envsample ./smart-storage-unit/packages/contracts/.env
           sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-storage-unit/packages/contracts/.env"
 
       - name: Install packages

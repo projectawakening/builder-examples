@@ -16,7 +16,7 @@ jobs:
 
       - name: Check Readme Files exist
         run: |
-          files=("README.md" "smart-gate/readme.md" "smart-turret/readme.md" "smart-storage-unit/readme.md")
+          files=("README.md" "smart-gate/readme.md" "smart-turret/readme.md" "smart-storage-unit/readme.md" "frontier-building-tool/README.md" "pods/readme.md")
           missing=false
 
           for file in "${files[@]}"; do
@@ -34,7 +34,7 @@ jobs:
 
       - name: Check Misc files exist
         run: |
-          files=(".gitignore" "docker-compose.yaml" "LICENSE")
+          files=(".gitignore" "docker-compose.yaml" "world.env" "LICENSE")
           missing=false
 
           for file in "${files[@]}"; do
@@ -50,7 +50,7 @@ jobs:
             exit 1
           fi
 
-      - name: Check .env Files exist
+      - name: Check .envsample files exist
         run: |
           files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.envsample" "smart-storage-unit/packages/contracts/.envsample")
           missing=false
@@ -65,6 +65,60 @@ jobs:
           done
 
           if [ "$missing" = true ]; then
+            exit 1
+          fi
+
+      - name: Check license files exist
+        run: |
+          files=("smart-turret/LICENSE" "smart-gate/LICENSE" "smart-storage-unit/LICENSE")
+          missing=false
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "$file is missing ❌"
+              missing=true
+            else
+              echo "$file exists ✅"
+            fi
+          done
+
+          if [ "$missing" = true ]; then
+            exit 1
+          fi
+
+      - name: Check .env files are not included
+        run: |
+          files=("smart-turret/packages/contracts/.env" "smart-gate/packages/contracts/.env" "smart-storage-unit/packages/contracts/.env")
+          included=false
+
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "$file is included ❌"
+              included=true
+            else
+              echo "$file does not exist ✅"
+            fi
+          done
+
+          if [ "$included" = true ]; then
+            exit 1
+          fi
+
+      - name: Check node_modules are not included
+        run: |
+          files=("smart-turret/node_modules" "smart-gate/node_modules" "smart-storage-unit/node_modules" "frontier-building-tool/node_modules" "pods/node_modules")
+          included=false
+
+          for file in "${files[@]}"; do
+            if [ -d "$file" ]; then
+              echo "$file is included ❌"
+              included=true
+            else
+              echo "$file does not exist ✅"
+            fi
+          done
+
+          if [ "$included" = true ]; then
             exit 1
           fi
       
