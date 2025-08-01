@@ -1,0 +1,194 @@
+name: Deploy Check
+
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  example-deploy-and-configure:
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Get Repo
+        uses: actions/checkout@v4
+
+      - name: Install Foundry in a Different Directory
+        run: |
+          export FOUNDRY_DIR="$HOME/foundry_temp"
+          mkdir -p $FOUNDRY_DIR
+          export PATH="$FOUNDRY_DIR/bin:$PATH"
+          echo "Installing Foundry in: $FOUNDRY_DIR"
+          curl -L https://foundry.paradigm.xyz | bash
+
+          echo "Checking Foundry installation..."
+          ls -lah $FOUNDRY_DIR || echo "ERROR: Foundry installation failed!"
+
+          echo "Running foundryup..."
+          $FOUNDRY_DIR/bin/foundryup || echo "ERROR: Foundryup failed!"
+
+          echo "Persisting Foundry PATH for future steps..."
+          echo "export PATH=$FOUNDRY_DIR/bin:\$PATH" >> $GITHUB_ENV
+
+          echo "Verifying Foundry installation..."
+          $FOUNDRY_DIR/bin/forge --version || echo "ERROR: Forge not found!"
+
+        
+      - name: Verify Foundry Installation
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          forge --version
+
+      - name: Setup Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Start Containers
+        run: docker-compose up -d
+
+      - name: Wait for World Deployer to Finish
+        run: |
+          echo "Waiting for world-deployer to complete..."
+          docker compose logs -f world-deployer &
+          DEPLOYER_PID=$!
+          docker wait world-deployer
+          echo "world-deployer has finished"
+
+      - name: Install Node.JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Navigate to the smart gate contracts directory
+        run: |
+          cd smart-gate/packages/contracts      
+
+      - name: Set RPC
+        run: |
+          sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-gate/packages/contracts/.env"
+
+      - name: Install packages
+        run: |          
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm install
+        working-directory: smart-gate
+
+      - name: Deploy Smart Gate Example locally
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm deploy:local
+        working-directory: smart-gate/packages/contracts
+
+      - name: Run Smart Gate Tests
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm test
+        working-directory: smart-gate/packages/contracts
+        
+      - name: Mock Data
+        run: |        
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm mock-data
+        working-directory: smart-gate/packages/contracts
+        
+      - name: Configure
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm configure          
+        working-directory: smart-gate/packages/contracts
+        
+      - name: Link Gates
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm link-gates          
+        working-directory: smart-gate/packages/contracts
+        
+      - name: Can Jump
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm can-jump         
+        working-directory: smart-gate/packages/contracts  
+
+      - name: Set RPC
+        run: |
+          sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-storage-unit/packages/contracts/.env"
+
+      - name: Install packages
+        run: |          
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm install
+        working-directory: smart-storage-unit
+
+      - name: Deploy Smart Storage Unit Example locally
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm deploy:local
+        working-directory: smart-storage-unit/packages/contracts
+        
+      - name: Mock Data
+        run: |        
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm mock-data
+        working-directory: smart-storage-unit/packages/contracts
+        
+      - name: Configure
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm configure          
+        working-directory: smart-storage-unit/packages/contracts
+        
+      - name: Execute
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm configure          
+        working-directory: smart-storage-unit/packages/contracts      
+
+      - name: Set RPC
+        run: |
+          cp ./smart-turret/packages/contracts/.envsample ./smart-turret/packages/contracts/.env
+          sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-turret/packages/contracts/.env"
+
+      - name: Install packages
+        run: |          
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm install
+        working-directory: smart-turret
+
+      - name: Deploy Smart Turret Example locally
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm deploy:local
+        working-directory: smart-turret/packages/contracts
+        
+      - name: Run Smart Turret Tests
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm test
+        working-directory: smart-turret/packages/contracts
+        
+      - name: Mock Data
+        run: |        
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm mock-data
+        working-directory: smart-turret/packages/contracts
+        
+      - name: Configure
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm configure          
+        working-directory: smart-turret/packages/contracts
+        
+      - name: Execute
+        run: |
+          export PATH="$HOME/foundry_temp/bin:$PATH"
+          pnpm configure          
+        working-directory: smart-turret/packages/contracts
+
+      - name: Stop Docker Containers
+        if: always()
+        run: docker-compose down

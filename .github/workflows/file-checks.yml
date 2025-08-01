@@ -1,0 +1,97 @@
+name: File Checks
+
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  file-checks:
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Get Repo
+        uses: actions/checkout@v4
+
+      - name: Check Readme Files exist
+        run: |
+          files=("README.md" "smart-gate/readme.md" "smart-turret/readme.md" "smart-storage-unit/readme.md")
+          missing=false
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "$file is missing ❌"
+              missing=true
+            else
+              echo "$file exists ✅"
+            fi
+          done
+
+          if [ "$missing" = true ]; then
+            exit 1
+          fi      
+
+      - name: Check Misc files exist
+        run: |
+          files=(".gitignore" "docker-compose.yaml" "LICENSE")
+          missing=false
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "$file is missing ❌"
+              missing=true
+            else
+              echo "$file exists ✅"
+            fi
+          done
+
+          if [ "$missing" = true ]; then
+            exit 1
+          fi
+
+      - name: Check .env Files exist
+        run: |
+          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.env" "smart-storage-unit/packages/contracts/.envsample")
+          missing=false
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "$file is missing ❌"
+              missing=true
+            else
+              echo "$file exists ✅"
+            fi
+          done
+
+          if [ "$missing" = true ]; then
+            exit 1
+          fi
+      
+      - name: Check default values
+        run: |
+          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.env" "smart-storage-unit/packages/contracts/.envsample")
+          missing=false
+          required_private_key="PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+          required_world_address="WORLD_ADDRESS=0x0165878a594ca255338adfa4d48449f69242eb8f"
+
+          for file in "${files[@]}"; do
+            if ! grep -qxF "$required_private_key" "$file"; then
+              echo "❌ $file does not contain the correct PRIVATE_KEY"
+              missing=true
+            else
+              echo "✅ $file contains correct PRIVATE_KEY"
+            fi
+           
+            if ! grep -qF "$required_world_address" "$file"; then
+              echo "❌ $file does not contain the correct WORLD_ADDRESS"
+              missing=true
+            else
+              echo "✅ $file contains correct WORLD_ADDRESS"
+            fi
+          done
+
+          if [ "$missing" = true ]; then
+            exit 1
+          fi
