@@ -70,12 +70,13 @@ jobs:
 
       - name: Set RPC
         run: |
+          cp ./smart-gate/packages/contracts/.envsample ./smart-gate/packages/contracts/.env
           sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-gate/packages/contracts/.env"
 
       - name: Install packages
         run: |          
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm install
+          pnpm install --no-frozen-lockfile
         working-directory: smart-gate
 
       - name: Deploy Smart Gate Example locally
@@ -121,7 +122,7 @@ jobs:
       - name: Install packages
         run: |          
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm install
+          pnpm install --no-frozen-lockfile
         working-directory: smart-storage-unit
 
       - name: Deploy Smart Storage Unit Example locally
@@ -156,7 +157,7 @@ jobs:
       - name: Install packages
         run: |          
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm install
+          pnpm install --no-frozen-lockfile
         working-directory: smart-turret
 
       - name: Deploy Smart Turret Example locally

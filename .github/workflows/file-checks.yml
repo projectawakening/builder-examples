@@ -52,7 +52,7 @@ jobs:
 
       - name: Check .env Files exist
         run: |
-          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.env" "smart-storage-unit/packages/contracts/.envsample")
+          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.envsample" "smart-storage-unit/packages/contracts/.envsample")
           missing=false
 
           for file in "${files[@]}"; do
@@ -70,7 +70,7 @@ jobs:
       
       - name: Check default values
         run: |
-          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.env" "smart-storage-unit/packages/contracts/.envsample")
+          files=("smart-turret/packages/contracts/.envsample" "smart-gate/packages/contracts/.envsample" "smart-storage-unit/packages/contracts/.envsample")
           missing=false
           required_private_key="PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 
