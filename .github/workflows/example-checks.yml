@@ -1,4 +1,4 @@
-name: Deploy Check
+name: Example Checks
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  example-deploy-and-configure:
+  example-checks:
     runs-on: ubuntu-latest
 
     steps: 
