@@ -99,6 +99,8 @@ async function CreateProof(){
 
     //Output the proof
     console.log(proofMessage)
+
+    process.exit(0);
 }
 
 CreateProof()

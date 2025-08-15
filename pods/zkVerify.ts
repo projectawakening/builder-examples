@@ -90,7 +90,7 @@ async function VerifyProof(){
 
     console.log("Correct POD Type")
 		
-    console.log("Verfied security badge for character", badgeEntries.holder_smart_character_address.value);
+    console.log("Verified security badge for character", badgeEntries.holder_smart_character_address.value);
 
     //Exit the program
     process.exit(0);

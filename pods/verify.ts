@@ -2,7 +2,7 @@
 import { POD, PODEntries, JSONPOD, PODValue, podValueFromJSON } from "@pcd/pod";
 
 //Fetch the POD String
-const serializedPOD = '{"entries":{"expiry_date":{"date":"2026-04-10T00:00:00.000Z"},"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae","issued_date":{"date":"2025-04-10T00:00:00.000Z"},"level":4,"pod_type":"corpName.access_badge"},"signature":"IQkqxOjjxbiJNHd2mfxOmLEFsWFluw+ZL93MnRGcXJoZWLdUc5Y9p/qgZ/gL72250U6XBVZnEIahn2M3leuBAg","signerPublicKey":"xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4"}'
+const serializedPOD = '{"entries":{"expiry_date":{"date":"2026-04-10T00:00:00.000Z"},"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae","issued_date":{"date":"2025-04-10T00:00:00.000Z"},"pod_type":"corpName.security_badge","security_level":4},"signature":"GfpAbL4XJzSVZUg2XmnPLlIl0Yt1e0JCG+CKNfNQi5FFT3P7L2aCxnmNmSoDGXahvaqhOcXtjGybD1ZH39ZXAQ","signerPublicKey":"3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw"}'
 
 //Create the POD from the String
 const receivedPOD: POD = POD.fromJSON(JSON.parse(serializedPOD));
@@ -14,7 +14,7 @@ if(!receivedPOD.verifySignature()){
 
 console.log("Verified POD")
 
-const officialPublicKey = "xDP3ppa3qjpSJO+zmTuvDM2eku7O4MKaP2yCCKnoHZ4" 
+const officialPublicKey = "3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw" 
 
 if(receivedPOD.signerPublicKey != officialPublicKey){
     throw new Error("Not the official signer");

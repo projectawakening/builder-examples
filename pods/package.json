@@ -5,17 +5,19 @@
   "description": "Example of how to create and verify PODs and ZK Proofs",
   "main": "index.js",
   "scripts": {
-    "create": "pnpm tsx create.tsx",
-    "verify": "pnpm tsx verify.tsx",
-    "zkCreate": "pnpm tsx zkCreate.tsx",
-    "zkVerify": "pnpm tsx zkVerify.tsx",
-    "keyGen": "node privateKeyGen.js"
+    "create": "pnpm tsx create.ts",
+    "verify": "pnpm tsx verify.ts",
+    "zkCreate": "pnpm tsx zkCreate.ts",
+    "zkVerify": "pnpm tsx zkVerify.ts",
+    "keyGen": "node privateKeyGen.js",
+    "test": "jest"
   },
   "author": "CCP Red Dragon",
   "dependencies": {
     "@pcd/gpc": "^0.4.0",
     "@pcd/pod": "^0.5.0",
     "tsx": "^4.19.3",
-    "@pcd/proto-pod-gpc-artifacts": "0.13.0"
+    "@pcd/proto-pod-gpc-artifacts": "0.13.0",
+    "jest": "30.0.5"
   }
 }
