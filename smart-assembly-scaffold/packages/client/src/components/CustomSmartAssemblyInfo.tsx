@@ -36,7 +36,7 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
   const [inventoryItems, setInventoryItems] = useState<ExtendedInventoryItem[]>(
     []
   );
-  const [isLoading, setIsLoading] = useState(false);
+  
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Create a stable key for the inventory to detect actual changes
@@ -66,17 +66,9 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
         return;
       }
 
-      // Only show loading on initial load or when we have new items to fetch
-      const newItems = props.inventory.filter(item => !itemCache.has(item.typeId));
-      if (newItems.length > 0) {
-        setIsLoading(true);
-      }
-
       const worldAPIURL = import.meta.env.VITE_WORLD_API_URL;
-
       if (!worldAPIURL) {
         setInventoryItems(backupInventoryItems || []);
-        setIsLoading(false);
         setIsInitialLoad(false);
         return;
       }
@@ -122,13 +114,12 @@ const InventoryView: React.FC<InventoryViewProps> = (props) => {
         console.error("Error fetching inventory items:", error);
         setInventoryItems(backupInventoryItems || []);
       } finally {
-        setIsLoading(false);
         setIsInitialLoad(false);
       }
     };
 
     getAllInventoryItemInfo();
-  }, [inventoryKey]); // Use inventoryKey instead of props.inventory
+  }, [inventoryKey]);
 
   return (
     <div>

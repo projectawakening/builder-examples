@@ -24,13 +24,13 @@ EVE Frontier Smart Assembly Scaffold is a streamlined framework designed for int
 
 ### 🚀 User Flow
 
-The Smart Assembly Scaffold provides a minimal example to toggle the state of an item on or off.
+The Smart Assembly Scaffold provides a minimal example to allow players to toggle the state of a MUD Table through interacting with a Smart Contract, view MUD data and more. 
 
 ---
 
 ## 🛠️ Development & Deployment Steps in Local Environment
 
-### Step 1: 🛠️ Setup your EVE Vault Wallet
+### Step 1: 🛠️ Setup your Development Wallet
 
 The local DApp development toolset uses the EVE Vault with a local recovery phrase. You can optionally use other wallets such as MetaMask if you prefer. 
 
@@ -63,14 +63,13 @@ This command will:
 - **Fork a Docker instance of Anvil**: This creates a local blockchain environment.
 - **Run a Local Instance of the World Explorer**: Enables you to visually inspect and debug the game state.
 - **Deploy Contracts to the Existing Docker World**: Deploys your contracts to the local environment.
+- **Run basic Smart Contract Unit Tests**: Runs basic tests to ensure contracts are functioning.
 
 You can then open the DApp through: http://localhost:3000
 
 ### Step 3: 🔭 Develop Against the World Explorer
 
-You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting:
-
-http://localhost:13690/anvil/worlds/0x0165878a594ca255338adfa4d48449f69242eb8f/explore
+You can use the World Explorer, a GUI tool for visualizing and inspecting and manipulating the state of your deployed world, by visiting: http://localhost:13690/anvil/worlds/0x0165878a594ca255338adfa4d48449f69242eb8f/explore
 
 With the World Explorer, you can interactively view tables, query on-chain data, and better understand how your smart contracts and front-end components work together in real time.
 
@@ -187,7 +186,6 @@ pnpm deploy:pyrope
 **Environment Variables**:
 
 - Ensure that your `.env` files in `packages/contracts` and `packages/client` point to the correct deployed instances. For Pyrope, the `WORLD_ADDRESS` and related RPC endpoints must match the environment you are deploying to.
-
 
 ### Step 2: 💻 Configuring dApp Environment Variables
 

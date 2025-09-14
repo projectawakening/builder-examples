@@ -201,11 +201,9 @@ export function useSmartCharacter() {
     tribeId: smartCharacterData?.tribeId || 0n,
     eveBalanceWei: Number(eveBalanceWei),
     gasBalanceWei: Number(GASBalanceWei),
-    image: "https://images.dev.quasar.reitnorf.com/Character/123456789_256.jpg", //Currently static
+    image: "https://artifacts.evefrontier.com/Character/123456789_256.jpg", //Currently static
     smartAssemblies: ownedSmartAssemblies, // Stores the Smart Object ID's of the Smart Assemblies owned by this character
   };
-
-  console.log("smartCharacter", smartCharacter);
 
   return { smartCharacter };
 }

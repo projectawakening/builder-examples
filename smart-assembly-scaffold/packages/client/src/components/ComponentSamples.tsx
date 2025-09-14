@@ -8,21 +8,12 @@ import {
   EveLoadingAnimation
 } from "@eveworld/ui-components";
 import { useAccount } from "wagmi";
-import { abbreviateAddress, getDappUrl } from "@eveworld/utils";
 import { Severity, SmartAssemblyType } from "@eveworld/types";
 
 import { useSmartCharacter } from "../hooks/useSmartCharacter";
 import { useSmartAssembly } from "../hooks/useSmartAssembly";
 
-import { ExternalIcon } from "@eveworld/ui-components/assets";
-
-import CustomSmartAssemblyInfo from "./CustomSmartAssemblyInfo";
-
-import Toggle from "./Toggle";
-
 export default function ComponentSamples() {
-  const { chain } = useAccount();
-  const { smartCharacter } = useSmartCharacter();
   const { smartAssembly: assembly } = useSmartAssembly();
 
   const smartAssembly = assembly as SmartAssemblyType<"SmartStorageUnit">;
@@ -35,8 +26,11 @@ export default function ComponentSamples() {
     <div className="grid gap-4 grid-cols-1 mobile:px-5">
       <div>
         Below is a style + component kit for getting started with building DApps using this scaffold.
+
         <br /><br />
+
         Remember, this is just a starting point, you can build and customize your DApp however you want.
+
         <br /><br />
 
         <p className="text-4xl">Text Elements</p>
@@ -55,6 +49,7 @@ export default function ComponentSamples() {
         <b>Bold</b><br />
         <u>Underline</u><br />
         <s>Strikethrough</s><br />
+        
         <br />
         
         <br />

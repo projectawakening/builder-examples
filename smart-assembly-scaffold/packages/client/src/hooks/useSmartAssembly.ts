@@ -267,7 +267,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
       name: smartAssemblyEntityRecordMetadata?.name || "",
       description: smartAssemblyEntityRecordMetadata?.description || "",
       dappURL:
-        smartAssemblyEntityRecordMetadata?.dappURL || "http://localhost:3000/",
+        smartAssemblyEntityRecordMetadata?.dappURL || window.location.origin,
       image: "",
       state: smartDeployableStateView?.currentState.toString() || State.NULL,
       solarSystemId: Number(smartAssemblyLocation?.solarSystemId),
