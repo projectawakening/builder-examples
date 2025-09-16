@@ -108,7 +108,7 @@ pnpm test
 ```
 
 This will run a series of pre-defined tests, and should display the results like:
-![../readme-imgs/tests-gate.png]
+![Smart Gate Unit Tests](../readme-imgs/tests-gate.png)
 
 ## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
@@ -217,9 +217,7 @@ pnpm run deploy:pyrope
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-<div align="center">
-<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
-</div>
+![Deployment Success Message Image](../readme-imgs/deploy.png)
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
@@ -252,7 +250,7 @@ For Stillness, the Smart Gate ID is available once you have deployed an Smart Ga
 
 Now set the ALLOWED_TRIBE_ID variable.
 
-1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters)
 
 2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 

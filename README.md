@@ -11,7 +11,7 @@
 </div>
 
 ## Welcome to EVE Frontier Building!
-Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
+Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit [docs.evefrontier.com](https://docs.evefrontier.com/). 
 
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
@@ -19,7 +19,8 @@ To start building, follow the steps below to setup your local development tools 
 
 1. [Installing general tools](#step-1-installing-general-tools)
    - [Installing Git](#installing-git)
-   - [Installing Node Version Manager](#installing-node-version-manager) 
+   - [Installing NVM (Node Version Manager)](#installing-node-version-manager) 
+   - [Installing Node.JS](#installing-node) 
    - [Installing PNPM](#installing-pnpm)
    - [Installing Foundry + Forge](#installing-foundry--forge)
 2. [Setting up your environment](#step-2-setting-up-your-environment)
@@ -30,7 +31,7 @@ To start building, follow the steps below to setup your local development tools 
 --- 
 
 ### Step 1: Installing general tools
-Before you get started you need to either install, or make sure you have the required tools. Install these tools for Linux, if you use a different OS then visit [Tools Setup](https://docs.evefrontier.com/Tools) and follow the guide for your operating system.
+Before you get started you need to either install, or make sure you have the required tools. This guide is for Linux / WSL, if you use a different OS then visit [Tools Setup](https://docs.evefrontier.com/Tools) and follow the guide for your operating system.
 
 #### Installing Git
 Install Git through [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). 
@@ -40,7 +41,7 @@ To confirm Git has been installed run:
 git --version
 ```
 
-#### Installing Node Version Manager
+#### Installing NVM (Node Version Manager)
 Install NVM using this command:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash && source ~/.bashrc
@@ -58,7 +59,7 @@ Install PNPM, which is used as a more efficient version of NPM with:
 npm install -g pnpm
 ```
 
-### Installing Foundry + Forge
+#### Installing Foundry + Forge
 Install foundry and restart the shell with:
 ```bash
 curl -L https://foundry.paradigm.xyz | bash && source ~/.bashrc

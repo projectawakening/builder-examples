@@ -8,5 +8,3 @@ broadcast/
 
 # Ignore MUD deploy artifacts
 deploys/**/*.json
-
-packages/contracts/.env

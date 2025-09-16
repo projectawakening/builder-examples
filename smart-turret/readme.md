@@ -72,9 +72,7 @@ Then, run the following commands:
 
 Once the contracts have been deployed you should see the below message. When changing the contracts it will automatically re-deploy them.
 
-<div align="center">
-<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
-</div>
+![Deployment Success Message Image](../readme-imgs/deploy.png)
 
 ### Step 1: Mock data for the existing world **(Local Development Only)**
 
@@ -104,7 +102,7 @@ pnpm configure
 > You can adjust the values of the Smart Turret ID and allowed tribe ID in the .env file as needed, though they are optional.
 
 ### Step 3: Test The Smart Turret (Optional)
-To test the custom Smart Turret functionality you can use the follow command:
+To test the custom Smart Turret functionality you can use:
 
 ```bash
 pnpm execute
@@ -116,9 +114,9 @@ pnpm test
 ```
 
 This will run a series of pre-defined tests, and should display the results like:
-![../readme-imgs/tests-turret.png]
+![Smart Turret Unit Tests](../readme-imgs/tests-turret.png)
 
-## Deployment To The Game (Stillness)</a>
+## Deployment To The Game (Stillness)
 To deploy the example to the game server which is named Stillness, follow the below steps.
 
 ### Step 1: Setup your Environment
@@ -133,7 +131,7 @@ Then install the Solidity dependencies for the contracts:
 pnpm install
 ```
 
-Then, if you haven't already copy the .envsample file to a .env file with:
+Then, if you haven't already, copy the .envsample file to a .env file with:
 ```bash
 cp .envsample .env
 ```
@@ -225,9 +223,9 @@ pnpm run deploy:pyrope
 
 Once the deployment is successful, you'll see a screen similar to the one below.
 
-<div align="center">
-<img src="../readme-imgs/deploy.png" alt="Deploy" width="600">
-</div>
+<center>
+![Deployment Success Message Image](../readme-imgs/deploy.png)
+</center>
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
@@ -236,7 +234,7 @@ Next, replace the following values in the [.env](./packages/contracts/.env) file
 
 #### Step 1.1: Smart Turret ID (Turret ID)
 
-For Stillness, the Smart Turret ID is available once you have deployed an Smart Turret in the game.
+For Stillness, the Smart Turret ID is available once you have deployed a Smart Turret in the game.
 
 1. Right click your Smart Turret and press Interact
 
@@ -256,9 +254,9 @@ For Stillness, the Smart Turret ID is available once you have deployed an Smart 
 
 Now set the `ALLOWED_TRIBE_ID` variable.
 
-1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/smartcharacters)
+1. Retrieve your character address from searching your username here: [Smart Characters World API](https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters)
 
-2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
+2. Use this link: https://world-api-stillness.live.tech.evefrontier.com/v2/smartcharacters/ADDRESS and replace **"ADDRESS"** with the address from the previous step.
 
 3. Use the **"tribeId"** value which should be in:
 
