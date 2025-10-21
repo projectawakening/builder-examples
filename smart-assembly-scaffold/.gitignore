@@ -15,6 +15,5 @@ packages/contracts/src/codegen
 mock-data/cache/
 mock-data/out/
 mock-data/broadcast/
-mock-data/cache/
 
 mprocs.log
