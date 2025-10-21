@@ -14,4 +14,4 @@ procs:
   explorer:
     cwd: packages/contracts
     shell: pnpm explorer
-    
+

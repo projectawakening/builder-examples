@@ -13,7 +13,7 @@ const expectedProofConfig: GPCProofConfig = {
     pods: {
         security_badge: {
             entries: {
-                security_level: { 
+                security_level: {
                     isRevealed: false,
                     inRange: {
                         min: 3n,
@@ -69,7 +69,7 @@ async function VerifyProof(){
 
     //Print the result
     if(!isValid){
-        throw new Error("Proof is invalid");   
+        throw new Error("Proof is invalid");
     }
 
     console.log("Proof is valid");
@@ -89,7 +89,7 @@ async function VerifyProof(){
     }
 
     console.log("Correct POD Type")
-		
+
     console.log("Verified security badge for character", badgeEntries.holder_smart_character_address.value);
 
     //Exit the program

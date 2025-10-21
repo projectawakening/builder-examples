@@ -13,7 +13,7 @@ import { GateAccess } from "../codegen/tables/GateAccess.sol";
 /**
  * @dev This contract is an example for implementing logic to a smart gate
  */
-contract SmartGateSystem is System {  
+contract SmartGateSystem is System {
   /**
    * @dev Check if a character can jump to a gate
    * @param characterId The ID of the character to check
@@ -33,7 +33,7 @@ contract SmartGateSystem is System {
       return true;
     } else {
       return false;
-    }    
+    }
   }
 
   /**

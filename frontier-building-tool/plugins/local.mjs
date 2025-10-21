@@ -30,8 +30,8 @@ export async function execute({ contracts, params }) {
       pattern: /^RPC_URL=.*/m,
       replacement: `RPC_URL=${localEnv.RPC_URL} #${localEnv.SERVER} RPC URL`,
       message: `RPC_URL`
-    },    
+    },
   ];
 
   updateFiles(updates);
-} 
+}

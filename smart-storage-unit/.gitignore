@@ -7,7 +7,7 @@ node_modules
 *.db
 *.db-journal
 
-# mud deployment artefacts 
+# mud deployment artefacts
 packages/contracts/worlds.json
 packages/contracts/src/codegen
 

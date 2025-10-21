@@ -10,7 +10,7 @@ jobs:
   pod-tests:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - name: Get Repo
         uses: actions/checkout@v4
 
@@ -24,10 +24,10 @@ jobs:
 
       - name: Navigate to the pods directory
         run: |
-          cd pods      
+          cd pods
 
       - name: Install packages
-        run: |          
+        run: |
           pnpm install --no-frozen-lockfile
         working-directory: pods
 

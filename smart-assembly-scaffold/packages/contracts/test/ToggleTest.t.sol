@@ -131,7 +131,7 @@ contract ToggleTest is MudTest {
 
     smartStorageUnit.createAndDepositItemsToInventory(smartStorageUnitId, items);
     smartStorageUnit.createAndDepositItemsToEphemeralInventory(smartStorageUnitId, player, ephemeralItems);
-  }  
+  }
 
   function testWorldExists() public {
     uint256 codeSize;

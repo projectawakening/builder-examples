@@ -3,11 +3,11 @@ pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
 
-import { 
-  Turret, 
-  SmartTurretTarget, 
-  TargetPriority, 
-  AggressionParams 
+import {
+  Turret,
+  SmartTurretTarget,
+  TargetPriority,
+  AggressionParams
 } from "@eveworld/world-v2/src/namespaces/evefrontier/systems/smart-turret/types.sol";
 
 import { Characters } from "@eveworld/world-v2/src/namespaces/evefrontier/codegen/tables/Characters.sol";
@@ -27,7 +27,7 @@ contract SmartTurretSystem is System {
    * @param turret is the turret data
    * @param turretTarget is the player in the zone
    * This runs on a tick based cycle when the player is in proximity of the Smart Turret
-   * The game receives the new priority queue, and select targets based on the reverse order of the new queue. 
+   * The game receives the new priority queue, and select targets based on the reverse order of the new queue.
    * Meaning the targets with the highest index will be picked first.
    */
   function inProximity(
@@ -42,15 +42,15 @@ contract SmartTurretSystem is System {
     // Get the corp ID of the player that is in proximity of the Smart Turret
     uint256 characterCorp = Characters.getTribeId(turretTarget.characterId);
 
-    // Find if the player is already in the queue. 
+    // Find if the player is already in the queue.
     // This might happen if the player joins the corp while in proximity.
     bool foundInPriorityQueue = getIsTargetInQueue(priorityQueue, turretTarget.characterId);
-    
+
     // Check if the player shouldn't be targeted
     if (characterCorp == allowedCorp) {
       if (!foundInPriorityQueue) {
         // Return the unchanged array
-        return priorityQueue;     
+        return priorityQueue;
       }
 
       // If found, create a new array without the character
@@ -67,7 +67,7 @@ contract SmartTurretSystem is System {
     }
 
     // Create the new priority
-    TargetPriority memory newTarget = TargetPriority({ target: turretTarget, weight: calculatedWeight }); 
+    TargetPriority memory newTarget = TargetPriority({ target: turretTarget, weight: calculatedWeight });
 
     // If not already in the queue, add to the queue
     return addTargetToQueue(priorityQueue, newTarget);
@@ -80,7 +80,7 @@ contract SmartTurretSystem is System {
    * @return isInQueue is true if the target is in the queue
    */
   function getIsTargetInQueue(
-    TargetPriority[] memory priorityQueue, 
+    TargetPriority[] memory priorityQueue,
     uint256 characterId
   ) public pure returns (bool isInQueue) {
     for (uint i = 0; i < priorityQueue.length; i++) {
@@ -99,7 +99,7 @@ contract SmartTurretSystem is System {
    * @return updatedPriorityQueue is the updated queue
    */
   function removeTargetFromQueue(
-    TargetPriority[] memory priorityQueue, 
+    TargetPriority[] memory priorityQueue,
     uint256 characterId
   ) public pure returns (TargetPriority[] memory updatedPriorityQueue) {
       // Create the smaller temporary array
@@ -143,7 +143,7 @@ contract SmartTurretSystem is System {
    * @return updatedPriorityQueue is the updated queue
    */
   function addTargetToQueue(
-    TargetPriority[] memory priorityQueue, 
+    TargetPriority[] memory priorityQueue,
     TargetPriority memory newTarget
   ) public pure returns (TargetPriority[] memory updatedPriorityQueue) {
     // Create the larger temporary array
@@ -155,7 +155,7 @@ contract SmartTurretSystem is System {
     }
 
     // Set the new target to the end of the temp array
-    updatedPriorityQueue[priorityQueue.length] = newTarget;      
+    updatedPriorityQueue[priorityQueue.length] = newTarget;
 
     // Sort the array
     updatedPriorityQueue = bubbleSortTargetPriorityArray(updatedPriorityQueue);
@@ -199,15 +199,15 @@ contract SmartTurretSystem is System {
   /**
    * @dev a function to calculate the weight of the target
    * @param target is the target
-   * This calculates weight so that the higher the weight, the higher the priority. 
+   * This calculates weight so that the higher the weight, the higher the priority.
    * As the targets are prioritized and the game selects the targets in reverse order they are returned.
    */
   function calculateWeight(SmartTurretTarget memory target) internal pure returns (uint256 weight) {
     uint256 MAX_COMBINED_HP_RATIO = 300;
 
     weight = MAX_COMBINED_HP_RATIO - (
-      target.hpRatio + 
-      target.shieldRatio + 
+      target.hpRatio +
+      target.shieldRatio +
       target.armorRatio
     );
 

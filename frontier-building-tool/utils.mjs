@@ -6,7 +6,7 @@ const errorColor = chalk.hex('#ff5f00');
 
 export async function validateInput(prompt, minLength, maxLength) {
   while (true) {
-    const answer = await input({ 
+    const answer = await input({
       message: prompt
     });
 
@@ -55,4 +55,4 @@ export function updateFiles(updates) {
       updateFile(path, pattern, replacement);
     }
   });
-} 
+}

@@ -5,7 +5,7 @@ import {
     gpcArtifactDownloadURL,
     GPCProofConfig, gpcProve,
     gpcVerify,
-    boundConfigToJSON, revealedClaimsToJSON 
+    boundConfigToJSON, revealedClaimsToJSON
   } from "@pcd/gpc";
 
 //POD Data
@@ -48,7 +48,7 @@ const proofConfig: GPCProofConfig = {
     pods: {
         security_badge: {
             entries: {
-                security_level: { 
+                security_level: {
                     isRevealed: false,
                     inRange: {
                         min: 3n,

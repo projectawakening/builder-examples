@@ -21,7 +21,7 @@ This example will show you how to deploy and configure contracts for a [Smart Ga
 
 Before starting make sure you've installed all required tools from the main [README](../README.md)
 
-The Smart Gate allows players to create player-made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it. 
+The Smart Gate allows players to create player-made transport gates, connecting systems and regions. It also features configuration options to allow specific players to use it.
 
 You can test everything locally first using the [Local Environment Guide](#deployment-and-testing-in-local-environment), and when ready, deploy to the live game using the [Deployment Guide](#deployment-to-the-game-stillness).
 
@@ -65,11 +65,11 @@ Then, run the following commands:
 ### Step 2: Mock data for the existing world
 Generate the test data by:
 
-#### Step 2.1. Select the "shell" process and then click on the main terminal window. 
+#### Step 2.1. Select the "shell" process and then click on the main terminal window.
 
 ![Processes Image](../readme-imgs/processes.png)
 
-#### Step 2.2. To generate mock data for testing the Smart Gate logic on the local world, run the following command. 
+#### Step 2.2. To generate mock data for testing the Smart Gate logic on the local world, run the following command.
 
 ```bash
 pnpm mock-data
@@ -140,7 +140,7 @@ RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
-You can also automatically point to Stillness with current values using: 
+You can also automatically point to Stillness with current values using:
 
 ```bash
 pnpm env-stillness
@@ -157,7 +157,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 - ❌ No special characters
 - ❌ No spaces
 
-Change the namespace from test to your own custom namespace. 
+Change the namespace from test to your own custom namespace.
 
 > [!TIP]
 > Consider using your username or tribe name as your namespace.
@@ -223,7 +223,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
-### Step 1: Setup the environment variables 
+### Step 1: Setup the environment variables
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
 #### Step 1.1: Smart Gate ID's
@@ -293,12 +293,12 @@ pnpm configure
 If you encounter any issues, refer to the troubleshooting tips below:
 
 1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
-   
+
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
 3. **Not able to jump even though it's the correct tribe**: Ensure you have set the correct tribe ID set in the `contracts/.env` file.
 
-## Need Help? 
+## Need Help?
 
 If you are still having issues, then visit the Documentation or join the Discord Community for support.
 

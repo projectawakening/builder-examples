@@ -46,13 +46,13 @@ contract MockData is Script {
    */
   function safeCreateCharacter(address account, uint256 characterId, uint256 tribeId, string memory name) private {
     uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
-    
+
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
-        smartObjectId, 
-        account, 
-        tribeId, 
-        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        smartObjectId,
+        account,
+        tribeId,
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
         EntityMetadataParams({ name: name, dappURL: "", description: "" })
       );
 
@@ -64,7 +64,7 @@ contract MockData is Script {
 
   function run(address worldAddress) public {
     StoreSwitch.setStoreAddress(worldAddress);
-    
+
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 

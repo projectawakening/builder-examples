@@ -51,7 +51,7 @@ contract SmartGateTest is MudTest {
 
   //Smart Gate IDs
   uint256 SOURCE_GATE_ID = 9000;
-  uint256 DESTINATION_GATE_ID = 9001; 
+  uint256 DESTINATION_GATE_ID = 9001;
 
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
@@ -63,10 +63,10 @@ contract SmartGateTest is MudTest {
 
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
-        smartObjectId, 
-        account, 
-        tribeId, 
-        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        smartObjectId,
+        account,
+        tribeId,
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
         EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
       );
     }
@@ -123,7 +123,7 @@ contract SmartGateTest is MudTest {
     GateAccess.set(sourceGateId, ALLOWED_TRIBE_ID);
 
     vm.stopPrank();
-  }  
+  }
 
   //Test if the world exists
   function testWorldExists() public {
@@ -193,7 +193,7 @@ contract SmartGateTest is MudTest {
   }
 
   //Test can jump to the destination gate
-  function testSourceCanJumpAllowed() public {    
+  function testSourceCanJumpAllowed() public {
     uint256 characterId = ObjectIdLib.calculateObjectId(tenantId, PLAYER_CHARACTER_ID);
 
     uint256 characterTribe = Characters.getTribeId(characterId);

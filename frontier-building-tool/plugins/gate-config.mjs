@@ -27,8 +27,8 @@ export async function execute() {
       path: contractsPath + '.env',
       pattern: /^ALLOWED_TRIBE_ID=.*/m,
       replacement: `ALLOWED_TRIBE_ID=${allowedTribeId}`
-    }   
+    }
   ];
 
   updateFiles(updates);
-} 
+}

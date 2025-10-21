@@ -1,17 +1,17 @@
 <div align="center">
   <img src="readme-imgs/evefrontier.png" alt="EVE Frontier" width="800"/>
-  
+
   # EVE Frontier Builder Examples
-  
+
   🚀 Learn to build in EVE Frontier with examples and guides.
-  
+
   [![Documentation](https://img.shields.io/badge/docs-evefrontier-blue)](https://docs.evefrontier.com/)
   [![Discord](https://img.shields.io/badge/join-discord-7289DA)](https://discord.gg/evefrontier)
   [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 </div>
 
 ## Welcome to EVE Frontier Building!
-Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/. 
+Welcome, this repository contains guides and examples to get started building on [EVE Frontier](https://evefrontier.com/en). For more information, you can visit https://docs.evefrontier.com/.
 
 To start building, follow the steps below to setup your local development tools and environment. If you already have the tools, make sure they are the correct version as otherwise you may have difficulties running the examples and building.
 
@@ -19,7 +19,7 @@ To start building, follow the steps below to setup your local development tools 
 
 1. [Installing general tools](#step-1-installing-general-tools)
    - [Installing Git](#installing-git)
-   - [Installing Node Version Manager](#installing-node-version-manager) 
+   - [Installing Node Version Manager](#installing-node-version-manager)
    - [Installing PNPM](#installing-pnpm)
    - [Installing Foundry + Forge](#installing-foundry--forge)
 2. [Setting up your environment](#step-2-setting-up-your-environment)
@@ -27,13 +27,13 @@ To start building, follow the steps below to setup your local development tools 
    - [Deploying world contracts into a local node](#deploying-world-contracts-into-a-local-node)
 3. [Start Building!](#step-3-start-building)
 
---- 
+---
 
 ### Step 1: Installing general tools
 Before you get started you need to either install, or make sure you have the required tools. Install these tools for Linux, if you use a different OS then visit [Tools Setup](https://docs.evefrontier.com/Tools) and follow the guide for your operating system.
 
 #### Installing Git
-Install Git through [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). 
+Install Git through [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
 To confirm Git has been installed run:
 ```bash
@@ -103,7 +103,7 @@ docker compose cp world-deployer:/monorepo/abis .
 
 ### Step 3: Start Building!
 
-Now that your local tools and development environment is set up, you're ready to start building! 
+Now that your local tools and development environment is set up, you're ready to start building!
 
 To begin, navigate to the desired example directory then follow the instructions outlined in its README file. For more information on Smart Assemblies you can visit the [Smart Assemblies Documentation](https://docs.evefrontier.com/SmartAssemblies).
 
@@ -123,7 +123,7 @@ Configure a Smart Turret with a custom strategy
 ### [🚪 Smart Gate](./smart-gate/readme.md)
 Control access to a Smart Gate based on Tribe membership
 
-## Need Help? 
+## Need Help?
 
 [![Documentation](https://img.shields.io/badge/📚_Documentation-Visit_Docs-blue)](https://docs.evefrontier.com/)
 [![Smart Assemblies](https://img.shields.io/badge/🔧_Smart_Assemblies-Read_Guide-orange)](https://docs.evefrontier.com/SmartAssemblies)

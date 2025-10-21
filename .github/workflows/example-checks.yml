@@ -10,7 +10,7 @@ jobs:
   example-checks:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - name: Get Repo
         uses: actions/checkout@v4
 
@@ -34,7 +34,7 @@ jobs:
           echo "Verifying Foundry installation..."
           $FOUNDRY_DIR/bin/forge --version || echo "ERROR: Forge not found!"
 
-        
+
       - name: Verify Foundry Installation
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
@@ -66,7 +66,7 @@ jobs:
 
       - name: Navigate to the smart gate contracts directory
         run: |
-          cd smart-gate/packages/contracts      
+          cd smart-gate/packages/contracts
 
       - name: Set RPC
         run: |
@@ -74,7 +74,7 @@ jobs:
           sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-gate/packages/contracts/.env"
 
       - name: Install packages
-        run: |          
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm install --no-frozen-lockfile
         working-directory: smart-gate
@@ -90,30 +90,30 @@ jobs:
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm test
         working-directory: smart-gate/packages/contracts
-        
+
       - name: Mock Data
-        run: |        
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm mock-data
         working-directory: smart-gate/packages/contracts
-        
+
       - name: Configure
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm configure          
+          pnpm configure
         working-directory: smart-gate/packages/contracts
-        
+
       - name: Link Gates
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm link-gates          
+          pnpm link-gates
         working-directory: smart-gate/packages/contracts
-        
+
       - name: Can Jump
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm can-jump         
-        working-directory: smart-gate/packages/contracts  
+          pnpm can-jump
+        working-directory: smart-gate/packages/contracts
 
       - name: Set RPC
         run: |
@@ -121,7 +121,7 @@ jobs:
           sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-storage-unit/packages/contracts/.env"
 
       - name: Install packages
-        run: |          
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm install --no-frozen-lockfile
         working-directory: smart-storage-unit
@@ -131,24 +131,24 @@ jobs:
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm deploy:local
         working-directory: smart-storage-unit/packages/contracts
-        
+
       - name: Mock Data
-        run: |        
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm mock-data
         working-directory: smart-storage-unit/packages/contracts
-        
+
       - name: Configure
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm configure          
+          pnpm configure
         working-directory: smart-storage-unit/packages/contracts
-        
+
       - name: Execute
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm configure          
-        working-directory: smart-storage-unit/packages/contracts      
+          pnpm configure
+        working-directory: smart-storage-unit/packages/contracts
 
       - name: Set RPC
         run: |
@@ -156,7 +156,7 @@ jobs:
           sed -i "s|^RPC_URL=.*|RPC_URL=\"http://127.0.0.1:8546\" #RPC URL|" "./smart-turret/packages/contracts/.env"
 
       - name: Install packages
-        run: |          
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm install --no-frozen-lockfile
         working-directory: smart-turret
@@ -166,29 +166,29 @@ jobs:
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm deploy:local
         working-directory: smart-turret/packages/contracts
-        
+
       - name: Run Smart Turret Tests
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm test
         working-directory: smart-turret/packages/contracts
-        
+
       - name: Mock Data
-        run: |        
+        run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
           pnpm mock-data
         working-directory: smart-turret/packages/contracts
-        
+
       - name: Configure
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm configure          
+          pnpm configure
         working-directory: smart-turret/packages/contracts
-        
+
       - name: Execute
         run: |
           export PATH="$HOME/foundry_temp/bin:$PATH"
-          pnpm configure          
+          pnpm configure
         working-directory: smart-turret/packages/contracts
 
       - name: Stop Docker Containers

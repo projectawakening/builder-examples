@@ -11,14 +11,14 @@ const __dirname = dirname(__filename);
 
 function findProjectRoot(startPath) {
   let currentPath = startPath;
-  
+
   let maxSearches = 6;
-  
+
   while (currentPath !== '/' && maxSearches > 0) {
     if (currentPath.endsWith('/packages/contracts')) {
       return dirname(dirname(currentPath));
     }
-    
+
     const potentialContractsDir = join(currentPath, 'packages/contracts');
     try {
       if (fs.existsSync(potentialContractsDir)) {
@@ -26,11 +26,11 @@ function findProjectRoot(startPath) {
       }
     } catch (err) {
     }
-    
+
     currentPath = dirname(currentPath);
     maxSearches--;
   }
-  
+
   return startPath;
 }
 
@@ -55,7 +55,7 @@ process.on('uncaughtException', (error) => {
   }
 });
 
-async function errorMessage(plugins){  
+async function errorMessage(plugins){
   console.error('Available plugins:', Object.keys(plugins).join(', '));
   console.error(`\nMore information about this tool can be found at: ${chalk.yellowBright('https://github.com/CCP-Red-Dragon/eve-frontier-builder-tools')}\n`);
 }
@@ -63,7 +63,7 @@ async function errorMessage(plugins){
 async function main() {
   try {
     const plugins = await loadPlugins();
-    
+
     let pluginName;
     let additionalArg = '';
     const args = process.argv.slice(2);

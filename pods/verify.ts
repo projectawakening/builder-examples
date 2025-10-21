@@ -14,7 +14,7 @@ if(!receivedPOD.verifySignature()){
 
 console.log("Verified POD")
 
-const officialPublicKey = "3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw" 
+const officialPublicKey = "3iREOe5OdCEZ0KaF4pOfFc5nMvG6iZbY7GeaMy2P3xw"
 
 if(receivedPOD.signerPublicKey != officialPublicKey){
     throw new Error("Not the official signer");

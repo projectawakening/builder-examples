@@ -31,7 +31,7 @@ if [[ -z "$world_address" ]]; then
         world_address="0x7fe660995b0c59b6975d5d59973e2668af6bb9c5"
     else
         world_address="0x972bfea201646a87dc59f042ad91254628974f0d"
-    fi    
+    fi
 fi
 
 # If the API call didn't work - use a known RPC URL for Stillness or Nova

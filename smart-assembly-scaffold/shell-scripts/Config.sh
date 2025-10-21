@@ -20,7 +20,7 @@ function validate_input(){
 
     local MIN_LENGTH="$2"
     local MAX_LENGTH="$3"
-    while true 
+    while true
     do
         if [[ -z "$INPUT" ]]; then
             read -p $'\e[38;5;202m[ERROR]\e[0m You did not enter anything. Please type your \e[1;33m'"$1"$': \e[0m' INPUT

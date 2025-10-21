@@ -21,7 +21,7 @@ import { Utils } from "../src/systems/Utils.sol";
  * @dev It also gives permissions to the custom contract to transfer from and to the SSU (to and from ephemeral inventories)
  */
 contract ConfigureRatio is Script {
-  
+
   function run(address worldAddress) external {
     uint256 adminPrivateKey = vm.envUint("PRIVATE_KEY");
     StoreSwitch.setStoreAddress(worldAddress);

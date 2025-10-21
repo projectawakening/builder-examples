@@ -31,8 +31,8 @@ For additional details on the Smart Turret, see our [Documentation](https://docs
 This example alters the Smart Turret to have two specific behaviors:
 
 1. It does not shoot at anyone in the specified tribe.
-   
-2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example. 
+
+2. It prioritizes shooting ships that have the lowest percentage of health. This is done as a strategy, as it means that ships can be destroyed faster. A byproduct of this, is that groups of Smart Turrets will share targets if in range when several are used with this example.
 
 > [!NOTE]
 > **Technical Note:** The game processes targets in reverse array order from calling the inProximity function. While the weight value is used for sorting, it's not currently used in-game targeting logic.
@@ -80,7 +80,7 @@ Once the contracts have been deployed you should see the below message. When cha
 
 Generate the test data by:
 
-1. Select the "shell" process and then click on the main terminal window. 
+1. Select the "shell" process and then click on the main terminal window.
 
 ![Processes Image](../readme-imgs/processes.png)
 
@@ -148,7 +148,7 @@ RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
-You can also automatically point to Stillness with current values using: 
+You can also automatically point to Stillness with current values using:
 
 ```bash
 pnpm env-stillness
@@ -165,7 +165,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 - ❌ No special characters
 - ❌ No spaces
 
-Change the namespace from test to your own custom namespace. 
+Change the namespace from test to your own custom namespace.
 
 > [!TIP]
 > Consider using your username or tribe name as your namespace.
@@ -231,7 +231,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
-### Step 1: Setup the environment variables 
+### Step 1: Setup the environment variables
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
 #### Step 1.1: Smart Turret ID (Turret ID)
@@ -298,12 +298,12 @@ pnpm configure
 If you encounter any issues, refer to the troubleshooting tips below:
 
 1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
-   
+
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Turret ID Mismatch (Stillness)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file. 
+3. **Turret ID Mismatch (Stillness)**: Double-check that the `SMART_TURRET_ID` is correctly updated in the `contracts/.env` file.
 
-## Need Help? 
+## Need Help?
 
 If you are still having issues, then visit the Documentation or join the Discord Community for support.
 

@@ -31,10 +31,10 @@ contract ConfigureSmartTurret is Script {
     );
 
     ResourceId systemId = Utils.smartTurretSystemId();
-    
+
     // This function can only be called by the owner of the smart turret
     smartTurretSystem.configureTurret(smartTurretId, systemId);
-    
+
     world.call(
       systemId,
       abi.encodeCall(CustomSmartTurretSystem.setAllowedTribe, (allowedTribeId))

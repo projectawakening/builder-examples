@@ -18,4 +18,4 @@ export async function execute({ contracts, params }) {
   ];
 
   updateFiles(updates);
-} 
+}

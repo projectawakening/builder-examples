@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 export async function loadPlugins() {
   const pluginsDir = join(__dirname, 'plugins');
   const plugins = {};
-  
+
   try {
     const files = readdirSync(pluginsDir);
     for (const file of files) {

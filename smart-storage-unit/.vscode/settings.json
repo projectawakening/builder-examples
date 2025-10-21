@@ -2,4 +2,3 @@
     "typescript.tsdk": "node_modules/typescript/lib",
       "window.title": "Smart Turret Builder Example"
 }
-  

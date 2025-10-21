@@ -3,9 +3,9 @@ const path = require('path');
 
 test('verify.ts should output expected verification messages', () => {
   // Run the verify.ts script
-  const output = execSync('npx tsx verify.ts', { 
+  const output = execSync('npx tsx verify.ts', {
     cwd: path.join(__dirname, '..'),
-    encoding: 'utf8' 
+    encoding: 'utf8'
   });
 
   // Check that all expected verification messages are present
@@ -19,9 +19,9 @@ test('verify.ts should output expected verification messages', () => {
 test('verify.ts should complete successfully without errors', () => {
   // Run the verify.ts script and ensure it doesn't throw
   expect(() => {
-    execSync('npx tsx verify.ts', { 
+    execSync('npx tsx verify.ts', {
       cwd: path.join(__dirname, '..'),
-      encoding: 'utf8' 
+      encoding: 'utf8'
     });
   }).not.toThrow();
 });

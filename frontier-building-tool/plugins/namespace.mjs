@@ -23,4 +23,4 @@ export async function execute({ contracts, params }, additionalArg) {
   ];
 
   updateFiles(updates);
-} 
+}

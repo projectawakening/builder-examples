@@ -9,7 +9,7 @@ import { IWorld } from "../src/codegen/world/IWorld.sol";
 
 /**
  * @dev This script is run after deploying the smart turret contracts.
- * You can change the logic here to do anything you want on deployment. 
+ * You can change the logic here to do anything you want on deployment.
  */
 contract PostDeploy is Script {
   function run(address worldAddress) external {

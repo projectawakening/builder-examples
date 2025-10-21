@@ -26,7 +26,7 @@ export async function execute({ contracts, params }) {
       RPC_URL: config.rpcUrls.default.http,
       SERVER: "Stillness"
     }
-  } 
+  }
 
   const updates = [
     {
@@ -46,8 +46,8 @@ export async function execute({ contracts, params }) {
       pattern: /^RPC_URL=.*/m,
       replacement: `RPC_URL=${stillnessEnv.RPC_URL} #${stillnessEnv.SERVER} RPC URL`,
       message: `RPC_URL`
-    },    
+    },
   ];
 
   updateFiles(updates);
-} 
+}

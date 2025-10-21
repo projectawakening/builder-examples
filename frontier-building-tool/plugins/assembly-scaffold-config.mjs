@@ -25,4 +25,4 @@ export async function execute() {
   ];
 
   updateFiles(updates);
-} 
+}

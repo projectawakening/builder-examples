@@ -20,9 +20,9 @@ contract ExecuteInProximity is Script {
 
   function testWithCharacter(uint256 characterId, uint256[] memory health) internal {
     console.log(
-      "Tribe ID of character", 
-      vm.toString(characterId), 
-      ":", 
+      "Tribe ID of character",
+      vm.toString(characterId),
+      ":",
       vm.toString(Characters.getTribeId(characterId))
     );
 
@@ -41,7 +41,7 @@ contract ExecuteInProximity is Script {
     });
 
     inputQueue[0] = TargetPriority({ target: turretTarget, weight: 100 });
-    
+
     TargetPriority[] memory outputTargetQueue = abi.decode(
       world.call(
         systemId,
@@ -75,7 +75,7 @@ contract ExecuteInProximity is Script {
     uint256 playerCharacterId = CharactersByAccount.getSmartObjectId(player);
 
     require(
-      adminCharacterId != 0 && playerCharacterId != 0, 
+      adminCharacterId != 0 && playerCharacterId != 0,
       "Characters do not exist. Run 'pnpm mock-data' to generate them."
     );
 

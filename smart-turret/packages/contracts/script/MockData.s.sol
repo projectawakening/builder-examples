@@ -38,12 +38,12 @@ contract MockData is Script {
       console.log("Character already exists:", name);
       return;
     }
-    
+
     smartCharacterSystem.createCharacter(
-      smartObjectId, 
-      account, 
-      tribeId, 
-      EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+      smartObjectId,
+      account,
+      tribeId,
+      EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
       EntityMetadataParams({ name: name, dappURL: "", description: "" })
     );
   }
@@ -54,7 +54,7 @@ contract MockData is Script {
     world = IBaseWorld(worldAddress);
 
     tenantId = Tenant.get();
-    
+
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.addr(deployerPrivateKey);
 

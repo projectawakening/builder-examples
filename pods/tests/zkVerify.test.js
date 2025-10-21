@@ -3,9 +3,9 @@ const path = require('path');
 
 test('zkVerify.ts should output expected verification messages', () => {
   // Run the zkVerify.ts script
-  const output = execSync('npx tsx zkVerify.ts', { 
+  const output = execSync('npx tsx zkVerify.ts', {
     cwd: path.join(__dirname, '..'),
-    encoding: 'utf8' 
+    encoding: 'utf8'
   });
 
   // Check that all expected verification messages are present
@@ -18,9 +18,9 @@ test('zkVerify.ts should output expected verification messages', () => {
 test('zkVerify.ts should complete successfully without errors', () => {
   // Run the zkVerify.ts script and ensure it doesn't throw
   expect(() => {
-    execSync('npx tsx zkVerify.ts', { 
+    execSync('npx tsx zkVerify.ts', {
       cwd: path.join(__dirname, '..'),
-      encoding: 'utf8' 
+      encoding: 'utf8'
     });
   }).not.toThrow();
 });

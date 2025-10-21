@@ -110,9 +110,9 @@ export function useSmartAssembly(smartObjectId = 0n) {
       if(chainID == 31337){
         setOwner("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
         return;
-      } 
+      }
 
-      const worldAddress = await getWorldDeploy(chainID);       
+      const worldAddress = await getWorldDeploy(chainID);
       // sql query from the indexer.
       const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",
@@ -126,9 +126,9 @@ export function useSmartAssembly(smartObjectId = 0n) {
           },
         ]),
       }).then((res) => res.json());
-      
+
       const ownerApiResult = mapApiResult(response.result);
-      setOwner(ownerApiResult.owner);     
+      setOwner(ownerApiResult.owner);
     };
 
     getOwner();
@@ -198,7 +198,7 @@ export function useSmartAssembly(smartObjectId = 0n) {
   /**
 	Construct the SmartAssembly object based on its type.
 	Some fields are left empty or assigned placeholder values since they are not used in this example.
-	If needed, you can fetch additional data directly from the World API using the `fetch` method, 
+	If needed, you can fetch additional data directly from the World API using the `fetch` method,
 	which encapsulates logic to retrieve this information.
 	*/
 

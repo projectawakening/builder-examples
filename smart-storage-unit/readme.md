@@ -69,7 +69,7 @@ Next, update your [.env](./packages/contracts/.env) file with the trade ratio:
 ```bash
 #Item Bought
 IN_RATIO=1
-#Item Sold  
+#Item Sold
 OUT_RATIO=2
 ```
 
@@ -84,7 +84,7 @@ OUT_RATIO=2
 
 Generate the test data by:
 
-1. Select the "shell" process and then click on the main terminal window. 
+1. Select the "shell" process and then click on the main terminal window.
 
 ![Processes Image](../readme-imgs/processes.png)
 
@@ -144,7 +144,7 @@ RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
-You can also automatically point to Stillness with current values using: 
+You can also automatically point to Stillness with current values using:
 
 ```bash
 pnpm env-stillness
@@ -161,7 +161,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 - ❌ No special characters
 - ❌ No spaces
 
-Change the namespace from test to your own custom namespace. 
+Change the namespace from test to your own custom namespace.
 
 > [!TIP]
 > Consider using your username or corporation name as your namespace.
@@ -227,7 +227,7 @@ Once the deployment is successful, you'll see a screen similar to the one below.
 
 ## Configuring and Testing the Game Contracts (Stillness)
 
-### Step 1: Setup the environment variables 
+### Step 1: Setup the environment variables
 Next, replace the following values in the [.env](./packages/contracts/.env) file with the below steps.
 
 #### Step 1.1: Player Test Account (Optional)
@@ -238,7 +238,7 @@ Set the `TEST_PLAYER_PRIVATE_KEY` in your .env file to the private key of the ac
 TEST_PLAYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 
-> [!NOTE] 
+> [!NOTE]
 > This is only for testing, and an example not requiring this is on it's way.
 
 #### Step 1.2: Smart Storage Unit ID (SSU ID)
@@ -331,14 +331,14 @@ pnpm execute
 If you encounter any issues, refer to the troubleshooting tips below:
 
 1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file to ensure you are deploying contracts to the correct world.
-   
+
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.  
+3. **Trade Quantity Is Incorrect**: Ensure your input and output ratios have been correctly set in the `contracts/.env` file.
 
 4. **The Trade is not Working**: Ensure the `ITEM_IN_TYPE_ID` and `ITEM_OUT_TYPE_ID` are correctly set in the `contracts/.env` file.
 
-## Need Help? 
+## Need Help?
 
 If you are still having issues, then visit the Documentation or join the Discord Community for support.
 

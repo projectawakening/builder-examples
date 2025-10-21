@@ -66,7 +66,7 @@ contract SmartTurretTest is MudTest {
 
   //Gate IDs
   uint256 SOURCE_GATE_ID = 9000;
-  uint256 DESTINATION_GATE_ID = 9001; 
+  uint256 DESTINATION_GATE_ID = 9001;
 
   //Type IDs
   uint256 CHARACTER_TYPE_ID = 42000000100;
@@ -77,10 +77,10 @@ contract SmartTurretTest is MudTest {
     if (CharactersByAccount.get(account) != 0) return;
 
     smartCharacterSystem.createCharacter(
-      smartObjectId, 
-      account, 
-      tribeId, 
-      EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+      smartObjectId,
+      account,
+      tribeId,
+      EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
       EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
     );
   }
@@ -89,7 +89,7 @@ contract SmartTurretTest is MudTest {
   function setUp() public override {
     super.setUp();
     world = IWorld(worldAddress);
-    
+
     tenantId = Tenant.getTenantId();
 
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -111,7 +111,7 @@ contract SmartTurretTest is MudTest {
     );
     vm.stopPrank();
     vm.startPrank(player, admin);
-    
+
     adminCharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, ADMIN_CHARACTER_ID);
     playerCharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, PLAYER_CHARACTER_ID);
     player2CharacterSmartId = ObjectIdLib.calculateObjectId(tenantId, PLAYER2_CHARACTER_ID);
@@ -153,7 +153,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test setAllowedTribe
-  function testSetAllowedTribe() public {    
+  function testSetAllowedTribe() public {
     vm.startPrank(admin);
 
     world.call(
@@ -170,7 +170,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test setAllowedTribe to make sure that people without admin access to the namespace cannot set the allowed tribeoration ID
-  function testSetAllowedTribeNotAdmin() public {    
+  function testSetAllowedTribeNotAdmin() public {
     vm.startPrank(player2);
 
     vm.expectRevert("You are not authorized to set the allowed tribe");
@@ -190,7 +190,7 @@ contract SmartTurretTest is MudTest {
   }
 
   //Test setAllowedTribe
-  function testSetAllowedTribeRevertIfInvalidID() public {    
+  function testSetAllowedTribeRevertIfInvalidID() public {
     vm.startPrank(admin);
 
     vm.expectRevert("Invalid Tribe ID");
@@ -213,7 +213,7 @@ contract SmartTurretTest is MudTest {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
-    
+
     //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -245,7 +245,7 @@ contract SmartTurretTest is MudTest {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
-    
+
     //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -277,7 +277,7 @@ contract SmartTurretTest is MudTest {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](0);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
-    
+
     //Total Weight: 0
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -308,7 +308,7 @@ contract SmartTurretTest is MudTest {
     //Execute inProximity view function and see what is returns
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
-    
+
     //Total Weight: 150
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -318,7 +318,7 @@ contract SmartTurretTest is MudTest {
       shieldRatio: 50,
       armorRatio: 50
     });
-    
+
     //Total Weight: 200
     SmartTurretTarget memory turretTarget2 = SmartTurretTarget({
       shipId: 1,
@@ -346,7 +346,7 @@ contract SmartTurretTest is MudTest {
 
     assertEq(returnTargetQueue[0].target.characterId, player3CharacterSmartId, "The first target should be turretTarget2, as it has the lowest total health. Test 1");
     assertEq(returnTargetQueue[0].weight, 150, "The first target should be with 100 weight, as it has the lowest total health. Test 1");
-    
+
 
     //Test with the lowest health being originally second
     priorityQueue[0] = TargetPriority({ target: turretTarget2, weight: 100 });
@@ -367,7 +367,7 @@ contract SmartTurretTest is MudTest {
     assertEq(returnTargetQueue[0].target.characterId, player2CharacterSmartId, "The first target should be turretTarget2, as it has the lowest total health. Test 2");
   }
 
-  function testBubbleSortAlgorithmGeneral() public {    
+  function testBubbleSortAlgorithmGeneral() public {
     //Total Weight: 150
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -377,7 +377,7 @@ contract SmartTurretTest is MudTest {
       shieldRatio: 50,
       armorRatio: 50
     });
-    
+
     //Total Weight: 200
     SmartTurretTarget memory turretTarget2 = SmartTurretTarget({
       shipId: 1,
@@ -387,7 +387,7 @@ contract SmartTurretTest is MudTest {
       shieldRatio: 0,
       armorRatio: 50
     });
-    
+
     //Total Weight: 0
     SmartTurretTarget memory turretTarget3 = SmartTurretTarget({
       shipId: 1,
@@ -424,7 +424,7 @@ contract SmartTurretTest is MudTest {
     assertEq(outputQueue[2].weight, 200, "The first target weight should be 100, as it is the lowest");
 
     priorityQueue = new TargetPriority[](2);
-    
+
     priorityQueue[1] = TargetPriority({ target: turretTarget, weight: 150 });
     priorityQueue[0] = TargetPriority({ target: turretTarget2, weight: 100 });
 
@@ -443,7 +443,7 @@ contract SmartTurretTest is MudTest {
     assertEq(outputQueue[0].weight, 100, "The first target weight should be 100, as it is the lowest");
   }
 
-  function testBubbleSortAlgorithmOneTarget() public {    
+  function testBubbleSortAlgorithmOneTarget() public {
     //Total Weight: 150
     SmartTurretTarget memory turretTarget = SmartTurretTarget({
       shipId: 1,
@@ -473,7 +473,7 @@ contract SmartTurretTest is MudTest {
     assertEq(outputQueue.length, 1, "The output queue should only have 1 target");
   }
   //Test aggression
-  function testAggression() public {    
+  function testAggression() public {
     TargetPriority[] memory priorityQueue = new TargetPriority[](1);
     Turret memory turret = Turret({ weaponTypeId: 1, ammoTypeId: 1, chargesLeft: 100 });
     SmartTurretTarget memory turretTarget = SmartTurretTarget({

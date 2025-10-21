@@ -89,10 +89,10 @@ contract SmartStorageUnitTest is MudTest {
     uint256 smartObjectId = ObjectIdLib.calculateObjectId(tenantId, characterId);
     if (CharactersByAccount.get(account) == 0) {
       smartCharacterSystem.createCharacter(
-        smartObjectId, 
-        account, 
-        tribeId, 
-        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }), 
+        smartObjectId,
+        account,
+        tribeId,
+        EntityRecordParams({ tenantId: tenantId, typeId: CHARACTER_TYPE_ID, itemId: characterId, volume: 100 }),
         EntityMetadataParams({ name: name, dappURL: "noURL", description: "." })
       );
     } else{
@@ -130,11 +130,11 @@ contract SmartStorageUnitTest is MudTest {
     vm.stopPrank();
 
     smartStorageUnitId = ObjectIdLib.calculateObjectId(tenantId, SSU_ID);
-    
+
     vm.startPrank(admin, admin);
 
     createAnchorAndOnline(smartStorageUnitId, SSU_ID, admin, admin);
-    
+
     vm.stopPrank();
 
     vm.startPrank(admin);
@@ -157,9 +157,9 @@ contract SmartStorageUnitTest is MudTest {
 
     itemInSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemInTypeID);
     itemOutSmartObjectId = ObjectIdLib.calculateObjectId(tenantId, itemOutTypeID);
-    
+
     vm.stopPrank();
-  }  
+  }
 
   //Test if the world exists
   function testWorldExists() public {
@@ -269,7 +269,7 @@ contract SmartStorageUnitTest is MudTest {
 
     vm.stopPrank();
   }
-  
+
   function testSetRatioRevertInvalidItem() public {
     vm.startPrank(admin);
 

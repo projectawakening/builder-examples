@@ -15,18 +15,18 @@ const expected_pod_object = {
 
 test('create.ts output should match expected POD structure', () => {
   // Run the create.ts script
-  const output = execSync('npx tsx create.ts', { 
+  const output = execSync('npx tsx create.ts', {
     cwd: path.join(__dirname, '..'),
-    encoding: 'utf8' 
+    encoding: 'utf8'
   });
 
   const lines = output.split('\n');
-  const stringifiedLine = lines.find(line => 
-    line.trim().startsWith('{"entries":') && 
+  const stringifiedLine = lines.find(line =>
+    line.trim().startsWith('{"entries":') &&
     line.includes('"security_level":4') &&
     line.includes('"holder_smart_character_address":"0x6d11ac8f376b6284a7e5d62a340f71869b3063ae"')
   );
-  
+
   if (!stringifiedLine) {
     throw new Error('Could not find stringified JSON output in create.ts');
   }

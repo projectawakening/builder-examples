@@ -120,7 +120,7 @@ RPC_URL=https://pyrope-external-sync-node-rpc.live.tech.evefrontier.com
 CHAIN_ID=695569
 ```
 
-You can also automatically point to Stillness with current values using: 
+You can also automatically point to Stillness with current values using:
 
 ```bash
 pnpm env-stillness
@@ -164,7 +164,7 @@ A namespace is a unique identifier for deploying your smart contracts. Once you 
 - ❌ No special characters
 - ❌ No spaces
 
-Change the namespace from `exampleName` to your own custom namespace. 
+Change the namespace from `exampleName` to your own custom namespace.
 
 > 💡 **Tip** Consider using your username or coporation name as your namespace.
 
@@ -305,10 +305,10 @@ The dApp uses Stash and the `useRecord` hook to fetch table data from your deplo
 If you encounter any issues, refer to the troubleshooting tips below:
 
 1. **World Address Mismatch**: Double-check that the `WORLD_ADDRESS` is correctly updated in the `contracts/.env` file. Make sure you are deploying contracts to the correct world.
-   
+
 2. **Anvil Instance Conflicts**: Ensure there is only one running instance of Anvil. The active instance should be initiated via the `docker compose up -d` command. Multiple instances of Anvil may cause unexpected behavior or deployment errors.
 
-3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.  
+3. **Not able to jump even though it's the correct corp**: Ensure you have set the correct corp ID set in the `contracts/.env` file.
 
 ### Still having issues?
 If you are still having issues, then visit [the documentation website](https://docs.evefrontier.com/Troubleshooting) for more general troubleshooting tips.

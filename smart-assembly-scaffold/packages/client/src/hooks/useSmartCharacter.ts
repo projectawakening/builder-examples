@@ -34,7 +34,7 @@ export function useSmartCharacter() {
   const { data: sessionClient } = useConnectorClient();
 
   var chainID = import.meta.env.VITE_CHAIN_ID
-  
+
   const [worldAddress, setWorldAddress] = useState<`0x${string}`>("0x");
 
   const [eveBalanceWei, setEveBalanceWei] = useState<BigInt>(0)
@@ -42,7 +42,7 @@ export function useSmartCharacter() {
 
   //Array of ID's for the players owned smart assemblies
   const [ownedSmartAssemblies, setOwnedSmartAssemblies] = useState<BigInt[]>([]);
-  
+
   useEffect(() => {
     const getWorldAddress = async () => {
       const { address: worldAddress } = await getWorldDeploy(chainID ?? 1);
@@ -50,11 +50,11 @@ export function useSmartCharacter() {
     };
 
     getWorldAddress();
-  }, []);   
+  }, []);
 
-  
+
   useEffect(() => {
-    const getBalance = async() => {      
+    const getBalance = async() => {
       //Get the GAS Balance
       const GASBalance = await publicClient.getBalance({
         address: address
@@ -65,7 +65,7 @@ export function useSmartCharacter() {
       //If it's local, don't get the EVE Token Balance as it's not currently supported
       if(chainID == 31337) {
         return
-      }      
+      }
 
       let EVETokenAddress = import.meta.env.VITE_EVE_TOKEN_ADDRESS
 
@@ -78,7 +78,7 @@ export function useSmartCharacter() {
           wallet: sessionClient?.extend(observer()),
         }
       })
-  
+
       //Use the balanceOf smart contract read function
       const balance = await contract.read.balanceOf([
         address.toString()
@@ -92,11 +92,11 @@ export function useSmartCharacter() {
 
   //Get an array of ID's for owned smart assemblies
   useEffect(() => {
-    const getOwnedAssemblies = async () => {     
+    const getOwnedAssemblies = async () => {
       if(!address) return;
 
       var chainID = import.meta.env.VITE_CHAIN_ID
-      var ownedArray : BigInt[] = [] 
+      var ownedArray : BigInt[] = []
 
       //If this DApp is on your local anvil chain, set the owner as a default
       if(chainID == 31337){
@@ -104,9 +104,9 @@ export function useSmartCharacter() {
 
         setOwnedSmartAssemblies(ownedArray);
         return;
-      } 
+      }
 
-      const worldAddress = await getWorldDeploy(chainID);      
+      const worldAddress = await getWorldDeploy(chainID);
 
       const response = await fetch("https://indexer.mud.pyropechain.com/q", {
         method: "POST",

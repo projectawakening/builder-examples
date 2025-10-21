@@ -123,7 +123,7 @@ export const wagmiConfig = getDefaultConfig({
       },
       iconUrl:
         "https://pbs.twimg.com/profile_images/1724553277147131904/cdma6E3g_400x400.jpg",
-    },    
+    },
     {
       ...pyrope,
       blockExplorers: {

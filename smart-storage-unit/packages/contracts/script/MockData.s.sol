@@ -26,7 +26,7 @@ import { EphemeralInvItem, EphemeralInvItemData } from "@eveworld/world-v2/src/n
 
 /**
  * @title MockData
- * @dev This script creates smart characters, a Smart Storage Unit and deposits items into the SSU. 
+ * @dev This script creates smart characters, a Smart Storage Unit and deposits items into the SSU.
  * @notice This can only be run on your local world.
  */
 contract MockData is Script {
@@ -128,7 +128,7 @@ contract MockData is Script {
       smartStorageUnitSystem.toResourceId(),
       abi.encodeCall(SmartStorageUnitSystem.createAndAnchorStorageUnit, (deployableParams, 100000000, 100000000, 0))
     );
-    
+
     deployableSystem.bringOnline(smartStorageUnitId);
     console.log("SSU created anchored and brought online");
   }
