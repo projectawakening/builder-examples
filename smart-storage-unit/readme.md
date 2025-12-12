@@ -263,7 +263,7 @@ For Stillness, the Smart Storage Unit ID (SSU ID) is available once you have dep
 
 To retrieve the Item ID's you can use https://world-api-stillness.live.tech.evefrontier.com/v2/types and then search for the item name.
 
-You can use the "smartItemId" as the Item ID.
+You will need to use the key number / Type ID for example with Salt that would be <strong>"83839"</strong>
 
 **Example Response:**
 
@@ -274,6 +274,8 @@ You can use the "smartItemId" as the Item ID.
 }
 ```
 
+> [!IMPORTANT]
+> This has changed from V1, as the Builder Examples used the Smart Object ID whereas V2 uses the Type ID for the .env. If you have a Smart Object ID from V1 you want to use, you will need to fetch the Type ID for it by searching for the item in the World API. 
 
 Configure the Item ID's in the .env file.
 
