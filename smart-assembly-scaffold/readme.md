@@ -59,23 +59,25 @@ You should now see the account in your wallet, and be able to use it to interact
 
 ### Step 2: 🏗️ Deploy Anvil, Contracts, and World Explorer
 
-Navigate to the project’s root directory with:
+1. Install the needed npm dependencies:
 
-```bash
-cd smart-assembly-scaffold
-```
+    ```bash
+    cd smart-assembly-scaffold
+    pnpm install
+    ```
 
-Install the dependencies with:
+2. Create your environment file:
 
-```bash
-pnpm install
-```
+    ```bash
+    cp packages/client/.envsample packages/client/.env
+    cp packages/contracts/.envsample packages/contracts/.env
+    ```
 
-From the project’s root directory, run:
+3. Deploy to your local test environment
 
-```bash
-pnpm run dev
-```
+    ```bash
+    pnpm dev
+    ```
 
 This command will:
 
